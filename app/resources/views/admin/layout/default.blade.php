@@ -12,6 +12,8 @@
     <link rel="stylesheet" href="{{asset('focus-2/focus-2/vendor/owl-carousel/css/owl.theme.default.min.css') }}">
     <link href="{{asset('focus-2/focus-2/vendor/jqvmap/css/jqvmap.min.css')}}" rel="stylesheet">
     <link href="{{asset('focus-2/focus-2/css/style.css')}}" rel="stylesheet">
+    <link href="{{asset('focus-2/focus-2/vendor/datatables/css/jquery.dataTables.min.css')}}" rel="stylesheet">
+
     @stack('styleHome')
 </head>
 
@@ -81,6 +83,9 @@
 
 
     <script src="{{asset('focus-2/focus-2/js/dashboard/dashboard-1.js')}}"></script>
+     <!-- Datatable -->
+     <script src="{{ asset('focus-2/focus-2/vendor/datatables/js/jquery.dataTables.min.js') }}"></script>
+     <script src="{{ asset('focus-2/focus-2/js/plugins-init/datatables.init.js') }}"></script>
     @stack('scriptHome')
 </body>
 

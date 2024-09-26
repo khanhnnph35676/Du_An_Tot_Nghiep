@@ -1,0 +1,38 @@
+.image-upload-container {
+    position: relative;
+    border: 2px dashed #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 80px;
+    height: 80px;
+}
+
+.image-upload-container img {
+    object-fit: cover;
+    display: none;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+}
+
+.name_click {
+    position: absolute;
+}
+
+#removeImage {
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 3;
+    cursor: pointer;
+    display: none;
+}
+
+#imageUpload {
+    opacity: 0;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+}
