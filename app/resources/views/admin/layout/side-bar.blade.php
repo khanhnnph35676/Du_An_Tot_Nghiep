@@ -32,9 +32,9 @@
              <li><a class="has-arrow" href="javascript:void()" aria-expanded="false"><i
                          class="icon icon-world-2"></i><span class="nav-text">Store</span></a>
                  <ul aria-expanded="true">
-                     <li><a href="./ui-accordion.html">Order</a></li>
-                     <li><a href="./ui-accordion.html">Discounts</a></li>
-                     <li><a href="./ui-accordion.html">Payment</a></li>
+                     <li><a href="{{route('admin.listOrders')}}">Order</a></li>
+                     <li><a href="{{route('admin.listDiscounts')}}">Discounts</a></li>
+                     <li><a href="{{route('admin.formPayment') }}">Payment</a></li>
                      <li><a href="./ui-accordion.html">Statistics</a></li>
                  </ul>
              </li>
@@ -42,15 +42,15 @@
              <li><a class="has-arrow" href="javascript:void()" aria-expanded="false"><i
                          class="icon icon-app-store"></i><span class="nav-text">Apps </span></a>
                  <ul aria-expanded="false">
-                     <li><a href="./app-profile.html">Profile</a></li>
+                     <li><a href="{{ route('admin.profile') }}">Profile</a></li>
                      <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">Email</a>
                          <ul aria-expanded="false">
-                             <li><a href="./app-profile.html">Inbox</a></li>
-                             <li><a href="./app-profile.html">Compose</a></li>
+                             <li><a href="{{ route('admin.inbox') }}">Inbox</a></li>
+                             <li><a href="{{ route('admin.compose') }}">Compose</a></li>
                          </ul>
                      </li>
                      <li><a href="./app-profile.html">Chatbox</a></li>
-                     <li><a href="./app-profile.html">Calenda</a></li>
+                     <li><a href="{{ route('admin.calender')}}">Calenda</a></li>
                  </ul>
              </li>
              {{-- Danh mục cài đặt: Thoát admin --}}

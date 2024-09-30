@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 class CustomerController extends Controller
 {
+    // Giao diện Customer
     public function listCustomer(){
         return view('admin.customer.list');
     }
