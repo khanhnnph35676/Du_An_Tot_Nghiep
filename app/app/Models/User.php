@@ -21,6 +21,11 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'avatar',
+        'number',
+        'gender',
+        'birth_date',
+        'rule_id',
     ];
 
     /**
@@ -41,4 +46,9 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function rules()
+    {
+        return $this->belongsTo(Rule::class, 'rule_id','id');
+    }
 }
