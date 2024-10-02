@@ -52,3 +52,4 @@ class User extends Authenticatable
         return $this->belongsTo(Rule::class, 'rule_id','id');
     }
 }
+// khanh lol
