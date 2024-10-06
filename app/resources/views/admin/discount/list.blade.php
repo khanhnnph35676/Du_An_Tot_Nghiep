@@ -31,7 +31,7 @@
                             <div class="card-header">
                                 <h4 class="card-title">List Orders</h4>
                                 <div class="btn-group" role="group">
-                                    <a href="{{ route('admin.discountDetail')}}" class="btn btn-secondary">Add Discount</a>
+                                    <a href="{{ route('admin.createDiscount')}}" class="btn btn-secondary">Add Discount</a>
                                 </div>
                             </div>
                             <div class="card-body">

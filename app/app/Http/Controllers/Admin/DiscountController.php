@@ -13,7 +13,15 @@ class DiscountController extends Controller
         // dd($discounts);
         return view('admin.discount.list', compact('discounts'));
     }
-    public function discountDetail(){
-        return view('admin.discount.detail');
+    public function createDiscount(){
+        return view('admin.discount.create');
+    }
+    public function storeDiscount(Request $request)
+    {
+        $data = $request->all();
+        // dd($data);
+
+        Discount::query()->create($data);
+        return redirect()->route('admin.listDiscounts')->with('message', 'Thêm dữ liệu thành công');
     }
 }
