@@ -54,7 +54,7 @@ Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
     Route::post('storeDiscount', [DiscountController::class, 'storeDiscount'])->name('discount.store');
     Route::get('update-discounts/{id}', [DiscountController::class, 'updateDiscount'])->name('updateDiscount');
     Route::put('editDiscount/{id}', [DiscountController::class, 'update'])->name('discount.update');
-    Route::delete('/deleteDiscount/{id}', [CategoryController::class, 'destroyDiscount'])->name('discount.destroy');
+    Route::delete('deleteDiscount/{id}', [DiscountController::class, 'destroy'])->name('discount.destroy');
 
     // Quản lý thanh toán
     Route::get('form-payment',[PaymentController::class,'formPayment'])->name('formPayment');
