@@ -58,14 +58,14 @@
                                                 <td>{{$discount->start_date}}</td>
                                                 <td>{{$discount->end_date}}</td>
                                                 <td>
-                                                    <button class="btn btn-success">Update</button>
+                                                    <a href="{{ route('admin.updateDiscount', $discount->id)}}" class="btn btn-success">Update</a>
                                                     <button class="btn btn-danger">Delete</button>
                                                 </td>
                                             </tr>
                                             @endforeach
                                         </tbody>
                                     </table>
-                                </div>
+                                </div>  
                             </div>
                         </div>
                     </div>
