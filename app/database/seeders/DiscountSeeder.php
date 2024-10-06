@@ -19,7 +19,7 @@ class DiscountSeeder extends Seeder
             $endDate = fake()->dateTimeBetween($startDate, '+1 month'); // Random end date after start date
 
             DB::table('discounts')->insert([
-                'product_id' => fake()->numberBetween(1, 10),
+                'product_id' => "1",
                 'discount' => fake()->numberBetween(1, 100),
                 'priority' => fake()->numberBetween(1, 4),
                 'start_date' => $startDate,

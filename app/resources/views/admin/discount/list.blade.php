@@ -39,25 +39,30 @@
                                     <table id="example" class="display">
                                         <thead>
                                             <tr>
-                                                <th>Stt</th>
-                                                <th>Name</th>
-                                                <th>Product</th>
-                                                <th>Price</th>
-                                                <th>Payment</th>
-                                                <th>Status</th>
+                                                <th>ID</th>
+                                                <th>Product Name</th>
+                                                <th>Discount</th>
+                                                <th>Priority</th>
+                                                <th>Start Date</th>
+                                                <th>End date</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            @foreach($discounts as $discount)
                                             <tr>
-                                                <td>Tiger Nixon</td>
-                                                <td>System Architect</td>
-                                                <td>Edinburgh</td>
-                                                <td>61</td>
-                                                <td>2011/04/25</td>
-                                                <td>$320,800</td>
-                                                <td>$320,800</td>
+                                                <td>{{$discount->id}}</td>
+                                                <td>{{$discount->products->name}}</td>
+                                                <td>{{$discount->discount}}</td>
+                                                <td>{{$discount->priority}}</td>
+                                                <td>{{$discount->start_date}}</td>
+                                                <td>{{$discount->end_date}}</td>
+                                                <td>
+                                                    <button class="btn btn-success">Update</button>
+                                                    <button class="btn btn-danger">Delete</button>
+                                                </td>
                                             </tr>
+                                            @endforeach
                                         </tbody>
                                     </table>
                                 </div>

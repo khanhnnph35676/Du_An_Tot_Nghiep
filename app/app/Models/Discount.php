@@ -10,8 +10,14 @@ class Discount extends Model
     use HasFactory,SoftDeletes;
     protected $table = 'discounts';
     public $fillable =[
-        'user_id ',
-        'name',
-        'acount_payments',
+        'product_id ',
+        'discount',
+        'priority',
+        'start_date',
+        'end_date',
     ];
+    public function products()
+    {
+        return $this->belongsTo(Product::class, 'product_id', 'id');
+    }
 }
