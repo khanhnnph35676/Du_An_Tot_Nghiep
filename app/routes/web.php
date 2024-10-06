@@ -21,6 +21,13 @@ Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
     // Trang san phẩm
     Route::get('list-product',[ProductController::class,'listProducts'])->name('listProducts');
     Route::get('product-detail',[ProductController::class,'productDetail'])->name('productDetail');
+    Route::get('product-simple',[ProductController::class,'productSimple'])->name('productSimple');
+    // code dữ liệu trang sản phẩm
+    Route::post('add-product-simple',[ProductController::class,'addProductSimple'])->name('addProductSimple');
+
+
+
+
     // Trang danh mục
     Route::get('list-categories',[CategoryController::class,'listCategories'])->name('listCategories');
     // Trang customer
@@ -40,5 +47,8 @@ Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
     Route::get('discounts-detail',[DiscountController::class,'discountDetail'])->name('discountDetail');
     // Quản lý thanh toán
     Route::get('form-payment',[PaymentController::class,'formPayment'])->name('formPayment');
+
+
+
 
 });

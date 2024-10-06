@@ -45,7 +45,7 @@
                                         </div>
                                         <div class="form-group">
                                             <label for="">Quanlity:</label>
-                                            <input class="form-control" type="text" placeholder="Quanlity">
+                                            <input class="form-control" type="text" placeholder="Quanlity" readonly>
                                         </div>
                                         <div class="form-group">
                                             <label for="">Price:</label>
@@ -101,45 +101,47 @@
                                     {{-- phần biến thể phải làm bằng front-end
                                         1,nếu click chọn loại thì in ra danh sách loại
                                         2,Chọn loại 2 cái nó sẽ in ra 2 bản ghi để thêm product varian  --}}
-
-                                    <table class="table" id="example" class="display" style="width: 100%">
-                                        <h5 class="mt-5">List Product</h5>
-                                        <thead>
-                                            <tr>
-                                                <th>Option Value</th>
-                                                <th>Image</th>
-                                                <th>Sku</th>
-                                                <th>Stick</th>
-                                                <th>Price</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>Hộp-300g</td>
-                                                <td>
-                                                    <div class="image-upload-container">
-                                                        <label for="imageUpload" class="name_click">Image:</label>
-                                                        <img id="imagePreview" src="#" alt="Image Preview"
-                                                            style="display:none;" />
-                                                        <input type="file" class="form-control-file" id="imageUpload"
-                                                            accept="image/*">
-                                                        <span style="button" class="btn btn-dark"
-                                                            id="removeImage"style="display:none;">x</span>
-                                                        {{-- thêm icon sau --}}
-                                                    </div>
-                                                </td>
-                                                <td class="pr-4">
-                                                    <input type="text" class="form-control">
-                                                </td>
-                                                <td class="pr-4">
-                                                    <input type="text" class="form-control">
-                                                </td>
-                                                <td class="pr-4">
-                                                    <input type="text" class="form-control">
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                        <div class="card-body border mt-3">
+                                            <div class="table-responsive">
+                                                <table id="example" class="display">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Option Value</th>
+                                                            <th>Image</th>
+                                                            <th>Sku</th>
+                                                            <th>Stick</th>
+                                                            <th>Price</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>Hộp-300g</td>
+                                                            <td>
+                                                                <div class="image-upload-container">
+                                                                    <label for="imageUpload" class="name_click">Image:</label>
+                                                                    <img id="imagePreview" src="#" alt="Image Preview"
+                                                                        style="display:none;" />
+                                                                    <input type="file" class="form-control-file" id="imageUpload"
+                                                                        accept="image/*">
+                                                                    <span style="button" class="btn btn-dark"
+                                                                        id="removeImage"style="display:none;">x</span>
+                                                                    {{-- thêm icon sau --}}
+                                                                </div>
+                                                            </td>
+                                                            <td class="pr-4">
+                                                                <input type="text" class="form-control">
+                                                            </td>
+                                                            <td class="pr-4">
+                                                                <input type="text" class="form-control">
+                                                            </td>
+                                                            <td class="pr-4">
+                                                                <input type="text" class="form-control">
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
                                     <div class="form-group mt-3" style="width: 100%">
                                         <h5>Description</h5>
                                         <textarea class="summernote" name="description" id="description"></textarea>

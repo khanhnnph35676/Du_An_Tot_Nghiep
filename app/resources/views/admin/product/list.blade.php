@@ -25,6 +25,13 @@
                     </div>
                 </div>
                 <!-- row -->
+                <div class="message">
+                    <div class="alert alert-primary alert-dismissible alert-alt solid fade show">
+                        <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close"><span><i class="mdi mdi-close"></i></span>
+                        </button>
+                        <strong>Success!</strong> Message has been sent.
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
@@ -33,9 +40,9 @@
 
                                 <div class="btn-group" role="group">
                                     <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown">Add Product</button>
-                                    <div class="dropdown-menu bg-secondary" >
-                                        <div class=" d-flex flex-column">
-                                            <a href="#" class='btn btn-secondary'>Product Simple</a>
+                                    <div class="dropdown-menu bg-secondary mr-3">
+                                        <div class="d-flex flex-column">
+                                            <a href="{{route('admin.productSimple')}}" class='btn btn-secondary'>Product Simple</a>
                                             <a href="{{route('admin.productDetail')}}" class='btn btn-secondary'>Product Configurable</a>
                                         </div>
                                     </div>
@@ -46,31 +53,42 @@
                                     <table id="example" class="display">
                                         <thead>
                                             <tr>
+                                                <th>Id</th>
                                                 <th>Name</th>
-                                                <th>Position</th>
-                                                <th>Office</th>
-                                                <th>Age</th>
-                                                <th>Start date</th>
-                                                <th>Salary</th>
+                                                <th>Image</th>
+                                                <th>Price</th>
+                                                <th>Stick</th>
+                                                <th>View</th>
+                                                <th>Category</th>
+                                                <th>Description</th>
+                                                <th>Type</th>
+                                                <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            @foreach ($listProducts as $key => $value):
                                             <tr>
-                                                <td>Tiger Nixon</td>
-                                                <td>System Architect</td>
-                                                <td>Edinburgh</td>
-                                                <td>61</td>
-                                                <td>2011/04/25</td>
-                                                <td>$320,800</td>
+                                                <td> {{ $value->id }}  </td>
+                                                <td> {{ $value->name }}  </td>
+                                                <td> {{ $value->image }} </td>
+                                                <td> {{ $value->price }} </td>
+                                                <td> {{ $value->qty }} </td>
+                                                <td> {{ $value->view }} </td>
+                                                <td> {{ $value->categories->name }} </td>
+                                                <td style="width:20%;"> {{ Str::limit($value->description, 20) }} </td>
+                                                <td>
+                                                    @if($value->type == 'Simple'):
+                                                     <span class='badge badge-pill badge-success'> {{$value->type }}</span>
+                                                    @else
+                                                     <span class='badge badge-pill badge-secondary'> {{$value->type }}</span>
+                                                    @endif
+                                                </td>
+                                                <td style="width:13%;">
+                                                    <a href=""class='badge badge-pill badge-primary'>Update</a>
+                                                    <a href=""class='badge badge-pill badge-danger'>Delete</a>
+                                                </td>
                                             </tr>
-                                            <tr>
-                                                <td>Garrett Winters</td>
-                                                <td>Accountant</td>
-                                                <td>Tokyo</td>
-                                                <td>63</td>
-                                                <td>2011/07/25</td>
-                                                <td>$170,750</td>
-                                            </tr>
+                                            @endforeach
                                         </tbody>
                                     </table>
                                 </div>
