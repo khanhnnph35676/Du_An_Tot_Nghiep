@@ -50,9 +50,14 @@ Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
     Route::get('order-detail',[OrderController::class,'orderDetail'])->name('orderDetail');
     // Quản lý giảm giá
     Route::get('list-discounts',[DiscountController::class,'listDiscounts'])->name('listDiscounts');
-    Route::get('discounts-detail',[DiscountController::class,'discountDetail'])->name('discountDetail');
+    Route::get('create-discounts',[DiscountController::class, 'createDiscount'])->name('createDiscount');
+    Route::post('storeDiscount', [DiscountController::class, 'storeDiscount'])->name('discount.store');
+    Route::get('update-discounts/{id}', [DiscountController::class, 'updateDiscount'])->name('updateDiscount');
+    Route::put('editDiscount/{id}', [DiscountController::class, 'update'])->name('discount.update');
+    Route::delete('deleteDiscount/{id}', [DiscountController::class, 'destroy'])->name('discount.destroy');
+
     // Quản lý thanh toán
-   Route::get('form-payment',[PaymentController::class,'formPayment'])->name('formPayment');
+    Route::get('form-payment',[PaymentController::class,'formPayment'])->name('formPayment');
 
    
 });

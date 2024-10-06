@@ -31,7 +31,7 @@
                             <div class="card-header">
                                 <h4 class="card-title">List Orders</h4>
                                 <div class="btn-group" role="group">
-                                    <a href="{{ route('admin.discountDetail')}}" class="btn btn-secondary">Add Discount</a>
+                                    <a href="{{ route('admin.createDiscount')}}" class="btn btn-secondary">Add Discount</a>
                                 </div>
                             </div>
                             <div class="card-body">
@@ -39,28 +39,36 @@
                                     <table id="example" class="display">
                                         <thead>
                                             <tr>
-                                                <th>Stt</th>
-                                                <th>Name</th>
-                                                <th>Product</th>
-                                                <th>Price</th>
-                                                <th>Payment</th>
-                                                <th>Status</th>
+                                                <th>ID</th>
+                                                <th>Product Name</th>
+                                                <th>Discount</th>
+                                                <th>Priority</th>
+                                                <th>Start Date</th>
+                                                <th>End date</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            @foreach($discounts as $discount)
                                             <tr>
-                                                <td>Tiger Nixon</td>
-                                                <td>System Architect</td>
-                                                <td>Edinburgh</td>
-                                                <td>61</td>
-                                                <td>2011/04/25</td>
-                                                <td>$320,800</td>
-                                                <td>$320,800</td>
+                                                <td>{{$discount->id}}</td>
+                                                <td>{{$discount->products->name}}</td>
+                                                <td>{{$discount->discount}}</td>
+                                                <td>{{$discount->priority}}</td>
+                                                <td>{{$discount->start_date}}</td>
+                                                <td>{{$discount->end_date}}</td>
+                                                <td>
+                                                    <a href="{{ route('admin.updateDiscount', $discount->id)}}" class="btn btn-success">Update</a>
+                                                    <form action="{{ route('admin.discount.destroy', $discount->id) }}" method="POST" style="display: inline-block;">  @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="btn btn-danger" onclick="return confirm('Bạn có muốn xóa {{$discount->name}} (Mã: {{$discount->id}}) không???')">Delete</button>
+                                                    </form>
+                                                </td>
                                             </tr>
+                                            @endforeach
                                         </tbody>
                                     </table>
-                                </div>
+                                </div>  
                             </div>
                         </div>
                     </div>
