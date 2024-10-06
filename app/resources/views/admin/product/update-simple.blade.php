@@ -22,10 +22,10 @@
                 </div>
             </div>
             <!-- row -->
-
             <div class="row">
                 <div class="col-12">
-                    <form action="{{ route('admin.addProductSimple') }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('admin.updateProductSimple',$product->id) }}" method="POST" enctype="multipart/form-data">
+                        @method('patch')
                         @csrf
                         <div class="card">
                             <div class="card-header">
@@ -42,7 +42,7 @@
                                         <div class="form-group">
                                             <label for="">Name:</label>
                                             <input type="number"  name="type" value="1" hidden>
-                                            <input class="form-control" type="text" name="name" placeholder="Name">
+                                            <input class="form-control" type="text" name="name" placeholder="Name" value="{{$product->name}}">
                                             @error('name')
                                                 <div class="alert alert-danger"><strong>Error!</strong> {{ $message }}
                                                 </div>
@@ -50,7 +50,7 @@
                                         </div>
                                         <div class="form-group">
                                             <label for="">Quanlity:</label>
-                                            <input class="form-control" type="text" name="qty"
+                                            <input class="form-control" type="text" name="qty" value="{{$product->qty}}"
                                                 placeholder="Quanlity">
                                             @error('qty')
                                                 <div class="alert alert-danger"><strong>Error!</strong> {{ $message }}
@@ -59,19 +59,22 @@
                                         </div>
                                         <div class="form-group">
                                             <label for="">Price:</label>
-                                            <input class="form-control" type="text" name="price" placeholder="Price">
+                                            <input class="form-control" type="text" name="price" placeholder="Price" value="{{$product->price}}">
                                             @error('price')
                                                 <div class="alert alert-danger"><strong>Error!</strong> {{ $message }}
                                                 </div>
                                             @enderror
-                                        </div>
+                                         </div>
                                     </div>
                                     <div class="col-3 p-3 border">
                                         <div class="form-group">
                                             <label>Category:</label>
                                             <select class="form-control" id="sel1" name="category_id">
                                                 @foreach ($listCategories as $category)
-                                                    <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                                    <option value="{{ $category->id }}"
+                                                        {{$product->category_id == $category->id? 'selected':''}} >
+                                                            {{ $category->name }}
+                                                    </option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -94,7 +97,9 @@
                                     </div>
                                     <div class="form-group mt-3" style="width: 100%">
                                         <h5>Description</h5>
-                                        <textarea class="summernote" name="description" id="description"></textarea>
+                                        <textarea class="summernote" name="description" id="description">
+                                            {{$product->description}}
+                                        </textarea>
                                         {{-- <input type="hidden" name="description" id="description"> --}}
                                     </div>
                                 </div>

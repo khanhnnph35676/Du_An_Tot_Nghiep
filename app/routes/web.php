@@ -28,19 +28,20 @@ Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
     })->name('admin1');
     // Trang san phẩm
     Route::get('list-product',[ProductController::class,'listProducts'])->name('listProducts');
-
     Route::get('product-detail',[ProductController::class,'productDetail'])->name('productDetail');
     Route::get('product-simple',[ProductController::class,'productSimple'])->name('productSimple');
+    Route::get('update-product-simple/{type}/{idProduct}',[ProductController::class,'formUpdateProductSimple'])->name('formUpdateProductSimple');
     // code dữ liệu trang sản phẩm
     Route::post('add-product-simple',[ProductController::class,'addProductSimple'])->name('addProductSimple');
+    Route::patch('update-product-simple/{idProduct}',[ProductController::class,'updateProductSimple'])->name('updateProductSimple');
+    Route::delete('delete-product-simple',[ProductController::class,'deleteProductSimple'])->name('deleteProductSimple');
+
 
 
 
 
     // Trang danh mục
     Route::get('list-categories',[CategoryController::class,'listCategories'])->name('listCategories');
-
-
 
 
     // Trang customer
