@@ -21,21 +21,29 @@ Route::get('login-admin',[AuthenController :: class,'loginAdmin'])->name('loginA
 Route::get('register-admin',[AuthenController :: class,'registerAdmin'])->name('registerAdmin');
 // Trang amdin
 Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
-    
+
     // trang chủ
     Route::get('/', function () {
         return view('admin.home');
     })->name('admin1');
     // Trang san phẩm
     Route::get('list-product',[ProductController::class,'listProducts'])->name('listProducts');
-
     Route::get('product-detail',[ProductController::class,'productDetail'])->name('productDetail');
+    Route::get('product-simple',[ProductController::class,'productSimple'])->name('productSimple');
+    Route::get('update-product-simple/{type}/{idProduct}',[ProductController::class,'formUpdateProductSimple'])->name('formUpdateProductSimple');
+    // code dữ liệu trang sản phẩm
+    Route::post('add-product-simple',[ProductController::class,'addProductSimple'])->name('addProductSimple');
+    Route::patch('update-product-simple/{idProduct}',[ProductController::class,'updateProductSimple'])->name('updateProductSimple');
+    Route::delete('delete-product-simple',[ProductController::class,'deleteProductSimple'])->name('deleteProductSimple');
+
+
+
+
+
     // Trang danh mục
     Route::get('list-categories',[CategoryController::class,'listCategories'])->name('listCategories');
-   
-  
-    
-    
+
+
     // Trang customer
     Route::get('list-customer',[CustomerController::class,'listCustomer'])->name('listCustomer');
     Route::get('customer-detail',[CustomerController::class,'customerDetail'])->name('customerDetail');
@@ -59,5 +67,4 @@ Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
     // Quản lý thanh toán
     Route::get('form-payment',[PaymentController::class,'formPayment'])->name('formPayment');
 
-   
 });

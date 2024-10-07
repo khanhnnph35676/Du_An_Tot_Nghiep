@@ -57,7 +57,7 @@
     <script src="{{ asset('focus-2/focus-2/vendor/global/global.min.js') }}"></script>
     <script src="{{ asset('focus-2/focus-2/js/quixnav-init.js') }}"></script>
     <script src="{{ asset('focus-2/focus-2/js/custom.min.js') }}"></script>
-
+    
 
     <!-- Vectormap -->
     <script src="{{asset('focus-2/focus-2/vendor/raphael/raphael.min.js')}}"></script>
