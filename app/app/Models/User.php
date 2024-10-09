@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -20,9 +19,10 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'phone',
         'password',
         'avatar',
-        'number',
+        'number', // Đây có thể là số điện thoại, bạn có thể đổi thành 'phone' nếu cần
         'gender',
         'birth_date',
         'rule_id',
@@ -47,9 +47,9 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function rules()
+    // Sửa tên phương thức quan hệ thành rule() vì mỗi user chỉ có một rule
+    public function rule()
     {
-        return $this->belongsTo(Rule::class, 'rule_id','id');
+        return $this->belongsTo(Rule::class, 'rule_id', 'id');
     }
 }
-// khanh lol
