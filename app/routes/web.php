@@ -10,19 +10,31 @@ use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\DiscountController;
 use App\Http\Controllers\Admin\PaymentController;
 
+
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('categories', CategoryController::class);
     Route::get('list-categories',[CategoryController::class,'listCategories'])->name('listCategories');
 });
 
 // DDawng nhập, đăng kí, đăng xuất, quên mật khẩu
-Route::get('login-admin',[AuthenController :: class,'loginAdmin'])->name('loginAdmin');
-Route::get('register-admin',[AuthenController :: class,'registerAdmin'])->name('registerAdmin');
+
+
+Route::get('login-admin', [AuthenController::class, 'loginAdmin'])->name('loginAdmin');
+Route::post('login-admin', [AuthenController::class, 'postLogin'])->name('postLogin');
+Route::get('register-admin', [AuthenController::class, 'registerAdmin'])->name('registerAdmin');
+Route::post('register-admin', [AuthenController::class, 'postRegister'])->name('postRegister');
+
+// Route::get('password/reset', [AuthenController::class, 'showLinkRequestForm'])->name('password.request');
+// Route::post('password/email', [AuthenController::class, 'sendResetLinkEmail'])->name('password.email');
+// Route::get('password/reset/{token}', [AuthenController::class, 'showResetForm'])->name('password.reset');
+// Route::post('password/reset', [AuthenController::class, 'reset'])->name('password.update');
+
+
 // Trang amdin
 Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
 
     // trang chủ
-    Route::get('/', function () {
+    Route::get('/', function () {   
         return view('admin.home');
     })->name('admin1');
     // Trang san phẩm
