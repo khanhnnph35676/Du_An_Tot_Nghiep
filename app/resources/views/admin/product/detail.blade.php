@@ -78,7 +78,6 @@
                                         <div class="form-group">
                                             <label>Trọng lượng:</label>
                                             <div class="form-check form-check-inline">
-
                                                 <label class="form-check-label">
                                                     <input type="checkbox" class="form-check-input" value="">300g
                                                 </label>

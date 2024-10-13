@@ -34,11 +34,11 @@
                                         @endif
                                         <h5>{{ $category->name }}</h5>
                                         <div class="d-flex">
-                                            <a href="{{ route('admin.categories.edit', $category->id) }}" class="badge badge-success badge-pill mr-1">Update</a>
+                                            <a href="{{ route('admin.categories.edit', $category->id) }}" class="btn btn-secondary mr-3">Update</a>
                                             <form action="{{ route('admin.categories.destroy', $category->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this category?');">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="badge badge-danger badge-pill">Delete</button>
+                                                <button type="submit" class="btn btn-dark">Delete</button>
                                             </form>
                                         </div>
                                     </li>

@@ -27,7 +27,9 @@
                         <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close"><span><i
                                     class="mdi mdi-close"></i></span>
                         </button>
-                        <strong>Success!</strong>
+                        @if (session('message'))
+                            <strong>{{session('message')}}</strong>
+                        @endif
                     </div>
                 </div>
             @endif
@@ -75,7 +77,7 @@
                                                 <td> {{ number_format($value->price) }} vnđ </td>
                                                 <td> {{ $value->qty }} </td>
                                                 <td> {{ $value->view }} </td>
-                                                <td> {{ $value->categories->name }} </td>
+                                                <td> {{ $value->categories ? $value->categories->name : 'No Category'  }} </td>
                                                 <td style="width:20%;"> {{ Str::limit($value->description, 20) }} </td>
                                                 <td>
                                                     @if ($value->type == '1')
@@ -128,8 +130,9 @@
             </div>
         </div>
     </div>
-    {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script> --}}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    {{-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script> --}}
+    <script src="{{ asset('focus-2/focus-2/documentation/main/assets/js/lib/bootstrap.min.js') }}"></script>
     <script>
        $('#deleteProductAdmin').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget); // Nút kích hoạt modal
