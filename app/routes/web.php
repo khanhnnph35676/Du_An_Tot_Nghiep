@@ -8,7 +8,6 @@ use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\DiscountController;
 use App\Http\Controllers\Admin\PaymentController;
-
 //controller bên store
 use App\Http\Controllers\User\PageController;
 use App\Http\Controllers\User\AuthenController;
@@ -40,8 +39,13 @@ Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
     // Trang danh mục
     Route::get('list-categories',[CategoryController::class,'listCategories'])->name('listCategories');
     // Trang customer
-    Route::get('list-customer',[CustomerController::class,'listCustomer'])->name('listCustomer');
-    Route::get('customer-detail',[CustomerController::class,'customerDetail'])->name('customerDetail');
+    Route::get('list-customer', [CustomerController::class, 'listCustomer'])->name('listCustomer');
+    Route::post('customer-store', [CustomerController::class, 'customerStore'])->name('customerStore');
+    Route::get('customer-create', [CustomerController::class, 'customerCreate'])->name('customerCreate');
+    Route::get('customer-edit/{id}', [CustomerController::class, 'customerEdit'])->name('customerEdit');
+    Route::put('customer-update/{id}', [CustomerController::class, 'customerUpdate'])->name('customerUpdate');
+    Route::delete('customer-destroy/{id}', [CustomerController::class, 'customerDestroy'])->name('customerDestroy');
+    
     // trang app
     Route::get('calender',[AppController::class,'calender'])->name('calender');
     Route::get('profile',[AppController::class,'profile'])->name('profile');

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('avatar')->nullable();
-            $table->string('number')->nullable();
+            $table->string('phone')->nullable();
             $table->enum('gender', ['male', 'female'])->nullable();
             $table->date('birth_date')->nullable();
             $table->unsignedInteger('rule_id');
