@@ -3,9 +3,7 @@
     <!-- Datatable -->
 @endpush
 @section('content')
-    <!--**********************************
-                                    Content body start
-                                ***********************************-->
+    <!--**********************************Content body start***********************************-->
     <div class="content-body">
         <div class="container-fluid">
             <div class="row page-titles mx-0">
@@ -38,7 +36,6 @@
                     <div class="card">
                         <div class="card-header">
                             <h4 class="card-title">List Product</h4>
-
                             <div class="btn-group" role="group">
                                 <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown">Add
                                     Product</button>
@@ -74,7 +71,7 @@
                                             <tr>
                                                 <td> {{ $value->id }} </td>
                                                 <td> {{ $value->name }} </td>
-                                                <td> {{ $value->image }} </td>
+                                                <td> <img src="{{asset($value->image)}}" width="50px" height="50px" alt=""> </td>
                                                 <td> {{ number_format($value->price) }} vnđ </td>
                                                 <td> {{ $value->qty }} </td>
                                                 <td> {{ $value->view }} </td>
@@ -87,11 +84,11 @@
                                                         <span class='badge badge-pill badge-secondary'> Configurable </span>
                                                     @endif
                                                 </td>
-                                                <td style="width:13%;">
+                                                <td>
                                                     <a
-                                                        href="{{ route('admin.formUpdateProductSimple', ['type' => 1, 'idProduct' => $value->id]) }}"class='badge badge-pill badge-primary'>Update</a>
+                                                        href="{{ route('admin.formUpdateProductSimple', ['type' => 1, 'idProduct' => $value->id]) }}"class='btn btn-secondary'>Update</a>
                                                     <!-- Button trigger modal -->
-                                                    <button class="badge badge-pill badge-danger" data-toggle="modal"
+                                                    <button class="btn btn-dark" data-toggle="modal"
                                                         data-target="#deleteProductAdmin"
                                                         data-id="{{ $value->id }}">Delete</button>
                                                 </td>
@@ -106,9 +103,7 @@
             </div>
         </div>
     </div>
-    <!--**********************************
-                                    Content body end
-                                ***********************************-->
+    <!--**********************************Content body end ***********************************-->
 
     <!-- Modal -->
     <div class="modal fade" id="deleteProductAdmin">
@@ -133,8 +128,8 @@
             </div>
         </div>
     </div>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script> --}}
     <script>
        $('#deleteProductAdmin').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget); // Nút kích hoạt modal
