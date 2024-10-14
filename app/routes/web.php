@@ -57,6 +57,8 @@ Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
     Route::get('form-payment',[PaymentController::class,'formPayment'])->name('formPayment');
     Route::get('create-payments', [PaymentController::class, 'createPayment'])->name('createPayment');
     Route::post('storePayment', [PaymentController::class, 'storePayment'])->name('payment.store');
+    Route::get('update-payment/{id}', [PaymentController::class, 'updatePayment'])->name('updatePayment');
+    Route::put('editPayment/{id}', [PaymentController::class, 'update'])->name('payment.update');
     Route::delete('deletePayment/{id}', [PaymentController::class, 'destroy'])->name('payment.destroy');
 
 

@@ -29,6 +29,21 @@ class PaymentController extends Controller
         return redirect()->route('admin.formPayment')->with('message', 'Thêm dữ liệu thành công');
     }
 
+    public function updatePayment(Request $request)
+    {
+        $users = User::all();
+        $payment = Payment::where('id', $request->id)->first();
+        return view('admin.payment.update', compact('payment','users'));
+    }
+    public function update(Request $request)
+    {
+        $data = $request->except('_token', '_method', 'submit');
+
+        dd($data); 
+        Payment::where('id', $request->id)->update($data);
+        return redirect()->route('admin.formPayment')->with('message', 'Cập nhật dữ liệu thành công');
+    }
+
     public function destroy(Request $request)
     {
         $discount = Payment::find($request->id);

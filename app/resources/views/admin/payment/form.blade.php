@@ -60,8 +60,7 @@
                                                 <td>{{$payment->updated_at}}</td>
                                                 <td>{{$payment->enabled ? 'yes':'no'}}</td>
                                                 <td>
-                                                    {{-- <a href="{{ route('admin.updatePayment', $discount->id)}}" class="btn btn-success">Update</a> --}}
-                                                    {{-- <a href="{{ route('admin.updateDiscount', $discount->id)}}" class="btn btn-success">Update</a> --}}
+                                                    <a href="{{ route('admin.updatePayment', $payment->id)}}" class="btn btn-success">Update</a>
                                                     <form action="{{ route('admin.payment.destroy', $payment->id) }}" method="POST" style="display: inline-block;">  
                                                         @csrf
                                                         @method('DELETE')
