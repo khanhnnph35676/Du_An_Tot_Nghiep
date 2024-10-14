@@ -56,7 +56,7 @@ Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
     // Quản lý thanh toán
     Route::get('form-payment',[PaymentController::class,'formPayment'])->name('formPayment');
     Route::get('create-payments', [PaymentController::class, 'createPayment'])->name('createPayment');
-    Route::post('storeDiscount', [DiscountController::class, 'storeDiscount'])->name('discount.store');
+    Route::post('storePayment', [PaymentController::class, 'storePayment'])->name('payment.store');
 
 
    

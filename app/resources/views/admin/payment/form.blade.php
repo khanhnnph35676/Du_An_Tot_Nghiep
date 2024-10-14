@@ -42,7 +42,7 @@
                                                 <th>ID</th>
                                                 <th>User Name</th>
                                                 <th>Name</th>
-                                                <th>Acount Payments</th>
+                                                <th>Account Payments</th>
                                                 <th>Start Date</th>
                                                 <th>End date</th>
                                                 <th>Enable</th>
@@ -55,7 +55,7 @@
                                                 <td>{{$payment->id}}</td>
                                                 <td>{{$payment->users->name}}</td>
                                                 <td>{{$payment->name}}</td>
-                                                <td>{{$payment->acount_payments}}</td>
+                                                <td>{{$payment->account_payments}}</td>
                                                 <td>{{$payment->created_at}}</td>
                                                 <td>{{$payment->updated_at}}</td>
                                                 <td>{{$payment->enabled ? 'yes':'no'}}</td>
