@@ -30,7 +30,7 @@
                         @csrf
                         <div class="card">
                             <div class="card-header">
-                                <h4 class="card-title">Add New Customer</h4>
+                                <h4 class="card-title">List of Payment method</h4>
                                 <div class="d-flex">
                                     <button type="submit" name="submit" class="btn btn-secondary">Save</button>
                                 </div>
