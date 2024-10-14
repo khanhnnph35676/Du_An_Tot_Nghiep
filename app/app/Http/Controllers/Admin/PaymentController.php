@@ -28,4 +28,11 @@ class PaymentController extends Controller
         Payment::query()->create($data);
         return redirect()->route('admin.formPayment')->with('message', 'Thêm dữ liệu thành công');
     }
+
+    public function destroy(Request $request)
+    {
+        $discount = Payment::find($request->id);
+        $discount->delete();
+        return redirect()->route('admin.formPayment')->with('message', 'Xóa dữ liệu thành công');
+    }
 }

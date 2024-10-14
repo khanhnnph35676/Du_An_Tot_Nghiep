@@ -62,10 +62,11 @@
                                                 <td>
                                                     {{-- <a href="{{ route('admin.updatePayment', $discount->id)}}" class="btn btn-success">Update</a> --}}
                                                     {{-- <a href="{{ route('admin.updateDiscount', $discount->id)}}" class="btn btn-success">Update</a> --}}
-                                                    {{-- <form action="{{ route('admin.discount.destroy', $discount->id) }}" method="POST" style="display: inline-block;">  @csrf
+                                                    <form action="{{ route('admin.payment.destroy', $payment->id) }}" method="POST" style="display: inline-block;">  
+                                                        @csrf
                                                         @method('DELETE')
-                                                        <button type="submit" class="btn btn-danger" onclick="return confirm('Bạn có muốn xóa {{$discount->name}} (Mã: {{$discount->id}}) không???')">Delete</button>
-                                                    </form> --}}
+                                                        <button type="submit" class="btn btn-danger" onclick="return confirm('Bạn có muốn xóa {{$payment->name}} (Mã: {{$payment->id}}) không???')">Delete</button>
+                                                    </form>
                                                 </td>
                                             </tr>
                                             @endforeach
