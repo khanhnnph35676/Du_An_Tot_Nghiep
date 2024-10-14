@@ -13,6 +13,7 @@ class Payment extends Model
         'user_id ',
         'name',
         'acount_payments',
+        'enabled',
     ];
 
     public function users()

@@ -32,9 +32,6 @@ Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
     Route::get('product-detail',[ProductController::class,'productDetail'])->name('productDetail');
     // Trang danh mục
     Route::get('list-categories',[CategoryController::class,'listCategories'])->name('listCategories');
-   
-  
-    
     
     // Trang customer
     Route::get('list-customer',[CustomerController::class,'listCustomer'])->name('listCustomer');
@@ -58,6 +55,9 @@ Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
 
     // Quản lý thanh toán
     Route::get('form-payment',[PaymentController::class,'formPayment'])->name('formPayment');
+    Route::get('create-payments', [PaymentController::class, 'createPayment'])->name('createPayment');
+    Route::post('storeDiscount', [DiscountController::class, 'storeDiscount'])->name('discount.store');
+
 
    
 });
