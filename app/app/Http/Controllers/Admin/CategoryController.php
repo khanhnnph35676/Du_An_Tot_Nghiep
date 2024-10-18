@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-
+use Illuminate\Support\Facades\Storage;
 use App\Models\Category;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -44,25 +44,34 @@ class CategoryController extends Controller
     }
 
     public function update(Request $request, Category $category)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'describe' => 'nullable|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
+{
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'describe' => 'nullable|string',
+        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+    ]);
 
-        // Handle image upload
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('images', 'public');
-            $category->image = $imagePath;
+    // Cập nhật tên và mô tả
+    $category->name = $request->name;
+    $category->describe = $request->describe;
+
+    // Xử lý tải lên ảnh
+    if ($request->hasFile('image')) {
+        // Xóa ảnh cũ nếu có
+        if ($category->image) {
+            Storage::disk('public')->delete($category->image);
         }
-
-        $category->name = $request->name;
-        $category->describe = $request->describe;
-        $category->save();
-
-        return redirect()->route('admin.categories.index')->with('success', 'Category updated successfully.');
+        
+        // Lưu ảnh mới
+        $imagePath = $request->file('image')->store('images', 'public');
+        $category->image = $imagePath;
     }
+
+    $category->save();
+
+    return redirect()->route('admin.categories.index')->with('success', 'Category updated successfully.');
+}
+
 
     public function destroy(Category $category)
     {
