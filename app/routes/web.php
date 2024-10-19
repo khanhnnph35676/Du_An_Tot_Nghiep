@@ -49,7 +49,7 @@ Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
     Route::patch('update-product-simple/{idProduct}',[ProductController::class,'updateProductSimple'])->name('updateProductSimple');
     Route::delete('delete-product-simple',[ProductController::class,'deleteProductSimple'])->name('deleteProductSimple');
     // Trang danh mục
-    Route::get('list-categories',[CategoryController::class,'listCategories'])->name('listCategories');
+
     // Trang customer
     Route::get('list-customer', [CustomerController::class, 'listCustomer'])->name('listCustomer');
     Route::post('customer-store', [CustomerController::class, 'customerStore'])->name('customerStore');
@@ -77,6 +77,13 @@ Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
 
     // Quản lý thanh toán
     Route::get('form-payment',[PaymentController::class,'formPayment'])->name('formPayment');
+    Route::get('create-payments', [PaymentController::class, 'createPayment'])->name('createPayment');
+    Route::post('storePayment', [PaymentController::class, 'storePayment'])->name('payment.store');
+    Route::get('update-payment/{id}', [PaymentController::class, 'updatePayment'])->name('updatePayment');
+    Route::put('editPayment/{id}', [PaymentController::class, 'update'])->name('payment.update');
+    Route::delete('deletePayment/{id}', [PaymentController::class, 'destroy'])->name('payment.destroy');
+
+
 
 });
 
