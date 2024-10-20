@@ -15,6 +15,7 @@ class ProductVariant extends Model
         'price',
         'sku',
         'stock',
+        'option_value',
     ];
     public function products()
     {

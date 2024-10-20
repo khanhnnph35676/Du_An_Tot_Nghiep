@@ -69,6 +69,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                      
                                         @foreach ($listProducts as $key => $value)
                                             <tr>
                                                 <td> {{ $value->id }} </td>

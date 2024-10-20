@@ -30,12 +30,20 @@ Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
     // Trang san phẩm
     Route::get('list-product',[ProductController::class,'listProducts'])->name('listProducts');
     Route::get('product-detail',[ProductController::class,'productDetail'])->name('productDetail');
+    // web.php
+    Route::get('get-variant-data', [ProductController::class, 'getVariantData']);
+
+// VariantController.php
+
     Route::get('product-simple',[ProductController::class,'productSimple'])->name('productSimple');
     Route::get('update-product-simple/{type}/{idProduct}',[ProductController::class,'formUpdateProductSimple'])->name('formUpdateProductSimple');
     // code dữ liệu trang sản phẩm
     Route::post('add-product-simple',[ProductController::class,'addProductSimple'])->name('addProductSimple');
     Route::patch('update-product-simple/{idProduct}',[ProductController::class,'updateProductSimple'])->name('updateProductSimple');
     Route::delete('delete-product-simple',[ProductController::class,'deleteProductSimple'])->name('deleteProductSimple');
+
+    Route::post('add-product-configurable',[ProductController::class,'addProductConfigurable'])->name('addProductConfigurable');
+    //
     // Trang danh mục
     Route::get('list-categories',[CategoryController::class,'listCategories'])->name('listCategories');
     // Trang customer
@@ -45,7 +53,7 @@ Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
     Route::get('customer-edit/{id}', [CustomerController::class, 'customerEdit'])->name('customerEdit');
     Route::put('customer-update/{id}', [CustomerController::class, 'customerUpdate'])->name('customerUpdate');
     Route::delete('customer-destroy/{id}', [CustomerController::class, 'customerDestroy'])->name('customerDestroy');
-    
+
     // trang app
     Route::get('calender',[AppController::class,'calender'])->name('calender');
     Route::get('profile',[AppController::class,'profile'])->name('profile');
