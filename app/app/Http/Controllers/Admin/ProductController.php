@@ -159,28 +159,12 @@ class ProductController extends Controller
             'qty' => '0',
             'image' => $image_url
         ];
-        // if($request->option_value){
-        //     $product = Product::create($product);
-        //     $option_value = VariantOption::where('option_value', $request->option_value)->get();
-        //     foreach ($option_value as $value){
-        //         $productVariant = [
-        //             'product_id' => $product->id,
-        //             'price' => $request->variant_price,
-        //             'sku' => $request->variant_sku,
-        //             'stock' => $request->variant_stock,
-        //             'option_value' => $value->id,
-        //             // 'image' => $variantImageUrl // Đường dẫn ảnh biến thể
-        //         ];
-        //         ProductVariant::create($productVariant);
-        //     }
-        // }
-
         $product = Product::create($product);
         $id = $product->id;
         if (is_array($request->option_value)) {
             foreach ($request->option_value as $key => $optionValue) {
                 $option_value = VariantOption::where('option_value', $optionValue)->get();
-                foreach ($option_value as $value){
+                foreach ($option_value as $value) {
                     $productVariant = [
                         'product_id' => $id,
                         'price' => $request->variant_price[$key],
@@ -203,6 +187,60 @@ class ProductController extends Controller
         }
         return redirect()->route('admin.listProducts')->with([
             'message' => 'Thêm mới sản phẩm biến thể thành công',
+        ]);
+    }
+    public function formUpdateProductConfigurable($type, $idProduct)
+    {
+        $variants = VariantOption::select('option_name')->distinct()->get();
+        $categories = Category::get();
+        $variant_values = VariantOption::get();
+        $product = Product::find($idProduct);
+        $productVariants = ProductVariant::where('product_id', $product->id)->get();
+        return view('admin.product.update-detail')->with([
+            'categories' => $categories,
+            'product' => $product,
+            'variants' => $variants,
+            'variant_values' => $variant_values,
+            'productVariants' => $productVariants
+        ]);
+    }
+    public function updateProductConfigurable($idProduct, ProductAdminRequest $request)
+    {
+        $product = Product::find($idProduct);
+        $image_url = $product->image;
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $nameImage = time() . "_" . uniqid() . '.' . $image->getClientOriginalExtension();
+            $link = "img/prd/";
+            $image->move(public_path($link), $nameImage);
+            $image_url = $link . $nameImage;
+        }
+
+        $data = [
+            'name' => $request->name,
+            'price' => $request->price,
+            'description' => $request->description,
+            'category_id' => $request->category_id,
+            'type' => $request->type,
+            'qty' => $request->qty,
+            'image' => $image_url,
+            'type' => '2'
+        ];
+        $product->update($data);
+        $product_variants = ProductVariant::where("product_id", $idProduct)->get();
+
+        foreach ($product_variants as $key => $value) {
+            $productVariant = ProductVariant::find($value->id);
+            if ($productVariant) {
+                $productVariant->price = $request->variant_price[$key];
+                $productVariant->sku = $request->variant_sku[$key];
+                $productVariant->stock = $request->variant_stock[$key];
+                $productVariant->save();
+            }
+        }
+
+        return redirect()->route('admin.listProducts')->with([
+            'message' => 'Sửa sản phẩm thành công'
         ]);
     }
 }

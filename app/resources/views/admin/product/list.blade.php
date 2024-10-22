@@ -69,7 +69,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                      
+
                                         @foreach ($listProducts as $key => $value)
                                             <tr>
                                                 <td> {{ $value->id }} </td>
@@ -88,8 +88,16 @@
                                                     @endif
                                                 </td>
                                                 <td>
-                                                    <a
-                                                        href="{{ route('admin.formUpdateProductSimple', ['type' => 1, 'idProduct' => $value->id]) }}"class='btn btn-secondary'>Update</a>
+                                                    @if ($value->type == '1')
+                                                        <a
+                                                            href="{{ route('admin.formUpdateProductSimple', ['type' => $value->type, 'idProduct' => $value->id]) }}"class='btn btn-secondary'>Update
+                                                        </a>
+                                                    @else
+                                                        <a
+                                                         href="{{ route('admin.formUpdateProductConfigurable', ['type' => $value->type, 'idProduct' => $value->id]) }}"class='btn btn-secondary'>Update
+                                                        </a>
+                                                    @endif
+
                                                     <!-- Button trigger modal -->
                                                     <button class="btn btn-dark" data-toggle="modal"
                                                         data-target="#deleteProductAdmin"

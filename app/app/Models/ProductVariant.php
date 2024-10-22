@@ -23,6 +23,6 @@ class ProductVariant extends Model
     }
     public function options()
     {
-        return $this->hasMany(VariantOption::class);
+        return $this->belongsTo(VariantOption::class);
     }
 }

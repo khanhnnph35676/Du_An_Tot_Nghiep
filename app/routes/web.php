@@ -33,8 +33,6 @@ Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
     // web.php
     Route::get('get-variant-data', [ProductController::class, 'getVariantData']);
 
-// VariantController.php
-
     Route::get('product-simple',[ProductController::class,'productSimple'])->name('productSimple');
     Route::get('update-product-simple/{type}/{idProduct}',[ProductController::class,'formUpdateProductSimple'])->name('formUpdateProductSimple');
     // code dữ liệu trang sản phẩm
@@ -43,7 +41,10 @@ Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
     Route::delete('delete-product-simple',[ProductController::class,'deleteProductSimple'])->name('deleteProductSimple');
 
     Route::post('add-product-configurable',[ProductController::class,'addProductConfigurable'])->name('addProductConfigurable');
-    //
+    Route::get('update-product-configurable/{type}/{idProduct}',[ProductController::class,'formUpdateProductConfigurable'])->name('formUpdateProductConfigurable');
+    Route::patch('update-product-configurable/{idProduct}',[ProductController::class,'updateProductConfigurable'])->name('updateProductConfigurable');
+
+
     // Trang danh mục
     Route::get('list-categories',[CategoryController::class,'listCategories'])->name('listCategories');
     // Trang customer
