@@ -11,10 +11,11 @@ use App\Http\Controllers\Admin\DiscountController;
 use App\Http\Controllers\Admin\PaymentController;
 
 
-Route::prefix('admin')->name('admin.')->group(function () {
-    Route::resource('categories', CategoryController::class);
-    Route::get('list-categories',[CategoryController::class,'listCategories'])->name('listCategories');
-});
+
+
+
+
+
 
 // DDawng nhập, đăng kí, đăng xuất, quên mật khẩu
 
@@ -24,15 +25,17 @@ Route::post('login-admin', [AuthenController::class, 'postLogin'])->name('postLo
 Route::get('register-admin', [AuthenController::class, 'registerAdmin'])->name('registerAdmin');
 Route::post('register-admin', [AuthenController::class, 'postRegister'])->name('postRegister');
 
-// Route::get('password/reset', [AuthenController::class, 'showLinkRequestForm'])->name('password.request');
-// Route::post('password/email', [AuthenController::class, 'sendResetLinkEmail'])->name('password.email');
-// Route::get('password/reset/{token}', [AuthenController::class, 'showResetForm'])->name('password.reset');
-// Route::post('password/reset', [AuthenController::class, 'reset'])->name('password.update');
+ Route::get('password/reset', [AuthenController::class, 'showLinkRequestForm'])->name('password.request');
+ Route::post('password/email', [AuthenController::class, 'sendResetLinkEmail'])->name('password.email');
+ Route::get('password/reset/{token}', [AuthenController::class, 'showResetForm'])->name('password.reset');
+ Route::post('password/reset', [AuthenController::class, 'reset'])->name('password.update');
 
 
 // Trang amdin
+//check đăng nhập
+Route::middleware(['auth.check'])->group(function () {
 Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
-
+    Route::post('logout', [AuthenController::class, 'logout'])->name('logout');
     // trang chủ
     Route::get('/', function () {   
         return view('admin.home');
@@ -52,8 +55,9 @@ Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
 
 
     // Trang danh mục
+  
+    Route::resource('categories', CategoryController::class);
     Route::get('list-categories',[CategoryController::class,'listCategories'])->name('listCategories');
-
 
     // Trang customer
     Route::get('list-customer', [CustomerController::class, 'listCustomer'])->name('listCustomer');
@@ -83,4 +87,5 @@ Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
     // Quản lý thanh toán
     Route::get('form-payment',[PaymentController::class,'formPayment'])->name('formPayment');
 
+});
 });
