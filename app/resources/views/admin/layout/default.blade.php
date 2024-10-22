@@ -86,6 +86,8 @@
      <!-- Datatable -->
      <script src="{{ asset('focus-2/focus-2/vendor/datatables/js/jquery.dataTables.min.js') }}"></script>
      <script src="{{ asset('focus-2/focus-2/js/plugins-init/datatables.init.js') }}"></script>
+
+
     @stack('scriptHome')
 </body>
 

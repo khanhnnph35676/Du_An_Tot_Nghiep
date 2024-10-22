@@ -5,11 +5,10 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Focus - Bootstrap Admin Dashboard </title>
+    <title>Focus - Bootstrap Admin Dashboard</title>
     <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="{{asset('focus-2/focus-2/images/favicon.png')}}">
-    <link href="{{asset('focus-2/focus-2/css/style.css')}}" rel="stylesheet">
-
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('focus-2/focus-2/images/favicon.png') }}">
+    <link href="{{ asset('focus-2/focus-2/css/style.css') }}" rel="stylesheet">
 </head>
 
 <body class="h-100">
@@ -22,24 +21,25 @@
                             <div class="col-xl-12">
                                 <div class="auth-form">
                                     <h4 class="text-center mb-4">Sign in your account</h4>
-                                    <form action="index.html">
+                                    <form action="{{ route('postLogin') }}" method="POST">
+                                        @csrf
                                         <div class="form-group">
                                             <label><strong>Email</strong></label>
-                                            <input type="email" class="form-control" value="hello@example.com">
+                                            <input type="email" name="email" class="form-control" required>
                                         </div>
                                         <div class="form-group">
                                             <label><strong>Password</strong></label>
-                                            <input type="password" class="form-control" value="Password">
+                                            <input type="password" name="password" class="form-control" required>
                                         </div>
                                         <div class="form-row d-flex justify-content-between mt-4 mb-2">
                                             <div class="form-group">
                                                 <div class="form-check ml-2">
-                                                    <input class="form-check-input" type="checkbox" id="basic_checkbox_1">
+                                                    <input class="form-check-input" type="checkbox" id="basic_checkbox_1" name="remember">
                                                     <label class="form-check-label" for="basic_checkbox_1">Remember me</label>
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <a href="page-forgot-password.html">Forgot Password?</a>
+                                                <a href="{{ route('loginAdmin') }}">Forgot Password?</a>
                                             </div>
                                         </div>
                                         <div class="text-center">
@@ -47,7 +47,7 @@
                                         </div>
                                     </form>
                                     <div class="new-account mt-3">
-                                        <p>Don't have an account? <a class="text-primary" href="./page-register.html">Sign up</a></p>
+                                        <p>Don't have an account? <a class="text-primary" href="{{ route('registerAdmin') }}">Sign up</a></p>
                                     </div>
                                 </div>
                             </div>
@@ -58,15 +58,12 @@
         </div>
     </div>
 
-
     <!--**********************************
         Scripts
     ***********************************-->
-    <!-- Required vendors -->
-    <script src="{{asset('focus-2/focus-2/vendor/global/global.min.js')}}"></script>
-    <script src="{{asset('focus-2/focus-2/js/quixnav-init.js')}}"></script>
-    <script src="{{asset('focus-2/focus-2/js/custom.min.js')}}"></script>
-
+    <script src="{{ asset('focus-2/focus-2/vendor/global/global.min.js') }}"></script>
+    <script src="{{ asset('focus-2/focus-2/js/quixnav-init.js') }}"></script>
+    <script src="{{ asset('focus-2/focus-2/js/custom.min.js') }}"></script>
 </body>
 
 </html>
