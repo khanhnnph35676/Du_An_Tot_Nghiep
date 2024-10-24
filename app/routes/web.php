@@ -22,7 +22,6 @@ Route::get('login-admin',[AuthenController :: class,'loginAdmin'])->name('loginA
 Route::get('register-admin',[AuthenController :: class,'registerAdmin'])->name('registerAdmin');
 // Trang amdin
 Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
-
     // trang chủ
     Route::get('/', function () {
         return view('admin.home');
@@ -39,14 +38,17 @@ Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
     Route::post('add-product-simple',[ProductController::class,'addProductSimple'])->name('addProductSimple');
     Route::patch('update-product-simple/{idProduct}',[ProductController::class,'updateProductSimple'])->name('updateProductSimple');
     Route::delete('delete-product-simple',[ProductController::class,'deleteProductSimple'])->name('deleteProductSimple');
-
+    Route::delete('delete-product-variant',[ProductController::class,'deleteVariant'])->name('deleteVariant');
+    //Code bên biến thể
     Route::post('add-product-configurable',[ProductController::class,'addProductConfigurable'])->name('addProductConfigurable');
     Route::get('update-product-configurable/{type}/{idProduct}',[ProductController::class,'formUpdateProductConfigurable'])->name('formUpdateProductConfigurable');
     Route::patch('update-product-configurable/{idProduct}',[ProductController::class,'updateProductConfigurable'])->name('updateProductConfigurable');
-
+    // restore
     Route::get('restore-product',[ProductController::class,'restorProduct'])->name('restorProduct');
-    Route::patch('products-restore-action',[ProductController::class,'restoreAction'])->name('restoreAction');
+    Route::patch('product-restore-action',[ProductController::class,'restoreAction'])->name('restoreAction');
+    Route::patch('variant-restore-action',[ProductController::class,'restoreVariantAction'])->name('restoreVariantAction');
     Route::delete('force-delete-product',[ProductController::class,'forceDeleteProduct'])->name('forceDeleteProduct');
+    Route::delete('force-delete-variant',[ProductController::class,'forceDeleteVariant'])->name('forceDeleteVariant');
     // Trang danh mục
     Route::get('list-categories',[CategoryController::class,'listCategories'])->name('listCategories');
     // Trang customer
@@ -56,7 +58,6 @@ Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
     Route::get('customer-edit/{id}', [CustomerController::class, 'customerEdit'])->name('customerEdit');
     Route::put('customer-update/{id}', [CustomerController::class, 'customerUpdate'])->name('customerUpdate');
     Route::delete('customer-destroy/{id}', [CustomerController::class, 'customerDestroy'])->name('customerDestroy');
-
     // trang app
     Route::get('calender',[AppController::class,'calender'])->name('calender');
     Route::get('profile',[AppController::class,'profile'])->name('profile');

@@ -135,6 +135,7 @@
                                         <textarea class="summernote" name="description" id="description"></textarea>
                                         {{-- <input type="hidden" name="description" id="description"> --}}
                                     </div>
+
                                 </div>
                             </div>
                     </form>
@@ -211,12 +212,7 @@
                         $('#example tbody').append('<tr>' +
                             '<td>' + variant + '</td>' +
                             '<td>' +
-                            '<div class="image-upload-container">' +
-                            '<label for="imageUpload" class="name_click">Image:</label>' +
-                            '<img id="imagePreview" src="#" alt="Image Preview" style="display:none;" />' +
-                            '<input type="file" name="variant_image" class="form-control-file" id="imageUpload" accept="image/*">' +
-                            '<span style="button" class="btn btn-dark" id="removeImage" style="display:none;">x</span>' +
-                            '</div>' +
+                                '<input type="file" name="variant_image[]" class="form-control">'  +
                             '</td>' +
                             '<td class="pr-4"><input name="variant_sku[]" type="text" class="form-control"></td>' +
                             '<td class="pr-4"><input name="variant_stock[]" type="text" class="form-control"></td>' +

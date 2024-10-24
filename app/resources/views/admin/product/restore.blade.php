@@ -64,7 +64,8 @@
                                             <tr>
                                                 <td> {{ $value->id }} </td>
                                                 <td> {{ $value->name }} </td>
-                                                <td> <img src="{{ asset($value->image) }}" style="width: 50px; height: 50px; object-fit: cover;"
+                                                <td> <img src="{{ asset($value->image) }}"
+                                                        style="width: 50px; height: 50px; object-fit: cover;"
                                                         alt="">
                                                     @foreach ($galleries as $gallerie)
                                                         @if ($gallerie->product_id == $value->id)
@@ -93,6 +94,37 @@
                                                     <button class="btn btn-danger" data-toggle="modal"
                                                         data-target="#deleteProductAdmin"
                                                         data-id="{{ $value->id }}">Delete</button>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                        @foreach ($variants as $variant)
+                                            <tr>
+
+                                                <td> {{ $variant->product_id }}</td>
+
+                                                <td> {{ $value->name . ' _ '}} <strong>{{ $variant->sku }}</strong> </td>
+                                                <td> <img src="{{ asset($variant->image) }}"
+                                                        style="width: 50px; height: 50px; object-fit: cover;"
+                                                        alt="">
+                                                </td>
+                                                <td> {{ number_format($variant->price) }} vnđ </td>
+                                                <td> {{ $variant->stock }} </td>
+                                                <td> {{ $value->view }} </td>
+                                                <td> {{ $value->categories ? $value->categories->name : 'No Category' }}
+                                                </td>
+                                                <td style="width:20%;"> {{ Str::limit($value->description, 20) }}
+                                                </td>
+                                                <td>
+                                                    <span class='badge badge-pill badge-success'> Simple</span>
+                                                </td>
+                                                <td>
+                                                    <button class="btn btn-dark" data-toggle="modal"
+                                                    data-target="#restoreVariant"
+                                                    data-id="{{ $variant->id }}">Restore</button>
+
+                                                    <button class="btn btn-danger" data-toggle="modal"
+                                                        data-target="#deleteForceVariant"
+                                                        data-id="{{ $variant->id }}">Delete</button>
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -154,6 +186,52 @@
             </div>
         </div>
     </div>
+    {{-- delete varinant --}}
+    <div class="modal fade" id="deleteForceVariant">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Delete Product Variant</h5>
+                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
+                    </button>
+                </div>
+                <form action="" method="POST" id="formDeleteVariant">
+                    @method('delete')
+                    @csrf
+                    <div class="modal-body">
+                        <p>You are delete this product</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Delete</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {{-- restore varinant --}}
+    <div class="modal fade" id="restoreVariant">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Restor Product Variant</h5>
+                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
+                    </button>
+                </div>
+                <form action="" method="POST" id="formRestoreVariant">
+                    @csrf
+                    @method('PATCH')
+                    <div class="modal-body">
+                        <p>Are you sure you want to restore this product variant?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Restore</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     {{-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script> --}}
     <script src="{{ asset('focus-2/focus-2/documentation/main/assets/js/lib/bootstrap.min.js') }}"></script>
@@ -166,13 +244,33 @@
             form.attr('action', '{{ route('admin.restoreAction') }}?id=' +
                 productId); // Đặt action với route khôi phục sản phẩm
         });
-        $('#deleteProductAdmin').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget); // Nút kích hoạt modal
-        var id = button.data('id'); // Lấy giá trị từ thuộc tính data-id
-        var modal = $(this); // Khai báo modal
-        var formDelete = modal.find('#formDelete'); // Tìm form bên trong modal
-        formDelete.attr('action', '{{ route('admin.forceDeleteProduct') }}?idProduct=' + id); // Thiết lập action cho form
-    });
+        $('#deleteProductAdmin').on('show.bs.modal', function(event) {
+            var button = $(event.relatedTarget); // Nút kích hoạt modal
+            var id = button.data('id'); // Lấy giá trị từ thuộc tính data-id
+            var modal = $(this); // Khai báo modal
+            var formDelete = modal.find('#formDelete'); // Tìm form bên trong modal
+            formDelete.attr('action', '{{ route('admin.forceDeleteProduct') }}?idProduct=' +
+            id); // Thiết lập action cho form
+        });
+
+        $('#restoreVariant').on('show.bs.modal', function(event) {
+            var button = $(event.relatedTarget); // Nút bấm đã kích hoạt modal
+            var productId = button.data('id'); // Lấy ID sản phẩm
+
+            var form = $('#formRestoreVariant');
+            form.attr('action', '{{ route('admin.restoreVariantAction') }}?id=' +
+                productId); // Đặt action với route khôi phục sản phẩm
+        });
+
+
+        $('#deleteForceVariant').on('show.bs.modal', function(event) {
+            var button = $(event.relatedTarget);
+            var id = button.data('id');
+            var modal = $(this);
+            var formDelete = modal.find('#formDeleteVariant');
+            formDelete.attr('action', '{{ route('admin.forceDeleteVariant') }}?idProduct=' +
+                id);
+        });
     </script>
 @endsection
 

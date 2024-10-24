@@ -39,7 +39,8 @@
                         <div class="card-header">
                             <h4 class="card-title">List Product</h4>
                             <div class="btn-group" role="group">
-                                <a href="{{ route('admin.restorProduct') }}" class="btn btn-dark mr-2">Restore Product</a>
+                                <a href="{{ route('admin.restorProduct') }}" class="btn btn-dark mr-2">
+                                    <i class="fa fa-trash"></i>  Restore Product</a>
                                 <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown">Add
                                     Product</button>
                                 <div class="dropdown-menu bg-secondary mr-3">
@@ -61,7 +62,7 @@
                                             <th>Name</th>
                                             <th>Image</th>
                                             <th>Price</th>
-                                            <th>Stick</th>
+                                            <th>Stock</th>
                                             <th>View</th>
                                             <th>Category</th>
                                             <th>Description</th>
@@ -75,21 +76,24 @@
                                             <tr>
                                                 <td> {{ $value->id }} </td>
                                                 <td> {{ $value->name }} </td>
-                                                <td> <img src="{{ asset($value->image) }}" width="50px" height="50px" alt="">
+                                                <td> <img src="{{ asset($value->image) }}" style="width: 50px; height: 50px; object-fit: cover;"
+                                                        alt="">
                                                     @php
                                                         $count = 0;
                                                     @endphp
 
                                                     @foreach ($galleries as $gallerie)
                                                         @if ($gallerie->product_id == $value->id && $count < 2)
-                                                            <img src="{{ asset($gallerie->image) }}" style="width: 50px; height: 50px; object-fit: cover;" alt="">
+                                                            <img src="{{ asset($gallerie->image) }}"
+                                                                style="width: 50px; height: 50px; object-fit: cover;"
+                                                                alt="">
                                                             @php
                                                                 $count++;
                                                             @endphp
                                                         @endif
                                                     @endforeach
                                                     @if ($count == 2)
-                                                    . . .
+                                                        . . .
                                                     @endif
                                                 </td>
                                                 <td> {{ number_format($value->price) }} vnđ </td>
@@ -122,6 +126,31 @@
                                                         data-id="{{ $value->id }}">Delete</button>
                                                 </td>
                                             </tr>
+                                            @foreach ($variants as $variant)
+                                                @if ($value->id == $variant->product_id)
+                                                    <tr>
+                                                        <td> {{ $variant->product_id }} </td>
+                                                        <td> {{$value->name . ' _ ' }}<strong>{{ $variant->sku }}</strong> </td>
+                                                        <td> <img src="{{ asset($variant->image) }}" style="width: 50px; height: 50px; object-fit: cover;" alt="">
+                                                        </td>
+                                                        <td> {{ number_format($variant->price) }} vnđ </td>
+                                                        <td> {{ $variant->stock }} </td>
+                                                        <td> {{ $value->view }} </td>
+                                                        <td> {{ $value->categories ? $value->categories->name : 'No Category' }}
+                                                        </td>
+                                                        <td style="width:20%;"> {{ Str::limit($value->description, 20) }}
+                                                        </td>
+                                                        <td>
+                                                            <span class='badge badge-pill badge-success'> Simple</span>
+                                                        </td>
+                                                        <td>
+                                                        <button class="btn btn-dark" data-toggle="modal"
+                                                                data-target="#deleteVariant"
+                                                                data-id="{{ $variant->id }}">Delete</button>
+                                                        </td>
+                                                    </tr>
+                                                @endif
+                                            @endforeach
                                         @endforeach
                                     </tbody>
                                 </table>
@@ -157,6 +186,28 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="deleteVariant">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Delete Product Variant</h5>
+                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
+                    </button>
+                </div>
+                <form action="" method="POST" id="formDeleteVariant">
+                    @method('delete')
+                    @csrf
+                    <div class="modal-body">
+                        <p>You are delete this product varinant</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Delete</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     {{-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script> --}}
     <script src="{{ asset('focus-2/focus-2/documentation/main/assets/js/lib/bootstrap.min.js') }}"></script>
@@ -167,6 +218,14 @@
             var modal = $(this); // Khai báo modal
             var formDelete = modal.find('#formDelete'); // Tìm form bên trong modal
             formDelete.attr('action', '{{ route('admin.deleteProductSimple') }}?idProduct=' +
+                id); // Thiết lập action cho form
+        });
+        $('#deleteVariant').on('show.bs.modal', function(event) {
+            var button = $(event.relatedTarget); // Nút kích hoạt modal
+            var id = button.data('id'); // Lấy giá trị từ thuộc tính data-id
+            var modal = $(this); // Khai báo modal
+            var formDelete = modal.find('#formDeleteVariant'); // Tìm form bên trong modal
+            formDelete.attr('action', '{{ route('admin.deleteVariant') }}?idProduct=' +
                 id); // Thiết lập action cho form
         });
     </script>
