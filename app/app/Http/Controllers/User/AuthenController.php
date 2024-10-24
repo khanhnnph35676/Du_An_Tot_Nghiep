@@ -30,7 +30,6 @@ class AuthenController extends Controller
         if (Auth::attempt($credentials)) {
             return redirect()->intended('admin');
         }
-
         return back()->withErrors([
             'email' => 'The provided credentials do not match our records.',
         ]);
@@ -55,7 +54,6 @@ class AuthenController extends Controller
             'password' => Hash::make($request->password),
             'rule_id' => 1, // or other default value
         ]);
-
         event(new Registered($user));
 
         Auth::login($user);

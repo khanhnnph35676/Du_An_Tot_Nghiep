@@ -29,7 +29,7 @@ Route::middleware(['auth.check'])->group(function () {
 Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
     Route::post('logout', [AuthenController::class, 'logout'])->name('logout');
     // trang chủ
-    Route::get('/', function () {   
+    Route::get('/', function () {
         return view('admin.home');
     })->name('admin1');
     // Trang san phẩm
@@ -43,10 +43,8 @@ Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
     Route::delete('delete-product-simple',[ProductController::class,'deleteProductSimple'])->name('deleteProductSimple');
     // Trang danh mục
 
-  
     Route::resource('categories', CategoryController::class);
     Route::get('list-categories',[CategoryController::class,'listCategories'])->name('listCategories');
-
 
     // Trang customer
     Route::get('list-customer', [CustomerController::class, 'listCustomer'])->name('listCustomer');
@@ -55,7 +53,7 @@ Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
     Route::get('customer-edit/{id}', [CustomerController::class, 'customerEdit'])->name('customerEdit');
     Route::put('customer-update/{id}', [CustomerController::class, 'customerUpdate'])->name('customerUpdate');
     Route::delete('customer-destroy/{id}', [CustomerController::class, 'customerDestroy'])->name('customerDestroy');
-    
+
     // trang app
     Route::get('calender',[AppController::class,'calender'])->name('calender');
     Route::get('profile',[AppController::class,'profile'])->name('profile');
@@ -80,6 +78,7 @@ Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
     Route::get('update-payment/{id}', [PaymentController::class, 'updatePayment'])->name('updatePayment');
     Route::put('editPayment/{id}', [PaymentController::class, 'update'])->name('payment.update');
     Route::delete('deletePayment/{id}', [PaymentController::class, 'destroy'])->name('payment.destroy');
+});
 });
 
 
