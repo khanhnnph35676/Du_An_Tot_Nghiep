@@ -78,7 +78,7 @@
                                                 <td> {{ $value->qty }} </td>
                                                 <td> {{ $value->view }} </td>
                                                 <td> {{ $value->categories ? $value->categories->name : 'No Category'  }} </td>
-                                                <td style="width:20%;"> {{ Str::limit($value->description, 20) }} </td>
+                                                <td style="width:20%;"> {{ Str::limit(html_entity_decode(strip_tags($value->description)), 20) }} </td>
                                                 <td>
                                                     @if ($value->type == '1')
                                                         <span class='badge badge-pill badge-success'> Simple</span>
