@@ -46,7 +46,7 @@ Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
 
     Route::get('restore-product',[ProductController::class,'restorProduct'])->name('restorProduct');
     Route::patch('products-restore-action',[ProductController::class,'restoreAction'])->name('restoreAction');
-
+    Route::delete('force-delete-product',[ProductController::class,'forceDeleteProduct'])->name('forceDeleteProduct');
     // Trang danh mục
     Route::get('list-categories',[CategoryController::class,'listCategories'])->name('listCategories');
     // Trang customer

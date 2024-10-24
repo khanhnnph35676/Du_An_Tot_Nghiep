@@ -19,11 +19,13 @@ class ProductController extends Controller
     // Giao diện
     public function listProducts()
     {
+        $galleries = Gallerie::get();
         $listProducts = Product::with([
             'categories:id,name,image,describe'
         ])->get();
         return view('admin.product.list')->with([
-            'listProducts' => $listProducts
+            'listProducts' => $listProducts,
+            'galleries' => $galleries
         ]);
     }
     // chi tiết sản phẩm có biến thể
@@ -152,9 +154,9 @@ class ProductController extends Controller
     public function deleteProductSimple(Request $request)
     {
         $product = Product::find($request->idProduct);
-        $image = $product->image;
-        if ($image) {
-            File::delete(public_path($image));
+        $galleries = Gallerie::where('product_id',$request->idProduct)->get();
+        foreach($galleries as $gallerie){
+            $gallerie->Delete();
         }
         $product->delete();
         return redirect()->back()->with([
@@ -305,20 +307,38 @@ class ProductController extends Controller
         ]);
     }
     public function restorProduct(){
+        $galleries = Gallerie::onlyTrashed()->get();
         $listProducts = Product::with([
             'categories:id,name,image,describe'
         ])->onlyTrashed()->get();
         return view('admin.product.restore')->with([
-            'listProducts' => $listProducts
+            'listProducts' => $listProducts,
+            'galleries' =>$galleries
         ]);
     }
     public function restoreAction(Request $request)
-        {
+    {
             $product = Product::withTrashed()->find($request->id);
             if ($product) {
                 $product->restore();
                 return redirect()->back()->with('success', 'Product restored successfully.');
             }
             return redirect()->back()->with('error', 'Product not found.');
+    }
+    public function forceDeleteProduct(Request $request)
+    {
+        $product = Product::withTrashed()->find($request->idProduct);
+        $galleries = Gallerie::onlyTrashed()->where('product_id',$request->idProduct)->get();
+        $image = $product->image;
+        if ($image) {
+            File::delete(public_path($image));
         }
+        foreach($galleries as $gallerie){
+            $gallerie->forceDelete();
+        }
+        $product->forceDelete();
+        return redirect()->back()->with([
+            'message' => 'Xoá sản phẩm thành công'
+        ]);
+    }
 }

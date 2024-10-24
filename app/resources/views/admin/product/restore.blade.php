@@ -28,7 +28,7 @@
                                     class="mdi mdi-close"></i></span>
                         </button>
                         @if (session('message'))
-                            <strong>{{session('message')}}</strong>
+                            <strong>{{ session('message') }}</strong>
                         @endif
                     </div>
                 </div>
@@ -39,7 +39,7 @@
                         <div class="card-header">
                             <h4 class="card-title">Restore Product</h4>
                             <div class="btn-group" role="group">
-                                <a href="{{route('admin.listProducts')}}" class="btn btn-dark mr-2">Back</a>
+                                <a href="{{ route('admin.listProducts') }}" class="btn btn-dark mr-2">Back</a>
                             </div>
                         </div>
                         <div class="card-body">
@@ -64,11 +64,20 @@
                                             <tr>
                                                 <td> {{ $value->id }} </td>
                                                 <td> {{ $value->name }} </td>
-                                                <td> <img src="{{asset($value->image)}}" width="50px" height="50px" alt=""> </td>
+                                                <td> <img src="{{ asset($value->image) }}" style="width: 50px; height: 50px; object-fit: cover;"
+                                                        alt="">
+                                                    @foreach ($galleries as $gallerie)
+                                                        @if ($gallerie->product_id == $value->id)
+                                                            <img src="{{ asset($gallerie->image) }}"width="50px"
+                                                                height="50px" alt="">
+                                                        @endif
+                                                    @endforeach
+                                                </td>
                                                 <td> {{ number_format($value->price) }} vnđ </td>
                                                 <td> {{ $value->qty }} </td>
                                                 <td> {{ $value->view }} </td>
-                                                <td> {{ $value->categories ? $value->categories->name : 'No Category'  }} </td>
+                                                <td> {{ $value->categories ? $value->categories->name : 'No Category' }}
+                                                </td>
                                                 <td style="width:20%;"> {{ Str::limit($value->description, 20) }} </td>
                                                 <td>
                                                     @if ($value->type == '1')
@@ -81,6 +90,9 @@
                                                     <button class="btn btn-dark" data-toggle="modal"
                                                         data-target="#restorePro"
                                                         data-id="{{ $value->id }}">Restore</button>
+                                                    <button class="btn btn-danger" data-toggle="modal"
+                                                        data-target="#deleteProductAdmin"
+                                                        data-id="{{ $value->id }}">Delete</button>
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -118,17 +130,49 @@
             </div>
         </div>
     </div>
+
+    {{-- delete --}}
+    <div class="modal fade" id="deleteProductAdmin">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Delete Product</h5>
+                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
+                    </button>
+                </div>
+                <form action="" method="POST" id="formDelete">
+                    @method('delete')
+                    @csrf
+                    <div class="modal-body">
+                        <p>You are delete this product</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Delete</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     {{-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script> --}}
     <script src="{{ asset('focus-2/focus-2/documentation/main/assets/js/lib/bootstrap.min.js') }}"></script>
     <script>
-     $('#restorePro').on('show.bs.modal', function (event) {
-    var button = $(event.relatedTarget); // Nút bấm đã kích hoạt modal
-    var productId = button.data('id'); // Lấy ID sản phẩm
+        $('#restorePro').on('show.bs.modal', function(event) {
+            var button = $(event.relatedTarget); // Nút bấm đã kích hoạt modal
+            var productId = button.data('id'); // Lấy ID sản phẩm
 
-    var form = $('#formRestore');
-    form.attr('action', '{{ route('admin.restoreAction')}}?id=' + productId); // Đặt action với route khôi phục sản phẩm
-});
+            var form = $('#formRestore');
+            form.attr('action', '{{ route('admin.restoreAction') }}?id=' +
+                productId); // Đặt action với route khôi phục sản phẩm
+        });
+        $('#deleteProductAdmin').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget); // Nút kích hoạt modal
+        var id = button.data('id'); // Lấy giá trị từ thuộc tính data-id
+        var modal = $(this); // Khai báo modal
+        var formDelete = modal.find('#formDelete'); // Tìm form bên trong modal
+        formDelete.attr('action', '{{ route('admin.forceDeleteProduct') }}?idProduct=' + id); // Thiết lập action cho form
+    });
     </script>
 @endsection
 

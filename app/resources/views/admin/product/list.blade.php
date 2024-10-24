@@ -28,7 +28,7 @@
                                     class="mdi mdi-close"></i></span>
                         </button>
                         @if (session('message'))
-                            <strong>{{session('message')}}</strong>
+                            <strong>{{ session('message') }}</strong>
                         @endif
                     </div>
                 </div>
@@ -39,7 +39,7 @@
                         <div class="card-header">
                             <h4 class="card-title">List Product</h4>
                             <div class="btn-group" role="group">
-                                <a href="{{route('admin.restorProduct')}}" class="btn btn-dark mr-2">Restore Product</a>
+                                <a href="{{ route('admin.restorProduct') }}" class="btn btn-dark mr-2">Restore Product</a>
                                 <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown">Add
                                     Product</button>
                                 <div class="dropdown-menu bg-secondary mr-3">
@@ -75,11 +75,28 @@
                                             <tr>
                                                 <td> {{ $value->id }} </td>
                                                 <td> {{ $value->name }} </td>
-                                                <td> <img src="{{asset($value->image)}}" width="50px" height="50px" alt=""> </td>
+                                                <td> <img src="{{ asset($value->image) }}" width="50px" height="50px" alt="">
+                                                    @php
+                                                        $count = 0;
+                                                    @endphp
+
+                                                    @foreach ($galleries as $gallerie)
+                                                        @if ($gallerie->product_id == $value->id && $count < 2)
+                                                            <img src="{{ asset($gallerie->image) }}" style="width: 50px; height: 50px; object-fit: cover;" alt="">
+                                                            @php
+                                                                $count++;
+                                                            @endphp
+                                                        @endif
+                                                    @endforeach
+                                                    @if ($count == 2)
+                                                    . . .
+                                                    @endif
+                                                </td>
                                                 <td> {{ number_format($value->price) }} vnđ </td>
                                                 <td> {{ $value->qty }} </td>
                                                 <td> {{ $value->view }} </td>
-                                                <td> {{ $value->categories ? $value->categories->name : 'No Category'  }} </td>
+                                                <td> {{ $value->categories ? $value->categories->name : 'No Category' }}
+                                                </td>
                                                 <td style="width:20%;"> {{ Str::limit($value->description, 20) }} </td>
                                                 <td>
                                                     @if ($value->type == '1')
@@ -95,7 +112,7 @@
                                                         </a>
                                                     @else
                                                         <a
-                                                         href="{{ route('admin.formUpdateProductConfigurable', ['type' => $value->type, 'idProduct' => $value->id]) }}"class='btn btn-secondary'>Update
+                                                            href="{{ route('admin.formUpdateProductConfigurable', ['type' => $value->type, 'idProduct' => $value->id]) }}"class='btn btn-secondary'>Update
                                                         </a>
                                                     @endif
 
@@ -144,13 +161,14 @@
     {{-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script> --}}
     <script src="{{ asset('focus-2/focus-2/documentation/main/assets/js/lib/bootstrap.min.js') }}"></script>
     <script>
-       $('#deleteProductAdmin').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget); // Nút kích hoạt modal
-        var id = button.data('id'); // Lấy giá trị từ thuộc tính data-id
-        var modal = $(this); // Khai báo modal
-        var formDelete = modal.find('#formDelete'); // Tìm form bên trong modal
-        formDelete.attr('action', '{{ route('admin.deleteProductSimple') }}?idProduct=' + id); // Thiết lập action cho form
-    });
+        $('#deleteProductAdmin').on('show.bs.modal', function(event) {
+            var button = $(event.relatedTarget); // Nút kích hoạt modal
+            var id = button.data('id'); // Lấy giá trị từ thuộc tính data-id
+            var modal = $(this); // Khai báo modal
+            var formDelete = modal.find('#formDelete'); // Tìm form bên trong modal
+            formDelete.attr('action', '{{ route('admin.deleteProductSimple') }}?idProduct=' +
+                id); // Thiết lập action cho form
+        });
     </script>
 @endsection
 
