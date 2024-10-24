@@ -57,6 +57,7 @@ class ProductController extends Controller
             $image->move(public_path($link), $nameImage);
             $image_url = $link . $nameImage;
         }
+
         $data = [
             'name' => $request->name,
             'price' => $request->price,
@@ -67,7 +68,21 @@ class ProductController extends Controller
             'image' => $image_url
         ];
 
-        Product::create($data);
+        $product = Product::create($data);
+        $id = $product->id;
+        if ($request->hasFile('gallerie_image')) {
+            $images = $request->file('gallerie_image');
+            foreach ($images as $key => $image) {
+                $nameImage = time() . "_" . uniqid() . '.' . $image->getClientOriginalExtension();
+                $link = "img/prd/";
+                $image->move(public_path($link), $nameImage);
+                $gallerie = [
+                    'product_id' => $id,
+                    'image' => $link . $nameImage
+                ];
+                Gallerie::create($gallerie);
+            }
+        }
         return redirect()->route('admin.listProducts')->with([
             'message' => 'Thêm mới thành công'
         ]);
@@ -104,21 +119,30 @@ class ProductController extends Controller
             'qty' => $request->qty,
             'image' => $image_url
         ];
-        // Kiểm tra nếu có file upload từ CKEditor
-
-        // if ($request->hasFile('file')) {
-        //     $file = $request->file('file');
-        //     $filename = time() . '_' . $file->getClientOriginalName();
-        //     $path = $file->storeAs('media', $filename, 'public');
-
-        //     // Chèn hình ảnh vào mô tả với một thẻ <img>
-        //     $imgTag = '<img src="' . url('storage/' . $path) . '" alt="' . $filename . '" style="max-width: 100%; height: auto;">';
-
-        //     // Thêm thẻ <img> vào mô tả nhưng chỉ lưu một thẻ ngắn gọn
-        //     $data['description'] .= $imgTag;
-        // }
 
         $product->update($data);
+        if ($request->hasFile('gallerie_image')) {
+            $updateGallerie = Gallerie::where('product_id', $idProduct)->get();
+            foreach ($updateGallerie as $value) {
+                if ($value->image != null && $value->image != '') {
+                    File::delete(public_path($value->image));
+                    Gallerie::where('product_id', $idProduct)->delete();
+                }
+            }
+            if ($request->hasFile('gallerie_image')) {
+                $images = $request->file('gallerie_image');
+                foreach ($images as $key => $image) {
+                    $nameImage = time() . "_" . uniqid() . '.' . $image->getClientOriginalExtension();
+                    $link = "img/prd/";
+                    $image->move(public_path($link), $nameImage);
+                    $gallerie = [
+                        'product_id' => $idProduct,
+                        'image' => $link . $nameImage
+                    ];
+                    Gallerie::create($gallerie);
+                }
+            }
+        }
         return redirect()->route('admin.listProducts')->with([
             'message' => 'Sửa sản phẩm thành công'
         ]);
@@ -160,6 +184,7 @@ class ProductController extends Controller
             'image' => $image_url
         ];
         $product = Product::create($product);
+
         $id = $product->id;
         if (is_array($request->option_value)) {
             foreach ($request->option_value as $key => $optionValue) {
@@ -183,6 +208,19 @@ class ProductController extends Controller
                 //     $variantImageUrl = $link . $variantImageName;
                 // }
 
+            }
+        }
+        if ($request->hasFile('gallerie_image')) {
+            $images = $request->file('gallerie_image');
+            foreach ($images as $key => $image) {
+                $nameImage = time() . "_" . uniqid() . '.' . $image->getClientOriginalExtension();
+                $link = "img/prd/";
+                $image->move(public_path($link), $nameImage);
+                $gallerie = [
+                    'product_id' => $id,
+                    'image' => $link . $nameImage
+                ];
+                Gallerie::create($gallerie);
             }
         }
         return redirect()->route('admin.listProducts')->with([
@@ -239,8 +277,48 @@ class ProductController extends Controller
             }
         }
 
+        if ($request->hasFile('gallerie_image')) {
+            $updateGallerie = Gallerie::where('product_id', $idProduct)->get();
+            foreach ($updateGallerie as $value) {
+                if ($value->image != null && $value->image != '') {
+                    File::delete(public_path($value->image));
+                    Gallerie::where('product_id', $idProduct)->delete();
+                }
+            }
+            if ($request->hasFile('gallerie_image')) {
+                $images = $request->file('gallerie_image');
+                foreach ($images as $key => $image) {
+                    $nameImage = time() . "_" . uniqid() . '.' . $image->getClientOriginalExtension();
+                    $link = "img/prd/";
+                    $image->move(public_path($link), $nameImage);
+                    $gallerie = [
+                        'product_id' => $idProduct,
+                        'image' => $link . $nameImage
+                    ];
+                    Gallerie::create($gallerie);
+                }
+            }
+        }
+
         return redirect()->route('admin.listProducts')->with([
             'message' => 'Sửa sản phẩm thành công'
         ]);
     }
+    public function restorProduct(){
+        $listProducts = Product::with([
+            'categories:id,name,image,describe'
+        ])->onlyTrashed()->get();
+        return view('admin.product.restore')->with([
+            'listProducts' => $listProducts
+        ]);
+    }
+    public function restoreAction(Request $request)
+        {
+            $product = Product::withTrashed()->find($request->id);
+            if ($product) {
+                $product->restore();
+                return redirect()->back()->with('success', 'Product restored successfully.');
+            }
+            return redirect()->back()->with('error', 'Product not found.');
+        }
 }

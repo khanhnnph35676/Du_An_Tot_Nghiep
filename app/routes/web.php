@@ -44,6 +44,8 @@ Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
     Route::get('update-product-configurable/{type}/{idProduct}',[ProductController::class,'formUpdateProductConfigurable'])->name('formUpdateProductConfigurable');
     Route::patch('update-product-configurable/{idProduct}',[ProductController::class,'updateProductConfigurable'])->name('updateProductConfigurable');
 
+    Route::get('restore-product',[ProductController::class,'restorProduct'])->name('restorProduct');
+    Route::patch('products-restore-action',[ProductController::class,'restoreAction'])->name('restoreAction');
 
     // Trang danh mục
     Route::get('list-categories',[CategoryController::class,'listCategories'])->name('listCategories');

@@ -37,19 +37,9 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h4 class="card-title">List Product</h4>
+                            <h4 class="card-title">Restore Product</h4>
                             <div class="btn-group" role="group">
-                                <a href="{{route('admin.restorProduct')}}" class="btn btn-dark mr-2">Restore Product</a>
-                                <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown">Add
-                                    Product</button>
-                                <div class="dropdown-menu bg-secondary mr-3">
-                                    <div class="d-flex flex-column">
-                                        <a href="{{ route('admin.productSimple') }}" class='btn btn-secondary'>Product
-                                            Simple</a>
-                                        <a href="{{ route('admin.productDetail') }}" class='btn btn-secondary'>Product
-                                            Configurable</a>
-                                    </div>
-                                </div>
+                                <a href="{{route('admin.listProducts')}}" class="btn btn-dark mr-2">Back</a>
                             </div>
                         </div>
                         <div class="card-body">
@@ -70,7 +60,6 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-
                                         @foreach ($listProducts as $key => $value)
                                             <tr>
                                                 <td> {{ $value->id }} </td>
@@ -89,20 +78,9 @@
                                                     @endif
                                                 </td>
                                                 <td>
-                                                    @if ($value->type == '1')
-                                                        <a
-                                                            href="{{ route('admin.formUpdateProductSimple', ['type' => $value->type, 'idProduct' => $value->id]) }}"class='btn btn-secondary'>Update
-                                                        </a>
-                                                    @else
-                                                        <a
-                                                         href="{{ route('admin.formUpdateProductConfigurable', ['type' => $value->type, 'idProduct' => $value->id]) }}"class='btn btn-secondary'>Update
-                                                        </a>
-                                                    @endif
-
-                                                    <!-- Button trigger modal -->
                                                     <button class="btn btn-dark" data-toggle="modal"
-                                                        data-target="#deleteProductAdmin"
-                                                        data-id="{{ $value->id }}">Delete</button>
+                                                        data-target="#restorePro"
+                                                        data-id="{{ $value->id }}">Restore</button>
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -118,23 +96,23 @@
     <!--**********************************Content body end ***********************************-->
 
     <!-- Modal -->
-    <div class="modal fade" id="deleteProductAdmin">
+    <div class="modal fade" id="restorePro">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Delete Product</h5>
+                    <h5 class="modal-title">Restore Product</h5>
                     <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
                     </button>
                 </div>
-                <form action="" method="POST" id="formDelete">
-                    @method('delete')
+                <form action="" method="POST" id="formRestore">
                     @csrf
+                    @method('PATCH')
                     <div class="modal-body">
-                        <p>You are delete this product</p>
+                        <p>Are you sure you want to restore this product?</p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Delete</button>
+                        <button type="submit" class="btn btn-primary">Restore</button>
                     </div>
                 </form>
             </div>
@@ -144,13 +122,13 @@
     {{-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script> --}}
     <script src="{{ asset('focus-2/focus-2/documentation/main/assets/js/lib/bootstrap.min.js') }}"></script>
     <script>
-       $('#deleteProductAdmin').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget); // Nút kích hoạt modal
-        var id = button.data('id'); // Lấy giá trị từ thuộc tính data-id
-        var modal = $(this); // Khai báo modal
-        var formDelete = modal.find('#formDelete'); // Tìm form bên trong modal
-        formDelete.attr('action', '{{ route('admin.deleteProductSimple') }}?idProduct=' + id); // Thiết lập action cho form
-    });
+     $('#restorePro').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget); // Nút bấm đã kích hoạt modal
+    var productId = button.data('id'); // Lấy ID sản phẩm
+
+    var form = $('#formRestore');
+    form.attr('action', '{{ route('admin.restoreAction')}}?id=' + productId); // Đặt action với route khôi phục sản phẩm
+});
     </script>
 @endsection
 

@@ -81,6 +81,10 @@
                                         <div class="form-group">
                                             <input type="file" class="form-control" name="image" accept="image/*">
                                         </div>
+                                        <div class="form-group">
+                                            <input type="file" class="form-control" name="gallerie_image[]" accept="image/*"multiple>
+                                        </div>
+
                                     </div>
                                     {{-- phần biến thể phải làm bằng front-end
                                         1,nếu click chọn loại thì in ra danh sách loại
