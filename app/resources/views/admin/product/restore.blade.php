@@ -37,20 +37,9 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h4 class="card-title">List Product</h4>
+                            <h4 class="card-title">Restore Product</h4>
                             <div class="btn-group" role="group">
-                                <a href="{{ route('admin.restorProduct') }}" class="btn btn-dark mr-2">
-                                    <i class="fa fa-trash"></i>  Restore Product</a>
-                                <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown">Add
-                                    Product</button>
-                                <div class="dropdown-menu bg-secondary mr-3">
-                                    <div class="d-flex flex-column">
-                                        <a href="{{ route('admin.productSimple') }}" class='btn btn-secondary'>Product
-                                            Simple</a>
-                                        <a href="{{ route('admin.productDetail') }}" class='btn btn-secondary'>Product
-                                            Configurable</a>
-                                    </div>
-                                </div>
+                                <a href="{{ route('admin.listProducts') }}" class="btn btn-dark mr-2">Back</a>
                             </div>
                         </div>
                         <div class="card-body">
@@ -62,7 +51,7 @@
                                             <th>Name</th>
                                             <th>Image</th>
                                             <th>Price</th>
-                                            <th>Stock</th>
+                                            <th>Stick</th>
                                             <th>View</th>
                                             <th>Category</th>
                                             <th>Description</th>
@@ -71,30 +60,19 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-
                                         @foreach ($listProducts as $key => $value)
                                             <tr>
                                                 <td> {{ $value->id }} </td>
                                                 <td> {{ $value->name }} </td>
-                                                <td> <img src="{{ asset($value->image) }}" style="width: 50px; height: 50px; object-fit: cover;"
+                                                <td> <img src="{{ asset($value->image) }}"
+                                                        style="width: 50px; height: 50px; object-fit: cover;"
                                                         alt="">
-                                                    @php
-                                                        $count = 0;
-                                                    @endphp
-
                                                     @foreach ($galleries as $gallerie)
-                                                        @if ($gallerie->product_id == $value->id && $count < 2)
-                                                            <img src="{{ asset($gallerie->image) }}"
-                                                                style="width: 50px; height: 50px; object-fit: cover;"
-                                                                alt="">
-                                                            @php
-                                                                $count++;
-                                                            @endphp
+                                                        @if ($gallerie->product_id == $value->id)
+                                                            <img src="{{ asset($gallerie->image) }}"width="50px"
+                                                                height="50px" alt="">
                                                         @endif
                                                     @endforeach
-                                                    @if ($count == 2)
-                                                        . . .
-                                                    @endif
                                                 </td>
                                                 <td> {{ number_format($value->price) }} vnđ </td>
                                                 <td> {{ $value->qty }} </td>
@@ -110,47 +88,45 @@
                                                     @endif
                                                 </td>
                                                 <td>
-                                                    @if ($value->type == '1')
-                                                        <a
-                                                            href="{{ route('admin.formUpdateProductSimple', ['type' => $value->type, 'idProduct' => $value->id]) }}"class='btn btn-secondary'>Update
-                                                        </a>
-                                                    @else
-                                                        <a
-                                                            href="{{ route('admin.formUpdateProductConfigurable', ['type' => $value->type, 'idProduct' => $value->id]) }}"class='btn btn-secondary'>Update
-                                                        </a>
-                                                    @endif
-
-                                                    <!-- Button trigger modal -->
                                                     <button class="btn btn-dark" data-toggle="modal"
+                                                        data-target="#restorePro"
+                                                        data-id="{{ $value->id }}">Restore</button>
+                                                    <button class="btn btn-danger" data-toggle="modal"
                                                         data-target="#deleteProductAdmin"
                                                         data-id="{{ $value->id }}">Delete</button>
                                                 </td>
                                             </tr>
-                                            @foreach ($variants as $variant)
-                                                @if ($value->id == $variant->product_id)
-                                                    <tr>
-                                                        <td> {{ $variant->product_id }} </td>
-                                                        <td> {{$value->name . ' _ ' }}<strong>{{ $variant->sku }}</strong> </td>
-                                                        <td> <img src="{{ asset($variant->image) }}" style="width: 50px; height: 50px; object-fit: cover;" alt="">
-                                                        </td>
-                                                        <td> {{ number_format($variant->price) }} vnđ </td>
-                                                        <td> {{ $variant->stock }} </td>
-                                                        <td> {{ $value->view }} </td>
-                                                        <td> {{ $value->categories ? $value->categories->name : 'No Category' }}
-                                                        </td>
-                                                        <td style="width:20%;"> {{ Str::limit($value->description, 20) }}
-                                                        </td>
-                                                        <td>
-                                                            <span class='badge badge-pill badge-success'> Simple</span>
-                                                        </td>
-                                                        <td>
-                                                        <button class="btn btn-dark" data-toggle="modal"
-                                                                data-target="#deleteVariant"
-                                                                data-id="{{ $variant->id }}">Delete</button>
-                                                        </td>
-                                                    </tr>
-                                                @endif
-                                            @endforeach
+                                        @endforeach
+                                        @foreach ($variants as $variant)
+                                            <tr>
+
+                                                <td> {{ $variant->product_id }}</td>
+
+                                                <td> {{ $value->name . ' _ '}} <strong>{{ $variant->sku }}</strong> </td>
+                                                <td> <img src="{{ asset($variant->image) }}"
+                                                        style="width: 50px; height: 50px; object-fit: cover;"
+                                                        alt="">
+                                                </td>
+                                                <td> {{ number_format($variant->price) }} vnđ </td>
+                                                <td> {{ $variant->stock }} </td>
+                                                <td> {{ $value->view }} </td>
+                                                <td> {{ $value->categories ? $value->categories->name : 'No Category' }}
+                                                </td>
+                                                <td style="width:20%;"> {{ Str::limit($value->description, 20) }}
+                                                </td>
+                                                <td>
+                                                    <span class='badge badge-pill badge-success'> Simple</span>
+                                                </td>
+                                                <td>
+                                                    <button class="btn btn-dark" data-toggle="modal"
+                                                    data-target="#restoreVariant"
+                                                    data-id="{{ $variant->id }}">Restore</button>
+
+                                                    <button class="btn btn-danger" data-toggle="modal"
+                                                        data-target="#deleteForceVariant"
+                                                        data-id="{{ $variant->id }}">Delete</button>
+                                                </td>
+                                            </tr>
                                         @endforeach
                                     </tbody>
                                 </table>
@@ -164,6 +140,30 @@
     <!--**********************************Content body end ***********************************-->
 
     <!-- Modal -->
+    <div class="modal fade" id="restorePro">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Restore Product</h5>
+                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
+                    </button>
+                </div>
+                <form action="" method="POST" id="formRestore">
+                    @csrf
+                    @method('PATCH')
+                    <div class="modal-body">
+                        <p>Are you sure you want to restore this product?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Restore</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {{-- delete --}}
     <div class="modal fade" id="deleteProductAdmin">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
@@ -186,7 +186,8 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="deleteVariant">
+    {{-- delete varinant --}}
+    <div class="modal fade" id="deleteForceVariant">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -198,7 +199,7 @@
                     @method('delete')
                     @csrf
                     <div class="modal-body">
-                        <p>You are delete this product varinant</p>
+                        <p>You are delete this product</p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
@@ -208,25 +209,67 @@
             </div>
         </div>
     </div>
+    {{-- restore varinant --}}
+    <div class="modal fade" id="restoreVariant">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Restor Product Variant</h5>
+                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
+                    </button>
+                </div>
+                <form action="" method="POST" id="formRestoreVariant">
+                    @csrf
+                    @method('PATCH')
+                    <div class="modal-body">
+                        <p>Are you sure you want to restore this product variant?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Restore</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     {{-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script> --}}
     <script src="{{ asset('focus-2/focus-2/documentation/main/assets/js/lib/bootstrap.min.js') }}"></script>
     <script>
+        $('#restorePro').on('show.bs.modal', function(event) {
+            var button = $(event.relatedTarget); // Nút bấm đã kích hoạt modal
+            var productId = button.data('id'); // Lấy ID sản phẩm
+
+            var form = $('#formRestore');
+            form.attr('action', '{{ route('admin.restoreAction') }}?id=' +
+                productId); // Đặt action với route khôi phục sản phẩm
+        });
         $('#deleteProductAdmin').on('show.bs.modal', function(event) {
             var button = $(event.relatedTarget); // Nút kích hoạt modal
             var id = button.data('id'); // Lấy giá trị từ thuộc tính data-id
             var modal = $(this); // Khai báo modal
             var formDelete = modal.find('#formDelete'); // Tìm form bên trong modal
-            formDelete.attr('action', '{{ route('admin.deleteProductSimple') }}?idProduct=' +
-                id); // Thiết lập action cho form
+            formDelete.attr('action', '{{ route('admin.forceDeleteProduct') }}?idProduct=' +
+            id); // Thiết lập action cho form
         });
-        $('#deleteVariant').on('show.bs.modal', function(event) {
-            var button = $(event.relatedTarget); // Nút kích hoạt modal
-            var id = button.data('id'); // Lấy giá trị từ thuộc tính data-id
-            var modal = $(this); // Khai báo modal
-            var formDelete = modal.find('#formDeleteVariant'); // Tìm form bên trong modal
-            formDelete.attr('action', '{{ route('admin.deleteVariant') }}?idProduct=' +
-                id); // Thiết lập action cho form
+
+        $('#restoreVariant').on('show.bs.modal', function(event) {
+            var button = $(event.relatedTarget); // Nút bấm đã kích hoạt modal
+            var productId = button.data('id'); // Lấy ID sản phẩm
+
+            var form = $('#formRestoreVariant');
+            form.attr('action', '{{ route('admin.restoreVariantAction') }}?id=' +
+                productId); // Đặt action với route khôi phục sản phẩm
+        });
+
+
+        $('#deleteForceVariant').on('show.bs.modal', function(event) {
+            var button = $(event.relatedTarget);
+            var id = button.data('id');
+            var modal = $(this);
+            var formDelete = modal.find('#formDeleteVariant');
+            formDelete.attr('action', '{{ route('admin.forceDeleteVariant') }}?idProduct=' +
+                id);
         });
     </script>
 @endsection

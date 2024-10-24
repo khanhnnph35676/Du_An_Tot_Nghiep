@@ -13,7 +13,8 @@
     <link href="{{asset('focus-2/focus-2/vendor/jqvmap/css/jqvmap.min.css')}}" rel="stylesheet">
     <link href="{{asset('focus-2/focus-2/css/style.css')}}" rel="stylesheet">
     <link href="{{asset('focus-2/focus-2/vendor/datatables/css/jquery.dataTables.min.css')}}" rel="stylesheet">
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    {{--  <link rel="stylesheet" href="{{asset('backend/css/all.min.css')}}"> --}}
     @stack('styleHome')
 </head>
 

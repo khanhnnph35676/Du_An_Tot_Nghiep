@@ -22,7 +22,6 @@ Route::post('register-admin', [AuthenController::class, 'postRegister'])->name('
  Route::get('password/reset/{token}', [AuthenController::class, 'showResetForm'])->name('password.reset');
  Route::post('password/reset', [AuthenController::class, 'reset'])->name('password.update');
 
-
 // Trang amdin
 //check đăng nhập
 Route::middleware(['auth.check'])->group(function () {
@@ -35,16 +34,32 @@ Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
     // Trang san phẩm
     Route::get('list-product',[ProductController::class,'listProducts'])->name('listProducts');
     Route::get('product-detail',[ProductController::class,'productDetail'])->name('productDetail');
+    // web.php
+    Route::get('get-variant-data', [ProductController::class, 'getVariantData']);
+
     Route::get('product-simple',[ProductController::class,'productSimple'])->name('productSimple');
     Route::get('update-product-simple/{type}/{idProduct}',[ProductController::class,'formUpdateProductSimple'])->name('formUpdateProductSimple');
     // code dữ liệu trang sản phẩm
     Route::post('add-product-simple',[ProductController::class,'addProductSimple'])->name('addProductSimple');
     Route::patch('update-product-simple/{idProduct}',[ProductController::class,'updateProductSimple'])->name('updateProductSimple');
     Route::delete('delete-product-simple',[ProductController::class,'deleteProductSimple'])->name('deleteProductSimple');
+    Route::delete('delete-product-variant',[ProductController::class,'deleteVariant'])->name('deleteVariant');
+    //Code bên biến thể
+    Route::post('add-product-configurable',[ProductController::class,'addProductConfigurable'])->name('addProductConfigurable');
+    Route::get('update-product-configurable/{type}/{idProduct}',[ProductController::class,'formUpdateProductConfigurable'])->name('formUpdateProductConfigurable');
+    Route::patch('update-product-configurable/{idProduct}',[ProductController::class,'updateProductConfigurable'])->name('updateProductConfigurable');
+    // restore
+    Route::get('restore-product',[ProductController::class,'restorProduct'])->name('restorProduct');
+    Route::patch('product-restore-action',[ProductController::class,'restoreAction'])->name('restoreAction');
+    Route::patch('variant-restore-action',[ProductController::class,'restoreVariantAction'])->name('restoreVariantAction');
+    Route::delete('force-delete-product',[ProductController::class,'forceDeleteProduct'])->name('forceDeleteProduct');
+    Route::delete('force-delete-variant',[ProductController::class,'forceDeleteVariant'])->name('forceDeleteVariant');
     // Trang danh mục
+
 
     Route::resource('categories', CategoryController::class);
     Route::get('list-categories',[CategoryController::class,'listCategories'])->name('listCategories');
+
 
     // Trang customer
     Route::get('list-customer', [CustomerController::class, 'listCustomer'])->name('listCustomer');
@@ -70,7 +85,6 @@ Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
     Route::get('update-discounts/{id}', [DiscountController::class, 'updateDiscount'])->name('updateDiscount');
     Route::put('editDiscount/{id}', [DiscountController::class, 'update'])->name('discount.update');
     Route::delete('deleteDiscount/{id}', [DiscountController::class, 'destroy'])->name('discount.destroy');
-
     // Quản lý thanh toán
     Route::get('form-payment',[PaymentController::class,'formPayment'])->name('formPayment');
     Route::get('create-payments', [PaymentController::class, 'createPayment'])->name('createPayment');
@@ -78,7 +92,6 @@ Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
     Route::get('update-payment/{id}', [PaymentController::class, 'updatePayment'])->name('updatePayment');
     Route::put('editPayment/{id}', [PaymentController::class, 'update'])->name('payment.update');
     Route::delete('deletePayment/{id}', [PaymentController::class, 'destroy'])->name('payment.destroy');
-});
 });
 
 
