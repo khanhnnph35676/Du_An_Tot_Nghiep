@@ -12,18 +12,23 @@ use App\Http\Controllers\Admin\PaymentController;
 use App\Http\Controllers\User\PageController;
 use App\Http\Controllers\User\AuthenController;
 
-Route::prefix('admin')->name('admin.')->group(function () {
-    Route::resource('categories', CategoryController::class);
-    Route::get('list-categories',[CategoryController::class,'listCategories'])->name('listCategories');
-});
+Route::get('login-admin', [AuthenController::class, 'loginAdmin'])->name('loginAdmin');
+Route::post('login-admin', [AuthenController::class, 'postLogin'])->name('postLogin');
+Route::get('register-admin', [AuthenController::class, 'registerAdmin'])->name('registerAdmin');
+Route::post('register-admin', [AuthenController::class, 'postRegister'])->name('postRegister');
 
-// DDawng nhập, đăng kí, đăng xuất, quên mật khẩu
-Route::get('login-admin',[AuthenController :: class,'loginAdmin'])->name('loginAdmin');
-Route::get('register-admin',[AuthenController :: class,'registerAdmin'])->name('registerAdmin');
+ Route::get('password/reset', [AuthenController::class, 'showLinkRequestForm'])->name('password.request');
+ Route::post('password/email', [AuthenController::class, 'sendResetLinkEmail'])->name('password.email');
+ Route::get('password/reset/{token}', [AuthenController::class, 'showResetForm'])->name('password.reset');
+ Route::post('password/reset', [AuthenController::class, 'reset'])->name('password.update');
+
 // Trang amdin
+//check đăng nhập
+Route::middleware(['auth.check'])->group(function () {
 Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
+    Route::post('logout', [AuthenController::class, 'logout'])->name('logout');
     // trang chủ
-    Route::get('/', function () {
+    Route::get('/', function () {   
         return view('admin.home');
     })->name('admin1');
     // Trang san phẩm
@@ -50,6 +55,7 @@ Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
     Route::delete('force-delete-product',[ProductController::class,'forceDeleteProduct'])->name('forceDeleteProduct');
     Route::delete('force-delete-variant',[ProductController::class,'forceDeleteVariant'])->name('forceDeleteVariant');
     // Trang danh mục
+    Route::resource('categories', CategoryController::class);
     Route::get('list-categories',[CategoryController::class,'listCategories'])->name('listCategories');
     // Trang customer
     Route::get('list-customer', [CustomerController::class, 'listCustomer'])->name('listCustomer');
@@ -74,10 +80,13 @@ Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
     Route::get('update-discounts/{id}', [DiscountController::class, 'updateDiscount'])->name('updateDiscount');
     Route::put('editDiscount/{id}', [DiscountController::class, 'update'])->name('discount.update');
     Route::delete('deleteDiscount/{id}', [DiscountController::class, 'destroy'])->name('discount.destroy');
-
     // Quản lý thanh toán
     Route::get('form-payment',[PaymentController::class,'formPayment'])->name('formPayment');
-
+    Route::get('create-payments', [PaymentController::class, 'createPayment'])->name('createPayment');
+    Route::post('storePayment', [PaymentController::class, 'storePayment'])->name('payment.store');
+    Route::get('update-payment/{id}', [PaymentController::class, 'updatePayment'])->name('updatePayment');
+    Route::put('editPayment/{id}', [PaymentController::class, 'update'])->name('payment.update');
+    Route::delete('deletePayment/{id}', [PaymentController::class, 'destroy'])->name('payment.destroy');
 });
 
 Route::get('/',[PageController :: class,'storeHome'])->name('storeHome');
