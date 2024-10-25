@@ -11,6 +11,13 @@ use Illuminate\Auth\Events\Registered;
 
 class AuthenController extends Controller
 {
+    public function logout(Request $request)
+{
+    Auth::logout(); // Đăng xuất người dùng
+
+    return redirect()->route('loginAdmin')->with('status', 'Bạn đã đăng xuất thành công.');
+}
+
     public function loginAdmin()
     {
         return view('admin.login');

@@ -39,7 +39,7 @@
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <a href="{{ route('password.request') }}">Forgot Password?</a>
+                                              <a href="{{ route('password.request') }}">Forgot Password?</a>
                                             </div>
                                         </div>
                                         <div class="text-center">
