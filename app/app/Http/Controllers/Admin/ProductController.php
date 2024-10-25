@@ -22,6 +22,7 @@ class ProductController extends Controller
     }
     // chi tiết sản phẩm có biến thể
     public function productDetail(){
+        $categories = Category::all();
         return view('admin.product.detail');
     }
     // chi tiết sản phẩm đơn thể

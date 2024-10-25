@@ -2,23 +2,15 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AppController;
-use App\Http\Controllers\User\AuthenController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\DiscountController;
 use App\Http\Controllers\Admin\PaymentController;
-
-
-
-
-
-
-
-
-// DDawng nhập, đăng kí, đăng xuất, quên mật khẩu
-
+//controller bên store
+use App\Http\Controllers\User\PageController;
+use App\Http\Controllers\User\AuthenController;
 
 Route::get('login-admin', [AuthenController::class, 'loginAdmin'])->name('loginAdmin');
 Route::post('login-admin', [AuthenController::class, 'postLogin'])->name('postLogin');
@@ -49,15 +41,12 @@ Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
     Route::post('add-product-simple',[ProductController::class,'addProductSimple'])->name('addProductSimple');
     Route::patch('update-product-simple/{idProduct}',[ProductController::class,'updateProductSimple'])->name('updateProductSimple');
     Route::delete('delete-product-simple',[ProductController::class,'deleteProductSimple'])->name('deleteProductSimple');
-
-
-
-
-
     // Trang danh mục
+
   
     Route::resource('categories', CategoryController::class);
     Route::get('list-categories',[CategoryController::class,'listCategories'])->name('listCategories');
+
 
     // Trang customer
     Route::get('list-customer', [CustomerController::class, 'listCustomer'])->name('listCustomer');
@@ -86,6 +75,19 @@ Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
 
     // Quản lý thanh toán
     Route::get('form-payment',[PaymentController::class,'formPayment'])->name('formPayment');
+    Route::get('create-payments', [PaymentController::class, 'createPayment'])->name('createPayment');
+    Route::post('storePayment', [PaymentController::class, 'storePayment'])->name('payment.store');
+    Route::get('update-payment/{id}', [PaymentController::class, 'updatePayment'])->name('updatePayment');
+    Route::put('editPayment/{id}', [PaymentController::class, 'update'])->name('payment.update');
+    Route::delete('deletePayment/{id}', [PaymentController::class, 'destroy'])->name('payment.destroy');
+});
 
-});
-});
+
+Route::get('/',[PageController :: class,'storeHome'])->name('storeHome');
+Route::get('list-product',[PageController :: class,'storeListProduct'])->name('storeListProduct');
+Route::get('store-product',[PageController :: class,'storeProductDetail'])->name('storeProductDetail');
+Route::get('store-contact',[PageController :: class,'storeContact'])->name('storeContact');
+Route::get('store-tetimonial',[PageController :: class,'storeTestimonial'])->name('storeTestimonial');
+
+Route::get('store-list-cart',[PageController :: class,'storeListCart'])->name('storeListCart');
+Route::get('store-checkout',[PageController :: class,'storeCheckout'])->name('storeCheckout');

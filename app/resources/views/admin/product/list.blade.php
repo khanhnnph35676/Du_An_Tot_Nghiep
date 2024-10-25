@@ -3,9 +3,7 @@
     <!-- Datatable -->
 @endpush
 @section('content')
-    <!--**********************************
-                                    Content body start
-                                ***********************************-->
+    <!--**********************************Content body start***********************************-->
     <div class="content-body">
         <div class="container-fluid">
             <div class="row page-titles mx-0">
@@ -29,7 +27,9 @@
                         <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close"><span><i
                                     class="mdi mdi-close"></i></span>
                         </button>
-                        <strong>Success!</strong>
+                        @if (session('message'))
+                            <strong>{{session('message')}}</strong>
+                        @endif
                     </div>
                 </div>
             @endif
@@ -38,7 +38,6 @@
                     <div class="card">
                         <div class="card-header">
                             <h4 class="card-title">List Product</h4>
-
                             <div class="btn-group" role="group">
                                 <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown">Add
                                     Product</button>
@@ -74,11 +73,11 @@
                                             <tr>
                                                 <td> {{ $value->id }} </td>
                                                 <td> {{ $value->name }} </td>
-                                                <td> {{ $value->image }} </td>
+                                                <td> <img src="{{asset($value->image)}}" width="50px" height="50px" alt=""> </td>
                                                 <td> {{ number_format($value->price) }} vnđ </td>
                                                 <td> {{ $value->qty }} </td>
                                                 <td> {{ $value->view }} </td>
-                                                <td> {{ $value->categories->name }} </td>
+                                                <td> {{ $value->categories ? $value->categories->name : 'No Category'  }} </td>
                                                 <td style="width:20%;"> {{ Str::limit($value->description, 20) }} </td>
                                                 <td>
                                                     @if ($value->type == '1')
@@ -87,11 +86,11 @@
                                                         <span class='badge badge-pill badge-secondary'> Configurable </span>
                                                     @endif
                                                 </td>
-                                                <td style="width:13%;">
+                                                <td>
                                                     <a
-                                                        href="{{ route('admin.formUpdateProductSimple', ['type' => 1, 'idProduct' => $value->id]) }}"class='badge badge-pill badge-primary'>Update</a>
+                                                        href="{{ route('admin.formUpdateProductSimple', ['type' => 1, 'idProduct' => $value->id]) }}"class='btn btn-secondary'>Update</a>
                                                     <!-- Button trigger modal -->
-                                                    <button class="badge badge-pill badge-danger" data-toggle="modal"
+                                                    <button class="btn btn-dark" data-toggle="modal"
                                                         data-target="#deleteProductAdmin"
                                                         data-id="{{ $value->id }}">Delete</button>
                                                 </td>
@@ -106,9 +105,7 @@
             </div>
         </div>
     </div>
-    <!--**********************************
-                                    Content body end
-                                ***********************************-->
+    <!--**********************************Content body end ***********************************-->
 
     <!-- Modal -->
     <div class="modal fade" id="deleteProductAdmin">
@@ -134,7 +131,8 @@
         </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    {{-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script> --}}
+    <script src="{{ asset('focus-2/focus-2/documentation/main/assets/js/lib/bootstrap.min.js') }}"></script>
     <script>
        $('#deleteProductAdmin').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget); // Nút kích hoạt modal
