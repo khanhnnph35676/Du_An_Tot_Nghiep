@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('discounts_products', function (Blueprint $table) {
             $table->string('name_discount');
             $table->unsignedInteger('product_id');
-            $table->primary(['name_discount', 'product_id']);
             $table->timestamps();
         });
     }

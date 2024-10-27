@@ -69,11 +69,11 @@
                                                 <td>{{ $discount->end_date }}</td>
                                                 <td>
                                                     <a href="{{ route('admin.updateDiscount', $discount->id) }}"
-                                                        class="btn btn-success">Update</a>
+                                                        class="btn btn-secondary">Update</a>
                                                     <form action="{{ route('admin.discount.destroy', $discount->id) }}"
                                                         method="POST" style="display: inline-block;"> @csrf
                                                         @method('DELETE')
-                                                        <button type="submit" class="btn btn-danger"
+                                                        <button type="submit" class="btn btn-dark"
                                                             onclick="return confirm('Bạn có muốn xóa {{ $discount->name }} (Mã: {{ $discount->id }}) không???')">Delete</button>
                                                     </form>
                                                 </td>

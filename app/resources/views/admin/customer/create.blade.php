@@ -3,10 +3,10 @@
     <!-- Datatable -->
 @endpush
 @section('content')
-<link rel="stylesheet" href="{{ asset('backend/css/product.css') }}">
+    <link rel="stylesheet" href="{{ asset('backend/css/product.css') }}">
     <!--**********************************
-                    Content body start
-                ***********************************-->
+                                Content body start
+                            ***********************************-->
     <div class="content-body">
         <div class="container-fluid">
             <div class="row page-titles mx-0">
@@ -34,37 +34,45 @@
                                 <h4 class="card-title">Add New Customer</h4>
                                 <div class="d-flex">
                                     <a href="{{ route('admin.listCustomer') }}" class="btn btn-dark mr-3">Back</a>
+                                    <button type="submit" class="btn btn-secondary mr-3">Save</button>
                                 </div>
                             </div>
-                            @if($errors->any())
-                                <div class="alert alert-danger">
-                                    <ul>
-                                        @foreach($errors->all() as $error)
-                                            <li>{{ $error }}</li>
-                                        @endforeach
-                                    </ul>
-                                </div>
-                            @endif
-
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-8 p-3 mr-4 ml-4 border">
                                         <!-- Form nhập thông tin khách hàng -->
                                         <div class="form-group">
                                             <label for="name">Name:</label>
-                                            <input name="name" class="form-control" type="text" placeholder="Name" required>
+                                            <input name="name" class="form-control" type="text" placeholder="Name">
+                                            @error('name')
+                                                <div class="alert alert-danger"><strong>Error!</strong> {{ $message }}
+                                                </div>
+                                            @enderror
                                         </div>
                                         <div class="form-group">
                                             <label for="email">Email:</label>
-                                            <input name="email" class="form-control" type="email" placeholder="Email" required>
+                                            <input name="email" class="form-control" type="email" placeholder="Email">
+                                            @error('email')
+                                                <div class="alert alert-danger"><strong>Error!</strong> {{ $message }}
+                                                </div>
+                                            @enderror
                                         </div>
                                         <div class="form-group">
                                             <label for="phone">Phone:</label>
                                             <input name="phone" class="form-control" type="text" placeholder="Phone">
+                                            @error('phone')
+                                                <div class="alert alert-danger"><strong>Error!</strong> {{ $message }}
+                                                </div>
+                                            @enderror
                                         </div>
                                         <div class="form-group">
                                             <label for="password">Password:</label>
-                                            <input name="password" class="form-control" type="password" placeholder="Password" required>
+                                            <input name="password" class="form-control" type="password"
+                                                placeholder="Password">
+                                            @error('password')
+                                                <div class="alert alert-danger"><strong>Error!</strong> {{ $message }}
+                                                </div>
+                                            @enderror
                                         </div>
                                     </div>
                                     <div class="col-3 p-3 border">
@@ -74,7 +82,7 @@
                                             <div class="basic-form">
                                                 <div class="form-group">
                                                     <label class="radio-inline">
-                                                        <input type="radio" name="gender" value="male" required> Male
+                                                        <input type="radio" name="gender" value="male"> Male
                                                     </label>
                                                     <label class="radio-inline ml-3">
                                                         <input type="radio" name="gender" value="female"> Female
@@ -82,6 +90,11 @@
                                                     <label class="radio-inline ml-3">
                                                         <input type="radio" name="gender" value="other"> Other
                                                     </label>
+                                                    @error('gender')
+                                                        <div class="alert alert-danger"><strong>Error!</strong>
+                                                            {{ $message }}
+                                                        </div>
+                                                    @enderror
                                                 </div>
                                             </div>
                                         </div>
@@ -89,31 +102,43 @@
                                         <div class="form-group">
                                             <label for="avatar">Avatar:</label>
                                             <div class="image-upload-container">
-                                                <img id="imagePreview" src="#" alt="Image Preview" style="display:none; width:100px; height:100px;" />
-                                                <input type="file" name="avatar" class="form-control-file" id="imageUpload" accept="image/*" onchange="previewImage(event)">
-                                                <button type="button" class="btn btn-dark" id="removeImage" style="display:none;">x</button>
+                                                <img id="imagePreview" src="#" alt="Image Preview"
+                                                    style="display:none; width:100px; height:100px;" />
+                                                <input type="file" name="avatar" class="form-control-file"
+                                                    id="imageUpload" accept="image/*" onchange="previewImage(event)">
+                                                <button type="button" class="btn btn-dark" id="removeImage"
+                                                    style="display:none;">x</button>
                                             </div>
+                                            @error('avatar')
+                                                <div class="alert alert-danger"><strong>Error!</strong> {{ $message }}
+                                                </div>
+                                            @enderror
                                         </div>
 
                                         <div class="form-group">
                                             <label for="birth_date">Birth Date:</label>
                                             <input name="birth_date" type="date" class="form-control">
+                                            @error('birth_date')
+                                                <div class="alert alert-danger"><strong>Error!</strong> {{ $message }}
+                                                </div>
+                                            @enderror
                                         </div>
 
                                         <div class="form-group">
                                             <label for="rule_id">Role:</label>
-                                            <select name="rule_id" class="form-control" required>
+                                            <select name="rule_id" class="form-control">
                                                 <option value="">Select Role</option>
-                                                @foreach($rules as $rule)
+                                                @foreach ($rules as $rule)
                                                     <option value="{{ $rule->id }}">{{ $rule->rule_name }}</option>
                                                 @endforeach
                                             </select>
+                                            @error('rule_id')
+                                                <div class="alert alert-danger"><strong>Error!</strong> {{ $message }}
+                                                </div>
+                                            @enderror
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="card-footer">
-                                <button type="submit" class="btn btn-secondary">Save</button>
                             </div>
                         </div>
                     </form>
@@ -122,11 +147,20 @@
         </div>
     </div>
     <!--**********************************
-                    Content body end
-                ***********************************-->
+                                Content body end
+    ***********************************-->
     <script src="{{ asset('backend/js/product.js') }}"></script>
 
     <script>
+          window.onload = function() {
+            // Tự động ẩn thông báo lỗi sau 1 giây
+            var errorElements = document.querySelectorAll('.alert-danger');
+            errorElements.forEach(function(errorElement) {
+                setTimeout(function() {
+                    errorElement.style.display = 'none'; // Ẩn thông báo
+                }, 2000); // 1000 milliseconds = 1 second
+            });
+        };
         // Preview hình ảnh avatar
         function previewImage(event) {
             var imagePreview = document.getElementById('imagePreview');

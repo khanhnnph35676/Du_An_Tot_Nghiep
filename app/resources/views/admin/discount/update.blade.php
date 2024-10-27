@@ -158,7 +158,7 @@
                                                                                                 checked
                                                                                             @endif
                                                                                         @endforeach
-                                                                                            value="{{ $value->product_id }}"
+                                                                                            value="{{ $variant->product_id }}"
                                                                                             class="checkItem"></td>
                                                                                     <td> {{ $variant->product_id }}
                                                                                     </td>

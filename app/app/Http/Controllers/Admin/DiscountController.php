@@ -85,14 +85,11 @@ class DiscountController extends Controller
             'end_date' => $request->end_date,
         ];
         Discount::where('id', $request->id)->update($data);
-
         if (is_array($request->product_id)) {
+            if(isset($discountProductBefore) || $discountBefore->name != $request->name ){
+                DiscountProduct::where('name_discount', $discountBefore->name)->delete();
+            }
             foreach ($request->product_id as $value) {
-                foreach ($discountProductBefore as $itemDiscount) {
-                    if($request->name !=  $discountBefore->name || $itemDiscount->product_id != $value){
-                        $itemDiscount->delete();
-                    }
-                }
                 $dataDiscount = [
                     'product_id' => $value,
                     'name_discount' => $request->name
