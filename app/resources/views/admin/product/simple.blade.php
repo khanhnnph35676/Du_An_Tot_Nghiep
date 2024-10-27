@@ -103,7 +103,17 @@
             </div>
         </div>
     </div>
-
+    <script>
+         window.onload = function() {
+            // Tự động ẩn thông báo lỗi sau 1 giây
+            var errorElements = document.querySelectorAll('.alert-danger');
+            errorElements.forEach(function(errorElement) {
+                setTimeout(function() {
+                    errorElement.style.display = 'none'; // Ẩn thông báo
+                }, 2000); // 1000 milliseconds = 1 second
+            });
+        };
+    </script>
     <script src="{{ asset('backend/js/product.js') }}"></script>
 @endsection
 

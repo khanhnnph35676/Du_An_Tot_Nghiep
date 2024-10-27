@@ -4,8 +4,8 @@
 @endpush
 @section('content')
     <!--**********************************
-                Content body start
-            ***********************************-->
+                    Content body start
+                ***********************************-->
     <div class="content-body">
         <div class="container-fluid">
             <div class="row page-titles mx-0">
@@ -23,6 +23,18 @@
                 </div>
             </div>
             <!-- row -->
+            @if (session('message'))
+                <div class="message">
+                    <div class="alert alert-primary alert-dismissible alert-alt solid fade show">
+                        <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close"><span><i
+                                    class="mdi mdi-close"></i></span>
+                        </button>
+                        @if (session('message'))
+                            <strong>{{ session('message') }}</strong>
+                        @endif
+                    </div>
+                </div>
+            @endif
             <div class="row">
                 <div class="col-12">
                     <div class="card">
@@ -38,7 +50,7 @@
                                     <thead>
                                         <tr>
                                             <th>ID</th>
-                                            <th>Product Name</th>
+                                            <th>Name</th>
                                             <th>Discount</th>
                                             <th>Priority</th>
                                             <th>Start Date</th>
@@ -50,13 +62,7 @@
                                         @foreach ($discounts as $discount)
                                             <tr>
                                                 <td>{{ $discount->id }}</td>
-                                                <td>
-                                                    @foreach ($products as $item)
-                                                        @if ($discount->product_id == $item->id)
-                                                            {{ $item->name }}
-                                                        @endif
-                                                    @endforeach
-                                                </td>
+                                                <td> {{ $discount->name }}</td>
                                                 <td>{{ $discount->discount }}</td>
                                                 <td>{{ $discount->priority }}</td>
                                                 <td>{{ $discount->start_date }}</td>
@@ -83,8 +89,8 @@
         </div>
     </div>
     <!--**********************************
-                Content body end
-            ***********************************-->
+                    Content body end
+                ***********************************-->
 @endsection
 
 @push('scriptHome')

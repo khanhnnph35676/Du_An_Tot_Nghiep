@@ -11,11 +11,11 @@ class Discount extends Model
     use HasFactory, SoftDeletes;
     protected $table = 'discounts';
     public $fillable = [
-        'product_id',
         'discount',
         'priority',
         'start_date',
         'end_date',
+        'name'
     ];
     public function products()
     {

@@ -62,7 +62,7 @@ class CustomerController extends Controller
         ]);
 
         // Chuyển hướng về trang danh sách khách hàng
-        return redirect()->route('admin.listCustomer')->with('success', 'Customer added successfully.');
+        return redirect()->route('admin.listCustomer')->with('message', 'Thêm người dùng thành công');
     }
 
 
@@ -120,7 +120,7 @@ class CustomerController extends Controller
         }
 
         // Chuyển hướng đến trang chỉnh sửa với ID của khách hàng
-        return redirect()->route('admin.listCustomer')->with('message', 'Customer updated successfully.');
+        return redirect()->route('admin.listCustomer')->with('message', 'Sửa thông tin người dùng thành công');
     }
 
 
@@ -136,6 +136,6 @@ class CustomerController extends Controller
 
         $user->delete();
 
-        return redirect()->route('admin.listCustomer')->with('success', 'Customer deleted successfully.');
+        return redirect()->back()->with('message', 'Xoá người dùng thành công');
     }
 }

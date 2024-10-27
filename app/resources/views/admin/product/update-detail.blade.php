@@ -67,22 +67,22 @@
                                             @enderror
                                         </div>
                                         @if (count($productVariants) === 0)
-                                        <div class="form-group">
-                                            <label>Variant options:</label>
-                                            <div class="form-check form-check-inline">
-                                                @foreach ($variants as $value)
-                                                    <label class="form-check-label">
-                                                        <input type="radio" class="form-check-input variant-checkbox"
-                                                               name="option_name"
-                                                               value="{{ $value->option_name }}">{{ $value->option_name }}
-                                                    </label>
-                                                @endforeach
+                                            <div class="form-group">
+                                                <label>Variant options:</label>
+                                                <div class="form-check form-check-inline">
+                                                    @foreach ($variants as $value)
+                                                        <label class="form-check-label">
+                                                            <input type="radio" class="form-check-input variant-checkbox"
+                                                                name="option_name"
+                                                                value="{{ $value->option_name }}">{{ $value->option_name }}
+                                                        </label>
+                                                    @endforeach
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="form-group ml-4">
-                                            <div id="selected-variant"></div>
-                                        </div>
-                                    @endif
+                                            <div class="form-group ml-4">
+                                                <div id="selected-variant"></div>
+                                            </div>
+                                        @endif
                                     </div>
                                     <div class="col-3 p-3 border">
                                         <div class="form-group">
@@ -133,9 +133,10 @@
                                                                     @endforeach
                                                                 </td>
                                                                 <td class="d-flex align-items-center">
-                                                                    <img src="{{asset($variant->image)}}"  style="width: 50px; height: 50px; object-fit: cover;" alt="">
-                                                                    <input type="file" name="variant_image[]"
-                                                                       >
+                                                                    <img src="{{ asset($variant->image) }}"
+                                                                        style="width: 50px; height: 50px; object-fit: cover;"
+                                                                        alt="">
+                                                                    <input type="file" name="variant_image[]">
                                                                 </td>
                                                                 <td class="pr-4"><input name="variant_sku[]"
                                                                         type="text" value="{{ $value->sku }}"
@@ -149,8 +150,9 @@
                                                                 </td>
 
                                                                 <td> <button class="btn btn-dark" data-toggle="modal"
-                                                                    data-target="#deleteVariant"
-                                                                    data-id="{{ $variant->id }}"> <i class="fa fa-trash"></i></button>
+                                                                        data-target="#deleteVariant"
+                                                                        data-id="{{ $variant->id }}"> <i
+                                                                            class="fa fa-trash"></i></button>
                                                                 </td>
                                                             </tr>
                                                         @endforeach
@@ -220,7 +222,16 @@
     <script src="{{ asset('focus-2/focus-2/documentation/main/assets/js/lib/bootstrap.min.js') }}"></script>
     <script src="{{ asset('backend/js/product.js') }}"></script>
     <script>
-         $('#deleteVariant').on('show.bs.modal', function(event) {
+        window.onload = function() {
+            // Tự động ẩn thông báo lỗi sau 1 giây
+            var errorElements = document.querySelectorAll('.alert-danger');
+            errorElements.forEach(function(errorElement) {
+                setTimeout(function() {
+                    errorElement.style.display = 'none'; // Ẩn thông báo
+                }, 2000); // 1000 milliseconds = 1 second
+            });
+        };
+        $('#deleteVariant').on('show.bs.modal', function(event) {
             var button = $(event.relatedTarget); // Nút kích hoạt modal
             var id = button.data('id'); // Lấy giá trị từ thuộc tính data-id
             var modal = $(this); // Khai báo modal
