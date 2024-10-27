@@ -15,6 +15,8 @@ class ProductVariant extends Model
         'price',
         'sku',
         'stock',
+        'option_value',
+        'image'
     ];
     public function products()
     {
@@ -22,6 +24,6 @@ class ProductVariant extends Model
     }
     public function options()
     {
-        return $this->hasMany(VariantOption::class);
+        return $this->belongsTo(VariantOption::class);
     }
 }
