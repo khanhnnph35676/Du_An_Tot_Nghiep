@@ -99,6 +99,8 @@
                                                 <td> {{ number_format($value->price) }} vnđ </td>
                                                 <td> {{ $value->qty }} </td>
                                                 <td> {{ $value->view }} </td>
+                                                <td> {{ $value->categories ? $value->categories->name : 'No Category'  }} </td>
+                                                <td style="width:20%;"> {{ Str::limit(html_entity_decode(strip_tags($value->description)), 20) }} </td>
                                                 <td> {{ $value->categories ? $value->categories->name : 'No Category' }}
                                                 </td>
                                                 <td style="width:20%;"> {{ Str::limit($value->description, 20) }} </td>
