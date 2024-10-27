@@ -31,7 +31,9 @@ class PageController extends Controller
     {
         // Lấy chi tiết sản phẩm
         $product = Product::with('categories')->findOrFail($id);
-
+        $product->update(
+            ['view' => $product->view + 1 ]
+        );
         // Lấy sản phẩm liên quan cùng danh mục (trừ sản phẩm hiện tại)
         $relatedProducts = Product::where('category_id', $product->category_id)
                                     ->where('id', '!=', $id)

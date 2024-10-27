@@ -102,7 +102,7 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- Sản phẩm nổi bật -->
         <div class="container mt-5">
             <h2 class="text-center mb-4">Sản phẩm Nổi bật</h2>
@@ -110,7 +110,9 @@
                 @foreach ($bestProducts as $product)
                     <div class="border border-primary rounded position-relative vesitable-item">
                         <div class="vesitable-img">
-                            <img src="{{ asset($product->image) }}" class="img-fluid w-100 rounded-top" alt="{{ $product->name }}">
+                            <img src="{{ asset($product->image) }}"
+                              style="height: 270px; object-fit: cover;"
+                            class="img-fluid w-100 rounded-top" alt="{{ $product->name }}">
                         </div>
                         <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
                             style="top: 10px; right: 10px;">
