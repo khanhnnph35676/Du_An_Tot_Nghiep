@@ -54,15 +54,15 @@
                                         <!-- Form nhập thông tin khách hàng -->
                                         <div class="form-group">
                                             <label for="name">Name:</label>
-                                            <input name="name" class="form-control" type="text" placeholder="Name" value="{{ old('name', $user->name) }}" required>
+                                            <input name="name" class="form-control" type="text" placeholder="Name" value="{{ old('name', $user->name) }}" readonly>
                                         </div>
                                         <div class="form-group">
                                             <label for="email">Email:</label>
-                                            <input name="email" class="form-control" type="email" placeholder="Email" value="{{ old('email', $user->email) }}" required>
+                                            <input name="email" class="form-control" type="email" placeholder="Email" value="{{ old('email', $user->email) }}" readonly>
                                         </div>
                                         <div class="form-group">
                                             <label for="phone">Phone:</label>
-                                            <input name="phone" class="form-control" type="text" placeholder="Phone" value="{{ old('phone', $user->phone) }}">
+                                            <input name="phone" class="form-control" type="text" placeholder="Phone" value="{{ old('phone', $user->phone) }}" readonly>
                                         </div>
                                         <div class="form-group">
                                             <label for="password">Password:</label>
@@ -100,7 +100,7 @@
 
                                         <div class="form-group">
                                             <label for="birth_date">Birth Date:</label>
-                                            <input name="birth_date" type="date" class="form-control" value="{{ old('birth_date', $user->birth_date) }}">
+                                            <input name="birth_date" type="date" class="form-control" value="{{ old('birth_date', $user->birth_date) }}" readonly>
                                         </div>
 
                                         <div class="form-group">
@@ -111,7 +111,7 @@
                                                     <option value="{{ $rule->id }}" {{ $user->rule_id == $rule->id ? 'selected' : '' }}>{{ $rule->rule_name }}</option>
                                                 @endforeach
                                             </select>
-                                        </div>                                        
+                                        </div>
                                     </div>
                                 </div>
                             </div>

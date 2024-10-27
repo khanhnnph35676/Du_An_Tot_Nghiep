@@ -120,7 +120,7 @@ class CustomerController extends Controller
         }
 
         // Chuyển hướng đến trang chỉnh sửa với ID của khách hàng
-        return redirect()->route('admin.customerEdit', $user->id)->with('success', 'Customer updated successfully.');
+        return redirect()->route('admin.listCustomer')->with('message', 'Customer updated successfully.');
     }
 
 

@@ -55,8 +55,6 @@ Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
     Route::delete('force-delete-product',[ProductController::class,'forceDeleteProduct'])->name('forceDeleteProduct');
     Route::delete('force-delete-variant',[ProductController::class,'forceDeleteVariant'])->name('forceDeleteVariant');
     // Trang danh mục
-
-
     Route::resource('categories', CategoryController::class);
     Route::get('list-categories',[CategoryController::class,'listCategories'])->name('listCategories');
 
@@ -92,6 +90,7 @@ Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
     Route::get('update-payment/{id}', [PaymentController::class, 'updatePayment'])->name('updatePayment');
     Route::put('editPayment/{id}', [PaymentController::class, 'update'])->name('payment.update');
     Route::delete('deletePayment/{id}', [PaymentController::class, 'destroy'])->name('payment.destroy');
+});
 });
 
 

@@ -91,7 +91,7 @@
                                             <div class="image-upload-container">
                                                 <img id="imagePreview" src="#" alt="Image Preview" style="display:none; width:100px; height:100px;" />
                                                 <input type="file" name="avatar" class="form-control-file" id="imageUpload" accept="image/*" onchange="previewImage(event)">
-                                                <button type="button" class="btn btn-dark" id="removeImage" style="display:none;">Remove Image</button>
+                                                <button type="button" class="btn btn-dark" id="removeImage" style="display:none;">x</button>
                                             </div>
                                         </div>
 
@@ -108,7 +108,7 @@
                                                     <option value="{{ $rule->id }}">{{ $rule->rule_name }}</option>
                                                 @endforeach
                                             </select>
-                                        </div>                                        
+                                        </div>
                                     </div>
                                 </div>
                             </div>

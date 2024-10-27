@@ -22,7 +22,18 @@
                 </ol>
             </div>
         </div>
-
+        @if (session('message'))
+        <div class="message">
+            <div class="alert alert-primary alert-dismissible alert-alt solid fade show">
+                <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close"><span><i
+                            class="mdi mdi-close"></i></span>
+                </button>
+                @if (session('message'))
+                    <strong>{{ session('message') }}</strong>
+                @endif
+            </div>
+        </div>
+        @endif
         <div class="row">
             <div class="col-12">
                 <div class="card">
@@ -56,7 +67,8 @@
                                             <td>{{ $user->email }}</td>
                                             <td>
                                                 @if($user->avatar)
-                                                    <img src="{{ asset('storage/' . $user->avatar) }}" alt="{{ $user->name }}" width="100px">
+                                                    <img src="{{ asset('storage/' . $user->avatar) }}" alt="{{ $user->name }}"
+                                                    style="width: 50px; height: 50px; object-fit: cover;">
                                                 @endif
                                             </td>
                                             <td>{{ $user->phone }}</td>

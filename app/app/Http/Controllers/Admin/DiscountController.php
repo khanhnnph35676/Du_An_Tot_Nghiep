@@ -4,14 +4,16 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Discount;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class DiscountController extends Controller
 {
     public function listDiscounts(){
-        $discounts = Discount::all();
+        $discounts = Discount::get();
+        $products =Product::get();
         // dd($discounts);
-        return view('admin.discount.list', compact('discounts'));
+        return view('admin.discount.list', compact('discounts','products'));
     }
     public function createDiscount(){
         return view('admin.discount.create');
