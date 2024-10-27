@@ -23,7 +23,18 @@
             </div>
             <!-- row -->
             <!-- In ra danh sách product_variants -->
-
+            @if (session('message'))
+                <div class="message">
+                    <div class="alert alert-primary alert-dismissible alert-alt solid fade show">
+                        <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close"><span><i
+                                    class="mdi mdi-close"></i></span>
+                        </button>
+                        @if (session('message'))
+                            <strong>{{ session('message') }}</strong>
+                        @endif
+                    </div>
+                </div>
+            @endif
             <div class="row">
                 <div class="col-12">
                     <form action="{{ route('admin.updateProductConfigurable', ['idProduct' => $product->id]) }}"
@@ -133,9 +144,9 @@
                                                                     @endforeach
                                                                 </td>
                                                                 <td class="d-flex align-items-center">
-                                                                    <img src="{{ asset($variant->image) }}"
+                                                                    <img src="{{ asset($value->image) }}"
                                                                         style="width: 50px; height: 50px; object-fit: cover;"
-                                                                        alt="">
+                                                                        alt="{{ $variant->sku }}">
                                                                     <input type="file" name="variant_image[]">
                                                                 </td>
                                                                 <td class="pr-4"><input name="variant_sku[]"
@@ -149,10 +160,11 @@
                                                                         class="form-control">
                                                                 </td>
 
-                                                                <td> <button class="btn btn-dark" data-toggle="modal"
-                                                                        data-target="#deleteVariant"
-                                                                        data-id="{{ $variant->id }}"> <i
-                                                                            class="fa fa-trash"></i></button>
+                                                                <td> <button type="button" class="btn btn-dark"
+                                                                        data-toggle="modal" data-target="#deleteVariant"
+                                                                        data-id="{{ $value->id }}"> <i
+                                                                            class="fa fa-trash"></i>
+                                                                    </button>
                                                                 </td>
                                                             </tr>
                                                         @endforeach
@@ -298,16 +310,20 @@
                     types = [];
                     weight = [];
                     // console.log(variants);
+                    selectedWeights.forEach(function(weight) {
+                        selectedVariants.push(weight);
+                    });
+                    // Thêm dòng vào bảng cho mỗi biến thể đã chọn
                     selectedVariants.forEach(function(variant) {
-                        $('#example tbody tr').append(
+                        $('#example tbody').append('<tr>' +
                             '<td>' + variant + '</td>' +
                             '<td>' +
-                            '<input type="file" name="variant_image[]" class="form-control">' +
+                                '<input type="file" name="variant_image[]" class="form-control">'  +
                             '</td>' +
                             '<td class="pr-4"><input name="variant_sku[]" type="text" class="form-control"></td>' +
                             '<td class="pr-4"><input name="variant_stock[]" type="text" class="form-control"></td>' +
-                            '<td class="pr-4"><input name="variant_price[]" type="text" class="form-control"></td>'
-                        );
+                            '<td class="pr-4"><input name="variant_price[]" type="text" class="form-control"></td>' +
+                            '</tr>');
                     });
                 });
             });

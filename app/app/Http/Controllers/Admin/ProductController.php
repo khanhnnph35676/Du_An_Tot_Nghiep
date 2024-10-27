@@ -175,7 +175,7 @@ class ProductController extends Controller
         $variant->Delete();
 
         return redirect()->back()->with([
-            'message' => 'Xoá sản phẩm thành công'
+            'message' => 'Xoá sản phẩm biến thể thành công'
         ]);
     }
     // thêm sản phẩm có biến thể
@@ -287,22 +287,51 @@ class ProductController extends Controller
         ];
         $product->update($data);
         $product_variants = ProductVariant::where("product_id", $idProduct)->get();
+        if(is_array($product_variants)){
+            foreach ($product_variants as $key => $value) {
+                $productVariant = ProductVariant::find($value->id);
+                if ($productVariant) {
+                    if ($request->hasFile("variant_image.$key")) {
+                        $image = $request->file("variant_image.$key");
+                        $nameImage = time() . "_" . uniqid() . '.' . $image->getClientOriginalExtension();
+                        $link = "img/prd/variant_image";
+                        $image->move(public_path($link), $nameImage);
 
-        foreach ($product_variants as $key => $value) {
-            $productVariant = ProductVariant::find($value->id);
-            if ($productVariant) {
-                if ($request->hasFile("variant_image.$key")) {
-                    $image = $request->file("variant_image.$key");
-                    $nameImage = time() . "_" . uniqid() . '.' . $image->getClientOriginalExtension();
-                    $link = "img/prd/variant_image";
-                    $image->move(public_path($link), $nameImage);
-
-                    $productVariant->image = $link . '/' . $nameImage;
+                        $productVariant->image = $link . '/' . $nameImage;
+                    }
+                    $productVariant->price = $request->variant_price[$key];
+                    $productVariant->sku = $request->variant_sku[$key];
+                    $productVariant->stock = $request->variant_stock[$key];
+                    $productVariant->save();
                 }
-                $productVariant->price = $request->variant_price[$key];
-                $productVariant->sku = $request->variant_sku[$key];
-                $productVariant->stock = $request->variant_stock[$key];
-                $productVariant->save();
+            }
+        }else{
+            if (is_array($request->option_value)) {
+                foreach ($request->option_value as $key => $optionValue) {
+                    $option_values = VariantOption::where('option_value', $optionValue)->get();
+
+                    foreach ($option_values as $value) {
+                        $imagePath = null;
+                        if ($request->hasFile("variant_image.$key")) {
+                            $image = $request->file("variant_image.$key");
+                            $nameImage = time() . "_" . uniqid() . '.' . $image->getClientOriginalExtension();
+                            $link = "img/prd/variant_image";
+                            $image->move(public_path($link), $nameImage);
+                            $imagePath = $link . '/' . $nameImage;
+                        }
+
+                        $productVariant = [
+                            'product_id' => $idProduct,
+                            'price' => $request->variant_price[$key],
+                            'sku' => $request->variant_sku[$key],
+                            'stock' => $request->variant_stock[$key],
+                            'option_value' => $value->id,
+                            'image' => $imagePath
+                        ];
+
+                        ProductVariant::create($productVariant);
+                    }
+                }
             }
         }
 
