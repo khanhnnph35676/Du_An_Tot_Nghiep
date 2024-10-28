@@ -31,8 +31,10 @@
                             <div class="form-group">
                                 <label for="imageUpload">Image:</label>
                                 <input type="file" class="form-control-file" name="image" accept="image/*">
-                                @if($category->image)
-                                <img src="{{ asset('storage/' . $category->image) }}" alt="" width="50px" height="50px">
+                               
+                                @if ($category->image)
+            <img src="{{ Storage::url($category->image) }}" alt="{{ $category->name }}" style="max-width: 150px;">
+       
                                 @endif
                             </div>
                             <button type="submit" class="btn btn-secondary mb-3">Update</button>

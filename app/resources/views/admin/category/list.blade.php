@@ -28,17 +28,18 @@
                                     @foreach($categories as $category)
                                     <li class="list-group-item d-flex justify-content-between align-items-center">
                                         @if($category->image)
-                                        <img src="{{ asset('storage/' . $category->image) }}" alt="" width="50px" height="50px">
+                                        <img src="{{ Storage::url($category->image) }}" alt="{{ $category->name }}" style="max-width: 50px; height :50px;">
                                         @else
+                                        
                                         <img src="#" alt="" width="50px" height="50px">
                                         @endif
                                         <h5>{{ $category->name }}</h5>
                                         <div class="d-flex">
-                                            <a href="{{ route('admin.categories.edit', $category->id) }}" class="badge badge-success badge-pill mr-1">Update</a>
+                                            <a href="{{ route('admin.categories.edit', $category->id) }}" class="btn btn-secondary mr-3">Update</a>
                                             <form action="{{ route('admin.categories.destroy', $category->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this category?');">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="badge badge-danger badge-pill">Delete</button>
+                                                <button type="submit" class="btn btn-dark">Delete</button>
                                             </form>
                                         </div>
                                     </li>
