@@ -9,6 +9,8 @@ use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\DiscountController;
 use App\Http\Controllers\Admin\PaymentController;
+use App\Http\Controllers\Admin\BlogController;
+use App\Http\Controllers\Admin\TestimonialController;
 
 
 
@@ -86,6 +88,9 @@ Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
 
     // Quản lý thanh toán
     Route::get('form-payment',[PaymentController::class,'formPayment'])->name('formPayment');
-
+    // quản lý blog
+    Route::get('/blog', [BlogController::class, 'index'])->name('admin.blog.list');
+// quản lý testimonial
+Route::get('/testimonials', [TestimonialController::class, 'index'])->name('admin.testimonials.list');
 });
 });
