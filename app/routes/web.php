@@ -91,3 +91,4 @@ Route::get('store-tetimonial',[PageController :: class,'storeTestimonial'])->nam
 
 Route::get('store-list-cart',[PageController :: class,'storeListCart'])->name('storeListCart');
 Route::get('store-checkout',[PageController :: class,'storeCheckout'])->name('storeCheckout');
+});
