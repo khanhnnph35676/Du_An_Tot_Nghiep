@@ -30,7 +30,6 @@ class AuthenController extends Controller
         if (Auth::attempt($credentials)) {
             return redirect()->intended('admin');
         }
-
         return back()->withErrors([
             'email' => 'The provided credentials do not match our records.',
         ]);
@@ -49,7 +48,7 @@ class AuthenController extends Controller
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|confirmed|min:8',
         ]);
-    
+ 
         try {
             // Tạo người dùng mới
             $user = User::create([
@@ -68,6 +67,18 @@ class AuthenController extends Controller
         } catch (\Exception $e) {
             return back()->withErrors(['error' => 'Có lỗi xảy ra, vui lòng thử lại.']);
         }
+
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'rule_id' => 1, // or other default value
+        ]);
+        event(new Registered($user));
+
+        Auth::login($user);
+
+        return redirect()->intended('admin');
     }
     
 

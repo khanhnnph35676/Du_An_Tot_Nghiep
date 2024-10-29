@@ -10,7 +10,7 @@
     <div class="container topbar bg-primary d-none d-lg-block">
         <div class="d-flex justify-content-between">
             <div class="top-info ps-2">
-                <small class="me-3"><i class="fas fa-map-marker-alt me-2 text-secondary"></i> <a href="#" class="text-white">123 Street, New York</a></small>
+                <small class="me-3"><i class="fas fa-map-marker-alt me-2 text-secondary"></i> <a href="#" class="text-white">1 Trịnh Văn Bô</a></small>
                 <small class="me-3"><i class="fas fa-envelope me-2 text-secondary"></i><a href="#" class="text-white">Email@Example.com</a></small>
             </div>
             <div class="top-link pe-2">
@@ -22,15 +22,14 @@
     </div>
     <div class="container px-0">
         <nav class="navbar navbar-light bg-white navbar-expand-xl">
-            <a href="{{ route('storeHome') }}" class="navbar-brand"><h1 class="text-primary display-6">Fruitables</h1></a>
+            <a href="{{ route('storeHome') }}" class="navbar-brand"><h1 class="text-primary display-6">J-Snack</h1></a>
             <button class="navbar-toggler py-2 px-3" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
                 <span class="fa fa-bars text-primary"></span>
             </button>
             <div class="collapse navbar-collapse bg-white" id="navbarCollapse">
                 <div class="navbar-nav mx-auto">
-                    <a href="{{ route('storeHome') }}" class="nav-item nav-link {{ request()->routeIs('storeHome') ? 'active' : '' }}">Home</a>
-                    <a href="{{ route('storeListProduct') }}" class="nav-item nav-link {{ request()->routeIs('storeListProduct') ? 'active' : '' }}">Shop</a>
-                    <a href="{{ route('storeProductDetail') }}" class="nav-item nav-link {{ request()->routeIs('storeProductDetail') ? 'active' : '' }}">Shop Detail</a>
+                    <a href="{{ route('storeHome') }}" class="nav-item nav-link {{ request()->routeIs('storeHome') ? 'active' : '' }}">Trang chủ</a>
+                    <a href="{{ route('storeListProduct') }}" class="nav-item nav-link {{ request()->routeIs('storeListProduct') ? 'active' : '' }}">Sản Phẩm</a>
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
                         <div class="dropdown-menu m-0 bg-secondary rounded-0">
