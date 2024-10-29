@@ -85,12 +85,10 @@
                                                 </div>
                                             @enderror
                                         </div>
-                                        {{-- galleries (ảnh đi kèm) --}}
-                                        {{-- <div class="form-group">
-                                            <label for="">Galleries</label>
-                                            <input type="file" name="image[]" class="form-control" accept="image/*"
-                                                multiple>
-                                        </div> --}}
+                                        <div class="form-group">
+                                            <label for="">Gallerie Image</label>
+                                            <input type="file" class="form-control" name="gallerie_image[]" accept="image/*"multiple>
+                                        </div>
                                     </div>
                                     <div class="form-group mt-3" style="width: 100%">
                                         <h5>Description</h5>

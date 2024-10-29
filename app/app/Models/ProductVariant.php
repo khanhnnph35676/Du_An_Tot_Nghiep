@@ -15,9 +15,15 @@ class ProductVariant extends Model
         'price',
         'sku',
         'stock',
+        'option_value',
+        'image'
     ];
     public function products()
     {
         return $this->belongsTo(Product::class, 'product_id');
+    }
+    public function options()
+    {
+        return $this->belongsTo(VariantOption::class);
     }
 }
