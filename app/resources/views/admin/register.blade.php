@@ -14,27 +14,38 @@
                     <div class="auth-form">
                         <h4 class="text-center">Create an account</h4>
                         <form action="{{ route('postRegister') }}" method="POST">
-                            @csrf
-                            <div class="form-group">
-                                <label>Name</label>
-                                <input type="text" name="name" class="form-control" required>
-                            </div>
-                            <div class="form-group">
-                                <label>Email</label>
-                                <input type="email" name="email" class="form-control" required>
-                            </div>
-                            <div class="form-group">
-                                <label>Password</label>
-                                <input type="password" name="password" class="form-control" required>
-                            </div>
-                            <div class="form-group">
-                                <label>Confirm Password</label>
-                                <input type="password" name="password_confirmation" class="form-control" required>
-                            </div>
-                            <div class="text-center">
-                                <button type="submit" class="btn btn-primary btn-block">Sign up</button>
-                            </div>
-                        </form>
+    @csrf
+    <div class="form-group">
+        <label>Name</label>
+        <input type="text" name="name" class="form-control" required>
+    </div>
+    <div class="form-group">
+        <label>Email</label>
+        <input type="email" name="email" class="form-control" required>
+    </div>
+    <div class="form-group">
+        <label>Password</label>
+        <input type="password" name="password" class="form-control" required>
+    </div>
+    <div class="form-group">
+        <label>Confirm Password</label>
+        <input type="password" name="password_confirmation" class="form-control" required>
+    </div>
+    <div class="text-center">
+        <button type="submit" class="btn btn-primary btn-block">Sign up</button>
+    </div>
+</form>
+@if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
+
                         <div class="new-account mt-3">
                             <p>Already have an account? <a href="{{ route('loginAdmin') }}" class="text-primary">Sign in</a></p>
                         </div>

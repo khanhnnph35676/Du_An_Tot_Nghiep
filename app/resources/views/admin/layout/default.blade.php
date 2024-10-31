@@ -22,7 +22,22 @@
     </style>
     @stack('styleHome')
 </head>
+<style>
+    .my-input {
+    border: none; /* Ẩn viền */
+    /* Các thuộc tính tùy chỉnh khác để làm đẹp ô input */
+    padding: 10px;
+    border-radius: 5px;
+}
 
+/* Khi ô input được focus (được chọn) */
+.my-input:focus {
+    border: 1px solid #000000; /* Thêm viền khi focus */
+    outline: none; /* Ẩn outline mặc định */
+    background-color: #f2f2f2;
+
+}
+</style>
 <body>
 
     <!--*******************
