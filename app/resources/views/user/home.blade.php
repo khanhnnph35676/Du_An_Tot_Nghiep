@@ -113,7 +113,8 @@
                     <div class="col-lg-8 text-end">
                         <ul class="nav nav-pills d-inline-flex text-center mb-5">
                             <li class="nav-item">
-                                <a class="d-flex m-2 py-2 bg-light rounded-pill active" data-bs-toggle="pill" href="{{ route('storeListProduct') }}">
+                                <a class="d-flex m-2 py-2 bg-light rounded-pill active" data-bs-toggle="pill"
+                                    href="{{ route('storeListProduct') }}">
                                     <span class="text-dark" style="width: 130px;">All Products</span>
                                 </a>
                             </li>
@@ -131,23 +132,38 @@
                                             <div class="rounded position-relative fruite-item">
                                                 <div class="fruite-img">
                                                     <a href="{{ route('product.detail', $product->id) }}">
-                                                        <img src="{{ asset($product->image) }}"  style="width: 50px; height: 250px; object-fit: cover;"
-                                                         class="img-fluid w-100 rounded-top" alt="{{ $product->name }}">
+                                                        <img src="{{ asset($product->image) }}"
+                                                            style="width: 50px; height: 250px; object-fit: cover;"
+                                                            class="img-fluid w-100 rounded-top" alt="{{ $product->name }}">
                                                     </a>
                                                 </div>
-                                                <div class="text-white bg-secondary px-3 py-1 rounded position-absolute" style="top: 10px; left: 10px;">
-                                                    {{ $product->categories->name ?? 'Uncategorized' }} <!-- Hiển thị danh mục sản phẩm -->
+                                                <div class="text-white bg-secondary px-3 py-1 rounded position-absolute"
+                                                    style="top: 10px; left: 10px;">
+                                                    {{ $product->categories->name ?? 'Uncategorized' }}
+                                                    <!-- Hiển thị danh mục sản phẩm -->
                                                 </div>
-                                                <div class="p-4 border border-secondary border-top-0 rounded-bottom">
-                                                    <h4>{{ $product->name }}</h4>
-                                                    <p>{{ Str::limit(strip_tags($product->description), 20) }}</p>
-                                                    <div class="d-flex justify-content-between flex-lg-wrap">
-                                                        <p class="text-dark fs-5 fw-bold mb-0">{{ number_format($product->price) }} vnđ</p>
-                                                        <a href="#" class="btn border border-secondary rounded-pill px-3 text-primary">
-                                                            <i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart
-                                                        </a>
+                                                <form action="" method="POST">
+                                                    @csrf
+                                                    <input type="text" hidden name="id" value="{{ $product->id }}">
+                                                    <div class="p-4 border border-secondary border-top-0 rounded-bottom">
+                                                        <h4>{{ $product->name }}</h4>
+                                                        <p>{{ Str::limit(strip_tags($product->description), 20) }}</p>
+                                                        <div class="d-flex justify-content-between flex-lg-wrap">
+                                                            <p class="text-dark fs-5 fw-bold mb-0">
+                                                                {{ number_format($product->price) }} vnđ</p>
+                                                            {{-- @foreach ($product_variants as $product_variant)
+                                                                @if ($product_variant->product_id == $product->id)
+                                                                    <span>{{ $product_variant->sku }}</span>
+                                                                @endif
+                                                            @endforeach --}}
+                                                            <a href="#"
+                                                                class="btn border border-secondary rounded-pill px-3 text-primary">
+                                                                <i class="fa fa-shopping-bag me-2 text-primary"></i> Add to
+                                                                cart
+                                                            </a>
+                                                        </div>
                                                     </div>
-                                                </div>
+                                                </form>
                                             </div>
                                         </div>
                                     @endforeach
@@ -219,14 +235,16 @@
                     <div class="col-md-3 mb-2">
                         <div class="border border-primary rounded position-relative vesitable-item">
                             <div class="vesitable-img">
-                                <img src="{{ asset('storage/'.$category->image) }}"  style="width: 50px; height: 250px; object-fit: cover;"
-                                class="img-fluid w-100 rounded-top" alt="{{ $category->name }}">
+                                <img src="{{ asset('storage/' . $category->image) }}"
+                                    style="width: 50px; height: 250px; object-fit: cover;"
+                                    class="img-fluid w-100 rounded-top" alt="{{ $category->name }}">
                             </div>
                             <div class="p-4 rounded-bottom">
                                 <h4>{{ $category->name }}</h4>
                                 <p>{{ $category->description }}</p>
                                 <div class="d-flex justify-content-between flex-lg-wrap">
-                                    <a href="#" class="btn border border-secondary rounded-pill px-3 text-primary"><i
+                                    <a href="#"
+                                        class="btn border border-secondary rounded-pill px-3 text-primary"><i
                                             class="fa fa-shopping-bag me-2 text-primary"></i>Sản phẩm</a>
                                 </div>
                             </div>
@@ -290,16 +308,26 @@
                                     <!-- Hiển thị ảnh sản phẩm -->
                                     <a href="{{ route('product.detail', $product->id) }}">
                                         <img src="{{ asset($product->image) }}" style="height: 170px; object-fit: cover;"
-                                         class="img-fluid w-100 rounded-top" alt="{{ $product->name }}">
+                                            class="img-fluid w-100 rounded-top" alt="{{ $product->name }}">
                                     </a>
                                 </div>
                                 <div class="col-6">
                                     <!-- Hiển thị tên và giá sản phẩm -->
-                                    <a href="{{ route('product.detail', $product->id) }}" class="h5">{{ $product->name }}</a>
-                                    <h4 class="mb-3">{{ number_format($product->price, 2) }} đ</h4>
-                                    <a href="#" class="btn border border-secondary rounded-pill px-3 text-primary">
-                                        <i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart
-                                    </a>
+                                    <form action="" method="POST">
+                                        @csrf
+                                        <input type="text" hidden name="id" value="{{ $product->id }}">
+                                        <a href="{{ route('product.detail', $product->id) }}"
+                                            class="h5">{{ $product->name }}</a>
+                                        <h4 class="mb-3">{{ number_format($product->price, 2) }} đ</h4>
+                                        {{-- @foreach ($product_variants as $product_variant)
+                                            @if ($product_variant->product_id == $product->id)
+                                                <span>{{ $product_variant->sku }}</span>
+                                            @endif
+                                        @endforeach --}}
+                                        <button class="btn border border-secondary rounded-pill px-3 text-primary">
+                                            <i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart
+                                        </button>
+                                    </form>
                                 </div>
                             </div>
                         </div>

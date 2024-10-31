@@ -5,6 +5,8 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\ProductVariant;
+
 use Illuminate\Http\Request;
 
 class PageController extends Controller
@@ -14,7 +16,8 @@ class PageController extends Controller
         $products = Product::latest()->take(8)->get();
         $bestViewedProducts = Product::orderBy('view', 'desc')->take(9)->get();
         $categories = Category::all();
-        return view('user.home', compact('products', 'categories', 'bestViewedProducts'));
+        $product_variants = ProductVariant::get();
+        return view('user.home', compact('products', 'categories', 'bestViewedProducts','product_variants'));
     }
 
 

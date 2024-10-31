@@ -148,42 +148,6 @@
                                                                                 @endif
                                                                             </td>
                                                                         </tr>
-                                                                        @foreach ($variants as $variant)
-                                                                            @if ($value->id == $variant->product_id)
-                                                                                <tr>
-                                                                                    <td><input type="checkbox"
-                                                                                            name="product_id[]"
-                                                                                            @foreach ($discountProduct as $item)
-                                                                                            @if ($item['product_id'] == $value->id)
-                                                                                                checked
-                                                                                            @endif
-                                                                                        @endforeach
-                                                                                            value="{{ $variant->product_id }}"
-                                                                                            class="checkItem"></td>
-                                                                                    <td> {{ $variant->product_id }}
-                                                                                    </td>
-                                                                                    <td> {{ $value->name . ' _ ' }}<strong>{{ $variant->sku }}</strong>
-                                                                                    </td>
-                                                                                    <td> <img
-                                                                                            src="{{ asset($variant->image) }}"
-                                                                                            style="width: 50px; height: 50px; object-fit: cover;"
-                                                                                            alt="">
-                                                                                    </td>
-                                                                                    <td> {{ number_format($variant->price) }}
-                                                                                        vnđ </td>
-                                                                                    <td> {{ $variant->stock }}
-                                                                                    </td>
-                                                                                    <td> {{ $value->view }} </td>
-                                                                                    <td> {{ $value->categories ? $value->categories->name : 'No Category' }}
-                                                                                    </td>
-                                                                                    <td>
-                                                                                        <span
-                                                                                            class='badge badge-pill badge-success'>
-                                                                                            Simple</span>
-                                                                                    </td>
-                                                                                </tr>
-                                                                            @endif
-                                                                        @endforeach
                                                                     @endforeach
                                                                 </tbody>
                                                             </table>
