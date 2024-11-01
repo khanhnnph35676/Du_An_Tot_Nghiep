@@ -69,7 +69,6 @@ Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
 
 Route::get('/',[PageController :: class,'storeHome'])->name('storeHome');
 Route::get('/product/{id}', [ProductController::class, 'show'])->name('product.detail');
-
 Route::get('list-product',[PageController :: class,'storeListProduct'])->name('storeListProduct');
 Route::get('/product/{id}', action: [PageController::class, 'storeProductDetail'])->name('product.detail');
 Route::get('store-contact',[PageController :: class,'storeContact'])->name('storeContact');
