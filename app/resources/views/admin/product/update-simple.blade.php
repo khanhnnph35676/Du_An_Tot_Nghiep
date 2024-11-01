@@ -87,6 +87,9 @@
                                                 <div class="alert alert-danger"><strong>Error!</strong> {{ $message }}
                                                 </div>
                                             @enderror
+                                            <div class="form-group">
+                                                <input type="file" class="form-control" name="gallerie_image[]" accept="image/*"multiple>
+                                            </div>
                                         </div>
                                         {{-- galleries (ảnh đi kèm) --}}
                                         {{-- <div class="form-group">

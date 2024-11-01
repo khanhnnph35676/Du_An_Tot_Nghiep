@@ -113,7 +113,10 @@
                                     </a>
                                     <a href="./page-login.html" class="dropdown-item">
                                         <i class="icon-key"></i>
-                                        <span class="ml-2">Logout </span>
+                                        <form action="{{ route('admin.logout') }}" method="POST" style="display: inline;">
+    @csrf
+    <button type="submit" class="btn btn-danger">Đăng Xuất</button>
+</form>
                                     </a>
                                 </div>
                             </li>

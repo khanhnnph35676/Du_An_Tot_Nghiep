@@ -28,8 +28,9 @@
                                     @foreach($categories as $category)
                                     <li class="list-group-item d-flex justify-content-between align-items-center">
                                         @if($category->image)
-                                        <img src="{{ asset('storage/' . $category->image) }}" alt="" width="50px" height="50px">
+                                        <img src="{{ Storage::url($category->image) }}" alt="{{ $category->name }}" style="max-width: 50px; height :50px;">
                                         @else
+                                        
                                         <img src="#" alt="" width="50px" height="50px">
                                         @endif
                                         <h5>{{ $category->name }}</h5>

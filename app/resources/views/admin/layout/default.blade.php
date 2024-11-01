@@ -13,10 +13,26 @@
     <link href="{{asset('focus-2/focus-2/vendor/jqvmap/css/jqvmap.min.css')}}" rel="stylesheet">
     <link href="{{asset('focus-2/focus-2/css/style.css')}}" rel="stylesheet">
     <link href="{{asset('focus-2/focus-2/vendor/datatables/css/jquery.dataTables.min.css')}}" rel="stylesheet">
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    {{--  <link rel="stylesheet" href="{{asset('backend/css/all.min.css')}}"> --}}
     @stack('styleHome')
 </head>
+<style>
+    .my-input {
+    border: none; /* Ẩn viền */
+    /* Các thuộc tính tùy chỉnh khác để làm đẹp ô input */
+    padding: 10px;
+    border-radius: 5px;
+}
 
+/* Khi ô input được focus (được chọn) */
+.my-input:focus {
+    border: 1px solid #000000; /* Thêm viền khi focus */
+    outline: none; /* Ẩn outline mặc định */
+    background-color: #f2f2f2;
+
+}
+</style>
 <body>
 
     <!--*******************
