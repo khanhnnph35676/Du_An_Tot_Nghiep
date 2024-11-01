@@ -93,7 +93,8 @@ Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
     // Quản lý thanh toán
     Route::get('form-payment',[PaymentController::class,'formPayment'])->name('formPayment');
     // quản lý blog
-    Route::get('/blog', [BlogController::class, 'index'])->name('admin.blog.list');
+    Route::get('/blog', [BlogController::class, 'index'])->name('blog.list');
+    Route::get('/blog-category', [BlogController::class, 'category'])->name('blog.category');
 // quản lý testimonial
     Route::get('/testimonials', [TestimonialController::class, 'index'])->name('admin.testimonials.list');
     Route::get('create-payments', [PaymentController::class, 'createPayment'])->name('createPayment');
