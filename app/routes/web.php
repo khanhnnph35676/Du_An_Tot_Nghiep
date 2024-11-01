@@ -10,6 +10,9 @@ use App\Http\Controllers\Admin\DiscountController;
 use App\Http\Controllers\Admin\PaymentController;
 use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\TestimonialController;
+use App\Http\Controllers\User\UserProfileController;
+use App\Http\Controllers\User\UserOrderController;
+
 
 
 // DDawng nhập, đăng kí, đăng xuất, quên mật khẩu
@@ -115,3 +118,5 @@ Route::get('store-tetimonial',[PageController :: class,'storeTestimonial'])->nam
 
 Route::get('store-list-cart',[PageController :: class,'storeListCart'])->name('storeListCart');
 Route::get('store-checkout',[PageController :: class,'storeCheckout'])->name('storeCheckout');
+Route::get('/user/profile', [UserProfileController::class, 'index'])->name('user.profile');
+Route::get('/order-history', [UserOrderController::class, 'index'])->name('order.history');
