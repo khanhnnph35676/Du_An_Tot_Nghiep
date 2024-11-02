@@ -110,7 +110,6 @@ Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
 
 Route::get('/',[PageController :: class,'storeHome'])->name('storeHome');
 Route::get('/product/{id}', [ProductController::class, 'show'])->name('product.detail');
-
 Route::get('list-product',[PageController :: class,'storeListProduct'])->name('storeListProduct');
 Route::get('/product/{id}', action: [PageController::class, 'storeProductDetail'])->name('product.detail');
 Route::get('store-contact',[PageController :: class,'storeContact'])->name('storeContact');
@@ -120,3 +119,12 @@ Route::get('store-list-cart',[PageController :: class,'storeListCart'])->name('s
 Route::get('store-checkout',[PageController :: class,'storeCheckout'])->name('storeCheckout');
 Route::get('/user/profile', [UserProfileController::class, 'index'])->name('user.profile');
 Route::get('/order-history', [UserOrderController::class, 'index'])->name('order.history');
+
+Route::get('/blog', [BlogController::class, 'index'])->name('blog.list');
+Route::get('/blog-category', [BlogController::class, 'category'])->name('blog.category');
+
+//Login
+Route::get('/user/login', [AuthenController::class, 'loginHome'])->name('user.login');
+Route::get('/user/register', [AuthenController::class, 'registerHome'])->name('user.register');
+Route::post('/user/login', [AuthenController::class, 'postLogin'])->name('user.postLogin');
+Route::get('/user/forgot-password', [AuthenController::class, 'forgotPassword'])->name('user.forgot-password');
