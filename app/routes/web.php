@@ -12,7 +12,7 @@ use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\TestimonialController;
 use App\Http\Controllers\User\UserProfileController;
 use App\Http\Controllers\User\UserOrderController;
-
+use App\Http\Controllers\User\CartController;
 
 
 // DDawng nhập, đăng kí, đăng xuất, quên mật khẩu
@@ -96,16 +96,18 @@ Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
     // quản lý blog
     Route::get('/blog', [BlogController::class, 'index'])->name('blog.list');
     Route::get('/blog-category', [BlogController::class, 'category'])->name('blog.category');
-// quản lý testimonial
+    // quản lý testimonial
     Route::get('/testimonials', [TestimonialController::class, 'index'])->name('admin.testimonials.list');
     Route::get('create-payments', [PaymentController::class, 'createPayment'])->name('createPayment');
     Route::post('storePayment', [PaymentController::class, 'storePayment'])->name('payment.store');
     Route::get('update-payment/{id}', [PaymentController::class, 'updatePayment'])->name('updatePayment');
     Route::put('editPayment/{id}', [PaymentController::class, 'update'])->name('payment.update');
     Route::delete('deletePayment/{id}', [PaymentController::class, 'destroy'])->name('payment.destroy');
-  });
+    });
 });
-});
+
+
+
 
 Route::get('/',[PageController :: class,'storeHome'])->name('storeHome');
 Route::get('/product/{id}', [ProductController::class, 'show'])->name('product.detail');
@@ -115,7 +117,10 @@ Route::get('/product/{id}', action: [PageController::class, 'storeProductDetail'
 Route::get('store-contact',[PageController :: class,'storeContact'])->name('storeContact');
 Route::get('store-tetimonial',[PageController :: class,'storeTestimonial'])->name('storeTestimonial');
 
+
+Route::post('add-to-cart',[CartController :: class,'addToCart'])->name('addToCart');
 Route::get('store-list-cart',[PageController :: class,'storeListCart'])->name('storeListCart');
+
 Route::get('store-checkout',[PageController :: class,'storeCheckout'])->name('storeCheckout');
 Route::get('/user/profile', [UserProfileController::class, 'index'])->name('user.profile');
 Route::get('/order-history', [UserOrderController::class, 'index'])->name('order.history');

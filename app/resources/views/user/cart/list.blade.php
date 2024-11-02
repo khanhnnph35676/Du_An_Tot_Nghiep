@@ -4,11 +4,10 @@
 @section('content')
     <!-- Single Page Header start -->
     <div class="container-fluid page-header py-5">
-        <h1 class="text-center text-white display-6">Cart</h1>
+        <h1 class="text-center text-white display-6">Giỏ hàng</h1>
         <ol class="breadcrumb justify-content-center mb-0">
-            <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item"><a href="#">Pages</a></li>
-            <li class="breadcrumb-item active text-white">Cart</li>
+            <li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
+            <li class="breadcrumb-item active text-white">Giỏ hàng</li>
         </ol>
     </div>
     <!-- Single Page Header End -->
@@ -20,25 +19,22 @@
                 <table class="table">
                     <thead>
                         <tr>
-                            <th scope="col">Products</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Price</th>
-                            <th scope="col">Quantity</th>
-                            <th scope="col">Total</th>
-                            <th scope="col">Handle</th>
+                            <th scope="col">Sản phẩm</th>
+                            <th scope="col">Giá</th>
+                            <th scope="col">Số lượng</th>
+                            <th scope="col">Thao tác</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- Các sản phẩm trong giỏ hàng sẽ được hiển thị ở đây -->
+                 @php
+                     print_r($cart);
+                 @endphp
                         <tr>
                             <th scope="row">
                                 <div class="d-flex align-items-center">
                                     <img src="img/vegetable-item-3.png" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt="">
                                 </div>
                             </th>
-                            <td>
-                                <p class="mb-0 mt-4">Big Banana</p>
-                            </td>
                             <td>
                                 <p class="mb-0 mt-4">2.99 $</p>
                             </td>
@@ -56,9 +52,6 @@
                                         </button>
                                     </div>
                                 </div>
-                            </td>
-                            <td>
-                                <p class="mb-0 mt-4">2.99 $</p>
                             </td>
                             <td>
                                 <button class="btn btn-md rounded-circle bg-light border mt-4">
@@ -105,7 +98,7 @@
 
         <!-- Sản phẩm nổi bật -->
         <div class="container mt-5">
-            <h2 class="text-center mb-4">Sản phẩm Nổi bật</h2>
+            <h2 class="text-center mb-4">Sản phẩm nổi bật</h2>
             <div class="owl-carousel vegetable-carousel justify-content-center">
                 @foreach ($bestProducts as $product)
                     <div class="border border-primary rounded position-relative vesitable-item">

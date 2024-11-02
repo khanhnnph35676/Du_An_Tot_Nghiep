@@ -17,10 +17,9 @@ class CheckAuthenticated
     public function handle($request, Closure $next)
     {
         // Kiểm tra nếu người dùng chưa đăng nhập
-        if (!Auth::check()) {
-            return redirect()->route('loginAdmin'); // Chuyển hướng đến màn hình đăng nhập
+        if (!Auth::check() && Auth::id()  !=  1 ) {
+            return redirect()->route('loginAdmin');
         }
-
         return $next($request);
     }
 }

@@ -16,7 +16,7 @@ class PageController extends Controller
         $products = Product::latest()->take(8)->get();
         $bestViewedProducts = Product::orderBy('view', 'desc')->take(9)->get();
         $categories = Category::all();
-        $product_variants = ProductVariant::get();
+        $product_variants = ProductVariant::with("options")->get();
         return view('user.home', compact('products', 'categories', 'bestViewedProducts','product_variants'));
     }
 
@@ -51,8 +51,8 @@ class PageController extends Controller
     {
         // Lấy 6 sản phẩm nổi bật
         $bestProducts = Product::orderBy('view', 'desc')->take(6)->get();
-
-        return view('user.cart.list', compact('bestProducts'));
+        $cart = session()->get('cart', []);
+        return view('user.cart.list', compact('bestProducts','cart'));
     }
     public function storeCheckout(){
         return view('user.cart.checkout');
