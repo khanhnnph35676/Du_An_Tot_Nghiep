@@ -56,8 +56,7 @@
         <li><a class="dropdown-item" href="{{ route('order.history') }}">Lịch sử đặt hàng</a></li>
         <li><hr class="dropdown-divider"></li>
         <li>
-            
-            <a class="dropdown-item" href="#">Đăng xuất</a>
+            <a class="dropdown-item" href="{{ route('user.login') }}">Đăng xuất</a>
         </li>
     </ul>
 </div>
