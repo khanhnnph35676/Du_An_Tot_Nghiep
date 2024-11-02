@@ -128,4 +128,17 @@ class AuthenController extends Controller
 
         return back()->withErrors(['email' => trans($response)]);
     }
+
+    public function loginHome()
+    {
+        return view('user.login');
+    }
+    public function registerHome()
+    {
+        return view('user.register');
+    }
+    public function forgotPassword()
+    {
+        return view('user.forgot-password');
+    }
 }

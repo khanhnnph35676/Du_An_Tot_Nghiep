@@ -7,6 +7,7 @@
  <!-- Spinner End -->
 
 
+<<<<<<< HEAD
  <!-- Navbar start -->
  <div class="container-fluid fixed-top">
      <div class="container topbar bg-primary d-none d-lg-block">
@@ -73,6 +74,62 @@
                                  <hr class="dropdown-divider">
                              </li>
                              <li>
+=======
+<!-- Navbar start -->
+<div class="container-fluid fixed-top">
+    <div class="container topbar bg-primary d-none d-lg-block">
+        <div class="d-flex justify-content-between">
+            <div class="top-info ps-2">
+                <small class="me-3"><i class="fas fa-map-marker-alt me-2 text-secondary"></i> <a href="#" class="text-white">1 Trịnh Văn Bô</a></small>
+                <small class="me-3"><i class="fas fa-envelope me-2 text-secondary"></i><a href="#" class="text-white">Email@Example.com</a></small>
+            </div>
+            <div class="top-link pe-2">
+                <a href="#" class="text-white"><small class="text-white mx-2">Privacy Policy</small>/</a>
+                <a href="#" class="text-white"><small class="text-white mx-2">Terms of Use</small>/</a>
+                <a href="#" class="text-white"><small class="text-white ms-2">Sales and Refunds</small></a>
+            </div>
+        </div>
+    </div>
+    <div class="container px-0">
+        <nav class="navbar navbar-light bg-white navbar-expand-xl">
+            <a href="{{ route('storeHome') }}" class="navbar-brand"><h1 class="text-primary display-6">J-Snack</h1></a>
+            <button class="navbar-toggler py-2 px-3" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                <span class="fa fa-bars text-primary"></span>
+            </button>
+            <div class="collapse navbar-collapse bg-white" id="navbarCollapse">
+                <div class="navbar-nav mx-auto">
+                    <a href="{{ route('storeHome') }}" class="nav-item nav-link {{ request()->routeIs('storeHome') ? 'active' : '' }}">Trang chủ</a>
+                    <a href="{{ route('storeListProduct') }}" class="nav-item nav-link {{ request()->routeIs('storeListProduct') ? 'active' : '' }}">Sản Phẩm</a>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
+                        <div class="dropdown-menu m-0 bg-secondary rounded-0">
+                            <a href="{{route('storeCheckout')}}" class="dropdown-item">Checkout</a>
+                            <a href="{{ route('storeTestimonial') }}" class="dropdown-item">Testimonial</a> 
+                            <a href="404.html" class="dropdown-item">404 Page</a>
+                        </div>
+                    </div>
+                    <a href="{{ route('storeContact') }}" class="nav-item nav-link {{ request()->routeIs('storeProductDetail') ? 'active' : '' }}">Contact</a>
+                </div>
+                <div class="d-flex m-3 me-0">
+                    <button class="btn-search btn border border-secondary btn-md-square rounded-circle bg-white me-4" data-bs-toggle="modal" data-bs-target="#searchModal"><i class="fas fa-search text-primary"></i></button>
+                    <a href="{{ route('storeListCart') }}" class="position-relative me-4 my-auto">
+                        <i class="fa fa-shopping-bag fa-2x"></i>
+                        <span class="position-absolute bg-secondary rounded-circle d-flex align-items-center justify-content-center text-dark px-1" style="top: -5px; left: 15px; height: 20px; min-width: 20px;">3</span>
+                    </a>
+                    <div class="dropdown my-auto">
+    <a href="#" class="nav-link dropdown-toggle" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fas fa-user fa-2x"></i>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+        <li><a class="dropdown-item" href="{{ route('user.profile') }}">Thông tin cá nhân</a></li>
+        <li><a class="dropdown-item" href="{{ route('order.history') }}">Lịch sử đặt hàng</a></li>
+        <li><hr class="dropdown-divider"></li>
+        <li>
+            <a class="dropdown-item" href="{{ route('user.login') }}">Đăng xuất</a>
+        </li>
+    </ul>
+</div>
+>>>>>>> e5521c8da9c3603694d2cea3d47ad51160e2a859
 
                                  <a class="dropdown-item" href="#">Đăng xuất</a>
                              </li>
