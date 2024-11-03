@@ -94,8 +94,11 @@ Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
     Route::get('form-payment',[PaymentController::class,'formPayment'])->name('formPayment');
     // quản lý blog
     Route::get('/blog', [BlogController::class, 'index'])->name('blog.list');
-    Route::get('/blog-category', [BlogController::class, 'category'])->name('blog.category');
-// quản lý testimonial
+    Route::get('/blog-category', [BlogController::class, 'category'])->name('blog.category');// Lấu danh mục blog
+    Route::post('storeBlog', [BlogController::class, 'storeBlog'])->name('blog.store');//Lưu danh mục blog
+    Route::delete('blog-categories-destroy/{id}', [BlogController::class, 'Blog_categories_destroy'])->name('blog.categories.destroy');//Xóa danh mục Blog
+    
+    // quản lý testimonial
     Route::get('/testimonials', [TestimonialController::class, 'index'])->name('admin.testimonials.list');
     Route::get('create-payments', [PaymentController::class, 'createPayment'])->name('createPayment');
     Route::post('storePayment', [PaymentController::class, 'storePayment'])->name('payment.store');
@@ -115,3 +118,4 @@ Route::get('store-tetimonial',[PageController :: class,'storeTestimonial'])->nam
 
 Route::get('store-list-cart',[PageController :: class,'storeListCart'])->name('storeListCart');
 Route::get('store-checkout',[PageController :: class,'storeCheckout'])->name('storeCheckout');
+
