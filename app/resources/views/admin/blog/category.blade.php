@@ -55,7 +55,7 @@
                                     @foreach($blog_categories as $category)
                                     <li class="list-group-item d-flex justify-content-between align-items-center">
                                         
-                                        <h5><input type="text" value="{{ $category->blog_categories_name}}" class="my-input" name="blog_categories_name" id="input1" data-bs-toggle="modal" data-bs-target="#editBlogCategories"></h5>
+                                        <h5>{{ $category->blog_categories_name}}</h5>
                                         <div class="d-flex">
                                             <form action="{{ route('admin.blog.category.update', $category->id) }}" method="POST"> 
                                                 @csrf
@@ -75,7 +75,7 @@
                                                         </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                                                        <button type="submit" class="btn btn-danger">Đồng ý</button>
+                                                        <button type="submit" class="btn btn-primary">Đồng ý</button>
                                                     </div>
                                                     </div>
                                                 </div>
@@ -85,7 +85,7 @@
                                             <form action="{{ route('admin.blog.categories.destroy', $category->id) }}" method="POST">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal{{$category->id}}">Xóa</button>
+                                                <button type="button" class="btn btn-danger mr-3" data-bs-toggle="modal" data-bs-target="#exampleModal{{$category->id}}">Xóa</button>
 
                                                 <!-- Modal -->
                                                 <div class="modal fade" id="exampleModal{{$category->id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -107,6 +107,8 @@
                                                 </div>
 
                                             </form>
+                                            <button type="button" class="btn btn-success">Detail</button>
+
                                         </div>
                                     </li>
                                     @endforeach
