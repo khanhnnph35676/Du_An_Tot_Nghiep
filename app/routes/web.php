@@ -97,8 +97,12 @@ Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
     Route::get('form-payment',[PaymentController::class,'formPayment'])->name('formPayment');
     // quản lý blog
     Route::get('/blog', [BlogController::class, 'index'])->name('blog.list');
-    Route::get('/blog-category', [BlogController::class, 'category'])->name('blog.category');
-// quản lý testimonial
+    Route::get('/blog-category', [BlogController::class, 'category'])->name('blog.category');// Lấu danh mục blog
+    Route::post('storeBlog', [BlogController::class, 'storeBlog'])->name('blog.store'); //Lưu danh mục blog
+    Route::put('editBlog/{id}', [BlogController::class, 'update'])->name('blog.category.update');// Sửa tên danh mục category
+    Route::delete('blog-categories-destroy/{id}', [BlogController::class, 'Blog_categories_destroy'])->name('blog.categories.destroy');//Xóa danh mục Blog
+    
+    // quản lý testimonial
     Route::get('/testimonials', [TestimonialController::class, 'index'])->name('admin.testimonials.list');
     Route::get('create-payments', [PaymentController::class, 'createPayment'])->name('createPayment');
     Route::post('storePayment', [PaymentController::class, 'storePayment'])->name('payment.store');
@@ -117,6 +121,7 @@ Route::get('store-tetimonial',[PageController :: class,'storeTestimonial'])->nam
 
 Route::get('store-list-cart',[PageController :: class,'storeListCart'])->name('storeListCart');
 Route::get('store-checkout',[PageController :: class,'storeCheckout'])->name('storeCheckout');
+
 Route::get('/user/profile', [UserProfileController::class, 'index'])->name('user.profile');
 Route::get('/order-history', [UserOrderController::class, 'index'])->name('order.history');
 
@@ -128,3 +133,4 @@ Route::get('/user/login', [AuthenController::class, 'loginHome'])->name('user.lo
 Route::get('/user/register', [AuthenController::class, 'registerHome'])->name('user.register');
 Route::post('/user/login', [AuthenController::class, 'postLogin'])->name('user.postLogin');
 Route::get('/user/forgot-password', [AuthenController::class, 'forgotPassword'])->name('user.forgot-password');
+

@@ -19,8 +19,6 @@ class DiscountController extends Controller
     public function storeDiscount(Request $request)
     {
         $data = $request->all();
-        // dd($data);
-
         Discount::query()->create($data);
         return redirect()->route('admin.listDiscounts')->with('message', 'Thêm dữ liệu thành công');
     }
