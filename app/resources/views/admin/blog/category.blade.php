@@ -33,7 +33,7 @@
             </div>
         @endif
         @if (session('delete-message'))
-            <div class="alert alert-success">
+            <div class="alert alert-danger">
                 <ul>
                     @if(session('delete-message'))
                         <li>{{ session('delete-message') }}</li>
@@ -54,19 +54,41 @@
                                 <ul class="list-group">
                                     @foreach($blog_categories as $category)
                                     <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        <input type="hidden" name="id" value="{{$category->id}}">
-                                        <h5><input type="text" value="{{ $category->blog_categories_name}}" class="my-input" name="blog_categories_name"></h5>
+                                        
+                                        <h5><input type="text" value="{{ $category->blog_categories_name}}" class="my-input" name="blog_categories_name" id="input1" data-bs-toggle="modal" data-bs-target="#editBlogCategories"></h5>
                                         <div class="d-flex">
-                                            <a href="{{ route('admin.categories.edit', $category->id) }}" class="btn btn-secondary mr-3">Sửa</a>
+                                            <form action="{{ route('admin.blog.category.update', $category->id) }}" method="POST"> 
+                                                @csrf
+                                                @method('PUT')
+                                                <input type="hidden" name="id" value="{{$category->id}}">
+                                                <button type="button" class="btn btn-primary mr-3" data-bs-toggle="modal" data-bs-target="#ModalUpdateBlogCategories{{$category->id}}">Sửa</button>
+                                                <!-- Modal -->
+                                                <div class="modal fade" id="ModalUpdateBlogCategories{{$category->id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLabel">Thông báo</h5>
+                                                        <button type="button" class=" text-dark btn border-0 bg-transparent" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+                                                    </div>
+                                                        <div class="modal-body">
+                                                            <p class="text-dark" id="new-name">Bạn muốn đổi thể loại "{{ $category->blog_categories_name }}" thành:  <input type="text" name="blog_categories_name"></p>
+                                                        </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                                                        <button type="submit" class="btn btn-danger">Đồng ý</button>
+                                                    </div>
+                                                    </div>
+                                                </div>
+                                                </div>
+                                            </form>
+                                            
                                             <form action="{{ route('admin.blog.categories.destroy', $category->id) }}" method="POST">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">Xóa</button>
-
-                                                <!-- Button trigger modal -->
+                                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal{{$category->id}}">Xóa</button>
 
                                                 <!-- Modal -->
-                                                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal fade" id="exampleModal{{$category->id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                 <div class="modal-dialog">
                                                     <div class="modal-content">
                                                     <div class="modal-header">
@@ -118,5 +140,12 @@
 
 <script src="{{ asset('backend/js/product.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<script>
+  const input1 = document.getElementById('input1');
+  const newNameElement = document.getElementById('new-name');
 
+  input1.addEventListener('input', () => {
+      newNameElement.textContent += input1.value;
+  });
+</script>
 @endsection

@@ -33,4 +33,12 @@ class BlogController extends Controller
         $blog_category->delete();
         return redirect()->route('admin.blog.category')->with('delete-message', 'Xóa dữ liệu thành công');
     }
+
+    public function update(BlogCategoriesRequest $request)
+    {
+        // $data = $request->all();
+        $data = $request->except('_token', '_method');
+        Blog_categories::where('id', $request->id)->update($data);
+        return redirect()->back()->with('insert-message', 'Cập nhật dữ liệu thành công');
+    }
 }
