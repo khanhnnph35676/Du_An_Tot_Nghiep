@@ -48,14 +48,14 @@
                         <h4 class="card-title">Thể loại</h4>
                     </div>
                     <div class="card-body row">
-                        <div class="col-4 ml-3 mr-5 border">
+                        <div class="col-5 ml-3 mr-5 border">
                             <h5 class="mb-3">Danh sách thể loại Blog</h5>
                             <div class="basic-list-group">
                                 <ul class="list-group">
                                     @foreach($blog_categories as $category)
                                     <li class="list-group-item d-flex justify-content-between align-items-center">
                                         
-                                        <h5><input type="text" value="{{ $category->blog_categories_name}}" class="my-input" name="blog_categories_name" id="input1" data-bs-toggle="modal" data-bs-target="#editBlogCategories"></h5>
+                                        <h5>{{ $category->blog_categories_name}}</h5>
                                         <div class="d-flex">
                                             <form action="{{ route('admin.blog.category.update', $category->id) }}" method="POST"> 
                                                 @csrf
@@ -75,7 +75,7 @@
                                                         </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                                                        <button type="submit" class="btn btn-danger">Đồng ý</button>
+                                                        <button type="submit" class="btn btn-primary">Đồng ý</button>
                                                     </div>
                                                     </div>
                                                 </div>
@@ -85,7 +85,7 @@
                                             <form action="{{ route('admin.blog.categories.destroy', $category->id) }}" method="POST">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal{{$category->id}}">Xóa</button>
+                                                <button type="button" class="btn btn-danger mr-3" data-bs-toggle="modal" data-bs-target="#exampleModal{{$category->id}}">Xóa</button>
 
                                                 <!-- Modal -->
                                                 <div class="modal fade" id="exampleModal{{$category->id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -107,6 +107,8 @@
                                                 </div>
 
                                             </form>
+                                            <a href="{{route('admin.blog.category.list',$category->id)}}" type="button" class="btn btn-success">Detail</a>
+
                                         </div>
                                     </li>
                                     @endforeach
@@ -128,8 +130,20 @@
                                     {{ $blog_categories->links() }}                               
                             </div>
                         </div>
-                        <div class="col-7 border">
-                            <h5 class="m-3">Danh sách sản phẩm thể loại ""</h5>
+                        <div class="col-6 border">
+                            <h5 class="m-3">
+                                Danh sách sản phẩm thể loại "
+                                
+                                    {{ $categoryFollowId->blog_categories_name }}
+                                
+                                " có {{$blogCount}} blog
+                                
+                            </h5>
+                            <ul>
+                                @foreach($blogs as $blog)
+                                <li class="text-dark">{{$blog->title}}</li>
+                                @endforeach
+                            </ul>
                         </div>
                     </div>
                 </div>
