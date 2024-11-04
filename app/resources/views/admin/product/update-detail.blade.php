@@ -133,7 +133,7 @@
                                                 </thead>
                                                 <tbody>
                                                     @if ($productVariants)
-                                                        @foreach ($productVariants as $value)
+                                                        @foreach ($productVariants as $key=>$value)
                                                             <tr class="text-center">
                                                                 <td>
                                                                     {{-- <input type="text" hidden name="option_value[]" value="{{ $value->optionvalue }}"> --}}
@@ -147,7 +147,7 @@
                                                                     <img src="{{ asset($value->image) }}"
                                                                         style="width: 50px; height: 50px; object-fit: cover;"
                                                                         alt="{{ $variant->sku }}">
-                                                                    <input type="file" name="variant_image[]">
+                                                                    <input type="file" name="variant_image[{{ $key }}]">
                                                                 </td>
                                                                 <td class="pr-4"><input name="variant_sku[]"
                                                                         type="text" value="{{ $value->sku }}"

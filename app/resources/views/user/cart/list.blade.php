@@ -26,45 +26,190 @@
                         </tr>
                     </thead>
                     <tbody>
-                 @php
-                     print_r($cart);
-                 @endphp
-                        <tr>
-                            <th scope="row">
-                                <div class="d-flex align-items-center">
-                                    <img src="img/vegetable-item-3.png" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt="">
-                                </div>
-                            </th>
-                            <td>
-                                <p class="mb-0 mt-4">2.99 $</p>
-                            </td>
-                            <td>
-                                <div class="input-group quantity mt-4" style="width: 100px;">
-                                    <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-minus rounded-circle bg-light border">
-                                            <i class="fa fa-minus"></i>
-                                        </button>
-                                    </div>
-                                    <input type="text" class="form-control form-control-sm text-center border-0" value="1">
-                                    <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-plus rounded-circle bg-light border">
-                                            <i class="fa fa-plus"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <button class="btn btn-md rounded-circle bg-light border mt-4">
-                                    <i class="fa fa-times text-danger"></i>
-                                </button>
-                            </td>
-                        </tr>
+                        @php
+                            print_r($cart);
+                        @endphp
+                        @if (Auth::check())
+                            @foreach ($products as $product)
+                                @foreach ($cart as $item)
+                                    @if ($product->id == $item['product_id'] && $product->type === '1')
+                                        <tr>
+                                            <th scope="row">
+                                                <div class="d-flex align-items-center">
+                                                    <img src=" {{ asset($product->image) }}"
+                                                        class="img-fluid me-5 rounded-circle"
+                                                        style="width: 80px; height: 80px;" alt="Ảnh sản phẩm">
+                                                    {{ $product->name }}
+                                                </div>
+                                            </th>
+                                            <td>
+                                                <p class="mb-0 mt-4">{{ number_format($product->price) }}</p>
+                                            </td>
+                                            <td>
+                                                <div class="input-group quantity mt-4" style="width: 100px;">
+                                                    <div class="input-group-btn">
+                                                        <button class="btn btn-sm btn-minus rounded-circle bg-light border">
+                                                            <i class="fa fa-minus"></i>
+                                                        </button>
+                                                    </div>
+                                                    <input type="text"
+                                                        class="form-control form-control-sm text-center border-0"
+                                                        value="{{ $item['qty'] }}">
+                                                    <div class="input-group-btn">
+                                                        <button class="btn btn-sm btn-plus rounded-circle bg-light border">
+                                                            <i class="fa fa-plus"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-md rounded-circle bg-light border mt-4">
+                                                    <i class="fa fa-times text-danger"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    @else
+                                        @foreach ($productVariants as $productVariant)
+                                            @if (
+                                                $product->id == $item['product_id'] &&
+                                                    $item['product_variant_id'] == $productVariant->id)
+                                                <tr>
+                                                    <th scope="row">
+                                                        <div class="d-flex align-items-center">
+                                                            <img src=" {{ asset($productVariant->image) }}"
+                                                                class="img-fluid me-5 rounded-circle"
+                                                                style="width: 80px; height: 80px;" alt="Ảnh sản phẩm">
+                                                            {{ $product->name . ' - ' . $productVariant->sku }}
+                                                        </div>
+                                                    </th>
+                                                    <td>
+                                                        <p class="mb-0 mt-4">{{ number_format($productVariant->price) }}</p>
+                                                    </td>
+                                                    <td>
+                                                        <div class="input-group quantity mt-4" style="width: 100px;">
+                                                            <div class="input-group-btn">
+                                                                <button
+                                                                    class="btn btn-sm btn-minus rounded-circle bg-light border">
+                                                                    <i class="fa fa-minus"></i>
+                                                                </button>
+                                                            </div>
+                                                            <input type="text"
+                                                                class="form-control form-control-sm text-center border-0"
+                                                                value="{{ $item['qty'] }}">
+                                                            <div class="input-group-btn">
+                                                                <button
+                                                                    class="btn btn-sm btn-plus rounded-circle bg-light border">
+                                                                    <i class="fa fa-plus"></i>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <button class="btn btn-md rounded-circle bg-light border mt-4">
+                                                            <i class="fa fa-times text-danger"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            @endif
+                                        @endforeach
+                                    @endif
+                                @endforeach
+                            @endforeach
+                        @else
+                        @foreach ($products as $product)
+                            @foreach ($cart as $item)
+                                @if ($product->id == $item['product_id'] && $product->type === '1' && $item['user_id'] == null)
+                                    <tr>
+                                        <th scope="row">
+                                            <div class="d-flex align-items-center">
+                                                <img src=" {{ asset($product->image) }}"
+                                                    class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;"
+                                                    alt="Ảnh sản phẩm">
+                                                {{ $product->name }}
+                                            </div>
+                                        </th>
+                                        <td>
+                                            <p class="mb-0 mt-4">{{ number_format($product->price) }}</p>
+                                        </td>
+                                        <td>
+                                            <div class="input-group quantity mt-4" style="width: 100px;">
+                                                <div class="input-group-btn">
+                                                    <button class="btn btn-sm btn-minus rounded-circle bg-light border">
+                                                        <i class="fa fa-minus"></i>
+                                                    </button>
+                                                </div>
+                                                <input type="text"
+                                                    class="form-control form-control-sm text-center border-0"
+                                                    value="{{ $item['qty'] }}">
+                                                <div class="input-group-btn">
+                                                    <button class="btn btn-sm btn-plus rounded-circle bg-light border">
+                                                        <i class="fa fa-plus"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-md rounded-circle bg-light border mt-4">
+                                                <i class="fa fa-times text-danger"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                @else
+                                    @foreach ($productVariants as $productVariant)
+                                        @if (
+                                            $product->id == $item['product_id'] &&
+                                                $item['product_variant_id'] == $productVariant->id &&
+                                                $item['user_id'] == null)
+                                            <tr>
+                                                <th scope="row">
+                                                    <div class="d-flex align-items-center">
+                                                        <img src=" {{ asset($productVariant->image) }}"
+                                                            class="img-fluid me-5 rounded-circle"
+                                                            style="width: 80px; height: 80px;" alt="Ảnh sản phẩm">
+                                                        {{ $product->name . ' - ' . $productVariant->sku }}
+                                                    </div>
+                                                </th>
+                                                <td>
+                                                    <p class="mb-0 mt-4">{{ number_format($productVariant->price) }}</p>
+                                                </td>
+                                                <td>
+                                                    <div class="input-group quantity mt-4" style="width: 100px;">
+                                                        <div class="input-group-btn">
+                                                            <button
+                                                                class="btn btn-sm btn-minus rounded-circle bg-light border">
+                                                                <i class="fa fa-minus"></i>
+                                                            </button>
+                                                        </div>
+                                                        <input type="text"
+                                                            class="form-control form-control-sm text-center border-0"
+                                                            value="{{ $item['qty'] }}">
+                                                        <div class="input-group-btn">
+                                                            <button
+                                                                class="btn btn-sm btn-plus rounded-circle bg-light border">
+                                                                <i class="fa fa-plus"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <button class="btn btn-md rounded-circle bg-light border mt-4">
+                                                        <i class="fa fa-times text-danger"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        @endif
+                                    @endforeach
+                                @endif
+                            @endforeach
+                        @endforeach
+                        @endif
                     </tbody>
                 </table>
             </div>
             <div class="mt-5">
                 <input type="text" class="border-0 border-bottom rounded me-5 py-3 mb-4" placeholder="Coupon Code">
-                <button class="btn border-secondary rounded-pill px-4 py-3 text-primary" type="button">Apply Coupon</button>
+                <button class="btn border-secondary rounded-pill px-4 py-3 text-primary" type="button">Apply
+                    Coupon</button>
             </div>
             <div class="row g-4 justify-content-end">
                 <div class="col-8"></div>
@@ -88,7 +233,8 @@
                             <h5 class="mb-0 ps-4 me-4">Total</h5>
                             <p class="mb-0 pe-4">$99.00</p>
                         </div>
-                        <a href="{{ route('storeCheckout') }}" class="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4">
+                        <a href="{{ route('storeCheckout') }}"
+                            class="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4">
                             Proceed Checkout
                         </a>
                     </div>
@@ -103,9 +249,8 @@
                 @foreach ($bestProducts as $product)
                     <div class="border border-primary rounded position-relative vesitable-item">
                         <div class="vesitable-img">
-                            <img src="{{ asset($product->image) }}"
-                              style="height: 270px; object-fit: cover;"
-                            class="img-fluid w-100 rounded-top" alt="{{ $product->name }}">
+                            <img src="{{ asset($product->image) }}" style="height: 270px; object-fit: cover;"
+                                class="img-fluid w-100 rounded-top" alt="{{ $product->name }}">
                         </div>
                         <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
                             style="top: 10px; right: 10px;">

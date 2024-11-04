@@ -84,7 +84,7 @@ label {
 
 .input-container input {
     width: 100%;
-    padding: 12px 10px 12px 30px; /* Đẩy nội dung bên trong để chừa khoảng trống cho icon */
+    padding: 10px 10px 10px 10px;
     margin-bottom: 15px;
     font-size: 1.0em; /* Cùng kích thước với icon */
     border: 1px solid #ccc;
