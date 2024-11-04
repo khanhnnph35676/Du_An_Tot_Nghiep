@@ -107,6 +107,9 @@ class ProductController extends Controller
         $product = Product::find($idProduct);
         $image_url = $product->image;
         if ($request->hasFile('image')) {
+            if (!empty($image_url) && File::exists(public_path($image_url))) {
+                File::delete(public_path($image_url)); // Xóa ảnh cũ
+            }
             $image = $request->file('image');
             $nameImage = time() . "_" . uniqid() . '.' . $image->getClientOriginalExtension();
             $link = "img/prd/";
@@ -268,6 +271,9 @@ class ProductController extends Controller
         $product = Product::find($idProduct);
         $image_url = $product->image;
         if ($request->hasFile('image')) {
+            if (!empty($image_url) && File::exists(public_path($image_url))) {
+                File::delete(public_path($image_url)); // Xóa ảnh cũ
+            }
             $image = $request->file('image');
             $nameImage = time() . "_" . uniqid() . '.' . $image->getClientOriginalExtension();
             $link = "img/prd/";
@@ -290,6 +296,9 @@ class ProductController extends Controller
 
         foreach ($product_variants as $key => $value) {
             if ($request->hasFile("variant_image.$key")) {
+                if (!empty($value->image) && File::exists(public_path($value->image))) {
+                    File::delete(public_path($value->image)); // Xóa ảnh cũ
+                }
                 $image = $request->file("variant_image.$key");
                 $nameImage = time() . "_" . uniqid() . '.' . $image->getClientOriginalExtension();
                 $link = "img/prd/variant_image";

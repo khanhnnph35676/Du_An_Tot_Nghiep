@@ -65,8 +65,9 @@
                              @if (Auth::check())
                                  @foreach ($cart as $item)
                                      @if ($item['user_id'] == Auth::id())
-                                         {{ count($cart) }}
-                                     @break
+                                    @php
+                                       $count++;
+                                    @endphp
                                  @endif
                                 @endforeach
                             @else
@@ -77,8 +78,8 @@
                                      @endphp
                                  @endif
                                 @endforeach
-                             {{ $count }}
                             @endif
+                            {{ $count }}
                      </span>
                  </a>
                  <div class="dropdown my-auto">
