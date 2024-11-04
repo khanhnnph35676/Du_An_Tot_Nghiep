@@ -48,7 +48,7 @@
                         <h4 class="card-title">Thể loại</h4>
                     </div>
                     <div class="card-body row">
-                        <div class="col-4 ml-3 mr-5 border">
+                        <div class="col-5 ml-3 mr-5 border">
                             <h5 class="mb-3">Danh sách thể loại Blog</h5>
                             <div class="basic-list-group">
                                 <ul class="list-group">
@@ -107,7 +107,7 @@
                                                 </div>
 
                                             </form>
-                                            <button type="button" class="btn btn-success">Detail</button>
+                                            <a href="{{route('admin.blog.category.list',$category->id)}}" type="button" class="btn btn-success">Detail</a>
 
                                         </div>
                                     </li>
@@ -130,8 +130,20 @@
                                     {{ $blog_categories->links() }}                               
                             </div>
                         </div>
-                        <div class="col-7 border">
-                            <h5 class="m-3">Danh sách sản phẩm thể loại ""</h5>
+                        <div class="col-6 border">
+                            <h5 class="m-3">
+                                Danh sách sản phẩm thể loại "
+                                
+                                    {{ $categoryFollowId->blog_categories_name }}
+                                
+                                " có {{$blogCount}} blog
+                                
+                            </h5>
+                            <ul>
+                                @foreach($blogs as $blog)
+                                <li class="text-dark">{{$blog->title}}</li>
+                                @endforeach
+                            </ul>
                         </div>
                     </div>
                 </div>

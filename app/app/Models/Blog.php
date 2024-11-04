@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Blog extends Model
 {
     use HasFactory, SoftDeletes;
-    protected $table = 'blog_categories';
+    protected $table = 'blogs';
     public $fillable = [
         'status',
         'post_image',

@@ -94,7 +94,8 @@ Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
     Route::get('form-payment',[PaymentController::class,'formPayment'])->name('formPayment');
     // quản lý blog
     Route::get('/blog', [BlogController::class, 'index'])->name('blog.list');
-    Route::get('/blog-category', [BlogController::class, 'category'])->name('blog.category');// Lấu danh mục blog
+    Route::get('/blog-category', [BlogController::class, 'category'])->name('blog.category'); // Lấu danh mục blog
+    Route::get('/blog-category-with-blog/{id}', [BlogController::class, 'categoryWithBlog'])->name('blog.category.list');// Lấu danh mục blog và tên blog
     Route::post('storeBlog', [BlogController::class, 'storeBlog'])->name('blog.store'); //Lưu danh mục blog
     Route::put('editBlog/{id}', [BlogController::class, 'update'])->name('blog.category.update');// Sửa tên danh mục category
     Route::delete('blog-categories-destroy/{id}', [BlogController::class, 'Blog_categories_destroy'])->name('blog.categories.destroy');//Xóa danh mục Blog

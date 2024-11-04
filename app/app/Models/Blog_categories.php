@@ -13,13 +13,13 @@ class Blog_categories extends Model
     public $fillable = [
         'blog_categories_name',
     ];
+    public function detailBlog()
+    {
+        return $this->belongsTo(Blog::class, 'category_id', 'id');
+    }
+
     public function blogs()
     {
         return $this->hasMany(Blog::class, 'category_id');
-    }
-
-    public function blogList()
-    {
-        return $this->blogs()->get();
     }
 }
