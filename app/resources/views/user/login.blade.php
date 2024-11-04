@@ -19,14 +19,14 @@
                     @csrf
                     <label for="email">Email</label>
                     <div class="input-container">
-                        <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                        <input type="email" id="email" name="email" placeholder="Enter your email" >
                     </div>
 
                     <label for="password">Password</label>
                     <div class="input-container">
-                        <input type="password" id="password" name="password" placeholder="********" required>
+                        <input type="password" id="password" name="password" placeholder="********" >
                     </div>
-                    
+
                     <a href="{{ route('user.forgot-password') }}" class="forgot-password">Forgot password?</a>
                     <button type="submit" class="submit-button">Log in</button>
                 </form>
