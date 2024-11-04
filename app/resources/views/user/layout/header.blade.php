@@ -1,4 +1,5 @@
  <!-- Spinner Start -->
+  
  <div id="spinner" class="show w-100 vh-100 bg-white position-fixed translate-middle top-50 start-50  d-flex align-items-center justify-content-center">
     <div class="spinner-grow text-primary" role="status"></div>
 </div>
@@ -34,7 +35,7 @@
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
                         <div class="dropdown-menu m-0 bg-secondary rounded-0">
                             <a href="{{route('storeCheckout')}}" class="dropdown-item">Checkout</a>
-                            <a href="{{ route('storeTestimonial') }}" class="dropdown-item">Testimonial</a>
+                            <a href="{{ route('storeTestimonial') }}" class="dropdown-item">Testimonial</a> 
                             <a href="404.html" class="dropdown-item">404 Page</a>
                         </div>
                     </div>
@@ -46,9 +47,20 @@
                         <i class="fa fa-shopping-bag fa-2x"></i>
                         <span class="position-absolute bg-secondary rounded-circle d-flex align-items-center justify-content-center text-dark px-1" style="top: -5px; left: 15px; height: 20px; min-width: 20px;">3</span>
                     </a>
-                    <a href="#" class="my-auto">
-                        <i class="fas fa-user fa-2x"></i>
-                    </a>
+                    <div class="dropdown my-auto">
+    <a href="#" class="nav-link dropdown-toggle" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fas fa-user fa-2x"></i>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+        <li><a class="dropdown-item" href="{{ route('user.profile') }}">Thông tin cá nhân</a></li>
+        <li><a class="dropdown-item" href="{{ route('order.history') }}">Lịch sử đặt hàng</a></li>
+        <li><hr class="dropdown-divider"></li>
+        <li>
+            <a class="dropdown-item" href="{{ route('user.login') }}">Đăng xuất</a>
+        </li>
+    </ul>
+</div>
+
                 </div>
             </div>
         </nav>
