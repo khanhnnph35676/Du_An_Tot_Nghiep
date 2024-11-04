@@ -59,6 +59,8 @@ class DiscountController extends Controller
                 DiscountProduct::create($dataDiscount);
             }
         }
+        $data = $request->all();
+        Discount::query()->create($data);
         return redirect()->route('admin.listDiscounts')->with('message', 'Thêm dữ liệu thành công');
     }
 
