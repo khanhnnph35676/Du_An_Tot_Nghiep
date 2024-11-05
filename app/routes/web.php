@@ -63,8 +63,18 @@ Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
     Route::delete('force-delete-product',[ProductController::class,'forceDeleteProduct'])->name('forceDeleteProduct');
     Route::delete('force-delete-variant',[ProductController::class,'forceDeleteVariant'])->name('forceDeleteVariant');
     // Trang danh mục
+    
     Route::resource('categories', CategoryController::class);
     Route::get('list-categories',[CategoryController::class,'listCategories'])->name('listCategories');
+    // Route xem danh mục đã xóa
+    Route::get('deleted', [CategoryController::class, 'listDeletedCategories'])->name('categories.deleted');
+
+    // Route phục hồi danh mục đã xóa
+    Route::post('categories/{id}/restore', [CategoryController::class, 'restore'])->name('categories.restore');
+
+    // Route xóa vĩnh viễn danh mục
+    Route::delete('categories/{id}/force-destroy', [CategoryController::class, 'forceDestroy'])->name('categories.forceDestroy');
+
 
 
     // Trang customer
@@ -100,8 +110,11 @@ Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
     Route::get('/blog-category-with-blog/{id}', [BlogController::class, 'categoryWithBlog'])->name('blog.category.list');// Lấu danh mục blog và tên blog
     Route::post('storeBlog', [BlogController::class, 'storeBlog'])->name('blog.store'); //Lưu danh mục blog
     Route::put('editBlog/{id}', [BlogController::class, 'update'])->name('blog.category.update');// Sửa tên danh mục category
-    Route::delete('blog-categories-destroy/{id}', [BlogController::class, 'Blog_categories_destroy'])->name('blog.categories.destroy');//Xóa danh mục Blog
+   
+
+
     
+
 
     // quản lý testimonial
     Route::get('/testimonials', [TestimonialController::class, 'index'])->name('admin.testimonials.list');
