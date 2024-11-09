@@ -36,6 +36,7 @@
                  <div class="navbar-nav mx-auto">
                      <a href="{{ route('storeHome') }}"
                          class="nav-item nav-link {{ request()->routeIs('storeHome') ? 'active' : '' }}">Trang chủ</a>
+                         <a href="{{ route('storeIntro') }}"class="nav-item nav-link {{ request()->routeIs('storeIntro') ? 'active' : '' }}">Giới thiệu</a>
                      <a href="{{ route('storeListProduct') }}"
                          class="nav-item nav-link {{ request()->routeIs('storeListProduct') ? 'active' : '' }}">Sản
                          Phẩm</a>
@@ -59,7 +60,7 @@
                          <span
                              class="position-absolute bg-secondary rounded-circle d-flex align-items-center justify-content-center text-dark px-1"
                              style="top: -5px; left: 15px; height: 20px; min-width: 20px;">
-                             @php
+                             {{-- @php
                                  $count = 0;
                              @endphp
                              @if (Auth::check())
@@ -79,7 +80,7 @@
                                  @endif
                                 @endforeach
                             @endif
-                            {{ $count }}
+                            {{ $count }} --}}
                      </span>
                  </a>
                  <div class="dropdown my-auto">

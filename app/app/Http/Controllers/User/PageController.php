@@ -70,5 +70,8 @@ class PageController extends Controller
         $cart = session()->get('cart', []);
         return view('user.contact');
     }
+    public function storeIntro(){
+        return view('user.introduct');
+    }
 
 }
