@@ -32,6 +32,15 @@
             </div>
         @endif  
 
+        @if(session('update-message'))
+            <div class="alert alert-success">
+                <ul>
+                    <li>{{ session('update-message') }}</li>
+                </ul>
+            </div>
+        @endif
+
+
 
         <div class="row">
             <div class="col-12">
@@ -258,7 +267,81 @@
                 </div>
             </div>
         </div>
-    @endforeach                                                                                                        
+    @endforeach  
+    
+    <!-- Modal for Updating Post -->
+    @foreach ($blogs as $blog)
+        <div class="modal fade" id="updatePostModal{{ $blog->id }}" tabindex="-1" role="dialog" aria-labelledby="updatePostModalLabel{{ $blog->id }}" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="updatePostModalLabel{{ $blog->id }}">Cập nhật Blog: {{ $blog->title }}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form action="{{ route('admin.blog.update', $blog->id) }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        @method('PUT')
+                        <div class="modal-body text-dark">
+                            <div class="form-group">
+                                <label for="status">Trạng thái:</label>
+                                <select class="form-select" name="status">
+                                    <option value="draft" {{ $blog->status == 'draft' ? 'selected' : '' }}>Bản nháp</option>
+                                    <option value="published" {{ $blog->status == 'published' ? 'selected' : '' }}>Đã xuất bản</option>
+                                    <option value="archived" {{ $blog->status == 'archived' ? 'selected' : '' }}>Đã lưu trữ</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="blog_image">Ảnh chính:</label>
+                                <input type="file" class="form-control" name="blog_image">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="list_image">Danh sách ảnh:</label>
+                                <input type="file" class="form-control" name="list_image[]" multiple>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="title">Tiêu đề:</label>
+                                <input type="text" class="form-control" name="title" value="{{ $blog->title }}">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="short_content">Nội dung ngắn:</label>
+                                <textarea name="short_content" class="form-control">{{ $blog->short_content }}</textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="author">Tác giả:</label>
+                                <input type="text" class="form-control" name="author" value="{{ $blog->author }}">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="full_content">Nội dung đầy đủ:</label>
+                                <textarea name="full_content" class="form-control">{{ $blog->full_content }}</textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="category_id">Danh mục:</label>
+                                <select class="form-select" name="category_id">
+                                    @foreach ($blog_categories as $category)
+                                        <option value="{{ $category->id }}" {{ $blog->category_id == $category->id ? 'selected' : '' }}>{{ $category->blog_categories_name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                            <button type="submit" class="btn btn-primary">Cập nhật Blog</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    @endforeach
+                
 </div>
 
 <script src="{{ asset('backend/js/blog.js') }}"></script>
