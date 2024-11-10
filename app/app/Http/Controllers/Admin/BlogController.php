@@ -3,10 +3,12 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BlogCategoriesRequest;
+use App\Http\Requests\StoreBlogRequest;
 use App\Models\Blog;
 use App\Models\Blog_categories;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use PhpParser\Node\Stmt\Block;
 
 class BlogController extends Controller
@@ -60,20 +62,8 @@ class BlogController extends Controller
     //     return redirect()->route('admin.blog.category')->with('insert-message', 'Thêm dữ liệu thành công');
     // }
 
-    public function addBlog(Request $request)
+    public function addBlog(StoreBlogRequest $request)
     {
-        // Xác thực dữ liệu từ form
-        $request->validate([
-            'status' => 'required|string',
-            'blog_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'list_image.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
-            'title' => 'required|string|max:255',
-            'short_content' => 'required|string|max:500',
-            'author' => 'required|string|max:100',
-            'full_content' => 'required|string',
-            'category_id' => 'required|exists:blog_categories,id',
-        ]);
-
         // Tạo mới Blog và lưu trữ dữ liệu
         $blog = new Blog();
         $blog->status = $request->status;
@@ -121,4 +111,29 @@ class BlogController extends Controller
         Blog_categories::where('id', $request->id)->update($data);
         return redirect()->back()->with('insert-message', 'Cập nhật dữ liệu thành công');
     }
+
+    public function destroy($id)
+    {
+        // Tìm blog theo ID và xóa nó
+        $blog = Blog::findOrFail($id);
+
+        // Xóa ảnh nếu có
+        if ($blog->blog_image) {
+            Storage::delete('public/blog_images/' . $blog->blog_image);
+        }
+
+        if ($blog->list_image) {
+            $listImages = json_decode($blog->list_image);
+            foreach ($listImages as $image) {
+                Storage::delete('public/blog_images/' . $image);
+            }
+        }
+
+        // Xóa bài blog
+        $blog->delete();
+
+        // Thông báo xóa thành công
+        return redirect()->route('admin.blog.list')->with('delete-message', 'Blog đã được xóa thành công.');
+    }
+
 }
