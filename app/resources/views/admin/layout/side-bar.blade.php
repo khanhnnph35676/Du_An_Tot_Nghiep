@@ -54,8 +54,8 @@
                  </ul>
              </li>
              {{-- Danh mục quản lý Blog --}}
-             <li><a class="has-arrow" href="javascript:void()" aria-expanded="false"><i
-                         class="icon icon-world-2"></i><span class="nav-text">Blog</span></a>
+             <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                <i class="fa-solid fa-blog"></i><span class="nav-text">Quản lý Blog</span></a>
                  <ul aria-expanded="true">
                     <li><a href="{{ route('admin.blog.category')}}">Danh mục Blog</a></li>
                     <li><a href="{{ route('admin.blog.list')}}">Danh sách Blog</a></li>

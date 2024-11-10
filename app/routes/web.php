@@ -96,7 +96,9 @@ Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
     // Quản lý thanh toán
     Route::get('form-payment',[PaymentController::class,'formPayment'])->name('formPayment');
     // quản lý blog
-    Route::get('/blog', [BlogController::class, 'index'])->name('blog.list');
+    Route::get('/blog', [BlogController::class, 'index'])->name('blog.list'); // Lấy danh sách Blog
+    Route::post('addBlog', [BlogController::class, 'addBlog'])->name('blog.add'); //Lưu blog
+
     Route::get('/blog-category', [BlogController::class, 'category'])->name('blog.category'); // Lấu danh mục blog
     Route::get('/blog-category-with-blog/{id}', [BlogController::class, 'categoryWithBlog'])->name('blog.category.list');// Lấu danh mục blog và tên blog
     Route::post('storeBlog', [BlogController::class, 'storeBlog'])->name('blog.store'); //Lưu danh mục blog

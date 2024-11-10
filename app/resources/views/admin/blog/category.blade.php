@@ -9,8 +9,8 @@
         <div class="row page-titles mx-0">
             <div class="col-sm-6 p-md-0">
                 <div class="welcome-text">
-                    <h4>Hi, welcome back!</h4>
-                    <span class="ml-1">Quản lý thể loại Blog</span>
+                    <h4>Chào mừng đến với quản lý thể loại Blog</h4>
+                    {{-- <span class="ml-1">Quản lý thể loại Blog</span> --}}
                 </div>
             </div>
         </div>
@@ -107,7 +107,7 @@
                                                 </div>
 
                                             </form>
-                                            <a href="{{route('admin.blog.category.list',$category->id)}}" type="button" class="btn btn-success">Detail</a>
+                                            <a href="{{route('admin.blog.category.list',$category->id)}}" type="button" class="btn btn-success">Xem</a>
 
                                         </div>
                                     </li>
@@ -131,6 +131,9 @@
                             </div>
                         </div>
                         <div class="col-6 border">
+                            @isset($categoryFollowId->blog_categories_name)
+                                
+                            
                             <h5 class="m-3">
                                 Danh sách sản phẩm thể loại "
                                 
@@ -144,6 +147,7 @@
                                 <li class="text-dark">{{$blog->title}}</li>
                                 @endforeach
                             </ul>
+                            @endisset
                         </div>
                     </div>
                 </div>

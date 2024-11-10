@@ -12,7 +12,7 @@ class Blog extends Model
     protected $table = 'blogs';
     public $fillable = [
         'status',
-        'post_image',
+        'blog_image',
         'list_image	',
         'title',
         'short_content',
@@ -21,4 +21,8 @@ class Blog extends Model
         'published_at',
         'category_id',
     ];
+    public function blog()
+    {
+        return $this->belongsTo(Blog_categories::class, 'category_id', 'id');
+    }
 }

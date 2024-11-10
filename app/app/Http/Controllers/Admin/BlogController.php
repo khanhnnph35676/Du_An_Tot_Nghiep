@@ -15,11 +15,14 @@ class BlogController extends Controller
     {
         // Lấy danh sách bài viết từ cơ sở dữ liệu (nếu có)
         $blogs = Blog::all(); // Thay thế bằng logic lấy dữ liệu từ model
-        dd($blogs); 
-        return view('admin.blog.list', compact('blogs'));
+        $blog_categories = Blog_categories::all();
+
+        // dd($blogs); 
+        return view('admin.blog.list', compact('blogs', 'blog_categories'));
     }
     public function category( ){
         $blog_categories = Blog_categories::paginate(5);
+        
         return view('admin.blog.category', compact('blog_categories'));
     }
 
@@ -50,6 +53,60 @@ class BlogController extends Controller
         Blog_categories::query()->create($data);
         return redirect()->route('admin.blog.category')->with('insert-message', 'Thêm dữ liệu thành công');
     }
+
+    // public function addBlog(Request $request) //lưu danh mục bài viết
+    // {
+
+    //     return redirect()->route('admin.blog.category')->with('insert-message', 'Thêm dữ liệu thành công');
+    // }
+
+    public function addBlog(Request $request)
+    {
+        // Xác thực dữ liệu từ form
+        $request->validate([
+            'status' => 'required|string',
+            'blog_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'list_image.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'title' => 'required|string|max:255',
+            'short_content' => 'required|string|max:500',
+            'author' => 'required|string|max:100',
+            'full_content' => 'required|string',
+            'category_id' => 'required|exists:blog_categories,id',
+        ]);
+
+        // Tạo mới Blog và lưu trữ dữ liệu
+        $blog = new Blog();
+        $blog->status = $request->status;
+        $blog->title = $request->title;
+        $blog->short_content = $request->short_content;
+        $blog->author = $request->author;
+        $blog->full_content = $request->full_content;
+        $blog->category_id = $request->category_id;
+        $blog->published_at = now();
+
+        // Lưu ảnh chính bài viết
+        if ($request->hasFile('blog_image')) {
+            $imagePath = $request->file('blog_image')->store('public/blog_images');
+            $blog->blog_image = basename($imagePath);
+        }
+
+        // Lưu danh sách ảnh
+        if ($request->hasFile('list_image')) {
+            $listImages = [];
+            foreach ($request->file('list_image') as $image) {
+                $imagePath = $image->store('public/blog_images');
+                $listImages[] = basename($imagePath);
+            }
+            $blog->list_image = json_encode($listImages); // lưu dưới dạng JSON
+        }
+
+        // Lưu blog vào database
+        $blog->save();
+
+        // Chuyển hướng sau khi lưu thành công
+        return redirect()->route('admin.blog.list')->with('insert-message', 'Thêm dữ liệu thành công');
+    }
+
     public function Blog_categories_destroy(Request $request)// Xóa danh mục bài viết
     {
         $blog_category = Blog_categories::find($request->id);
