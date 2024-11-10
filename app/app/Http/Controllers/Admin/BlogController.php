@@ -135,5 +135,47 @@ class BlogController extends Controller
         // Thông báo xóa thành công
         return redirect()->route('admin.blog.list')->with('delete-message', 'Blog đã được xóa thành công.');
     }
+    public function updateBlog(Request $request, $id)
+    {
+        $request->validate([
+            'status' => 'required',
+            'blog_image' => 'nullable|image',
+            'list_image' => 'nullable|array',
+            'title' => 'required|string|max:255',
+            'short_content' => 'nullable|string',
+            'author' => 'nullable|string|max:255',
+            'full_content' => 'required|string',
+            'category_id' => 'required|exists:blog_categories,id',
+        ]);
+
+        $blog = Blog::findOrFail($id);
+        $blog->status = $request->status;
+        $blog->title = $request->title;
+        $blog->short_content = $request->short_content;
+        $blog->author = $request->author;
+        $blog->full_content = $request->full_content;
+        $blog->category_id = $request->category_id;
+
+        // Lưu ảnh chính bài viết
+        if ($request->hasFile('blog_image')) {
+            $imagePath = $request->file('blog_image')->store('public/blog_images');
+            $blog->blog_image = basename($imagePath);
+        }
+
+        // Lưu danh sách ảnh
+        if ($request->hasFile('list_image')) {
+            $listImages = [];
+            foreach ($request->file('list_image') as $image) {
+                $imagePath = $image->store('public/blog_images');
+                $listImages[] = basename($imagePath);
+            }
+            $blog->list_image = json_encode($listImages); // lưu dưới dạng JSON
+        }
+
+        $blog->save();
+
+        return redirect()->route('admin.blog.list')->with('update-message', 'Cập nhật bài viết thành công');
+    }
+
 
 }

@@ -106,7 +106,9 @@ Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
 // quản lý blog
     Route::get('/blog', [BlogController::class, 'index'])->name('blog.list'); // Lấy danh sách Blog
     Route::post('addBlog', [BlogController::class, 'addBlog'])->name('blog.add'); //Lưu blog
-    Route::delete('/admin/blog/{id}', [BlogController::class, 'destroy'])->name('blog.delete');// Xóa Blog
+    Route::delete('/admin/blog/{id}', [BlogController::class, 'destroy'])->name('blog.delete'); // Xóa Blog
+    Route::put('/admin/blog/{id}/update', [BlogController::class, 'updateBlog'])->name('blog.update'); // Update blog 
+
 
 
     Route::get('/blog-category', [BlogController::class, 'category'])->name('blog.category'); // Lấy danh mục blog
