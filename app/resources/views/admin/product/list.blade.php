@@ -40,7 +40,7 @@
                             <h4 class="card-title">List Product</h4>
                             <div class="btn-group" role="group">
                                 <a href="{{ route('admin.restorProduct') }}" class="btn btn-dark mr-2">
-                                    <i class="fa fa-trash"></i>  Restore Product</a>
+                                    <i class="fa fa-trash"></i> Restore Product</a>
                                 <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown">Add
                                     Product</button>
                                 <div class="dropdown-menu bg-secondary mr-3">
@@ -71,12 +71,12 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-
                                         @foreach ($listProducts as $key => $value)
                                             <tr>
                                                 <td> {{ $value->id }} </td>
                                                 <td> {{ $value->name }} </td>
-                                                <td> <img src="{{ asset($value->image) }}" style="width: 50px; height: 50px; object-fit: cover;"
+                                                <td> <img src="{{ asset($value->image) }}"
+                                                        style="width: 50px; height: 50px; object-fit: cover;"
                                                         alt="">
                                                     @php
                                                         $count = 0;
@@ -99,16 +99,28 @@
                                                 <td> {{ number_format($value->price) }} vnđ </td>
                                                 <td> {{ $value->qty }} </td>
                                                 <td> {{ $value->view }} </td>
-                                                <td> {{ $value->categories ? $value->categories->name : 'No Category'  }} </td>
-                                                <td style="width:20%;"> {{ Str::limit(html_entity_decode(strip_tags($value->description)), 20) }} </td>
                                                 <td> {{ $value->categories ? $value->categories->name : 'No Category' }}
                                                 </td>
-                                                <td style="width:20%;"> {{ Str::limit($value->description, 20) }} </td>
+                                                <td>{{ Str::limit(html_entity_decode(strip_tags($value->description)), 20) }}
+                                                </td>
+
                                                 <td>
                                                     @if ($value->type == '1')
                                                         <span class='badge badge-pill badge-success'> Simple</span>
                                                     @else
                                                         <span class='badge badge-pill badge-secondary'> Configurable </span>
+                                                        @php
+                                                            $count = 0;
+                                                        @endphp
+                                                        @foreach ($variants as $variant)
+                                                            @if ($variant->product_id == $value->id)
+                                                                @php
+                                                                    $count++;
+                                                                @endphp
+                                                            @endif
+                                                        @endforeach
+                                                        <span class='badge badge-pill badge-secondary'> {{ $count++ }}
+                                                        </span>
                                                     @endif
                                                 </td>
                                                 <td>
@@ -121,38 +133,12 @@
                                                             href="{{ route('admin.formUpdateProductConfigurable', ['type' => $value->type, 'idProduct' => $value->id]) }}"class='btn btn-secondary'>Update
                                                         </a>
                                                     @endif
-
                                                     <!-- Button trigger modal -->
                                                     <button class="btn btn-dark" data-toggle="modal"
                                                         data-target="#deleteProductAdmin"
                                                         data-id="{{ $value->id }}">Delete</button>
                                                 </td>
                                             </tr>
-                                            @foreach ($variants as $variant)
-                                                @if ($value->id == $variant->product_id)
-                                                    <tr>
-                                                        <td> {{ $variant->product_id }} </td>
-                                                        <td> {{$value->name . ' _ ' }}<strong>{{ $variant->sku }}</strong> </td>
-                                                        <td> <img src="{{ asset($variant->image) }}" style="width: 50px; height: 50px; object-fit: cover;" alt="">
-                                                        </td>
-                                                        <td> {{ number_format($variant->price) }} vnđ </td>
-                                                        <td> {{ $variant->stock }} </td>
-                                                        <td> {{ $value->view }} </td>
-                                                        <td> {{ $value->categories ? $value->categories->name : 'No Category' }}
-                                                        </td>
-                                                        <td style="width:20%;"> {{ Str::limit($value->description, 20) }}
-                                                        </td>
-                                                        <td>
-                                                            <span class='badge badge-pill badge-success'> Simple</span>
-                                                        </td>
-                                                        <td>
-                                                        <button class="btn btn-dark" data-toggle="modal"
-                                                                data-target="#deleteVariant"
-                                                                data-id="{{ $variant->id }}">Delete</button>
-                                                        </td>
-                                                    </tr>
-                                                @endif
-                                            @endforeach
                                         @endforeach
                                     </tbody>
                                 </table>

@@ -22,7 +22,7 @@ class User extends Authenticatable
         'phone',
         'password',
         'avatar',
-        'number', // Đây có thể là số điện thoại, bạn có thể đổi thành 'phone' nếu cần
+        'number', 
         'gender',
         'birth_date',
         'rule_id',

@@ -19,6 +19,8 @@
                 <div class="card">
                     <div class="card-header">
                         <h4 class="card-title">Categories</h4>
+                        <a href="{{ route('admin.categories.deleted') }}" class="btn btn-primary">View Deleted Categories</a>
+
                     </div>
                     <div class="card-body row">
                         <div class="col-4 ml-3 mr-5 border">

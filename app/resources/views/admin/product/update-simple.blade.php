@@ -24,7 +24,8 @@
             <!-- row -->
             <div class="row">
                 <div class="col-12">
-                    <form action="{{ route('admin.updateProductSimple',$product->id) }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('admin.updateProductSimple', $product->id) }}" method="POST"
+                        enctype="multipart/form-data">
                         @method('patch')
                         @csrf
                         <div class="card">
@@ -41,8 +42,9 @@
                                         {{-- form thêm cho product --}}
                                         <div class="form-group">
                                             <label for="">Name:</label>
-                                            <input type="number"  name="type" value="1" hidden>
-                                            <input class="form-control" type="text" name="name" placeholder="Name" value="{{$product->name}}">
+                                            <input type="number" name="type" value="1" hidden>
+                                            <input class="form-control" type="text" name="name" placeholder="Name"
+                                                value="{{ $product->name }}">
                                             @error('name')
                                                 <div class="alert alert-danger"><strong>Error!</strong> {{ $message }}
                                                 </div>
@@ -50,8 +52,8 @@
                                         </div>
                                         <div class="form-group">
                                             <label for="">Quanlity:</label>
-                                            <input class="form-control" type="text" name="qty" value="{{$product->qty}}"
-                                                placeholder="Quanlity">
+                                            <input class="form-control" type="text" name="qty"
+                                                value="{{ $product->qty }}" placeholder="Quanlity">
                                             @error('qty')
                                                 <div class="alert alert-danger"><strong>Error!</strong> {{ $message }}
                                                 </div>
@@ -59,12 +61,13 @@
                                         </div>
                                         <div class="form-group">
                                             <label for="">Price:</label>
-                                            <input class="form-control" type="text" name="price" placeholder="Price" value="{{$product->price}}">
+                                            <input class="form-control" type="text" name="price" placeholder="Price"
+                                                value="{{ $product->price }}">
                                             @error('price')
                                                 <div class="alert alert-danger"><strong>Error!</strong> {{ $message }}
                                                 </div>
                                             @enderror
-                                         </div>
+                                        </div>
                                     </div>
                                     <div class="col-3 p-3 border">
                                         <div class="form-group">
@@ -72,8 +75,8 @@
                                             <select class="form-control" id="sel1" name="category_id">
                                                 @foreach ($listCategories as $category)
                                                     <option value="{{ $category->id }}"
-                                                        {{$product->category_id == $category->id? 'selected':''}} >
-                                                            {{ $category->name }}
+                                                        {{ $product->category_id == $category->id ? 'selected' : '' }}>
+                                                        {{ $category->name }}
                                                     </option>
                                                 @endforeach
                                             </select>
@@ -88,7 +91,8 @@
                                                 </div>
                                             @enderror
                                             <div class="form-group">
-                                                <input type="file" class="form-control" name="gallerie_image[]" accept="image/*"multiple>
+                                                <input type="file" class="form-control" name="gallerie_image[]"
+                                                    accept="image/*"multiple>
                                             </div>
                                         </div>
                                         {{-- galleries (ảnh đi kèm) --}}
@@ -101,7 +105,7 @@
                                     <div class="form-group mt-3" style="width: 100%">
                                         <h5>Description</h5>
                                         <textarea class="summernote" name="description" id="description">
-                                            {{$product->description}}
+                                            {{ $product->description }}
                                         </textarea>
                                         {{-- <input type="hidden" name="description" id="description"> --}}
                                     </div>
@@ -113,7 +117,17 @@
             </div>
         </div>
     </div>
-
+    <script>
+        window.onload = function() {
+            // Tự động ẩn thông báo lỗi sau 1 giây
+            var errorElements = document.querySelectorAll('.alert-danger');
+            errorElements.forEach(function(errorElement) {
+                setTimeout(function() {
+                    errorElement.style.display = 'none'; // Ẩn thông báo
+                }, 2000); // 1000 milliseconds = 1 second
+            });
+        };
+    </script>
     <script src="{{ asset('backend/js/product.js') }}"></script>
 @endsection
 

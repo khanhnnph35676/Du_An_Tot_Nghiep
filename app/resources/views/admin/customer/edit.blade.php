@@ -4,10 +4,10 @@
 @endpush
 
 @section('content')
-<link rel="stylesheet" href="{{ asset('backend/css/product.css') }}">
+    <link rel="stylesheet" href="{{ asset('backend/css/product.css') }}">
     <!--**********************************
-                    Content body start
-                ***********************************-->
+                            Content body start
+                        ***********************************-->
     <div class="content-body">
         <div class="container-fluid">
             <div class="row page-titles mx-0">
@@ -28,7 +28,8 @@
 
             <div class="row">
                 <div class="col-12">
-                    <form action="{{ route('admin.customerUpdate', $user->id) }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('admin.customerUpdate', $user->id) }}" method="POST"
+                        enctype="multipart/form-data">
                         @csrf
                         @method('PUT') <!-- Thêm phương thức PUT -->
                         <div class="card">
@@ -36,12 +37,13 @@
                                 <h4 class="card-title">Update Customer</h4>
                                 <div class="d-flex">
                                     <a href="{{ route('admin.listCustomer') }}" class="btn btn-dark mr-3">Back</a>
+                                    <button type="submit" class="btn btn-secondary mr-3">Save</button>
                                 </div>
                             </div>
-                            @if($errors->any())
+                            @if ($errors->any())
                                 <div class="alert alert-danger">
                                     <ul>
-                                        @foreach($errors->all() as $error)
+                                        @foreach ($errors->all() as $error)
                                             <li>{{ $error }}</li>
                                         @endforeach
                                     </ul>
@@ -54,20 +56,41 @@
                                         <!-- Form nhập thông tin khách hàng -->
                                         <div class="form-group">
                                             <label for="name">Name:</label>
-                                            <input name="name" class="form-control" type="text" placeholder="Name" value="{{ old('name', $user->name) }}" required>
+                                            <input name="name" class="form-control" type="text" placeholder="Name" readonly
+                                                value="{{ old('name', $user->name) }}">
+                                            @error('name')
+                                                <div class="alert alert-danger"><strong>Error!</strong> {{ $message }}
+                                                </div>
+                                            @enderror
                                         </div>
                                         <div class="form-group">
                                             <label for="email">Email:</label>
-                                            <input name="email" class="form-control" type="email" placeholder="Email" value="{{ old('email', $user->email) }}" required>
+                                            <input name="email" class="form-control" type="email" placeholder="Email" readonly
+                                                value="{{ old('email', $user->email) }}">
+                                            @error('email')
+                                                <div class="alert alert-danger"><strong>Error!</strong> {{ $message }}
+                                                </div>
+                                            @enderror
                                         </div>
                                         <div class="form-group">
                                             <label for="phone">Phone:</label>
-                                            <input name="phone" class="form-control" type="text" placeholder="Phone" value="{{ old('phone', $user->phone) }}">
+                                            <input name="phone" class="form-control" type="text" placeholder="Phone" readonly
+                                                value="{{ old('phone', $user->phone) }}">
+                                            @error('phone')
+                                                <div class="alert alert-danger"><strong>Error!</strong> {{ $message }}
+                                                </div>
+                                            @enderror
                                         </div>
                                         <div class="form-group">
                                             <label for="password">Password:</label>
-                                            <input name="password" class="form-control" type="password" placeholder="Password">
-                                            <small class="form-text text-muted">Leave blank to keep the current password.</small>
+                                            <input name="password" class="form-control" type="password" readonly
+                                                placeholder="Password">
+                                            <small class="form-text text-muted">Leave blank to keep the current
+                                                password.</small>
+                                            @error('password')
+                                                <div class="alert alert-danger"><strong>Error!</strong> {{ $message }}
+                                                </div>
+                                            @enderror
                                         </div>
                                     </div>
                                     <div class="col-3 p-3 border">
@@ -77,14 +100,22 @@
                                             <div class="basic-form">
                                                 <div class="form-group">
                                                     <label class="radio-inline">
-                                                        <input type="radio" name="gender" value="male" {{ $user->gender == 'male' ? 'checked' : '' }} required> Male
+                                                        <input type="radio" name="gender" value="male"
+                                                            {{ $user->gender == 'male' ? 'checked' : '' }}> Male
                                                     </label>
                                                     <label class="radio-inline ml-3">
-                                                        <input type="radio" name="gender" value="female" {{ $user->gender == 'female' ? 'checked' : '' }}> Female
+                                                        <input type="radio" name="gender" value="female"
+                                                            {{ $user->gender == 'female' ? 'checked' : '' }}> Female
                                                     </label>
                                                     <label class="radio-inline ml-3">
-                                                        <input type="radio" name="gender" value="other" {{ $user->gender == 'other' ? 'checked' : '' }}> Other
+                                                        <input type="radio" name="gender" value="other"
+                                                            {{ $user->gender == 'other' ? 'checked' : '' }}> Other
                                                     </label>
+                                                    @error('gender')
+                                                        <div class="alert alert-danger"><strong>Error!</strong>
+                                                            {{ $message }}
+                                                        </div>
+                                                    @enderror
                                                 </div>
                                             </div>
                                         </div>
@@ -92,31 +123,47 @@
                                         <div class="form-group">
                                             <label for="avatar">Avatar:</label>
                                             <div class="image-upload-container">
-                                                <img id="imagePreview" src="{{ asset('storage/' . $user->avatar) }}" alt="Image Preview" style="display:{{ $user->avatar ? 'block' : 'none' }}; width:100px; height:100px;" />
-                                                <input type="file" name="avatar" class="form-control-file" id="imageUpload" accept="image/*" onchange="previewImage(event)">
-                                                <button type="button" class="btn btn-dark" id="removeImage" style="display:none;">Remove Image</button>
+                                                <img id="imagePreview" src="{{ asset('storage/' . $user->avatar) }}"
+                                                    alt="Image Preview"
+                                                    style="display:{{ $user->avatar ? 'block' : 'none' }}; width:100px; height:100px;" />
+                                                <input type="file" name="avatar" class="form-control-file"
+                                                    id="imageUpload" accept="image/*" onchange="previewImage(event)">
+                                                <button type="button" class="btn btn-dark" id="removeImage"
+                                                    style="display:none;">Remove Image</button>
                                             </div>
+                                            @error('avatar')
+                                                <div class="alert alert-danger"><strong>Error!</strong> {{ $message }}
+                                                </div>
+                                            @enderror
                                         </div>
 
                                         <div class="form-group">
                                             <label for="birth_date">Birth Date:</label>
-                                            <input name="birth_date" type="date" class="form-control" value="{{ old('birth_date', $user->birth_date) }}">
+                                            <input name="birth_date" type="date" class="form-control"
+                                                value="{{ old('birth_date', $user->birth_date) }}">
+                                            @error('birth_date')
+                                                <div class="alert alert-danger"><strong>Error!</strong> {{ $message }}
+                                                </div>
+                                            @enderror
                                         </div>
 
                                         <div class="form-group">
                                             <label for="rule_id">Role:</label>
                                             <select name="rule_id" class="form-control" required>
                                                 <option value="">Select Role</option>
-                                                @foreach($rules as $rule)
-                                                    <option value="{{ $rule->id }}" {{ $user->rule_id == $rule->id ? 'selected' : '' }}>{{ $rule->rule_name }}</option>
+                                                @foreach ($rules as $rule)
+                                                    <option value="{{ $rule->id }}"
+                                                        {{ $user->rule_id == $rule->id ? 'selected' : '' }}>
+                                                        {{ $rule->rule_name }}</option>
                                                 @endforeach
                                             </select>
-                                        </div>                                        
+                                            @error('rule_id')
+                                                <div class="alert alert-danger"><strong>Error!</strong> {{ $message }}
+                                                </div>
+                                            @enderror
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="card-footer">
-                                <button type="submit" class="btn btn-secondary">Save</button>
                             </div>
                         </div>
                     </form>
@@ -125,8 +172,8 @@
         </div>
     </div>
     <!--**********************************
-                    Content body end
-                ***********************************-->
+                            Content body end
+                        ***********************************-->
     <script src="{{ asset('backend/js/product.js') }}"></script>
 
     <script>
