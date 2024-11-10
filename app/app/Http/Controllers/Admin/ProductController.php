@@ -27,7 +27,7 @@ class ProductController extends Controller
         return view('admin.product.list')->with([
             'listProducts' => $listProducts,
             'galleries' => $galleries,
-            'variants'=>$variants,
+            'variants' => $variants,
         ]);
     }
     // chi tiết sản phẩm có biến thể
@@ -107,6 +107,9 @@ class ProductController extends Controller
         $product = Product::find($idProduct);
         $image_url = $product->image;
         if ($request->hasFile('image')) {
+            if (!empty($image_url) && File::exists(public_path($image_url))) {
+                File::delete(public_path($image_url)); // Xóa ảnh cũ
+            }
             $image = $request->file('image');
             $nameImage = time() . "_" . uniqid() . '.' . $image->getClientOriginalExtension();
             $link = "img/prd/";
@@ -175,7 +178,7 @@ class ProductController extends Controller
         $variant->Delete();
 
         return redirect()->back()->with([
-            'message' => 'Xoá sản phẩm thành công'
+            'message' => 'Xoá sản phẩm biến thể thành công'
         ]);
     }
     // thêm sản phẩm có biến thể
@@ -268,6 +271,9 @@ class ProductController extends Controller
         $product = Product::find($idProduct);
         $image_url = $product->image;
         if ($request->hasFile('image')) {
+            if (!empty($image_url) && File::exists(public_path($image_url))) {
+                File::delete(public_path($image_url)); // Xóa ảnh cũ
+            }
             $image = $request->file('image');
             $nameImage = time() . "_" . uniqid() . '.' . $image->getClientOriginalExtension();
             $link = "img/prd/";
@@ -289,20 +295,49 @@ class ProductController extends Controller
         $product_variants = ProductVariant::where("product_id", $idProduct)->get();
 
         foreach ($product_variants as $key => $value) {
-            $productVariant = ProductVariant::find($value->id);
-            if ($productVariant) {
-                if ($request->hasFile("variant_image.$key")) {
-                    $image = $request->file("variant_image.$key");
-                    $nameImage = time() . "_" . uniqid() . '.' . $image->getClientOriginalExtension();
-                    $link = "img/prd/variant_image";
-                    $image->move(public_path($link), $nameImage);
-
-                    $productVariant->image = $link . '/' . $nameImage;
+            if ($request->hasFile("variant_image.$key")) {
+                if (!empty($value->image) && File::exists(public_path($value->image))) {
+                    File::delete(public_path($value->image)); // Xóa ảnh cũ
                 }
-                $productVariant->price = $request->variant_price[$key];
-                $productVariant->sku = $request->variant_sku[$key];
-                $productVariant->stock = $request->variant_stock[$key];
-                $productVariant->save();
+                $image = $request->file("variant_image.$key");
+                $nameImage = time() . "_" . uniqid() . '.' . $image->getClientOriginalExtension();
+                $link = "img/prd/variant_image";
+                $image->move(public_path($link), $nameImage);
+                $value->image = $link . '/' . $nameImage;
+            }
+            $value->price = $request->variant_price[$key];
+            $value->sku = $request->variant_sku[$key];
+            $value->stock = $request->variant_stock[$key];
+            $value->save();
+        }
+
+        if (!is_array($product_variants)) {
+            if (is_array($request->option_value)) {
+                foreach ($request->option_value as $key => $optionValue) {
+                    $option_values = VariantOption::where('option_value', $optionValue)->get();
+
+                    foreach ($option_values as $value) {
+                        $imagePath = null;
+                        if ($request->hasFile("variant_image.$key")) {
+                            $image = $request->file("variant_image.$key");
+                            $nameImage = time() . "_" . uniqid() . '.' . $image->getClientOriginalExtension();
+                            $link = "img/prd/variant_image";
+                            $image->move(public_path($link), $nameImage);
+                            $imagePath = $link . '/' . $nameImage;
+                        }
+
+                        $productVariant = [
+                            'product_id' => $idProduct,
+                            'price' => $request->variant_price[$key],
+                            'sku' => $request->variant_sku[$key],
+                            'stock' => $request->variant_stock[$key],
+                            'option_value' => $value->id,
+                            'image' => $imagePath
+                        ];
+
+                        ProductVariant::create($productVariant);
+                    }
+                }
             }
         }
 

@@ -1,5 +1,13 @@
 @extends('user.layout.default')
 @push('styleStore')
+    <style>
+        .variant {
+            height: 30px;
+            display: flex;
+            align-items: center;
+            margin: 10px 0px 10px 0px;
+        }
+    </style>
 @endpush
 @section('content')
     <!-- Hero Start -->
@@ -102,7 +110,7 @@
     <!-- Featurs Section End -->
 
 
-    <!-- Fruits Shop Start-->
+    <!-- List Product-->
     <div class="container-fluid fruite py-5">
         <div class="container py-5">
             <div class="tab-class text-center">
@@ -113,42 +121,159 @@
                     <div class="col-lg-8 text-end">
                         <ul class="nav nav-pills d-inline-flex text-center mb-5">
                             <li class="nav-item">
-                                <a class="d-flex m-2 py-2 bg-light rounded-pill active" data-bs-toggle="pill" href="{{ route('storeListProduct') }}">
+                                <a href="{{ route('storeListProduct') }}"
+                                    class="d-flex m-2 py-2 bg-light rounded-pill active">
                                     <span class="text-dark" style="width: 130px;">All Products</span>
                                 </a>
                             </li>
-                            <!-- Thêm các danh mục khác nếu cần -->
                         </ul>
                     </div>
                 </div>
+
                 <div class="tab-content">
                     <div id="tab-1" class="tab-pane fade show p-0 active">
                         <div class="row g-4">
                             <div class="col-lg-12">
-                                <div class="row g-4">
+                                <div class="row g-4 d-flex">
                                     @foreach ($products as $product)
-                                        <div class="col-md-6 col-lg-4 col-xl-3">
-                                            <div class="rounded position-relative fruite-item">
-                                                <div class="fruite-img">
-                                                    <a href="{{ route('product.detail', $product->id) }}">
-                                                        <img src="{{ asset($product->image) }}" class="img-fluid w-100 rounded-top" alt="{{ $product->name }}">
-                                                    </a>
-                                                </div>
-                                                <div class="text-white bg-secondary px-3 py-1 rounded position-absolute" style="top: 10px; left: 10px;">
-                                                    {{ $product->categories->name ?? 'Uncategorized' }} <!-- Hiển thị danh mục sản phẩm -->
-                                                </div>
-                                                <div class="p-4 border border-secondary border-top-0 rounded-bottom">
-                                                    <h4>{{ $product->name }}</h4>
-                                                    <p>{{ Str::limit(strip_tags($product->description), 20) }}</p>
-                                                    <div class="d-flex justify-content-between flex-lg-wrap">
-                                                        <p class="text-dark fs-5 fw-bold mb-0">{{ number_format($product->price) }} vnđ</p>
-                                                        <a href="#" class="btn border border-secondary rounded-pill px-3 text-primary">
-                                                            <i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart
+                                        @if ($product->type == '2')
+                                            <div class="col-md-6 col-lg-4 col-xl-3">
+                                                <div class="rounded position-relative fruite-item">
+                                                    <div class="fruite-img">
+                                                        <a href="{{ route('product.detail', $product->id) }}">
+                                                            <img src="{{ asset($product->image) }}"
+                                                                style="width: 50px; height: 250px; object-fit: cover;"
+                                                                class="img-fluid w-100 rounded-top"
+                                                                alt="{{ $product->name }}">
                                                         </a>
                                                     </div>
+                                                    <div class="text-white bg-secondary px-3 py-1 rounded position-absolute"
+                                                        style="top: 10px; left: 10px;">
+                                                        {{ $product->categories->name ?? 'Uncategorized' }}
+                                                    </div>
+                                                    <form action="{{ route('addToCart') }}" method="POST">
+                                                        @csrf
+                                                        <div
+                                                            class="p-4 border border-secondary border-top-0 rounded-bottom">
+                                                            <input type="hidden" name="product_id"
+                                                                value="{{ $product->id }}">
+                                                            <input hidden name="qty" value="1">
+                                                            <h4>{{ $product->name }}</h4>
+                                                            <div class="variant">
+                                                                @if ($product->type == '2')
+                                                                    @foreach ($product_variants as $product_variant)
+                                                                        @if ($product_variant->product_id == $product->id)
+                                                                            <button type="button"
+                                                                                class="btn border border-secondary rounded-pill px-3 text-primary"
+                                                                                onclick="showOptionValue('{{ $product->id }}', '{{ $product_variant->id }}')">
+                                                                                <span>{{ $product_variant->options->option_value }}</span>
+                                                                            </button>
+                                                                        @endif
+                                                                    @endforeach
+                                                                @endif
+                                                                <input type="hidden"
+                                                                    id="optionValueInput{{ $product->id }}"
+                                                                    name="product_variant_id" value="">
+                                                            </div>
+                                                            <div class="d-flex">
+                                                                <p class="text-dark fs-5 fw-bold mb-0">
+                                                                    {{ number_format($product->price) }} vnđ
+                                                                </p>
+                                                            </div>
+                                                            <br>
+                                                            <div class="d-flex">
+                                                                <button type="button"
+                                                                    onclick="validateSelection('{{ $product->id }}')"
+                                                                    class="btn border border-secondary rounded-pill px-3 text-primary"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#exampleModal{{ $product->id }}">
+                                                                    <i class="fa fa-shopping-bag me-2 text-primary"></i>
+                                                                    Thêm vào giỏ
+                                                                </button>
+
+                                                                <!-- Modal -->
+                                                                @if ($product->type == '1')
+                                                                    <div class="modal fade"
+                                                                        id="exampleModal{{ $product->id }}"
+                                                                        tabindex="-1"
+                                                                        aria-labelledby="exampleModalLabel{{ $product->id }}"
+                                                                        aria-hidden="true">
+                                                                        <div class="modal-dialog">
+                                                                            <div class="modal-content">
+                                                                                <div class="modal-header">
+                                                                                    <h1 class="modal-title fs-5"
+                                                                                        id="exampleModalLabel{{ $product->id }}">
+                                                                                        <i
+                                                                                            class="fa fa-shopping-bag me-2 text-primary"></i>
+                                                                                        Thêm vào giỏ
+                                                                                    </h1>
+                                                                                    <button type="button"
+                                                                                        class="btn-close"
+                                                                                        data-bs-dismiss="modal"
+                                                                                        aria-label="Close"></button>
+                                                                                </div>
+                                                                                <div class="modal-body">
+                                                                                    Bạn có muốn thêm sản phẩm vào giỏ hàng
+                                                                                    không?
+                                                                                </div>
+                                                                                <div class="modal-footer">
+                                                                                    <button type="button"
+                                                                                        class="btn btn-secondary"
+                                                                                        data-bs-dismiss="modal">Đóng</button>
+                                                                                    <button type="submit"
+                                                                                        id="addToCartButton{{ $product->id }}"
+                                                                                        class="btn btn-primary">Thêm vào
+                                                                                        giỏ</button>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                @else
+                                                                    <div class="modal fade"
+                                                                        id="exampleModal{{ $product->id }}"
+                                                                        tabindex="-1"
+                                                                        aria-labelledby="exampleModalLabel{{ $product->id }}"
+                                                                        aria-hidden="true">
+                                                                        <div class="modal-dialog">
+                                                                            <div class="modal-content">
+                                                                                <div class="modal-header">
+                                                                                    <h1 class="modal-title fs-5"
+                                                                                        id="exampleModalLabel{{ $product->id }}">
+                                                                                        <i
+                                                                                            class="fa fa-shopping-bag me-2 text-primary"></i>
+                                                                                        Thêm vào giỏ
+                                                                                    </h1>
+                                                                                    <button type="button"
+                                                                                        class="btn-close"
+                                                                                        data-bs-dismiss="modal"
+                                                                                        aria-label="Close"></button>
+                                                                                </div>
+                                                                                <div class="modal-body">
+                                                                                    Bạn có muốn thêm sản phẩm vào giỏ hàng
+                                                                                    không?
+                                                                                </div>
+                                                                                <div class="modal-footer">
+                                                                                    <button type="button"
+                                                                                        class="btn btn-secondary"
+                                                                                        data-bs-dismiss="modal">Đóng</button>
+                                                                                    <button type="submit"
+                                                                                        id="addToCartButton{{ $product->id }}"
+                                                                                        class="btn btn-primary"
+                                                                                        disabled>Thêm
+                                                                                        vào
+                                                                                        giỏ</button>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                @endif
+
+                                                            </div>
+                                                        </div>
+                                                    </form>
                                                 </div>
                                             </div>
-                                        </div>
+                                        @endif
                                     @endforeach
                                 </div>
                             </div>
@@ -159,12 +284,7 @@
             </div>
         </div>
     </div>
-    
-    
-    
     <!-- Fruits Shop End-->
-
-
     <!-- Featurs Start -->
     <div class="container-fluid service py-5">
         <div class="container py-5">
@@ -217,20 +337,23 @@
     <!-- Vesitable Shop Start-->
     <div class="container-fluid vesitable py-5">
         <div class="container py-3">
-            <h1 class="mb-0">Category</h1>
+            <h1 class="mb-3">Categories</h1>
             <div class="row">
                 @foreach ($categories as $category)
                     <div class="col-md-3 mb-2">
                         <div class="border border-primary rounded position-relative vesitable-item">
                             <div class="vesitable-img">
-                                <img src="{{ asset('storage/'.$category->image) }}" class="img-fluid w-100 rounded-top" alt="{{ $category->name }}">
+                                <img src="{{ asset('storage/' . $category->image) }}"
+                                    style="width: 50px; height: 250px; object-fit: cover;"
+                                    class="img-fluid w-100 rounded-top" alt="{{ $category->name }}">
                             </div>
                             <div class="p-4 rounded-bottom">
                                 <h4>{{ $category->name }}</h4>
                                 <p>{{ $category->description }}</p>
                                 <div class="d-flex justify-content-between flex-lg-wrap">
-                                    <a href="#" class="btn border border-secondary rounded-pill px-3 text-primary"><i
-                                            class="fa fa-shopping-bag me-2 text-primary"></i>Sản phẩm</a>
+                                    <a href="#" class="btn border border-secondary rounded-pill px-3 text-primary">
+                                        Xem chi tiết
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -238,7 +361,7 @@
                 @endforeach
             </div>
         </div>
-        
+
     </div>
     <!-- Vesitable Shop End -->
 
@@ -276,7 +399,7 @@
     <!-- Banner Section End -->
 
 
-    <!-- Bestsaler Product Start -->
+    <!-- list product Start -->
     <div class="container-fluid py-5">
         <div class="container py-5">
             <div class="text-center mx-auto mb-5" style="max-width: 700px;">
@@ -292,23 +415,34 @@
                                 <div class="col-6">
                                     <!-- Hiển thị ảnh sản phẩm -->
                                     <a href="{{ route('product.detail', $product->id) }}">
-                                        <img src="{{ asset($product->image) }}" class="img-fluid w-100 rounded-top" alt="{{ $product->name }}">
+                                        <img src="{{ asset($product->image) }}" style="height: 170px; object-fit: cover;"
+                                            class="img-fluid w-100 rounded-top" alt="{{ $product->name }}">
                                     </a>
                                 </div>
                                 <div class="col-6">
                                     <!-- Hiển thị tên và giá sản phẩm -->
-                                    <a href="{{ route('product.detail', $product->id) }}" class="h5">{{ $product->name }}</a>
-                                    <h4 class="mb-3">{{ number_format($product->price, 2) }} đ</h4>
-                                    <a href="#" class="btn border border-secondary rounded-pill px-3 text-primary">
-                                        <i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart
-                                    </a>
+                                    <form action="" method="POST">
+                                        @csrf
+                                        <input type="text" hidden name="id" value="{{ $product->id }}">
+                                        <a href="{{ route('product.detail', $product->id) }}"
+                                            class="h5">{{ $product->name }}</a>
+                                        <h4 class="mb-3">{{ number_format($product->price, 2) }} đ</h4>
+                                        {{-- @foreach ($product_variants as $product_variant)
+                                            @if ($product_variant->product_id == $product->id)
+                                                <span>{{ $product_variant->sku }}</span>
+                                            @endif
+                                        @endforeach --}}
+                                        <button class="btn border border-secondary rounded-pill px-3 text-primary">
+                                            <i class="fa fa-shopping-bag me-2 text-primary"></i>Thêm vào giỏ
+                                        </button>
+                                    </form>
                                 </div>
                             </div>
                         </div>
                     </div>
                 @endforeach
             </div>
-            
+
         </div>
     </div>
     <!-- Bestsaler Product End -->
@@ -450,6 +584,14 @@
         </div>
     </div>
     <!-- Tastimonial End -->
+    <script>
+        function showOptionValue(productId, variantId) {
+            // Gán giá trị của variantId vào input ẩn và bật nút thêm vào giỏ
+            const input = document.getElementById('optionValueInput' + productId);
+            input.value = variantId;
+            document.getElementById('addToCartButton' + productId).disabled = false;
+        }
+    </script>
 @endsection
 
 @push('scriptStore')

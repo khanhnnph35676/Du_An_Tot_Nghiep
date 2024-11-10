@@ -145,6 +145,15 @@
     </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
+         window.onload = function() {
+            // Tự động ẩn thông báo lỗi sau 1 giây
+            var errorElements = document.querySelectorAll('.alert-danger');
+            errorElements.forEach(function(errorElement) {
+                setTimeout(function() {
+                    errorElement.style.display = 'none'; // Ẩn thông báo
+                }, 2000); // 1000 milliseconds = 1 second
+            });
+        };
         var variants = @json($variant_values);
 
         $(document).ready(function() {
