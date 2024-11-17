@@ -111,18 +111,14 @@ Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
     Route::post('storeBlog', [BlogController::class, 'storeBlog'])->name('blog.store'); //Lưu danh mục blog
     Route::put('editBlog/{id}', [BlogController::class, 'update'])->name('blog.category.update');// Sửa tên danh mục category
    
+    // Quản lý Testimonials
+    Route::get('/testimonials', [TestimonialController::class, 'listTestimonial'])->name('listTestimonial');
+    Route::get('/testimonials/create', [TestimonialController::class, 'createTestimonial'])->name('createTestimonial');
+    Route::post('/testimonials', [TestimonialController::class, 'StoreTestimonial'])->name('StoreTestimonial');
+    Route::get('/testimonials/{id}/edit', [TestimonialController::class, 'editTestimonial'])->name('editTestimonial');
+    Route::put('/testimonials/{id}', [TestimonialController::class, 'updateTestimonial'])->name('updateTestimonial');
+    Route::delete('/testimonials/{id}', [TestimonialController::class, 'deleteTestimonial'])->name('deleteTestimonial');
 
-
-    
-
-
-    // quản lý testimonial
-    Route::get('/testimonials', [TestimonialController::class, 'index'])->name('admin.testimonials.list');
-    Route::get('create-payments', [PaymentController::class, 'createPayment'])->name('createPayment');
-    Route::post('storePayment', [PaymentController::class, 'storePayment'])->name('payment.store');
-    Route::get('update-payment/{id}', [PaymentController::class, 'updatePayment'])->name('updatePayment');
-    Route::put('editPayment/{id}', [PaymentController::class, 'update'])->name('payment.update');
-    Route::delete('deletePayment/{id}', [PaymentController::class, 'destroy'])->name('payment.destroy');
     });
 });
 
