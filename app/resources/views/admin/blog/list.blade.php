@@ -1,8 +1,17 @@
 @extends('admin.layout.default')
 
 @section('content')
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.ckeditor.com/4.22.0/standard/ckeditor.js"></script>
+    <style>
+        .cke_notification { 
+            display: none !important; 
+        }
+    </style>
 
-<link rel="stylesheet" href="{{ asset('backend/css/blog.css') }}">
+ <link rel="stylesheet" href="{{ asset('backend/css/blog.css') }}">
+
+
 
 <div class="content-body">
     <div class="container-fluid">
@@ -42,7 +51,7 @@
 
 
 
-        <div class="row">
+        <div class="row ">
             <div class="col-12">
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
@@ -52,64 +61,67 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <table class="table table-bordered text-dark">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Trạng thái</th>
-                                    <th>Ảnh chính bài viết</th>
-                                    <th>Danh sách ảnh</th>
-                                    <th>Tiêu đề</th>
-                                    <th>Nội dung ngắn</th>
-                                    <th>Tác giả</th>
-                                    <th>Nội dung đầy đủ</th>
-                                    <th>Ngày đăng</th>
-                                    <th>Danh mục</th>
-                                    <th>Thao tác</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($blogs as $blog)
-                                    <tr>
-                                        <td>{{ $blog->id}}</td>
-                                        <td>
-                                            @if ($blog->status == 'draft')
-                                                Bản nháp
-                                            @elseif ($blog->status == 'published')
-                                                Đã xuất bản
-                                            @elseif ($blog->status == 'archived')
-                                                Đã lưu trữ
-                                            @endif
-                                        </td>
-                                        <td>
-                                            <img src="{{ asset('storage/blog_images/' . $blog->blog_image) }}" alt="Ảnh chính" style="max-width: 150px; max-height: 150px; object-fit: cover;">
-                                        </td>
-                                        <td>
-                                            @foreach (json_decode($blog->list_image) as $image)
-                                                <img src="{{ asset('storage/blog_images/' . $image) }}" alt="Ảnh" style="width: 100px; height: auto; margin: 5px;">
-                                            @endforeach
-                                        </td>
-                                        <td>{{ $blog->title}}</td>
-                                        <td>{{ $blog->short_content}}</td>
-                                        <td>{{ $blog->author}}</td>
-                                        <td>{{ $blog->full_content}}</td>
-                                        <td>{{ $blog->published_at}}</td>
-                                        <td>{{ $blog->blog->blog_categories_name }}</td>
-                                        <td>
-                                            <!-- Nút chi tiết -->
-                                            <button class="btn btn-info" data-toggle="modal" data-target="#detailModal{{ $blog->id }}">Chi tiết</button>
-                                            <!-- Nút Xóa -->
-                                            <button class="btn btn-danger" data-toggle="modal" data-target="#deleteModal{{ $blog->id }}">Xóa</button>
-                                            <!-- Nút Cập nhật -->
-                                            <button class="btn btn-warning" data-toggle="modal" data-target="#updatePostModal{{ $blog->id }}">Cập nhật</button>
-                                        </td>
+                        <table class="data-tables table mb-0 tbl-server-info text-dark">
+                        <thead class="bg-white text-uppercase">
+                            <tr class="ligth ligth-data">
+                                <th>ID Tin tức</th>
+                                <th>Tiêu đề</th>
+                                <th>Ngày tạo</th>
+                                <th>Ngày cập nhật</th>
+                                <th>Ẩn/Hiện</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
 
+                        <tbody class="ligth-body">
+                            @foreach($list_blog as $key => $blog)
+                            <tr>
+                                <td>{{$blog->idBlog}}</td>
+                                <td>
+                                    <img src="{{asset('/storage/images/blog/'.$blog->BlogImage)}}" class="img-fluid rounded avatar-50 mr-3" alt="image">
+                                    {{$blog->BlogTitle}}
+                                </td>
+                                <td>{{$blog->created_at}}</td>
+                                <td>{{$blog->updated_at}}</td>
+                                <td>
+                                    @if($blog->Status == 0) Ẩn
+                                    @else Hiện 
+                                    @endif
+                                </td>
+                                <td>
+                                    <!-- Nút chi tiết -->
+                                    <a href="{{ route('admin.blog.blog_details', ['BlogSlug' => $blog->BlogSlug]) }}" class="btn btn-info">Xem chi tiết</a>
+                                    <!-- Nút Xóa -->
+                                    <button class="btn btn-danger" data-toggle="modal" data-target="#deleteModal{{ $blog->idBlog }}">Xóa</button>
+                                    <!-- Nút Cập nhật -->
+                                    {{-- <button class="btn btn-warning" data-toggle="modal" data-target="#updatePostModal{{ $blog->idBlog }}">Cập nhật</button> --}}
+                                    <a href="{{ route('admin.blog.edit_blog', $blog->idBlog) }}" class="btn btn-warning">Cập nhật</a>
 
-                                    </tr>
-                                @endforeach
-                                
-                            </tbody>
-                        </table>
+                                </td>
+                            </tr>
+
+                            <div class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" id="modal-delete-{{$blog->idBlog}}"  aria-hidden="true">
+                                <div class="modal-dialog modal-sm">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Thông báo</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">×</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>Bạn có muốn xóa bài viết #{{$blog->idBlog}} không?</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-light" data-dismiss="modal">Trở về</button>
+                                            <a href="{{URL::to('/delete-blog/'.$blog->idBlog)}}" type="button" class="btn btn-primary">Xác nhận</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @endforeach
+                        </tbody>
+                    </table> 
                     </div>
                 </div>
             </div>
@@ -118,7 +130,7 @@
 
     <!-- Modal for Adding New Post -->
     <div class="modal fade" id="addPostModal" tabindex="-1" role="dialog" aria-labelledby="addPostModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="addPostModalLabel">Thêm Blog mới</h5>
@@ -126,138 +138,110 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form action="{{ route('admin.blog.add') }}" method="POST" enctype="multipart/form-data">
-                    @csrf
-                    <div class="modal-body text-dark">
-                        <div class="form-group">
-                            <div class="form-floating">
-                                <label for="">Chọn trạng thái: </label>
-                                <select class="form-select" id="floatingSelect" aria-label="Floating label select example" name="status">
-                                    <option value="draft" {{ old('status') == 'draft' ? 'selected' : '' }}>Bản nháp</option>
-                                    <option value="published" {{ old('status') == 'published' ? 'selected' : '' }}>Đã xuất bản</option>
-                                    <option value="archived" {{ old('status') == 'archived' ? 'selected' : '' }}>Đã lưu trữ</option>
-                                </select>
-                                @error('status')<span class="text-danger">{{ $message }}</span>@enderror
+                                <div class="card">
+                    <div class="card-header d-flex justify-content-between">
+                        <div class="header-title">
+                            <h4 class="card-title">Thêm tin tức</h4>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                     <form method="post" action="{{URL::to('admin/submit-add-blog')}}" id="form-add-blog" data-toggle="validator" enctype="multipart/form-data">
+                        @csrf
+                        <div class="row">
+                            <!-- Tiêu đề -->
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Tiêu đề *</label>
+                                    <input type="text" name="BlogTitle" class="form-control slug" onkeyup="ChangeToSlug()" placeholder="Nhập tiêu đề tin tức" value="{{ old('BlogTitle') }}" >
+                                    @error('BlogTitle')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <!-- Slug -->
+                            <input type="hidden" name="BlogSlug" class="form-control" id="convert_slug" value="{{ old('BlogSlug') }}">
+
+                            <!-- Ảnh tin tức -->
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Ảnh tin tức *</label>
+                                    <input type="file" name="BlogImage" id="images" onchange="loadPreview(this)" class="form-control image-file" >
+                                    @error('BlogImage')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <!-- Mô tả ngắn -->
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Mô tả ngắn *</label>
+                                    <textarea class="form-control" name="BlogDesc" id="BlogDesc">{{ old('BlogDesc') }}</textarea>
+                                    <script>$(document).ready(function(){CKEDITOR.replace('BlogDesc');});</script>
+                                    @error('BlogDesc')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <!-- Nội dung -->
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Nội dung *</label>
+                                    <textarea class="form-control" name="BlogContent">{{ old('BlogContent') }}</textarea>
+                                    <script>$(document).ready(function(){CKEDITOR.replace('BlogContent');});</script>
+                                    @error('BlogContent')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <!-- Trạng thái -->
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Ẩn/Hiện *</label>
+                                    <select class="selectpicker form-control" data-style="py-0" name="Status" >
+                                        <option value="">Chọn trạng thái hiển thị</option>
+                                        <option value="0" {{ old('Status') == '0' ? 'selected' : '' }}>Ẩn</option>
+                                        <option value="1" {{ old('Status') == '1' ? 'selected' : '' }}>Hiện</option>
+                                    </select>
+                                    @error('Status')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
                             </div>
                         </div>
+                        <input type="submit" class="btn btn-primary mr-2" id="btn-submit" value="Thêm tin tức">
+                    </form>
 
-                        <div class="form-group">
-                            <label for="">Ảnh chính:</label>
-                            <input type="file" class="form-control" name="blog_image">
-                            @error('blog_image')<span class="text-danger">{{ $message }}</span>@enderror
-                        </div>
-
-                        <div class="form-group">
-                            <label for="image">Danh sách ảnh:</label>
-                            <input type="file" class="form-control" name="list_image[]" multiple>
-                            @error('list_image')<span class="text-danger">{{ $message }}</span>@enderror
-                        </div>
-
-                        <div class="form-group">
-                            <label for="image">Tiêu đề:</label>
-                            <input type="text" class="form-control" name="title" value="{{ old('title') }}">
-                            @error('title')<span class="text-danger">{{ $message }}</span>@enderror
-                        </div>
-
-                        <div class="form-group">
-                            <label for="image">Nội dung ngắn:</label>
-                            <textarea name="short_content" class="form-control" id="" cols="5" rows="3">{{ old('short_content') }}</textarea>
-                            @error('short_content')<span class="text-danger">{{ $message }}</span>@enderror
-                        </div>
-
-                        <div class="form-group">
-                            <label for="image">Tác giả:</label>
-                            <input type="text" class="form-control" name="author" value="{{ old('author') }}">
-                            @error('author')<span class="text-danger">{{ $message }}</span>@enderror
-                        </div>
-
-                        <div class="form-group">
-                            <label for="image">Nội dung đầy đủ:</label>
-                            <textarea name="full_content" class="form-control" id="" cols="8" rows="5">{{ old('full_content') }}</textarea>
-                            @error('full_content')<span class="text-danger">{{ $message }}</span>@enderror
-                        </div>
-
-                        <div class="form-group">
-                            <label for="image">Danh mục:</label>
-                            <select class="form-select" aria-label="Default select example" name="category_id">
-                                <option value="" selected>Chọn danh mục</option>
-                                @foreach ($blog_categories as $blog_category)
-                                    <option value="{{ $blog_category->id }}" {{ old('category_id') == $blog_category->id ? 'selected' : '' }}>{{ $blog_category->blog_categories_name }}</option>
-                                @endforeach
-                            </select>
-                            @error('category_id')<span class="text-danger">{{ $message }}</span>@enderror
-                        </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                        <button type="submit" class="btn btn-primary">Tạo Blog</button>
-                    </div>
-                </form>
+                </div>
 
             </div>
         </div>
     </div>
 
 
-    <!-- Modal for Viewing Blog Details -->
-    @foreach ($blogs as $blog)
-        <div class="modal fade" id="detailModal{{ $blog->id }}" tabindex="-1" role="dialog" aria-labelledby="detailModalLabel{{ $blog->id }}" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="detailModalLabel{{ $blog->id }}">Chi tiết Blog: {{ $blog->title }}</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body text-dark">
-                        <p><strong>Tiêu đề:</strong> {{ $blog->title }}</p>
-                        <p><strong>Trạng thái:</strong> {{ $blog->status == 'draft' ? 'Bản nháp' : ($blog->status == 'published' ? 'Đã xuất bản' : 'Đã lưu trữ') }}</p>
-                        <p><strong>Nội dung ngắn:</strong> {{ $blog->short_content }}</p>
-                        <p><strong>Tác giả:</strong> {{ $blog->author }}</p>
-                        <p><strong>Nội dung đầy đủ:</strong> {{ $blog->full_content }}</p>
-                        <p><strong>Danh mục:</strong> {{ $blog->blog->blog_categories_name }}</p>
-                        <p><strong>Ngày đăng:</strong> {{ $blog->published_at }}</p>
-                        
-                        <strong>Ảnh chính:</strong>
-                        <img src="{{ asset('storage/blog_images/' . $blog->blog_image) }}" alt="Ảnh chính" style="max-width: 100%; height: auto; object-fit: cover;">
-                        
-                        <strong>Danh sách ảnh:</strong>
-                        <div class="row">
-                            @foreach (json_decode($blog->list_image) as $image)
-                                <div class="col-md-3">
-                                    <img src="{{ asset('storage/blog_images/' . $image) }}" alt="Ảnh" style="width: 100%; height: auto; object-fit: cover; margin: 5px;">
-                                </div>
-                            @endforeach
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    @endforeach
-
 
     <!-- Modal Xóa Blog -->
-    @foreach ($blogs as $blog)
-        <div class="modal fade" id="deleteModal{{ $blog->id }}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel{{ $blog->id }}" aria-hidden="true">
-            <div class="modal-dialog" role="document">
+    @foreach ($list_blog as $blog)
+        <div class="modal fade" id="deleteModal{{ $blog->idBlog }}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel{{ $blog->idBlog }}" aria-hidden="true">
+            <div class="modal-dialog " role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="deleteModalLabel{{ $blog->id }}">Xóa Blog: {{ $blog->title }}</h5>
+                        <h5 class="modal-title" id="deleteModalLabel{{ $blog->idBlog }}">Xóa Blog: {{ $blog->BlogTitle }}</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body text-dark">
-                        <p>Bạn có chắc chắn muốn xóa bài blog "<strong>{{ $blog->title }}</strong>"?</p>
+                        <p>Bạn có chắc chắn muốn xóa bài blog "<strong>{{ $blog->BlogTitle }}</strong>"?</p>
                         <p>Hành động này sẽ không thể hoàn tác.</p>
                     </div>
                     <div class="modal-footer">
                         <!-- Form Xóa -->
-                        <form action="{{ route('admin.blog.delete', $blog->id) }}" method="POST">
+                        <form action="{{ route('admin.blog.delete', $blog->idBlog) }}" method="POST">
                             @csrf
                             @method('DELETE')
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
@@ -269,89 +253,28 @@
         </div>
     @endforeach  
     
-    <!-- Modal for Updating Post -->
-    @foreach ($blogs as $blog)
-        <div class="modal fade" id="updatePostModal{{ $blog->id }}" tabindex="-1" role="dialog" aria-labelledby="updatePostModalLabel{{ $blog->id }}" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="updatePostModalLabel{{ $blog->id }}">Cập nhật Blog: {{ $blog->title }}</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <form action="{{ route('admin.blog.update', $blog->id) }}" method="POST" enctype="multipart/form-data">
-                        @csrf
-                        @method('PUT')
-                        <div class="modal-body text-dark">
-                            <div class="form-group">
-                                <label for="status">Trạng thái:</label>
-                                <select class="form-select" name="status">
-                                    <option value="draft" {{ $blog->status == 'draft' ? 'selected' : '' }}>Bản nháp</option>
-                                    <option value="published" {{ $blog->status == 'published' ? 'selected' : '' }}>Đã xuất bản</option>
-                                    <option value="archived" {{ $blog->status == 'archived' ? 'selected' : '' }}>Đã lưu trữ</option>
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="blog_image">Ảnh chính:</label>
-                                <input type="file" class="form-control" name="blog_image">
-                            </div>
-
-                            <div class="form-group">
-                                <label for="list_image">Danh sách ảnh:</label>
-                                <input type="file" class="form-control" name="list_image[]" multiple>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="title">Tiêu đề:</label>
-                                <input type="text" class="form-control" name="title" value="{{ $blog->title }}">
-                            </div>
-
-                            <div class="form-group">
-                                <label for="short_content">Nội dung ngắn:</label>
-                                <textarea name="short_content" class="form-control">{{ $blog->short_content }}</textarea>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="author">Tác giả:</label>
-                                <input type="text" class="form-control" name="author" value="{{ $blog->author }}">
-                            </div>
-
-                            <div class="form-group">
-                                <label for="full_content">Nội dung đầy đủ:</label>
-                                <textarea name="full_content" class="form-control">{{ $blog->full_content }}</textarea>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="category_id">Danh mục:</label>
-                                <select class="form-select" name="category_id">
-                                    @foreach ($blog_categories as $category)
-                                        <option value="{{ $category->id }}" {{ $blog->category_id == $category->id ? 'selected' : '' }}>{{ $category->blog_categories_name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                            <button type="submit" class="btn btn-primary">Cập nhật Blog</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    @endforeach
                 
 </div>
 
 <script src="{{ asset('backend/js/blog.js') }}"></script>
 <script>
-    $(document).ready(function () {
-        // Kiểm tra xem có lỗi hay không và hiển thị modal
-        @if(session()->has('errors'))
-            $('#addPostModal').modal('show');
-        @endif
-    });
+    function ChangeToSlug() {
+    var title = document.querySelector('.slug').value;
+    var slug = title.toLowerCase();
+
+    // Loại bỏ ký tự đặc biệt
+    slug = slug.replace(/[^a-zA-Z0-9\s-]/g, '');
+
+    // Thay khoảng trắng bằng dấu gạch ngang
+    slug = slug.replace(/\s+/g, '-');
+
+    // Xóa dấu gạch ngang dư thừa
+    slug = slug.replace(/^-+|-+$/g, '');
+
+    // Gán slug vào ô input ẩn
+    document.getElementById('convert_slug').value = slug;
+}
+
 </script>
 
 
