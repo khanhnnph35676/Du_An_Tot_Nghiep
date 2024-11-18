@@ -16,9 +16,9 @@ class BlogController extends Controller
     public function index()
     {
         // Lấy danh sách bài viết từ cơ sở dữ liệu (nếu có)
-        $blogs = Blog::all(); // Thay thế bằng logic lấy dữ liệu từ model
-        dd($blogs);
-        return view('admin.blog.list', compact('blogs'));
+        $list_blog = Blog::get(); // Thay thế bằng logic lấy dữ liệu từ model
+        // dd($blogs);
+        return view('admin.blog.list', compact('list_blog'));
     }
 
     public function submit_add_blog(Request $request)
