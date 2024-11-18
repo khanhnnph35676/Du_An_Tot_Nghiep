@@ -26,6 +26,7 @@
                          class="icon icon-chart-bar-33"></i><span class="nav-text">Customer</span></a>
                  <ul aria-expanded="false">
                      <li><a href="{{route('admin.listCustomer')}}">All Customers</a></li>
+                     <li><a href="{{route('admin.listTestimonial')}}">Testimonial Manager</a></li>
                  </ul>
              </li>
              {{-- Danh mục quản lý cửa hàng: Sản phẩm order, Giảm giá, Phương thức thanh toán, Thống kê  --}}
@@ -54,12 +55,10 @@
                  </ul>
              </li>
              {{-- Danh mục quản lý Blog --}}
-             <li><a class="has-arrow" href="javascript:void()" aria-expanded="false"><i
-                         class="icon icon-world-2"></i><span class="nav-text">Blog</span></a>
+             <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                <i class="fa-solid fa-blog"></i><span class="nav-text">Quản lý Blog</span></a>
                  <ul aria-expanded="true">
-                    <li><a href="{{ route('admin.blog.category')}}">Danh mục Blog</a></li>
                     <li><a href="{{ route('admin.blog.list')}}">Danh sách Blog</a></li>
-
                  </ul>
              </li>
              {{-- Danh mục cài đặt: Thoát admin --}}

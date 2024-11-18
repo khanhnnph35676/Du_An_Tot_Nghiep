@@ -33,4 +33,8 @@ class Product extends Model
     public function galleries(){
         return $this->hasMany(Gallerie::class,'id','product_id');
     }
+    public function testimonials()
+    {
+        return $this->hasMany(Testimonial::class);
+    }
 }

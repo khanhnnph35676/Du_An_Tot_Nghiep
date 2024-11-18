@@ -17,11 +17,11 @@ use App\Models\Address;
 class AuthenController extends Controller
 {
     public function logout(Request $request)
-    {
-        Auth::logout(); // Đăng xuất người dùng
+{
+    Auth::logout(); // Đăng xuất người dùng
 
-        return redirect()->route('loginAdmin')->with('status', 'Bạn đã đăng xuất thành công.');
-    }
+    return redirect()->route('loginAdmin')->with('status', 'Bạn đã đăng xuất thành công.');
+}
 
     public function loginAdmin()
     {
@@ -31,11 +31,12 @@ class AuthenController extends Controller
     public function postLogin(Request $request)
     {
         $credentials = $request->only('email', 'password');
+
         if (Auth::attempt($credentials)) {
-            if (Auth::user()->rule_id == 1) {
+            if(Auth::user()->rule_id == 1){
                 return redirect()->intended('admin');
             }
-            if (Auth::user()->rule_id == 2) {
+            if(Auth::user()->rule_id == 2){
                 return redirect()->intended('');
             }
         }
@@ -64,10 +65,9 @@ class AuthenController extends Controller
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
-                'rule_id' => 1,
+                'rule_id' => 1, // giá trị mặc định hoặc có thể được cấu hình
             ]);
 
-            // Gửi sự kiện đăng ký
             event(new Registered($user));
 
             // Đăng nhập người dùng ngay sau khi đăng ký
@@ -75,9 +75,11 @@ class AuthenController extends Controller
 
             return redirect()->intended('admin')->with('status', 'Đăng ký thành công.');
         } catch (\Exception $e) {
-            return back()->withErrors(['error' => 'Có lỗi xảy ra, vui lòng thử lại.']);
+            return back()->withErrors(['error' => 'Có lỗi xảy ra, vui lòng thử lại. Chi tiết lỗi: ' . $e->getMessage()]);
         }
     }
+
+
 
     public function showLinkRequestForm()
     {
