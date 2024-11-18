@@ -103,7 +103,22 @@ Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
     Route::delete('deleteDiscount/{id}', [DiscountController::class, 'destroy'])->name('discount.destroy');
     // Quản lý thanh toán
     Route::get('form-payment',[PaymentController::class,'formPayment'])->name('formPayment');
-// quản lý blog
+    // quản lý blog
+    Route::get('/blog', [BlogController::class, 'index'])->name('blog.list');
+    Route::get('/blog-category', [BlogController::class, 'category'])->name('blog.category');
+    Route::get('/blog-category', [BlogController::class, 'category'])->name('blog.category'); // Lấu danh mục blog
+    Route::get('/blog-category-with-blog/{id}', [BlogController::class, 'categoryWithBlog'])->name('blog.category.list');// Lấu danh mục blog và tên blog
+    Route::post('storeBlog', [BlogController::class, 'storeBlog'])->name('blog.store'); //Lưu danh mục blog
+    Route::put('editBlog/{id}', [BlogController::class, 'update'])->name('blog.category.update');// Sửa tên danh mục category
+   
+    // Quản lý Testimonials
+    Route::get('/testimonials', [TestimonialController::class, 'listTestimonial'])->name('listTestimonial');
+    Route::get('/testimonials/create', [TestimonialController::class, 'createTestimonial'])->name('createTestimonial');
+    Route::post('/testimonials', [TestimonialController::class, 'StoreTestimonial'])->name('StoreTestimonial');
+    Route::get('/testimonials/{id}/edit', [TestimonialController::class, 'editTestimonial'])->name('editTestimonial');
+    Route::put('/testimonials/{id}', [TestimonialController::class, 'updateTestimonial'])->name('updateTestimonial');
+    Route::delete('/testimonials/{id}', [TestimonialController::class, 'deleteTestimonial'])->name('deleteTestimonial');
+    // quản lý blog
     Route::get('/blog', [BlogController::class, 'index'])->name('blog.list'); // Lấy danh sách Blog
     Route::post('/submit-add-blog', [BlogController::class, 'submit_add_blog']); // Thêm blog
     Route::post('/submit-edit-blog/{idBlog}', [BlogController::class, 'submit_edit_blog'])->name('blog.submit-edit-blog');; // Sửa blog
