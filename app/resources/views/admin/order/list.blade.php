@@ -31,7 +31,7 @@
                             <div class="card-header">
                                 <h4 class="card-title">List Orders</h4>
                                 <div class="btn-group" role="group">
-                                    <a href="{{ route('admin.orderDetail')}}" class="btn btn-secondary">Add Order</a>
+                                    <a href="" class="btn btn-secondary">Add Order</a>
                                 </div>
                             </div>
                             <div class="card-body">
@@ -40,24 +40,38 @@
                                         <thead>
                                             <tr>
                                                 <th>Stt</th>
-                                                <th>Order code</th>
-                                                <th>Product</th>
-                                                <th>Price</th>
-                                                <th>Payment</th>
-                                                <th>Status</th>
-                                                <th>Action</th>
+                                                <th>Mã Order</th>
+                                                <th>Người dùng</th>
+                                                <th>Phương thức thanh toán</th>
+                                                <th>Địa chỉ</th>
+                                                <th>Tổng tiền</th>
+                                                <th>Trang thái</th>
+                                                <th>Ngày đặt</th>
+                                                <th>Thao tác</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>Tiger Nixon</td>
-                                                <td>System Architect</td>
-                                                <td>Edinburgh</td>
-                                                <td>61</td>
-                                                <td>2011/04/25</td>
-                                                <td>$320,800</td>
-                                                <td>$320,800</td>
-                                            </tr>
+                                            @foreach ($orderLists as $key => $value)
+                                                <tr>
+                                                    <td>{{$key + 1}}</td>
+                                                    <td>{{ $value->orders->id }}</td>
+                                                    <td>{{ $value->users->email  }}</td>
+                                                    <td>{{ $value->orders->payment_id  }}</td>
+                                                    <td>
+                                                        @if ($value->orders && $value->orders->address)
+                                                            {{$value->orders->address->address}}
+                                                        @else
+                                                            <p>No address found</p>
+                                                        @endif
+                                                    </td>
+                                                    <td> {{ number_format($value->orders->sum_price) }} vnđ</td>
+                                                    <td>{{  $value->orders->status }}</td>
+                                                    <td>{{  $value->orders->created_at }}</td>
+                                                    <td>
+                                                        <a href="{{ route('admin.orderDetail',['order_id' => $value->order_id]) }}" class="btn btn-primary">Chi tiết</button>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
                                         </tbody>
                                     </table>
                                 </div>

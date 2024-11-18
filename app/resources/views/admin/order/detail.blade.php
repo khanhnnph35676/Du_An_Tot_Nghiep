@@ -3,10 +3,10 @@
     <!-- Datatable -->
 @endpush
 @section('content')
-<link rel="stylesheet" href="{{ asset('backend/css/product.css') }}">
+    <link rel="stylesheet" href="{{ asset('backend/css/product.css') }}">
     <!--**********************************
-                    Content body start
-                ***********************************-->
+                                Content body start
+                            ***********************************-->
     <div class="content-body">
         <div class="container-fluid">
             <div class="row page-titles mx-0">
@@ -23,87 +23,129 @@
                     </ol>
                 </div>
             </div>
-            <!-- row -->
 
+            @if (session('message'))
+                <div class="message">
+                    <div class="alert alert-primary alert-dismissible alert-alt solid fade show">
+                        <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close"><span><i
+                                    class="mdi mdi-close"></i></span>
+                        </button>
+                        @if (session('message'))
+                            <strong>{{ session('message') }}</strong>
+                        @endif
+                    </div>
+                </div>
+            @endif
+            <!-- row -->
             <div class="row">
                 <div class="col-12">
-                    <form action="" method="POST">
-                        @csrf
-                        <div class="card">
-                            <div class="card-header">
-                                <h4 class="card-title">Add New Customer</h4>
-                                <div class="d-flex">
-                                    <a href="{{ route('admin.listOrders') }}" class="btn btn-dark mr-3">Back</a>
-                                    <button type="submit" name="submit" class="btn btn-secondary">Save</button>
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-8 p-3 mr-4  ml-4 border">
-                                        {{-- form thêm cho product --}}
-                                        <div class="form-group">
-                                            <label for="">Name:</label>
-                                            <input class="form-control" type="text" placeholder="Name">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="">Email:</label>
-                                            <input class="form-control" type="text" placeholder="Email">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="">Phone:</label>
-                                            <input class="form-control" type="text" placeholder="Phone">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="">Address:</label>
-                                            <input class="form-control" type="text" placeholder="Adrress">
-                                        </div>
+                    @foreach ($orderLists as $order)
+                        <form action="{{ route('admin.updateOrder', ['order_id' => $order->order_id]) }}" method="POST">
+                            @csrf
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title">{{ $order->users->email }}</h4>
+                                    <div class="d-flex">
+                                        <a href="{{ route('admin.listOrders') }}" class="btn btn-dark mr-3">Back</a>
+                                        <button type="submit" name="submit" class="btn btn-secondary">Save</button>
                                     </div>
-                                    <div class="col-3 p-3 border">
-                                        <div class="form-group">
-                                            <label for="">Gener:</label>
-                                            <div class="basic-form">
-                                                <form>
-                                                    <div class="form-group">
-                                                        <label class="radio-inline">
-                                                            <input type="radio" name="gener"> Nam</label>
-                                                        <label class="radio-inline">
-                                                            <input type="radio" name="gener" class="ml-3"> Nữ</label>
-                                                        <label class="radio-inline">
-                                                            <input type="radio" name="gener" class="ml-3">
-                                                            Khác</label>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-8 p-3 mr-4  ml-4 border">
+                                            <div class="table-responsive">
+                                                <table id="example" class="display">
+                                                    <div class="head-line d-flex align-items-center">
+                                                        <h3 class="mr-3">Đơn hàng </h3>
+                                                        <span
+                                                            class="badge badge-light">{{ $order->orders->status == 1 ? 'Chờ xác nhận' : '' }}</span>
+                                                        <span
+                                                            class="badge badge-warning">{{ $order->orders->status == 2 ? 'Chờ lấy hàng' : '' }}</span>
+                                                        <span
+                                                            class="badge badge-info">{{ $order->orders->status == 3 ? 'Đang giao hàng' : '' }}</span>
+                                                        <span
+                                                            class="badge badge-success">{{ $order->orders->status == 4 ? 'Đã giao hàng' : '' }}</span>
+                                                        <span
+                                                            class="badge badge-danger">{{ $order->orders->status == 5 ? 'Đã huỷ' : '' }}</span>
                                                     </div>
-                                                </form>
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Stt</th>
+                                                            <th>Sản phẩm</th>
+                                                            <th>Giá</th>
+                                                            <th class="text-center">Số lượng</th>
+                                                            <th>Ngày đặt</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+
+                                                        @foreach ($data as $key => $value)
+                                                            {{-- @php
+                                                            print_r($value->product_variants);
+                                                        @endphp --}}
+                                                            {{-- @foreach ($value->product_variants as $product_variant) --}}
+                                                            <tr>
+                                                                <td>{{ $key + 1 }}</td>
+                                                                <td>
+                                                                    <img src="{{ asset($value->product_variants->image) }}"
+                                                                        style="width: 50px; height: 50px; object-fit: cover;"
+                                                                        alt="">
+                                                                    {{ $value->products->name . ' - ' . $value->product_variants->sku }}
+                                                                </td>
+                                                                <td> {{ number_format($value->product_variants->price) }}
+                                                                    vnđ </td>
+                                                                <td class="text-center">{{ $value->quantity }}</td>
+                                                                <td>{{ $value->created_at }}</td>
+                                                            </tr>
+                                                            {{-- @endforeach --}}
+                                                        @endforeach
+                                                        {{-- Hàng cuối cùng cho tổng giá --}}
+                                                        <tr>
+                                                            <td colspan="1" class="text-end"><strong>Tổng giá:</strong></td>
+                                                            <td colspan="3">
+                                                                <strong>{{ number_format($order->orders->sum_price) }} vnđ</strong>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+
+                                                </table>
+
                                             </div>
                                         </div>
-                                        <div class="form-group">
-                                            <label for="">Image:</label>
-                                            <div class="image-upload-container">
-                                                <label for="imageUpload" class="name_click">Image:</label>
-                                                <img id="imagePreview" src="#" alt="Image Preview"
-                                                    style="display:none;" />
-                                                <input type="file" class="form-control-file" id="imageUpload"
-                                                    accept="image/*">
-                                                <span style="button" class="btn btn-dark"
-                                                    id="removeImage"style="display:none;">x</span>
+                                        <div class="col-3 p-3 border">
+                                            <h3>Điều chỉnh trạng thái</h3>
+                                            <div class="form-group">
+                                                <label>Trạng thái:</label>
+                                                <select id="single-select" name="status">
+                                                    <option value="1"
+                                                        {{ $order->orders->status == 1 ? 'selected' : '' }}>Chờ xác nhận
+                                                    </option>
+                                                    <option value="2"
+                                                        {{ $order->orders->status == 2 ? 'selected' : '' }}>Chờ lấy hàng
+                                                    </option>
+                                                    <option value="3"
+                                                        {{ $order->orders->status == 3 ? 'selected' : '' }}>Đang giao hàng
+                                                    </option>
+                                                    <option value="4"
+                                                        {{ $order->orders->status == 4 ? 'selected' : '' }}>Đã giao hàng
+                                                    </option>
+                                                    <option value="5"
+                                                        {{ $order->orders->status == 5 ? 'selected' : '' }}>Đã huỷ</option>
+                                                </select>
                                             </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="">Birth:</label>
-                                           <input type="date" class="form-control">
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                    @endforeach
                     </form>
                 </div>
-
             </div>
         </div>
     </div>
     <!--**********************************
-                    Content body end
-                ***********************************-->
-                <script src="{{ asset('backend/js/product.js') }}"></script>
+                                Content body end
+                            ***********************************-->
+    <script src="{{ asset('backend/js/product.js') }}"></script>
 @endsection
 
 

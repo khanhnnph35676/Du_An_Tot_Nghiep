@@ -15,7 +15,7 @@ class BlogController extends Controller
     {
         // Lấy danh sách bài viết từ cơ sở dữ liệu (nếu có)
         $blogs = Blog::all(); // Thay thế bằng logic lấy dữ liệu từ model
-        dd($blogs); 
+        // dd($blogs); 
         return view('admin.blog.list', compact('blogs'));
     }
     public function category( ){

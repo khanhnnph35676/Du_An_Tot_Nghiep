@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
@@ -6,17 +7,21 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use App\Models\Order;
+use App\Models\OrderList;
+use App\Models\ProductOder;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Auth\Events\Registered;
+use App\Models\Address;
 
 class AuthenController extends Controller
 {
     public function logout(Request $request)
-{
-    Auth::logout(); // Đăng xuất người dùng
+    {
+        Auth::logout(); // Đăng xuất người dùng
 
-    return redirect()->route('loginAdmin')->with('status', 'Bạn đã đăng xuất thành công.');
-}
+        return redirect()->route('loginAdmin')->with('status', 'Bạn đã đăng xuất thành công.');
+    }
 
     public function loginAdmin()
     {
@@ -27,10 +32,10 @@ class AuthenController extends Controller
     {
         $credentials = $request->only('email', 'password');
         if (Auth::attempt($credentials)) {
-            if(Auth::user()->rule_id == 1){
+            if (Auth::user()->rule_id == 1) {
                 return redirect()->intended('admin');
             }
-            if(Auth::user()->rule_id == 2){
+            if (Auth::user()->rule_id == 2) {
                 return redirect()->intended('');
             }
         }
@@ -73,8 +78,6 @@ class AuthenController extends Controller
             return back()->withErrors(['error' => 'Có lỗi xảy ra, vui lòng thử lại.']);
         }
     }
-
-
 
     public function showLinkRequestForm()
     {
@@ -134,5 +137,75 @@ class AuthenController extends Controller
     public function forgotPassword()
     {
         return view('user.forgot-password');
+    }
+    public function logoutUser(Request $request)
+    {
+        Auth::logout();
+        return redirect()->back();
+    }
+    // xoá địa chỉ
+    public function destroy($id)
+    {
+        try {
+            // Tìm và xóa địa chỉ trong database
+            $address = Address::findOrFail($id);
+            $address->delete();
+
+            return response()->json(['success' => true, 'message' => 'Địa chỉ đã được xóa']);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => 'Xóa địa chỉ thất bại']);
+        }
+    }
+    //Thêm địa chỉ mới
+    public function store(Request $request)
+    {
+        // dd($request->all());
+        Address::create([
+            'address' => $request->province . ', ' . $request->district . ', ' . $request->ward,
+            'home_address' => $request->home_address,
+            'user_id' => Auth::user()->id
+        ]);
+        return response()->json(['success' => true, 'message' => 'Địa chỉ mới đã được lưu']);
+    }
+    // Mua sản phẩm
+    public function AddOrder(Request $request)
+    {
+        // $request->validate([
+        //     'sum_price' => 'required',
+        //     'address_id' => 'required'
+        // ]);
+        $order = [
+            'payment_id' => 1,
+            'status' => 1,
+            'sum_price' => $request->sum_price,
+            'address_id' => $request->selected_address
+        ];
+
+        $addOrder = Order::create($order);
+        $orderList = [
+            'order_id' => $addOrder->id,
+            'user_id' => Auth::user()->id,
+        ];
+        OrderList::create($orderList);
+        // Lấy tất cả các sản phẩm
+
+        $cart = session()->get('cart', []);
+        foreach ($cart as $key => $value) {
+            if( Auth::user()->id == $value['user_id'] ) {
+                $products = [
+                    'order_id' => $addOrder->id,  // ID đơn hàng
+                    'product_id' => $value['product_id'],
+                    'product_variant_id' =>  $value['product_variant_id'],
+                    'quantity' => $value['qty'],
+                ];
+                // Tạo một bản ghi mới cho mỗi sản phẩm
+                ProductOder::create($products);
+                unset($cart[$key]);
+            }
+        }
+        session()->put('cart', $cart);
+        return redirect()->route('storeHome')->with([
+            'success' => 'Chúc mừng thanh toán thành công'
+        ]);
     }
 }

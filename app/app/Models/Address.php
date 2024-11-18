@@ -12,6 +12,7 @@ class Address extends Model
     public $fillable =[
         'user_id ',
         'address',
+        'home_address',
     ];
     public function users()
     {

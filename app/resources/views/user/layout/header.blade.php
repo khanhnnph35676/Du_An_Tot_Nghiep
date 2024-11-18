@@ -65,69 +65,75 @@
                              @if (Auth::check())
                                  @foreach ($cart as $item)
                                      @if ($item['user_id'] == Auth::id())
-                                    @php
-                                       $count++;
-                                    @endphp
-                                 @endif
-                                @endforeach
-                            @else
-                             @foreach ($cart as $item)
-                                 @if ($item['user_id'] === null)
-                                     @php
-                                         $count++;
-                                     @endphp
-                                 @endif
-                                @endforeach
-                            @endif
-                            {{ $count }}
-                     </span>
-                 </a>
-                 <div class="dropdown my-auto">
-                     <a href="#" class="nav-link" id="userDropdown" role="button" data-bs-toggle="dropdown"
-                         aria-expanded="false">
-                         <i class="fas fa-user fa-2x"></i>
+                                         @php
+                                             $count++;
+                                         @endphp
+                                     @endif
+                                 @endforeach
+                             @else
+                                 @foreach ($cart as $item)
+                                     @if ($item['user_id'] === null)
+                                         @php
+                                             $count++;
+                                         @endphp
+                                     @endif
+                                 @endforeach
+                             @endif
+                             {{ $count }}
+                         </span>
                      </a>
-                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                         @if (Auth::check())
-                             <li><a class="dropdown-item" href="{{ route('user.profile') }}">Thông tin cá nhân</a>
-                             </li>
-                             <li><a class="dropdown-item" href="{{ route('order.history') }}">Lịch sử đặt hàng</a>
-                             </li>
-                             <li>
-                                 <hr class="dropdown-divider">
-                             </li>
-                             <li>
-                                 <a class="dropdown-item" href="{{ route('user.login') }}">Đăng xuất</a>
-                             </li>
-                         @else
-                             helo
-                         @endif
+                     <div class="dropdown my-auto">
+                         <a href="#" class="nav-link" id="userDropdown" role="button" data-bs-toggle="dropdown"
+                             aria-expanded="false">
+                             <i class="fas fa-user fa-2x"></i>
+                         </a>
+                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                             @if (Auth::check())
+                                 <li><a class="dropdown-item" href="{{ route('user.profile') }}">Thông tin cá nhân</a>
+                                 </li>
+                                 <li><a class="dropdown-item" href="{{ route('order.history') }}">Lịch sử đặt hàng</a>
+                                 </li>
+                                 <li>
+                                     <hr class="dropdown-divider">
+                                 </li>
+                                 <li>
+                                    <form action="{{ route('logoutUser') }}" method="POST" style="display: inline;">
+                                        @csrf
+                                        <button type="submit" class="dropdown-item">Đăng xuất</button>
+                                    </form>
+                                 </li>
+                             @else
+                                 <li><a class="dropdown-item" href="{{ route('user.login') }}">Đăng nhập</a>
+                                 </li>
+                                 <li><a class="dropdown-item" href="{{ route('order.history') }}">Đăng ký</a>
+                                 </li>
+                             @endif
 
-                     </ul>
+                         </ul>
+                     </div>
+
                  </div>
-
              </div>
-         </div>
-     </nav>
+         </nav>
+     </div>
  </div>
-</div>
-<!-- Navbar End -->
-<!-- Modal Search Start -->
-<div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
- <div class="modal-dialog modal-fullscreen">
-     <div class="modal-content rounded-0">
-         <div class="modal-header">
-             <h5 class="modal-title" id="exampleModalLabel">Search by keyword</h5>
-             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-         </div>
-         <div class="modal-body d-flex align-items-center">
-             <div class="input-group w-75 mx-auto d-flex">
-                 <input type="search" class="form-control p-3" placeholder="keywords"
-                     aria-describedby="search-icon-1">
-                 <span id="search-icon-1" class="input-group-text p-3"><i class="fa fa-search"></i></span>
+ <!-- Navbar End -->
+ <!-- Modal Search Start -->
+ <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+     <div class="modal-dialog modal-fullscreen">
+         <div class="modal-content rounded-0">
+             <div class="modal-header">
+                 <h5 class="modal-title" id="exampleModalLabel">Search by keyword</h5>
+                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+             </div>
+             <div class="modal-body d-flex align-items-center">
+                 <div class="input-group w-75 mx-auto d-flex">
+                     <input type="search" class="form-control p-3" placeholder="keywords"
+                         aria-describedby="search-icon-1">
+                     <span id="search-icon-1" class="input-group-text p-3"><i class="fa fa-search"></i></span>
+                 </div>
              </div>
          </div>
      </div>
  </div>
-</div>
-<!-- Modal Search End -->
+ <!-- Modal Search End -->
