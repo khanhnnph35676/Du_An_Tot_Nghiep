@@ -14,7 +14,6 @@ use App\Http\Controllers\User\UserProfileController;
 use App\Http\Controllers\User\UserOrderController;
 use App\Http\Controllers\User\CartController;
 
-
 // DDawng nhập, đăng kí, đăng xuất, quên mật khẩu
 //controller bên store
 use App\Http\Controllers\User\PageController;
@@ -44,38 +43,30 @@ Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
     Route::get('product-detail',[ProductController::class,'productDetail'])->name('productDetail');
     // web.php
     Route::get('get-variant-data', [ProductController::class, 'getVariantData']);
-
     Route::get('product-simple',[ProductController::class,'productSimple'])->name('productSimple');
     Route::get('update-product-simple/{type}/{idProduct}',[ProductController::class,'formUpdateProductSimple'])->name('formUpdateProductSimple');
+
     // code dữ liệu trang sản phẩm
     Route::post('add-product-simple',[ProductController::class,'addProductSimple'])->name('addProductSimple');
     Route::patch('update-product-simple/{idProduct}',[ProductController::class,'updateProductSimple'])->name('updateProductSimple');
     Route::delete('delete-product-simple',[ProductController::class,'deleteProductSimple'])->name('deleteProductSimple');
     Route::delete('delete-product-variant',[ProductController::class,'deleteVariant'])->name('deleteVariant');
+
     //Code bên biến thể
     Route::post('add-product-configurable',[ProductController::class,'addProductConfigurable'])->name('addProductConfigurable');
     Route::get('update-product-configurable/{type}/{idProduct}',[ProductController::class,'formUpdateProductConfigurable'])->name('formUpdateProductConfigurable');
     Route::patch('update-product-configurable/{idProduct}',[ProductController::class,'updateProductConfigurable'])->name('updateProductConfigurable');
+
     // restore
     Route::get('restore-product',[ProductController::class,'restorProduct'])->name('restorProduct');
     Route::patch('product-restore-action',[ProductController::class,'restoreAction'])->name('restoreAction');
     Route::patch('variant-restore-action',[ProductController::class,'restoreVariantAction'])->name('restoreVariantAction');
     Route::delete('force-delete-product',[ProductController::class,'forceDeleteProduct'])->name('forceDeleteProduct');
     Route::delete('force-delete-variant',[ProductController::class,'forceDeleteVariant'])->name('forceDeleteVariant');
+
     // Trang danh mục
-    
     Route::resource('categories', CategoryController::class);
     Route::get('list-categories',[CategoryController::class,'listCategories'])->name('listCategories');
-    // Route xem danh mục đã xóa
-    Route::get('deleted', [CategoryController::class, 'listDeletedCategories'])->name('categories.deleted');
-
-    // Route phục hồi danh mục đã xóa
-    Route::post('categories/{id}/restore', [CategoryController::class, 'restore'])->name('categories.restore');
-
-    // Route xóa vĩnh viễn danh mục
-    Route::delete('categories/{id}/force-destroy', [CategoryController::class, 'forceDestroy'])->name('categories.forceDestroy');
-
-
 
     // Trang customer
     Route::get('list-customer', [CustomerController::class, 'listCustomer'])->name('listCustomer');
@@ -91,9 +82,11 @@ Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
     Route::get('inbox',[AppController::class,'inbox'])->name('inbox');
     Route::get('compose',[AppController::class,'compose'])->name('compose');
     Route::get('read-email',[AppController::class,'readEmail'])->name('readEmail');
-    // Quản lý cửa hàng
+
+    // Quản lý đơn hàng
     Route::get('list-orders',[OrderController::class,'listOrders'])->name('listOrders');
-    Route::get('order-detail',[OrderController::class,'orderDetail'])->name('orderDetail');
+    Route::get('order-detail/{order_id}',[OrderController::class,'orderDetail'])->name('orderDetail');
+    Route::post('order-update/{order_id}',[OrderController::class,'updateOrder'])->name('updateOrder');
     // Quản lý giảm giá
     Route::get('list-discounts',[DiscountController::class,'listDiscounts'])->name('listDiscounts');
     Route::get('create-discounts',[DiscountController::class, 'createDiscount'])->name('createDiscount');
@@ -101,8 +94,15 @@ Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
     Route::get('update-discounts/{id}', [DiscountController::class, 'updateDiscount'])->name('updateDiscount');
     Route::put('editDiscount/{id}', [DiscountController::class, 'update'])->name('discount.update');
     Route::delete('deleteDiscount/{id}', [DiscountController::class, 'destroy'])->name('discount.destroy');
-    // Quản lý thanh toán
+
+    // Quản lý phương thức thanh toán
     Route::get('form-payment',[PaymentController::class,'formPayment'])->name('formPayment');
+    Route::get('create-payments', [PaymentController::class, 'createPayment'])->name('createPayment');
+    Route::post('storePayment', [PaymentController::class, 'storePayment'])->name('payment.store');
+    Route::get('update-payment/{id}', [PaymentController::class, 'updatePayment'])->name('updatePayment');
+    Route::put('editPayment/{id}', [PaymentController::class, 'update'])->name('payment.update');
+    Route::delete('deletePayment/{id}', [PaymentController::class, 'destroy'])->name('payment.destroy');
+
     // quản lý blog
     Route::get('/blog', [BlogController::class, 'index'])->name('blog.list');
     Route::get('/blog-category', [BlogController::class, 'category'])->name('blog.category');
@@ -110,43 +110,11 @@ Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
     Route::get('/blog-category-with-blog/{id}', [BlogController::class, 'categoryWithBlog'])->name('blog.category.list');// Lấu danh mục blog và tên blog
     Route::post('storeBlog', [BlogController::class, 'storeBlog'])->name('blog.store'); //Lưu danh mục blog
     Route::put('editBlog/{id}', [BlogController::class, 'update'])->name('blog.category.update');// Sửa tên danh mục category
-   
-    // Quản lý Testimonials
-    Route::get('/testimonials', [TestimonialController::class, 'listTestimonial'])->name('listTestimonial');
-    Route::get('/testimonials/create', [TestimonialController::class, 'createTestimonial'])->name('createTestimonial');
-    Route::post('/testimonials', [TestimonialController::class, 'StoreTestimonial'])->name('StoreTestimonial');
-    Route::get('/testimonials/{id}/edit', [TestimonialController::class, 'editTestimonial'])->name('editTestimonial');
-    Route::put('/testimonials/{id}', [TestimonialController::class, 'updateTestimonial'])->name('updateTestimonial');
-    Route::delete('/testimonials/{id}', [TestimonialController::class, 'deleteTestimonial'])->name('deleteTestimonial');
-    // quản lý blog
-    Route::get('/blog', [BlogController::class, 'index'])->name('blog.list'); // Lấy danh sách Blog
-    Route::post('/submit-add-blog', [BlogController::class, 'submit_add_blog']); // Thêm blog
-    Route::post('/submit-edit-blog/{idBlog}', [BlogController::class, 'submit_edit_blog'])->name('blog.submit-edit-blog');; // Sửa blog
-    Route::get('/edit-blog/{idBlog}', [BlogController::class, 'edit_blog'])->name('blog.edit_blog'); // Cập nhật
-    Route::delete('/admin/blog/{id}', [BlogController::class, 'destroy'])->name('blog.delete'); // Xóa Blog
-    Route::get('/admin/blog/{BlogSlug}', [BlogController::class, 'blog_details'])->name('blog.blog_details'); // Xem chi tiết blog
-    
-    // Route::put('/admin/blog/{id}/update', [BlogController::class, 'updateBlog'])->name('blog.update'); // Update blog 
-
-
-
-    // Route::get('/blog-category', [BlogController::class, 'category'])->name('blog.category'); // Lấy danh mục blog
-    // Route::get('/blog-category-with-blog/{id}', [BlogController::class, 'categoryWithBlog'])->name('blog.category.list');// Lấy danh mục blog và tên blog
-    // Route::post('storeBlog', [BlogController::class, 'storeBlog'])->name('blog.store'); //Lưu danh mục blog
-    // Route::put('editBlog/{id}', [BlogController::class, 'update'])->name('blog.category.update');// Sửa tên danh mục category
-    // Route::delete('blog-categories-destroy/{id}', [BlogController::class, 'Blog_categories_destroy'])->name('blog.categories.destroy');//Xóa danh mục Blog
-    
-
+    Route::delete('blog-categories-destroy/{id}', [BlogController::class, 'Blog_categories_destroy'])->name('blog.categories.destroy');//Xóa danh mục Blog
     // quản lý testimonial
     Route::get('/testimonials', [TestimonialController::class, 'index'])->name('admin.testimonials.list');
-    Route::get('create-payments', [PaymentController::class, 'createPayment'])->name('createPayment');
-    Route::post('storePayment', [PaymentController::class, 'storePayment'])->name('payment.store');
-    Route::get('update-payment/{id}', [PaymentController::class, 'updatePayment'])->name('updatePayment');
-    Route::put('editPayment/{id}', [PaymentController::class, 'update'])->name('payment.update');
-    Route::delete('deletePayment/{id}', [PaymentController::class, 'destroy'])->name('payment.destroy');
     });
 });
-
 Route::get('/',[PageController :: class,'storeHome'])->name('storeHome');
 Route::get('/product/{id}', [ProductController::class, 'show'])->name('product.detail');
 Route::get('list-product',[PageController :: class,'storeListProduct'])->name('storeListProduct');
@@ -155,9 +123,10 @@ Route::get('store-contact',[PageController :: class,'storeContact'])->name('stor
 Route::get('store-tetimonial',[PageController :: class,'storeTestimonial'])->name('storeTestimonial');
 
 
+Route::delete('remove-item-cart-detail/{product_id}', [CartController::class, 'removeItemCartDetail'])->name('removeItemCartDetail');
+Route::delete('remove-item-cart/{product_variant_id}', [CartController::class, 'removeItemCart'])->name('removeItemCart');
 Route::post('add-to-cart',[CartController :: class,'addToCart'])->name('addToCart');
 Route::get('store-list-cart',[PageController :: class,'storeListCart'])->name('storeListCart');
-
 Route::get('store-checkout',[PageController :: class,'storeCheckout'])->name('storeCheckout');
 
 Route::get('/user/profile', [UserProfileController::class, 'index'])->name('user.profile');
@@ -171,4 +140,9 @@ Route::get('/user/login', [AuthenController::class, 'loginHome'])->name('user.lo
 Route::get('/user/register', [AuthenController::class, 'registerHome'])->name('user.register');
 Route::post('/user/login', [AuthenController::class, 'postLogin'])->name('user.postLogin');
 Route::get('/user/forgot-password', [AuthenController::class, 'forgotPassword'])->name('user.forgot-password');
+Route::post('/user/logout', [AuthenController::class, 'logoutUser'])->name('logoutUser');
 
+// địa chỉ người dùng
+Route::delete('/address/{id}', [AuthenController::class, 'destroy'])->name('address.destroy');
+Route::post('/address', [AuthenController::class, 'store'])->name('address.store');
+Route::post('add-order', [AuthenController::class, 'AddOrder'])->name('AddOrder');

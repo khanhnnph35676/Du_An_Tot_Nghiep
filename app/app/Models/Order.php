@@ -8,19 +8,20 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Order extends Model
 {
     use HasFactory,SoftDeletes;
-    protected $table = 'order';
+    protected $table = 'orders';
     public $fillable =[
-        'name',
-        'product_id',
         'payment_id',
         'status',
+        'sum_price',
+        'address_id'
     ];
-    public function products()
+    public function address()
     {
-        return $this->belongsTo(Product::class, 'product_id','id');
+        return $this->belongsTo(Address::class, 'address_id','id');
     }
     public function payments()
     {
         return $this->belongsTo(Product::class, 'payment_id','id');
     }
+
 }
