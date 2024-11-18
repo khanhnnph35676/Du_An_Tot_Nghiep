@@ -118,7 +118,32 @@ Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
     Route::get('/testimonials/{id}/edit', [TestimonialController::class, 'editTestimonial'])->name('editTestimonial');
     Route::put('/testimonials/{id}', [TestimonialController::class, 'updateTestimonial'])->name('updateTestimonial');
     Route::delete('/testimonials/{id}', [TestimonialController::class, 'deleteTestimonial'])->name('deleteTestimonial');
+    // quản lý blog
+    Route::get('/blog', [BlogController::class, 'index'])->name('blog.list'); // Lấy danh sách Blog
+    Route::post('/submit-add-blog', [BlogController::class, 'submit_add_blog']); // Thêm blog
+    Route::post('/submit-edit-blog/{idBlog}', [BlogController::class, 'submit_edit_blog'])->name('blog.submit-edit-blog');; // Sửa blog
+    Route::get('/edit-blog/{idBlog}', [BlogController::class, 'edit_blog'])->name('blog.edit_blog'); // Cập nhật
+    Route::delete('/admin/blog/{id}', [BlogController::class, 'destroy'])->name('blog.delete'); // Xóa Blog
+    Route::get('/admin/blog/{BlogSlug}', [BlogController::class, 'blog_details'])->name('blog.blog_details'); // Xem chi tiết blog
+    
+    // Route::put('/admin/blog/{id}/update', [BlogController::class, 'updateBlog'])->name('blog.update'); // Update blog 
 
+
+
+    // Route::get('/blog-category', [BlogController::class, 'category'])->name('blog.category'); // Lấy danh mục blog
+    // Route::get('/blog-category-with-blog/{id}', [BlogController::class, 'categoryWithBlog'])->name('blog.category.list');// Lấy danh mục blog và tên blog
+    // Route::post('storeBlog', [BlogController::class, 'storeBlog'])->name('blog.store'); //Lưu danh mục blog
+    // Route::put('editBlog/{id}', [BlogController::class, 'update'])->name('blog.category.update');// Sửa tên danh mục category
+    // Route::delete('blog-categories-destroy/{id}', [BlogController::class, 'Blog_categories_destroy'])->name('blog.categories.destroy');//Xóa danh mục Blog
+    
+
+    // quản lý testimonial
+    Route::get('/testimonials', [TestimonialController::class, 'index'])->name('admin.testimonials.list');
+    Route::get('create-payments', [PaymentController::class, 'createPayment'])->name('createPayment');
+    Route::post('storePayment', [PaymentController::class, 'storePayment'])->name('payment.store');
+    Route::get('update-payment/{id}', [PaymentController::class, 'updatePayment'])->name('updatePayment');
+    Route::put('editPayment/{id}', [PaymentController::class, 'update'])->name('payment.update');
+    Route::delete('deletePayment/{id}', [PaymentController::class, 'destroy'])->name('payment.destroy');
     });
 });
 
