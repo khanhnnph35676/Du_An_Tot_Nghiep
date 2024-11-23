@@ -5,7 +5,9 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\Address;
 use App\Models\ProductVariant;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class PageController extends Controller
@@ -60,15 +62,25 @@ class PageController extends Controller
     }
     public function storeCheckout(){
         $cart = session()->get('cart', []);
-        return view('user.cart.checkout');
+        $products = Product::get();
+        $address = Address::where('user_id',Auth::user()->id)->get();
+        $productVariants = ProductVariant::get();
+        return view('user.cart.checkout')->with([
+            'address' => $address,
+            'cart' => $cart,
+            'products' => $products,
+            'productVariants' => $productVariants
+        ]);
     }
     public function storeTestimonial(){
         $cart = session()->get('cart', []);
-        return view('user.testimonial');
+        return view('user.testimonial')->with([
+            'cart' => $cart]);;
     }
     public function storeContact(){
         $cart = session()->get('cart', []);
-        return view('user.contact');
+        return view('user.contact')->with([
+            'cart' => $cart]);;
     }
 
 }
