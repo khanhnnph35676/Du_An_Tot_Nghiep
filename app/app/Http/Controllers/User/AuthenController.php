@@ -28,16 +28,18 @@ class AuthenController extends Controller
         return view('admin.login');
     }
 
-    public function postLogin(Request $request)
+    public function postLoginAdmin(Request $request)
     {
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
-            if(Auth::user()->rule_id == 1){
-                return redirect()->intended('admin');
-            }
             if(Auth::user()->rule_id == 2){
                 return redirect()->intended('');
+            }
+            if(Auth::user()->rule_id == 2){
+                return redirect()->intended('admin.login')->with([
+                    'message' => 'Tài khoản không tồn tài'
+                ]);
             }
         }
         return back()->withErrors([
@@ -132,6 +134,24 @@ class AuthenController extends Controller
     {
         return view('user.login');
     }
+    public function postLogin(Request $request)
+    {
+        $credentials = $request->only('email', 'password');
+
+        if (Auth::attempt($credentials)) {
+            if(Auth::user()->rule_id == 1){
+                return redirect()->intended('admin');
+            }
+            if(Auth::user()->rule_id == 2){
+                return redirect()->intended('loginHome')->with([
+                    'message' => 'Tài khoản không tồn tài'
+                ]);
+            }
+        }
+        return back()->withErrors([
+            'email' => 'The provided credentials do not match our records.',
+        ]);
+    }
     public function registerHome()
     {
         return view('user.register');
@@ -170,17 +190,23 @@ class AuthenController extends Controller
         return response()->json(['success' => true, 'message' => 'Địa chỉ mới đã được lưu']);
     }
     // Mua sản phẩm
+
     public function AddOrder(Request $request)
     {
         // $request->validate([
         //     'sum_price' => 'required',
         //     'address_id' => 'required'
         // ]);
+        function generateRandomCode($length = 8) {
+            return strtoupper(substr(md5(uniqid(rand(), true)), 0, $length));
+        }
+
         $order = [
             'payment_id' => 1,
             'status' => 1,
             'sum_price' => $request->sum_price,
-            'address_id' => $request->selected_address
+            'address_id' => $request->selected_address,
+            'order_code'=> generateRandomCode(),
         ];
 
         $addOrder = Order::create($order);
@@ -199,6 +225,7 @@ class AuthenController extends Controller
                     'product_id' => $value['product_id'],
                     'product_variant_id' =>  $value['product_variant_id'],
                     'quantity' => $value['qty'],
+                    'price' => $request->price
                 ];
                 // Tạo một bản ghi mới cho mỗi sản phẩm
                 ProductOder::create($products);

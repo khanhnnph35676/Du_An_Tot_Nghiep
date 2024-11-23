@@ -9,6 +9,7 @@ class UserProfileController extends Controller
     public function index()
     {
         // Dữ liệu cho testimonials
+        $cart = session()->get('cart', []);
         $testimonials = [
             (object)[
                 'content' => 'Lorem Ipsum is simply dummy text...',
@@ -27,6 +28,6 @@ class UserProfileController extends Controller
             // Thêm các testimonial khác...
         ];
 
-        return view('user.profile', compact('testimonials'));
+        return view('user.profile', compact('testimonials','cart'));
     }
 }

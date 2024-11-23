@@ -170,6 +170,8 @@
                                                             <td>
                                                                 <p class="mb-0 mt-4">
                                                                     {{ number_format($productVariant->price) }}</p>
+                                                                <input type="text" name='price'
+                                                                    value="{{ $productVariant->price }}" hidden>
                                                             </td>
                                                             <td>
                                                                 <div class="input-group quantity mt-4"
@@ -271,7 +273,7 @@
                             </div>
                         </div>
                         @php
-                            // print_r($cart);
+                            print_r($cart);
                         @endphp
                         <input type="text" name='sum_price' value="{{ $sumPrice + 15000 }}" hidden>
                         <div class="row g-4 text-center align-items-center justify-content-center pt-4">

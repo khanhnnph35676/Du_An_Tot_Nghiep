@@ -26,7 +26,7 @@
                          class="icon icon-chart-bar-33"></i><span class="nav-text">Customer</span></a>
                  <ul aria-expanded="false">
                      <li><a href="{{route('admin.listCustomer')}}">All Customers</a></li>
-                     <li><a href="{{route('admin.listTestimonial')}}">Testimonial Manager</a></li>
+                     {{-- <li><a href="{{route('admin.listTestimonial')}}">Testimonial Manager</a></li> --}}
                  </ul>
              </li>
              {{-- Danh mục quản lý cửa hàng: Sản phẩm order, Giảm giá, Phương thức thanh toán, Thống kê  --}}

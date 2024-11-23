@@ -20,7 +20,7 @@ use App\Http\Controllers\User\PageController;
 use App\Http\Controllers\User\AuthenController;
 
 Route::get('login-admin', [AuthenController::class, 'loginAdmin'])->name('loginAdmin');
-Route::post('login-admin', [AuthenController::class, 'postLogin'])->name('postLogin');
+Route::post('login-admin', [AuthenController::class, 'postLoginAdmin'])->name('postLogin');
 Route::get('register-admin', [AuthenController::class, 'registerAdmin'])->name('registerAdmin');
 Route::post('register-admin', [AuthenController::class, 'postRegister'])->name('postRegister');
 
@@ -67,6 +67,11 @@ Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
     // Trang danh mục
     Route::resource('categories', CategoryController::class);
     Route::get('list-categories',[CategoryController::class,'listCategories'])->name('listCategories');
+    Route::get('list-categories-deleted',[CategoryController::class,'listDeletedCategories'])->name('categories.deleted');
+    Route::post('restore-categories',[CategoryController::class,'restore'])->name('categories.restore');
+    Route::delete('delete-categories',[CategoryController::class,'forceDestroy'])->name('categories.forceDestroy');
+    Route::get('categorie-edit/{id}',[CategoryController::class,'editCategory'])->name('categories.edit');
+    Route::patch('categorie-edit/{id}',[CategoryController::class,'pathchEditCategory'])->name('categories.update');
 
     // Trang customer
     Route::get('list-customer', [CustomerController::class, 'listCustomer'])->name('listCustomer');

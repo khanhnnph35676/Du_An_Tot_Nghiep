@@ -9,17 +9,30 @@ use Illuminate\Http\Request;
 class CategoryController extends Controller
 {
     public function index()
-{
-    return $this->listCategories();
-}
-
+    {
+        return $this->listCategories();
+    }
     public function listCategories()
     {
         // Lấy tất cả các category chưa bị xóa
         $categories = Category::whereNull('deleted_at')->get();
         return view('admin.category.list', compact('categories'));
     }
-
+    public function editCategory($id){
+        $category = Category::find($id);
+        return view('admin.category.edit', compact('category'));
+    }
+    public function pathchEditCategory(Request $request, $id){
+        $categorie = Category::find($id);
+        $imagePath = $request->hasFile('image') ? $request->file('image')->store('images', 'public') : $categorie->image;
+        $category=[
+            'name' => $request->name,
+            'describe' => $request->describe,
+            'image' => $imagePath
+        ];
+        $categorie->update($category);
+        return redirect()->route('admin.categories.index')->with('success', 'Sửa danh mục thành công');
+    }
     public function listDeletedCategories()
     {
         // Lấy tất cả các category đã bị xóa (xóa mềm)
@@ -62,7 +75,7 @@ class CategoryController extends Controller
             return redirect()->route('admin.categories.deleted')
                              ->with('success', 'Category restored successfully!');
         }
-    
+
         return redirect()->route('admin.categories.deleted')->with('error', 'Category not found.');
     }
 
@@ -77,6 +90,6 @@ class CategoryController extends Controller
 
         return redirect()->route('admin.categories.deleted')->with('error', 'Category not found.');
     }
-    
-    
+
+
 }

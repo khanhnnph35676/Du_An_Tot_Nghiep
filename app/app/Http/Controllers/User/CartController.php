@@ -23,7 +23,7 @@ class CartController extends Controller
             'user_id' => $user_id,
             'product_variant_id' => $request->product_variant_id,
             'product_id' => $request->product_id,
-            'qty' => (int)$request->qty
+            'qty' => (int)$request->qty,
         ];
         $cart = session()->get('cart', []);
         $productExists = false;

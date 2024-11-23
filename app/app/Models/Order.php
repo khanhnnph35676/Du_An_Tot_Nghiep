@@ -13,7 +13,8 @@ class Order extends Model
         'payment_id',
         'status',
         'sum_price',
-        'address_id'
+        'address_id',
+        'order_code'
     ];
     public function address()
     {

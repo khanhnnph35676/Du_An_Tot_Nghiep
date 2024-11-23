@@ -150,7 +150,7 @@ class ProductController extends Controller
                 }
             }
         }
-        return redirect()->route('admin.listProducts')->with([
+        return redirect()->back()->with([
             'message' => 'Sửa sản phẩm thành công'
         ]);
     }
@@ -364,7 +364,7 @@ class ProductController extends Controller
             }
         }
 
-        return redirect()->route('admin.listProducts')->with([
+        return redirect()->back()->with([
             'message' => 'Sửa sản phẩm thành công'
         ]);
     }

@@ -13,19 +13,22 @@ class OrderController extends Controller
 {
     // giao diện
     public function listOrders(){
-        $orderLists = OrderList::with('orders','orders.address' ,'users')->get();
+        $orderLists = OrderList::with('orders','orders.address' ,'users')
+        ->orderBy('id', 'desc')
+        ->get();
         return view('admin.order.list')->with([
             'orderLists' => $orderLists
         ]);
     }
     public function orderDetail($order_id){
         if(Auth::check()){
-            $orderLists = OrderList::with('orders','orders.address' ,'users')
-                        ->where('user_id',Auth::user()->id)->get();
-            $data =  ProductOder::with('products','product_variants')->where('order_id',$order_id)->get();
+            $orderList = OrderList::with(['orders', 'orders.address', 'users'])
+            ->where('order_id', $order_id)
+            ->get();
+            $data = ProductOder::with('products','product_variants')->where('order_id',$order_id)->get();
         }
         return view('admin.order.detail')->with([
-            'orderLists' => $orderLists,
+            'orderList' => $orderList,
             'data' => $data
         ]);
     }
@@ -39,5 +42,5 @@ class OrderController extends Controller
             'message' => 'Sửa trạng thái thành công'
         ]);
     }
-    
+
 }
