@@ -95,58 +95,114 @@
                     <div class="status-title" onclick="toggleOrderDetails('delivered')">Đã Giao</div>
                     <div class="status-title" onclick="toggleOrderDetails('cancelled')">Đã Hủy</div>
                 </div>
-
+                @foreach ($orderLists as $value)
                 <!-- Chi tiết đơn hàng -->
                 <div id="pending" class="order-details">
-                    <div class="order-item">
-                        <img src="https://via.placeholder.com/150" alt="Sản phẩm 1">
-                        <span class="status-title">Đơn Hàng #12345</span>
-                        <a href="#" class="view-details">Xem Chi Tiết</a>
-                    </div>
-                    <div class="order-item">
-                        <img src="https://via.placeholder.com/150" alt="Sản phẩm 2">
-                        <span class="status-title">Đơn Hàng #12351</span>
-                        <a href="#" class="view-details">Xem Chi Tiết</a>
-                    </div>
+                        @if ($value->orders->status == 1)
+                        <h3>Đơn {{$value->order_id }}  <a href="#" class="view-details">Xem Chi Tiết</a></h3>
+                        Tổng giá:{{number_format($value->orders->sum_price) }} vnđ <br>
+                        Phí ship: 15,000 vnđ
+                        <br>
+                            @foreach ($productOrders as $item)
+                                <div class="order-item">
+                                    <img src="{{ asset($item->product_variants->image) }}"
+                                    style="width: 150px; height: 150px; object-fit: cover;" alt="">
+                                    <br>
+                                    {{ $item->products->name . ' - ' . $item->product_variants->sku }}
+                                    <br>
+                                    Số lượng: {{ $item->quantity }}
+                                    Giá: {{ number_format($item->product_variants->price) }} vnđ
+                                    <br>
+                                </div>
+                            @endforeach
+                        @endif
                 </div>
 
                 <div id="awaiting" class="order-details">
-                    <div class="order-item">
-                        <img src="https://via.placeholder.com/150" alt="Sản phẩm 3">
-                        <span class="status-title">Đơn Hàng #12346</span>
-                        <a href="#" class="view-details">Xem Chi Tiết</a>
-                    </div>
+                    @if ($value->orders->status == 2)
+                    <h3>Đơn {{$value->order_id }}  <a href="#" class="view-details">Xem Chi Tiết</a></h3>
+                    Tổng giá:{{number_format($value->orders->sum_price) }} vnđ <br>
+                    Phí ship: 15,000 vnđ
+                    <br>
+                        @foreach ($productOrders as $item)
+                            <div class="order-item">
+                                <img src="{{ asset($item->product_variants->image) }}"
+                                style="width: 150px; height: 150px; object-fit: cover;" alt="">
+                                <br>
+                                {{ $item->products->name . ' - ' . $item->product_variants->sku }}
+                                <br>
+                                Số lượng: {{ $item->quantity }}
+                                Giá: {{ number_format($item->product_variants->price) }} vnđ
+                                <br>
+                            </div>
+                        @endforeach
+                    @endif
                 </div>
 
                 <div id="shipping" class="order-details">
-                    <div class="order-item">
-                        <img src="https://via.placeholder.com/150" alt="Sản phẩm 4">
-                        <span class="status-title">Đơn Hàng #12347</span>
-                        <a href="#" class="view-details">Xem Chi Tiết</a>
-                    </div>
+                    @if ($value->orders->status == 3)
+                    <h3>Đơn {{$value->order_id }}  <a href="#" class="view-details">Xem Chi Tiết</a></h3>
+                    Tổng giá:{{number_format($value->orders->sum_price) }} vnđ <br>
+                    Phí ship: 15,000 vnđ
+                    <br>
+                        @foreach ($productOrders as $item)
+                            <div class="order-item">
+                                <img src="{{ asset($item->product_variants->image) }}"
+                                style="width: 150px; height: 150px; object-fit: cover;" alt="">
+                                <br>
+                                {{ $item->products->name . ' - ' . $item->product_variants->sku }}
+                                <br>
+                                Số lượng: {{ $item->quantity }}
+                                Giá: {{ number_format($item->product_variants->price) }} vnđ
+                                <br>
+                            </div>
+                        @endforeach
+                    @endif
                 </div>
 
                 <div id="delivered" class="order-details">
-                    <div class="order-item">
-                        <img src="https://via.placeholder.com/150" alt="Sản phẩm 5">
-                        <span class="status-title">Đơn Hàng #12348</span>
-                        <a href="#" class="view-details">Xem Chi Tiết</a>
-                    </div>
-                    <div class="order-item">
-                        <img src="https://via.placeholder.com/150" alt="Sản phẩm 6">
-                        <span class="status-title">Đơn Hàng #12349</span>
-                        <a href="#" class="view-details">Xem Chi Tiết</a>
-                    </div>
+                    @if ($value->orders->status == 4)
+                    <h3>Đơn {{$value->order_id }}  <a href="#" class="view-details">Xem Chi Tiết</a></h3>
+                    Tổng giá:{{number_format($value->orders->sum_price) }} vnđ <br>
+                    Phí ship: 15,000 vnđ
+                    <br>
+                        @foreach ($productOrders as $item)
+                            <div class="order-item">
+                                <img src="{{ asset($item->product_variants->image) }}"
+                                style="width: 150px; height: 150px; object-fit: cover;" alt="">
+                                <br>
+                                {{ $item->products->name . ' - ' . $item->product_variants->sku }}
+                                <br>
+                                Số lượng: {{ $item->quantity }}
+                                Giá: {{ number_format($item->product_variants->price) }} vnđ
+                                <br>
+                            </div>
+                        @endforeach
+                    @endif
                 </div>
 
                 <div id="cancelled" class="order-details">
-                    <div class="order-item">
-                        <img src="https://via.placeholder.com/150" alt="Sản phẩm 7">
-                        <span class="status-title">Đơn Hàng #12350</span>
-                        <a href="#" class="view-details">Xem Chi Tiết</a>
-                    </div>
+                    @if ($value->orders->status == 5)
+                    <h3>Đơn {{$value->order_id }}  <a href="#" class="view-details">Xem Chi Tiết</a></h3>
+                    Tổng giá:{{number_format($value->orders->sum_price) }} vnđ <br>
+                    Phí ship: 15,000 vnđ
+                    <br>
+                        @foreach ($productOrders as $item)
+                            <div class="order-item">
+                                <img src="{{ asset($item->product_variants->image) }}"
+                                style="width: 150px; height: 150px; object-fit: cover;" alt="">
+                                <br>
+                                {{ $item->products->name . ' - ' . $item->product_variants->sku }}
+                                <br>
+                                Số lượng: {{ $item->quantity }}
+                                Giá: {{ number_format($item->product_variants->price) }} vnđ
+                                <br>
+                            </div>
+                        @endforeach
+                    @endif
                 </div>
             </div>
+            @endforeach
         </div>
     </div>
     <!-- Order History End -->

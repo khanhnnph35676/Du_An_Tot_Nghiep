@@ -6,23 +6,20 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
-        Schema::create('blog_categories', function (Blueprint $table) {
-            $table->id();
-            $table->string('blog_categories_name');
-            $table->timestamps();
+        Schema::table('address', function (Blueprint $table) {
+            $table->string('home_address');
+
         });
     }
-
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('blog_categories');
+        Schema::table('address', function (Blueprint $table) {
+            $table->dropColumn('home_address');
+        });
     }
 };
