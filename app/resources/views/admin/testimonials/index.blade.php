@@ -32,7 +32,6 @@
                                         <p class="testimonial-content">{{ $testimonial->description }}</p>
                                         <!-- Hiển thị tên người dùng -->
                                         <h5>By: {{ $testimonial->user->name }}</h5>
-
                                         <!-- Hiển thị ảnh sản phẩm nếu có -->
                                         @if($testimonial->product_id)
                                             <?php $product = \App\Models\Product::find($testimonial->product_id); ?>

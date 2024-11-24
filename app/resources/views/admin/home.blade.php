@@ -528,7 +528,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-xl-3 col-lg-6 col-sm-6 col-xxl-6 col-md-6">
+                                                        <div class="col-xl-3 col-lg-6 col-sm-6 col-xxl-6 col-md-6">
                                 <div class="card">
                                     <div class="social-graph-wrapper widget-googleplus">
                                         <span class="s-icon"><i class="fa fa-google-plus"></i></span>

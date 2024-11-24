@@ -45,7 +45,6 @@ class Testimonial extends Model
     {
         return $this->deleted_at ? $this->deleted_at->format('d-m-Y H:i:s') : null;
     }
-
     /**
      * Các trường ngày tháng sẽ được tự động chuyển thành Carbon instance.
      */

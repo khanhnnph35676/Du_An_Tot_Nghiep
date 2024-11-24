@@ -32,7 +32,6 @@
                                     <label for="description">Description</label>
                                     <textarea class="form-control" id="description" name="description" rows="3" required>{{ old('description', $testimonial->description) }}</textarea>
                                 </div>
-                                
                                 <div class="form-group">
                                     <label for="user_id">User</label>
                                     <select class="form-control" id="user_id" name="user_id" required>

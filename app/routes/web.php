@@ -110,7 +110,7 @@ Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
     Route::get('/blog-category-with-blog/{id}', [BlogController::class, 'categoryWithBlog'])->name('blog.category.list');// Lấu danh mục blog và tên blog
     Route::post('storeBlog', [BlogController::class, 'storeBlog'])->name('blog.store'); //Lưu danh mục blog
     Route::put('editBlog/{id}', [BlogController::class, 'update'])->name('blog.category.update');// Sửa tên danh mục category
-   
+    
     // Quản lý Testimonials
     Route::get('/testimonials', [TestimonialController::class, 'listTestimonial'])->name('listTestimonial');
     Route::get('/testimonials/create', [TestimonialController::class, 'createTestimonial'])->name('createTestimonial');

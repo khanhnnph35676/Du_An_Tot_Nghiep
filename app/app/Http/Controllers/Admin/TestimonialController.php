@@ -89,7 +89,6 @@ class TestimonialController extends Controller
             'star' => $validatedData['star'],
             'status' => $validatedData['status'],
         ]);
-
         // Nếu có thay đổi ảnh, xử lý
         if ($request->hasFile('image')) {
             // Xóa ảnh cũ nếu có
