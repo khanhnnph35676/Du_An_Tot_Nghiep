@@ -118,7 +118,6 @@ Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
     Route::get('/testimonials/{id}/edit', [TestimonialController::class, 'editTestimonial'])->name('editTestimonial');
     Route::put('/testimonials/{id}', [TestimonialController::class, 'updateTestimonial'])->name('updateTestimonial');
     Route::delete('/testimonials/{id}', [TestimonialController::class, 'deleteTestimonial'])->name('deleteTestimonial');
-
     });
 });
 
