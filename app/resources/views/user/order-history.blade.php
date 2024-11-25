@@ -91,8 +91,6 @@
             <li class="breadcrumb-item active text-white">Đơn hàng</li>
         </ol>
     </div>
-    <!-- Single Page Header End -->
-
     <!-- Order History Start -->
     @php
         $count = 0;
@@ -105,6 +103,17 @@
         @endif
     @endforeach
     <div class="container py-5">
+        <!-- Single Page Header End -->
+        @if (session('message'))
+            <div class="message">
+                <div class="alert alert-primary alert-dismissible alert-alt solid fade show">
+                    @if (session('message'))
+                        <strong>{{ session('message') }}</strong>
+                    @endif
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            </div>
+        @endif
         <div class="row">
             <div class="col-3">
                 <ul class="side-bar border rounded p-1">
@@ -137,8 +146,8 @@
                                             nhận</strong>
                                     </li>
                                     <li> Địa chỉ:
-                                        @if ($value->orders->address)
-                                            {{-- {{$value->orders->address->home_address . ', ' . $value->orders->address->address}} --}}
+                                        @if (isset($value->orders->address))
+                                            {{ $value->orders->address->home_address . ', ' . $value->orders->address->address }}
                                         @endif
                                     </li>
                                     <li> Phí vận chuyển: 15,000 vnđ</li>
@@ -146,15 +155,33 @@
                                 </ul>
                                 <div class="border p-2 rounded d-flex gap-2">
                                     @foreach ($productOrders as $item)
-                                        @if ($item->order_id == $value->order_id)
-                                            <div class="order-item">
-                                                <img src="{{ asset($item->product_variants->image) }}"
-                                                    style="width: 70px; height: 70px; object-fit: cover;" alt="">
-                                                <p class="text-start m-0">
-                                                    {{ $item->products->name . ' - ' . $item->product_variants->sku }}</p>
-                                                <p class="text-start m-0">Số lượng: {{ $item->quantity }} </p>
-                                                <p class="text-start m-0">Giá: {{ number_format($item->price) }} vnđ</p>
-                                            </div>
+                                        @if ($item->product_variant_id == null)
+                                            @if ($item->order_id == $value->order_id)
+                                                <div class="order-item">
+                                                    <img src="{{ asset($item->products->image) }}"
+                                                        style="width: 70px; height: 70px; object-fit: cover;"
+                                                        alt="">
+                                                    <p class="text-start m-0">
+                                                        {{ $item->products->name }}</p>
+                                                    <p class="text-start m-0">Số lượng: {{ $item->quantity }} </p>
+                                                    <p class="text-start m-0">Giá: {{ number_format($item->price) }} vnđ
+                                                    </p>
+                                                </div>
+                                            @endif
+                                        @else
+                                            @if ($item->order_id == $value->order_id)
+                                                <div class="order-item">
+                                                    <img src="{{ asset($item->product_variants->image) }}"
+                                                        style="width: 70px; height: 70px; object-fit: cover;"
+                                                        alt="">
+                                                    <p class="text-start m-0">
+                                                        {{ $item->products->name }} -
+                                                        {{ $item->product_variants->sku }}</p>
+                                                    <p class="text-start m-0">Số lượng: {{ $item->quantity }} </p>
+                                                    <p class="text-start m-0">Giá: {{ number_format($item->price) }} vnđ
+                                                    </p>
+                                                </div>
+                                            @endif
                                         @endif
                                     @endforeach
                                 </div>
@@ -276,7 +303,7 @@
                                         <strong class="ms-3 border rounded p-1 text-dark fs-6 bg-danger">Đã huỷ</strong>
                                     </li>
                                     <li> Địa chỉ:
-                                        {{ $value->orders->address->home_address . ', ' . $value->orders->address->address }}
+                                        {{-- {{ $value->orders->address->home_address . ', ' . $value->orders->address->address }} --}}
                                     </li>
                                     <li> Phí vận chuyển: 15,000 vnđ</li>
                                     <li> <strong> Tổng giá: {{ number_format($value->orders->sum_price) }} vnđ</strong>
@@ -343,7 +370,7 @@
 
                 // Hiển thị chi tiết đơn hàng tương ứng
                 const selectedDetails = document.getElementById(status);
-                selectedDetails.style.display = 'flex';
+                selectedDetails.style.display = 'block';
 
                 // Ẩn các mục khác khi click vào một mục mới
                 const statusTitles = document.querySelectorAll('.status-title');

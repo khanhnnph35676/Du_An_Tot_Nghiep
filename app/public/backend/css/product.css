@@ -148,3 +148,7 @@
     border: 0;
     transition: all .2s ease;
   }
+
+  .side-bar{
+    max-height: 200px;
+  }

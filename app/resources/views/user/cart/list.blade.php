@@ -38,14 +38,14 @@
                     </thead>
                     <tbody>
                         @php
-                            // print_r($cart);
+                            print_r($cart);
                             // print_r(Auth::user()->rule_id );
                             $price = 0;
                         @endphp
                         @if (Auth::user())
                             @foreach ($products as $product)
                                 @foreach ($cart as $item)
-                                    @if ($product->id == $item['product_id'] && $product->type === '1' && Auth::id() == $item['user_id'])
+                                    @if ($product->type == 1 && $item['product_variant_id'] == '' && $product->id == $item['product_id'])
                                         <tr>
                                             <th scope="row">
                                                 <div class="d-flex align-items-center">
@@ -153,7 +153,7 @@
                         @else
                             @foreach ($products as $product)
                                 @foreach ($cart as $item)
-                                    @if ($product->id == $item['product_id'] && $product->type === '1' && Auth::id() != $item['user_id'])
+                                    @if ($product->type == 1 && $item['product_variant_id'] == '' && $product->id == $item['product_id'])
                                         <tr>
                                             <th scope="row">
                                                 <div class="d-flex align-items-center">
@@ -294,13 +294,14 @@
                             @endforeach
                         @endif
                         @if (Auth::check())
-                            @if (Auth::user()->id && $hasEmptyUserId = false)
+                            @if (Auth::user()->id && ($hasEmptyUserId = false))
                                 <a href=""
                                     class="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4">
                                     Proceed Checkout
                                 </a>
-                            @elseif(Auth::user()->id && $hasEmptyUserId = true)
-                                <a href="{{route('storeCheckout')}}" class="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4">
+                            @elseif(Auth::user()->id && ($hasEmptyUserId = true))
+                                <a href="{{ route('storeCheckout') }}"
+                                    class="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4">
                                     Proceed Checkout
                                 </a>
                             @else
