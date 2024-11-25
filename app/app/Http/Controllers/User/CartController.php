@@ -23,8 +23,16 @@ class CartController extends Controller
             'user_id' => $user_id,
             'product_variant_id' => $request->product_variant_id,
             'product_id' => $request->product_id,
-            'qty' => (int)$request->qty
+            'qty' => (int)$request->qty,
         ];
+        $product_variant = ProductVariant::find($request->product_variant_id);
+        if ($product_variant && $product_variant->stock > 0) {
+            $product_variant->stock -= 1;
+            $product_variant->save();
+        } else {
+            // Nếu không có đủ sản phẩm trong kho, bạn có thể thông báo lỗi
+            return response()->json(['error' => 'Sản phẩm không đủ số lượng.'], 400);
+        }
         $cart = session()->get('cart', []);
         $productExists = false;
         foreach ($cart as $index => $item) {

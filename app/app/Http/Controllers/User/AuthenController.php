@@ -28,7 +28,7 @@ class AuthenController extends Controller
         return view('admin.login');
     }
 
-    public function postLogin(Request $request)
+    public function postLoginAdmin(Request $request)
     {
         $credentials = $request->only('email', 'password');
 
@@ -37,7 +37,9 @@ class AuthenController extends Controller
                 return redirect()->intended('admin');
             }
             if(Auth::user()->rule_id == 2){
-                return redirect()->intended('');
+                return redirect()->back()->with([
+                    'message' => 'Tài khoản không tồn tài'
+                ]);
             }
         }
         return back()->withErrors([
@@ -132,6 +134,24 @@ class AuthenController extends Controller
     {
         return view('user.login');
     }
+    public function postLogin(Request $request)
+    {
+        $credentials = $request->only('email', 'password');
+
+        if (Auth::attempt($credentials)) {
+            if(Auth::user()->rule_id == 2){
+                return redirect()->intended('');
+            }
+            if(Auth::user()->rule_id == 1){
+                return redirect()->back()->with([
+                    'message' => 'Tài khoản không tồn tài'
+                ]);
+            }
+        }
+        return back()->withErrors([
+            'email' => 'The provided credentials do not match our records.',
+        ]);
+    }
     public function registerHome()
     {
         return view('user.register');
@@ -167,47 +187,8 @@ class AuthenController extends Controller
             'home_address' => $request->home_address,
             'user_id' => Auth::user()->id
         ]);
-        return response()->json(['success' => true, 'message' => 'Địa chỉ mới đã được lưu']);
-    }
-    // Mua sản phẩm
-    public function AddOrder(Request $request)
-    {
-        // $request->validate([
-        //     'sum_price' => 'required',
-        //     'address_id' => 'required'
-        // ]);
-        $order = [
-            'payment_id' => 1,
-            'status' => 1,
-            'sum_price' => $request->sum_price,
-            'address_id' => $request->selected_address
-        ];
-
-        $addOrder = Order::create($order);
-        $orderList = [
-            'order_id' => $addOrder->id,
-            'user_id' => Auth::user()->id,
-        ];
-        OrderList::create($orderList);
-        // Lấy tất cả các sản phẩm
-
-        $cart = session()->get('cart', []);
-        foreach ($cart as $key => $value) {
-            if( Auth::user()->id == $value['user_id'] ) {
-                $products = [
-                    'order_id' => $addOrder->id,  // ID đơn hàng
-                    'product_id' => $value['product_id'],
-                    'product_variant_id' =>  $value['product_variant_id'],
-                    'quantity' => $value['qty'],
-                ];
-                // Tạo một bản ghi mới cho mỗi sản phẩm
-                ProductOder::create($products);
-                unset($cart[$key]);
-            }
-        }
-        session()->put('cart', $cart);
-        return redirect()->route('storeHome')->with([
-            'success' => 'Chúc mừng thanh toán thành công'
+        return redirect()->back()->with([
+            'message' => 'Thêm địa chỉ thành công'
         ]);
     }
 }

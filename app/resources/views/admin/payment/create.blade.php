@@ -26,46 +26,27 @@
 
             <div class="row">
                 <div class="col-12">
-                    <form action="{{route('admin.payment.store')}}" method="POST">
+                    <form action="{{route('admin.payment.store')}}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="card">
                             <div class="card-header">
                                 <h4 class="card-title">List of Payment method</h4>
                                 <div class="d-flex">
+                                    <a href="{{ route('admin.formPayment') }}" class="btn btn-dark mr-3">Back</a>
                                     <button type="submit" name="submit" class="btn btn-secondary">Save</button>
                                 </div>
                             </div>
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-8 p-3 mr-4  ml-4 border">
-                                        {{-- form thêm cho product --}}
-                                        <div class="form-group">
-                                            <label for="">User:</label>
-                                            <select class="form-select" aria-label="Default select example" name="user_id">
-                                                    <option selected>Choose user</option>
-                                                @foreach($users as $user)
-                                                    <option value="{{$user->id}}">{{$user->name}}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
                                         <div class="form-group">
                                             <label for="">Name:</label>
                                             <input class="form-control" type="text" placeholder="Name" name="name">
                                         </div>
                                         <div class="form-group">
-                                            <label for="">Account Payments:</label>
-                                            <input class="form-control" type="text" placeholder="Account Payments" name="account_payments">
+                                            <label for="imageUpload">Image:</label>
+                                            <input type="file" class="form-control-file" name="image" accept="image/*">
                                         </div>
-                                        <div class="form-group">
-                                            <label for="">Enabled:</label>
-                                            <select class="form-select" aria-label="Default select example" name="enable">
-                                                <option selected>Choose enable</option>
-                                                <option value="1">Yes</option>
-                                                <option value="2">No</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-3 p-3 border">
                                     </div>
                                 </div>
                             </div>

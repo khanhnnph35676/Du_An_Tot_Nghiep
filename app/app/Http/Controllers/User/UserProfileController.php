@@ -3,12 +3,14 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-
+use App\Models\OrderList;
 class UserProfileController extends Controller
 {
     public function index()
     {
+        $orderLists = OrderList::with('orders','orders.address' ,'users')->get();
         // Dữ liệu cho testimonials
+        $cart = session()->get('cart', []);
         $testimonials = [
             (object)[
                 'content' => 'Lorem Ipsum is simply dummy text...',
@@ -27,6 +29,6 @@ class UserProfileController extends Controller
             // Thêm các testimonial khác...
         ];
 
-        return view('user.profile', compact('testimonials'));
+        return view('user.profile', compact('testimonials','cart','orderLists'));
     }
 }

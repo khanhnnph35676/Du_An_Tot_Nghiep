@@ -21,6 +21,18 @@
                     </ol>
                 </div>
             </div>
+            @if (session('message'))
+            <div class="message">
+                <div class="alert alert-primary alert-dismissible alert-alt solid fade show">
+                    <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close"><span><i
+                                class="mdi mdi-close"></i></span>
+                    </button>
+                    @if (session('message'))
+                        <strong>{{ session('message') }}</strong>
+                    @endif
+                </div>
+            </div>
+            @endif
             <!-- row -->
             <div class="row">
                 <div class="col-12">

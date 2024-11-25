@@ -10,14 +10,7 @@ class Payment extends Model
     use HasFactory,SoftDeletes;
     protected $table = 'payments';
     public $fillable =[
-        'user_id',
         'name',
-        'account_payments',
-        'enabled',
+        'image',
     ];
-
-    public function users()
-    {
-        return $this->belongsTo(User::class, 'user_id','id');
-    }
 }

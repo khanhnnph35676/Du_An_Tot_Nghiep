@@ -25,6 +25,18 @@
                     </div>
                 </div>
                 <!-- row -->
+                @if (session('message'))
+                <div class="message">
+                    <div class="alert alert-primary alert-dismissible alert-alt solid fade show">
+                        <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close"><span><i
+                                    class="mdi mdi-close"></i></span>
+                        </button>
+                        @if (session('message'))
+                            <strong>{{ session('message') }}</strong>
+                        @endif
+                    </div>
+                </div>
+            @endif
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
@@ -40,38 +52,32 @@
                                         <thead>
                                             <tr>
                                                 <th>ID</th>
-                                                <th>User Name</th>
                                                 <th>Name</th>
-                                                <th>Account Payments</th>
-                                                <th>Start Date</th>
-                                                <th>End date</th>
-                                                <th>Enable</th>
+                                                <th>Image</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @foreach($payments as $payment)
                                             <tr>
-                                                <td>{{$payment->id}}</td>
-                                                <td>{{$payment->users->name}}</td>
-                                                <td>{{$payment->name}}</td>
-                                                <td>{{$payment->account_payments}}</td>
-                                                <td>{{$payment->created_at}}</td>
-                                                <td>{{$payment->updated_at}}</td>
-                                                <td>{{$payment->enabled ? 'yes':'no'}}</td>
+                                                <td>{{ $payment->id }}</td>
+                                                <td>{{ $payment->name }}</td>
+                                                <td><img src="{{ Storage::url($payment->image) }}"
+                                                    style="width: 50px; height: 50px; object-fit: cover;"
+                                                    alt=""></td>
                                                 <td>
-                                                    <a href="{{ route('admin.updatePayment', $payment->id)}}" class="btn btn-success">Update</a>
-                                                    <form action="{{ route('admin.payment.destroy', $payment->id) }}" method="POST" style="display: inline-block;">  
+                                                    <a href="{{ route('admin.updatePayment', $payment->id)}}" class="btn btn-primary">Update</a>
+                                                    <form action="{{ route('admin.payment.destroy', $payment->id) }}" method="POST" style="display: inline-block;">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button type="submit" class="btn btn-danger" onclick="return confirm('Bạn có muốn xóa {{$payment->name}} (Mã: {{$payment->id}}) không???')">Delete</button>
+                                                        <button type="submit" class="btn btn-dark" onclick="return confirm('Bạn có muốn xóa {{$payment->name}} (Mã: {{$payment->id}}) không???')">Delete</button>
                                                     </form>
                                                 </td>
                                             </tr>
                                             @endforeach
                                         </tbody>
                                     </table>
-                                </div>  
+                                </div>
                             </div>
                         </div>
                     </div>
