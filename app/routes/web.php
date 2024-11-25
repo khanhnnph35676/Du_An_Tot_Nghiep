@@ -13,6 +13,8 @@ use App\Http\Controllers\Admin\TestimonialController;
 use App\Http\Controllers\User\UserProfileController;
 use App\Http\Controllers\User\UserOrderController;
 use App\Http\Controllers\User\CartController;
+use App\Http\Controllers\User\CheckoutController;
+
 
 // DDawng nhập, đăng kí, đăng xuất, quên mật khẩu
 //controller bên store
@@ -151,3 +153,6 @@ Route::post('/user/logout', [AuthenController::class, 'logoutUser'])->name('logo
 Route::delete('/address/{id}', [AuthenController::class, 'destroy'])->name('address.destroy');
 Route::post('/address', [AuthenController::class, 'store'])->name('address.store');
 Route::post('add-order', [AuthenController::class, 'AddOrder'])->name('AddOrder');
+
+Route::get('momo_payment', [CheckoutController::class, 'momoPayment'])->name('momoPayment');
+
