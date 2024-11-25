@@ -126,7 +126,7 @@
                                                         <th>Option Value</th>
                                                         <th>Image</th>
                                                         <th>Sku</th>
-                                                        <th>Stick</th>
+                                                        <th>Stock</th>
                                                         <th>Price</th>
                                                         <th>Action</th>
                                                     </tr>

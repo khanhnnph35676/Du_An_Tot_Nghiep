@@ -137,7 +137,9 @@
                                             nhận</strong>
                                     </li>
                                     <li> Địa chỉ:
-                                        {{ $value->orders->address->home_address . ', ' . $value->orders->address->address }}
+                                        @if ($value->orders->address)
+                                            {{-- {{$value->orders->address->home_address . ', ' . $value->orders->address->address}} --}}
+                                        @endif
                                     </li>
                                     <li> Phí vận chuyển: 15,000 vnđ</li>
                                     <li> <strong> Tổng giá: {{ number_format($value->orders->sum_price) }} vnđ</strong></li>
@@ -171,7 +173,7 @@
                                             hàng</strong>
                                     </li>
                                     <li> Địa chỉ:
-                                        {{ $value->orders->address->home_address . ', ' . $value->orders->address->address }}
+                                        {{-- {{ $value->orders->address->home_address . ', ' . $value->orders->address->address }} --}}
                                     </li>
                                     <li> Phí vận chuyển: 15,000 vnđ</li>
                                     <li> <strong> Tổng giá: {{ number_format($value->orders->sum_price) }} vnđ</strong>
@@ -206,7 +208,7 @@
                                             hàng</strong>
                                     </li>
                                     <li> Địa chỉ:
-                                        {{ $value->orders->address->home_address . ', ' . $value->orders->address->address }}
+                                        {{-- {{ $value->orders->address->home_address . ', ' . $value->orders->address->address }} --}}
                                     </li>
                                     <li> Phí vận chuyển: 15,000 vnđ</li>
                                     <li> <strong> Tổng giá: {{ number_format($value->orders->sum_price) }} vnđ</strong>
@@ -240,7 +242,7 @@
                                         <strong class="ms-3 border rounded p-1 text-dark fs-6 bg-primary">Đã giao</strong>
                                     </li>
                                     <li> Địa chỉ:
-                                        {{ $value->orders->address->home_address . ', ' . $value->orders->address->address }}
+                                        {{-- {{ $value->orders->address->home_address . ', ' . $value->orders->address->address }} --}}
                                     </li>
                                     <li> Phí vận chuyển: 15,000 vnđ</li>
                                     <li> <strong> Tổng giá: {{ number_format($value->orders->sum_price) }} vnđ</strong>
