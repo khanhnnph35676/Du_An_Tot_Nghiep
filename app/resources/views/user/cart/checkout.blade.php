@@ -102,8 +102,8 @@
                                     @if (Auth::check())
                                         @foreach ($products as $product)
                                             @foreach ($cart as $item)
-                                                @if ($product->id == $item['product_id'] && $product->type === '1' && Auth::id() == $item['user_id'])
-                                                    <tr>
+                                                @if ($product->id == $item['product_id'] && $product->type == 1 && Auth::id() == $item['user_id'])
+                                                    <tr class="mt-1 mb-1">
                                                         <th scope="row">
                                                             <div class="d-flex align-items-center">
                                                                 <img src=" {{ asset($product->image) }}"
@@ -112,26 +112,15 @@
                                                                     alt="Ảnh sản phẩm">
                                                             </div>
                                                         </th>
-                                                        <td>
+                                                        <td class="align-middle">
                                                             {{ $product->name }}
                                                         </td>
-                                                        <td>
-                                                            <p class="mb-0 mt-4">{{ number_format($product->price) }} vnđ
+                                                        <td class="align-middle">
+                                                            <input type="text" name='price' value="{{$product->price}}" hidden>
+                                                            <p class="mb-0">{{ number_format($product->price) }} vnđ
                                                             </p>
                                                         </td>
-                                                        <td>
-                                                            <div class="input-group quantity mt-4" style="width: 100px;">
-                                                                <div class="input-group-btn">
-                                                                    <button
-                                                                        class="btn btn-sm btn-minus rounded-circle bg-light border">
-                                                                        <i class="fa fa-minus"></i>
-                                                                    </button>
-                                                                </div>
-                                                                <input type="text"
-                                                                    class="form-control form-control-sm text-center border-0"
-                                                                    value="{{ $item['qty'] }}">
-                                                            </div>
-                                                        </td>
+                                                        <td class="text-center align-middle">{{$item['qty'] }}</td>
                                                 @endif
                                                 @foreach ($productVariants as $productVariant)
                                                     @if (
@@ -159,7 +148,7 @@
                                                                 <input type="text" name='price'
                                                                     value="{{ $productVariant->price }}" hidden>
                                                             </td>
-                                                            <td class="text-center align-middle">1</td>
+                                                            <td class="text-center align-middle">{{$item['qty'] }}</td>
                                                         </tr>
                                                     @endif
                                                 @endforeach

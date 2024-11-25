@@ -51,7 +51,7 @@ class CheckoutController extends Controller
             return strtoupper(substr(md5(uniqid(rand(), true)), 0, $length));
         }
 
-        if($request->payment_id === 1){
+        if($request->payment_id == 1){
             $order = [
                 'payment_id' => $request->payment_id,
                 'status' => 1,
@@ -71,10 +71,11 @@ class CheckoutController extends Controller
             $cart = session()->get('cart', []);
             foreach ($cart as $key => $value) {
                 if (Auth::user()->id == $value['user_id']) {
+                  $product_variant_id = $value['product_variant_id']?$value['product_variant_id']:null;
                     $products = [
                         'order_id' => $addOrder->id,  // ID đơn hàng
                         'product_id' => $value['product_id'],
-                        'product_variant_id' =>  $value['product_variant_id'],
+                        'product_variant_id' =>  $product_variant_id,
                         'quantity' => $value['qty'],
                         'price' => $request->price
                     ];
@@ -84,8 +85,8 @@ class CheckoutController extends Controller
                 }
             }
             session()->put('cart', $cart);
-            return redirect()->route('storeCheckout')->with([
-                'success' => 'Chúc mừng thanh toán thành công qua COD'
+            return redirect()->route('order.history')->with([
+                'message' => 'Chúc mừng thanh toán thành công qua COD'
             ]);
         }else {
             $endpoint = "https://test-payment.momo.vn/v2/gateway/api/create";
@@ -155,6 +156,9 @@ class CheckoutController extends Controller
             $result = $this->execPostRequest($endpoint, json_encode($data));
             $jsonResult = json_decode($result, true);
             return redirect()->to($jsonResult['payUrl']);
+            return redirect()->route('order.history')->with([
+                'message' => 'Chúc mừng thanh toán thành công qua COD'
+            ]);
         }
     }
 }

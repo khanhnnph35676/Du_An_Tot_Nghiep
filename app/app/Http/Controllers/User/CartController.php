@@ -14,27 +14,40 @@ class CartController extends Controller
     {
         $user_id = Auth::id() ?? null;
 
-        $request->validate([
-            'product_variant_id' => 'required',
-        ], [
-            'product_variant_id.required' => 'Vui lòng chọn một biến thể trước khi thêm vào giỏ hàng.',
-        ]);
+        // Kiểm tra nếu sản phẩm có biến thể
+        $hasVariant = $request->has('product_variant_id') && $request->product_variant_id;
+
+        if ($hasVariant) {
+            $request->validate([
+                'product_variant_id' => 'required',
+            ], [
+                'product_variant_id.required' => 'Vui lòng chọn một biến thể trước khi thêm vào giỏ hàng.',
+            ]);
+        }
+
+        // Dữ liệu giỏ hàng
         $data = [
             'user_id' => $user_id,
-            'product_variant_id' => $request->product_variant_id,
+            'product_variant_id' => $hasVariant ? $request->product_variant_id : null,
             'product_id' => $request->product_id,
             'qty' => (int)$request->qty,
         ];
-        $product_variant = ProductVariant::find($request->product_variant_id);
-        if ($product_variant && $product_variant->stock > 0) {
-            $product_variant->stock -= 1;
-            $product_variant->save();
-        } else {
-            // Nếu không có đủ sản phẩm trong kho, bạn có thể thông báo lỗi
-            return response()->json(['error' => 'Sản phẩm không đủ số lượng.'], 400);
+
+        // Nếu sản phẩm có biến thể, kiểm tra và trừ kho
+        if ($hasVariant) {
+            $product_variant = ProductVariant::find($request->product_variant_id);
+            if ($product_variant && $product_variant->stock > 0) {
+                $product_variant->stock -= 1;
+                $product_variant->save();
+            } else {
+                return response()->json(['error' => 'Sản phẩm không đủ số lượng.'], 400);
+            }
         }
+
+        // Xử lý giỏ hàng
         $cart = session()->get('cart', []);
         $productExists = false;
+
         foreach ($cart as $index => $item) {
             if (
                 $item['user_id'] === $data['user_id'] &&
@@ -46,12 +59,16 @@ class CartController extends Controller
                 break;
             }
         }
+
         if (!$productExists) {
             $cart[] = $data;
         }
+
         session()->put('cart', $cart);
+
         return redirect()->back();
     }
+
     public function removeItemCart($product_variant_id)
     {
         $cart = session()->get('cart', []);
