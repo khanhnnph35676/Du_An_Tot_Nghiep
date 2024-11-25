@@ -152,7 +152,7 @@ Route::post('/user/logout', [AuthenController::class, 'logoutUser'])->name('logo
 // địa chỉ người dùng
 Route::delete('/address/{id}', [AuthenController::class, 'destroy'])->name('address.destroy');
 Route::post('/address', [AuthenController::class, 'store'])->name('address.store');
-Route::post('add-order', [AuthenController::class, 'AddOrder'])->name('AddOrder');
+Route::post('add-order', [CheckoutController::class, 'AddOrder'])->name('AddOrder');
 
-Route::get('momo_payment', [CheckoutController::class, 'momoPayment'])->name('momoPayment');
+Route::post('momo_payment', [CheckoutController::class, 'momoPayment'])->name('momoPayment');
 

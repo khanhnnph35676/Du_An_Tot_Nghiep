@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 class PaymentController extends Controller
 {
     public function formPayment(){
-        $payments = Payment::all();
+        $payments = Payment::get();
         return view('admin.payment.form', compact('payments'));
     }
 
@@ -22,25 +22,29 @@ class PaymentController extends Controller
 
     public function storePayment(Request $request)
     {
-        $data = $request->all();
-        // dd($data);
-
-        Payment::query()->create($data);
+        $imagePath = $request->hasFile('image') ? $request->file('image')->store('images', 'public') : '';
+        $data = [
+            'name' => $request->name,
+            'image' => $imagePath
+        ];
+        Payment::create($data);
         return redirect()->route('admin.formPayment')->with('message', 'Thêm dữ liệu thành công');
     }
 
     public function updatePayment(Request $request)
     {
-        $users = User::all();
-        $payment = Payment::where('id', $request->id)->first();
-        return view('admin.payment.update', compact('payment','users'));
+        $payment = Payment::find($request->id);
+        return view('admin.payment.update', compact('payment'));
     }
     public function update(Request $request)
     {
-        $data = $request->except('_token', '_method', 'submit');
-
-        dd($data); 
-        Payment::where('id', $request->id)->update($data);
+        $payment = Payment::find($request->id);
+        $imagePath = $request->hasFile('image') ? $request->file('image')->store('images', 'public') : $payment->image;
+        $data =[
+            'name' => $request->name,
+            'image' => $imagePath
+        ];
+        $payment->update($data);
         return redirect()->route('admin.formPayment')->with('message', 'Cập nhật dữ liệu thành công');
     }
 

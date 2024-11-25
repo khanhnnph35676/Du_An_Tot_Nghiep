@@ -75,7 +75,8 @@
                             <label class="form-label my-3">Phương thức thanh toán<sup>*</sup></label>
                             <div class="payment-id">
                                 @foreach ($payments as $payment)
-                                    <input type="radio" name="payment_id" value="{{ $payment->id }}">
+                                    <input type="radio" name="payment_id" value="{{ $payment->id }}"
+                                        id="payment-{{ $payment->id }}"  @if($payment->id == '1') checked @endif>
                                     <label class="form-label my-3 me-3">{{ $payment->name }}</label>
                                 @endforeach
                             </div>
@@ -202,12 +203,21 @@
                         @php
                             // print_r($cart);
                         @endphp
-                        <input type="text" name='sum_price' value="{{ $sumPrice + 15000 }}" hidden>
-                        <div class="row g-4 text-center align-items-center justify-content-center pt-4">
+                        <div id="payment-button">
+                            <!-- Mặc định hiển thị cho COD -->
+                            <input type="text" name='sum_price' value="{{ $sumPrice + 15000 }}" hidden>
                             <button class="btn border-secondary py-3 px-4 text-uppercase w-100 text-primary">
-                                Place Order
+                                Thanh toán COD
                             </button>
                         </div>
+                        <button class="btn border-secondary py-3 px-4 text-uppercase w-100 text-primary" id='momoPayment'
+                            style="display:none;">
+                            Thanh toán qua ATM Momo
+                        </button>
+                        @error('payment_id')
+                        <div class="alert alert-danger"><strong>Error!</strong> {{ $message }}
+                        </div>
+                        @enderror
             </form>
         </div>
     </div>
@@ -420,6 +430,22 @@
                     item.classList.remove('selected'); // Xóa trạng thái selected
                 });
                 this.closest('.form-item').classList.add('selected'); // Đánh dấu địa chỉ được chọn
+            });
+        });
+
+        // phương thức thanh toán
+        document.querySelectorAll('input[name="payment_id"]').forEach((radio) => {
+            radio.addEventListener('change', function() {
+                const paymentButtonCOD = document.querySelector('#payment-button');
+                const paymentButtonMoMo = document.querySelector('#momoPayment');
+
+                if (this.value == 1) { // Hiển thị COD
+                    paymentButtonCOD.style.display = 'block';
+                    paymentButtonMoMo.style.display = 'none';
+                } else if (this.value == 2) { // Hiển thị MoMo
+                    paymentButtonCOD.style.display = 'none';
+                    paymentButtonMoMo.style.display = 'block';
+                }
             });
         });
     </script>
