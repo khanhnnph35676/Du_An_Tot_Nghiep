@@ -10,7 +10,7 @@ class Address extends Model
     use HasFactory,SoftDeletes;
     protected $table = 'address';
     public $fillable =[
-        'user_id ',
+        'user_id',
         'address',
         'home_address',
     ];

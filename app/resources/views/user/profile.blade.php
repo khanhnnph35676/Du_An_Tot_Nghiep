@@ -1,72 +1,113 @@
 @extends('user.layout.default')
 @push('styleStore')
-<style>
-    body {
-        background-color: #f8f9fa;
-    }
-    .content {
-        padding: 40px;
-    }
-    .profile-header {
-        display: flex;
-        align-items: center;
-        margin-bottom: 30px;
-        background: #ffffff;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    }
-    .profile-header img {
-        width: 100px;
-        height: 100px;
-        border-radius: 50%;
-        margin-right: 20px;
-    }
-    .info-card {
-        background-color: #ffffff;
-        border-radius: 10px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        padding: 20px;
-        margin-bottom: 20px;
-    }
-    .btn-edit {
-        margin-top: 20px;
-        width: 100%;
-    }
-</style>
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-header img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin-right: 20px;
+        }
+
+        .info-card {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .btn-edit {
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        .side-bar {
+            min-height: 300px;
+        }
+
+        .side-bar li {
+            display: block;
+            border-bottom: 1px solid black;
+        }
+
+        .side-bar li:hover {
+            background: #b9b7b793;
+        }
+    </style>
 @endpush
 
 @section('content')
     <!-- Single Page Header start -->
     <div class="container-fluid page-header py-5">
-        <h1 class="text-center text-dark display-6">User Profile</h1>
+        <h1 class="text-center text-white display-6">User Profile</h1>
         <ol class="breadcrumb justify-content-center mb-0">
             <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item active text-dark">Profile</li>
+            <li class="breadcrumb-item active text-white">Profile</li>
         </ol>
     </div>
     <!-- Single Page Header End -->
+    @php
+        $count = 0;
+    @endphp
+    @foreach ($orderLists as $item)
+        @if ($item->orders->status != 5)
+            @php
+                $count += 1;
+            @endphp
+        @endif
+    @endforeach
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-3">
+                <ul class="side-bar border rounded p-1">
+                    <h3 class="mb-4 mt-3">Đơn Hàng</h3>
+                    <li class="p-2"><a href="{{ route('user.profile') }}" class="text-dark"><strong>Thông tin cá
+                                nhân</strong> </a> </li>
 
-    <div class="content">
-        <div class="container">
-            <div class="profile-header">
-                <img src="https://via.placeholder.com/100" alt="User Avatar">
-                <div>
-                    <h2>John Doe</h2>
-                    <p class="text-muted">Email: john.doe@example.com</p>
-                    <p class="text-muted">Phone: (123) 456-7890</p>
+                    <li class="p-2"><a href="{{ route('order.history') }}" class="text-dark"><strong>Đơn hàng
+                                ({{ $count }})</strong>
+                        </a> </li>
+                </ul>
+            </div>
+            <div class="col-9 m-0 p-0">
+                <div class="content m-0">
+                    <div class="profile-header">
+                        <img src="https://via.placeholder.com/100" alt="User Avatar">
+                        <div>
+                            <h2>John Doe</h2>
+                            <p class="text-muted">Email: john.doe@example.com</p>
+                            <p class="text-muted">Phone: (123) 456-7890</p>
+                        </div>
+                    </div>
+
+                    <div class="info-card">
+                        <h5>Personal Information</h5>
+                        <p><strong>Address:</strong> 123 Main St, Apt 4B</p>
+                        <p><strong>City:</strong> Springfield</p>
+                        <p><strong>Country:</strong> USA</p>
+                    </div>
+                    <button class="btn btn-primary btn-edit" data-bs-toggle="modal" data-bs-target="#editProfileModal">Edit
+                        Profile</button>
                 </div>
             </div>
-
-            <div class="info-card">
-                <h5>Personal Information</h5>
-                <p><strong>Address:</strong> 123 Main St, Apt 4B</p>
-                <p><strong>City:</strong> Springfield</p>
-                <p><strong>Country:</strong> USA</p>
-            </div>
-            <button class="btn btn-primary btn-edit" data-bs-toggle="modal" data-bs-target="#editProfileModal">Edit Profile</button>
         </div>
     </div>
+
+
 
     <!-- Modal Chỉnh Sửa Hồ Sơ -->
     <div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
@@ -118,6 +159,6 @@
 @endsection
 
 @push('scriptStore')
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.min.js"></script>
 @endpush

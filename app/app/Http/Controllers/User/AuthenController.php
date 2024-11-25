@@ -33,11 +33,11 @@ class AuthenController extends Controller
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
-            if(Auth::user()->rule_id == 2){
-                return redirect()->intended('');
+            if(Auth::user()->rule_id == 1){
+                return redirect()->intended('admin');
             }
             if(Auth::user()->rule_id == 2){
-                return redirect()->intended('admin.login')->with([
+                return redirect()->back()->with([
                     'message' => 'Tài khoản không tồn tài'
                 ]);
             }
@@ -139,11 +139,11 @@ class AuthenController extends Controller
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
-            if(Auth::user()->rule_id == 1){
-                return redirect()->intended('admin');
-            }
             if(Auth::user()->rule_id == 2){
-                return redirect()->intended('loginHome')->with([
+                return redirect()->intended('');
+            }
+            if(Auth::user()->rule_id == 1){
+                return redirect()->back()->with([
                     'message' => 'Tài khoản không tồn tài'
                 ]);
             }
@@ -187,16 +187,30 @@ class AuthenController extends Controller
             'home_address' => $request->home_address,
             'user_id' => Auth::user()->id
         ]);
-        return response()->json(['success' => true, 'message' => 'Địa chỉ mới đã được lưu']);
+        return redirect()->back()->with([
+            'message' => 'Thêm địa chỉ thành công'
+        ]);
     }
-    // Mua sản phẩm
 
     public function AddOrder(Request $request)
     {
-        // $request->validate([
-        //     'sum_price' => 'required',
-        //     'address_id' => 'required'
-        // ]);
+        $request->validate([
+            'sum_price' => 'required|min:1',  // Kiểm tra giá trị là số và lớn hơn 0
+            'address_id' => 'required|exists:addresses,id',  // Kiểm tra address_id có tồn tại trong bảng addresses
+            'email' => 'required|email',  // Kiểm tra email hợp lệ
+            'phone' => 'required|min:10',  // Kiểm tra phone là số và có ít nhất 10 chữ số
+            'payment_id' => 'required',  // Kiểm tra payment_id có giá trị hợp lệ (ví dụ COD, credit_card, bank_transfer)
+        ], [
+            // Các thông báo lỗi tùy chỉnh (nếu cần thiết)
+            'sum_price.required' => 'Giá trị tổng phải được nhập.',
+            'sum_price.min' => 'Giá trị tổng phải lớn hơn 0.',
+            'address_id.exists' => 'Địa chỉ không tồn tại.',
+            'email.required' => 'Email không được bỏ trống.',
+            'email.email' => 'Email không hợp lệ.',
+            'phone.required' => 'Số điện thoại không được bỏ trống.',
+            'phone.min' => 'Số điện thoại phải có ít nhất 10 chữ số.',
+            'payment_id.required' => 'Phương thức thanh toán phải được chọn.',
+        ]);
         function generateRandomCode($length = 8) {
             return strtoupper(substr(md5(uniqid(rand(), true)), 0, $length));
         }

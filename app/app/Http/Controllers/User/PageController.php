@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\Address;
 use App\Models\ProductVariant;
+use App\Models\Payment;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
@@ -63,13 +64,21 @@ class PageController extends Controller
     public function storeCheckout(){
         $cart = session()->get('cart', []);
         $products = Product::get();
-        $address = Address::where('user_id',Auth::user()->id)->get();
+        $address =[];
+        if(Auth::user()){
+            $address = Address::where('user_id',Auth::user()->id)->get();
+        }else{
+            $address =[];
+            return redirect()->intended('');
+        }
         $productVariants = ProductVariant::get();
+        $payments = Payment::get();
         return view('user.cart.checkout')->with([
             'address' => $address,
             'cart' => $cart,
             'products' => $products,
-            'productVariants' => $productVariants
+            'productVariants' => $productVariants,
+            'payments' => $payments
         ]);
     }
     public function storeTestimonial(){
