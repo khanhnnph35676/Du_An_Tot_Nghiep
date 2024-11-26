@@ -37,32 +37,35 @@
                                 <table id="example" class="display">
                                     <thead>
                                         <tr>
-                                            <th>Stt</th>
+                                            <th class="text-center">Stt</th>
                                             <th>Mã Order</th>
                                             <th>Người dùng</th>
-                                            <th>Phương thức thanh toán</th>
-                                            <th>Địa chỉ</th>
+
+                                            {{-- <th>Địa chỉ</th> --}}
                                             <th>Tổng tiền</th>
-                                            <th>Trang thái</th>
                                             <th>Ngày đặt</th>
+                                            <th class="text-center">Thanh toán</th>
+                                            <th>Trang thái</th>
                                             <th>Thao tác</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach ($orderLists as $key => $value)
                                             <tr>
-                                                <td>{{ $key + 1 }}</td>
+                                                <td class="text-center">{{ $key + 1 }}</td>
                                                 <td>{{ $value->orders->order_code }}</td>
                                                 <td>{{ $value->users->email }}</td>
-                                                <td>{{ $value->orders->payment_id }}</td>
-                                                <td>
+
+                                                {{-- <td>
                                                     @if ($value->orders && $value->orders->address)
                                                         {{ $value->orders->address->address }}
                                                     @else
                                                         <p>No address found</p>
                                                     @endif
-                                                </td>
+                                                </td> --}}
                                                 <td> {{ number_format($value->orders->sum_price) }} vnđ</td>
+                                                <td>{{ $value->orders->created_at }}</td>
+                                                <td class="text-center">{{$value->orders->payments->name?$value->orders->payments->name:'No address found'}}</td>
                                                 <td>
                                                     <span
                                                         class="badge badge-light">{{ $value->orders->status == 1 ? 'Chờ xác nhận' : '' }}</span>
@@ -76,7 +79,6 @@
                                                         class="badge badge-danger">{{ $value->orders->status == 5 ? 'Đã huỷ' : '' }}</span>
 
                                                 </td>
-                                                <td>{{ $value->orders->created_at }}</td>
                                                 <td>
                                                     <a href="{{ route('admin.orderDetail', ['order_id' => $value->order_id]) }}"
                                                         class="btn btn-primary">Chi tiết</button>

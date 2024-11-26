@@ -22,7 +22,7 @@ class Order extends Model
     }
     public function payments()
     {
-        return $this->belongsTo(Product::class, 'payment_id','id');
+        return $this->belongsTo(Payment::class, 'payment_id','id');
     }
 
 }

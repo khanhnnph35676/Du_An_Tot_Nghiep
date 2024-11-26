@@ -72,7 +72,7 @@
                                  @endforeach
                              @else
                                  @foreach ($cart as $item)
-                                     @if ($item['user_id'] === null)
+                                     @if ($item['user_id'] == 0)
                                          @php
                                              $count++;
                                          @endphp

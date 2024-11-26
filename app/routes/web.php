@@ -134,6 +134,7 @@ Route::delete('remove-item-cart-detail/{product_id}', [CartController::class, 'r
 Route::delete('remove-item-cart/{product_variant_id}', [CartController::class, 'removeItemCart'])->name('removeItemCart');
 Route::post('add-to-cart',[CartController :: class,'addToCart'])->name('addToCart');
 Route::post('/cart/update', [CartController::class, 'updateCart'])->name('updateCart');
+Route::post('/update-selected-product', [CartController::class, 'updateSelectedProduct'])->name('updateSelectedProduct');
 
 
 Route::get('store-list-cart',[PageController :: class,'storeListCart'])->name('storeListCart');

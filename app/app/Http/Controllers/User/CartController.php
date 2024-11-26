@@ -10,9 +10,45 @@ use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
+    public function updateSelectedProduct(Request $request)
+    {
+        $productId = $request->input('product_id');
+        $selected = $request->input('selected'); // 1 nếu chọn, 0 nếu bỏ chọn
+
+        // Kiểm tra nếu sản phẩm id và selected đã được gửi đúng
+        if (!$productId || !isset($selected)) {
+            return response()->json(['error' => 'Dữ liệu không hợp lệ'], 400);
+        }
+
+        // Lấy giỏ hàng hiện tại từ session
+        $cart = session()->get('cart', []);
+
+        $productUpdated = false;
+        foreach ($cart as $index => $item) {
+            if ($item['product_id'] == $productId) {
+                $cart[$index]['selected_products'] = $selected; // Cập nhật selected_products
+                $productUpdated = true;
+                break;
+            }
+        }
+
+        if (!$productUpdated) {
+            // Nếu sản phẩm không có trong giỏ, thêm mới
+            $cart[] = [
+                'product_id' => $productId,
+                'selected_products' => $selected
+            ];
+        }
+
+        // Lưu lại giỏ hàng vào session
+        session()->put('cart', $cart);
+
+        return response()->json(['message' => 'Giỏ hàng đã được cập nhật.']);
+    }
+
     public function updateCart(Request $request)
     {
-        $user_id = Auth::id();
+        $user_id = Auth::id() ?? 0;
         $product_id = $request->product_id;
         $product_variant_id = $request->product_variant_id;
         $new_qty = (int)$request->qty;
@@ -46,7 +82,7 @@ class CartController extends Controller
 
     public function addToCart(Request $request)
     {
-        $user_id = Auth::id() ?? null;
+        $user_id = Auth::id() ?? 0;
 
         // Kiểm tra nếu sản phẩm có biến thể
         $hasVariant = $request->has('product_variant_id') && $request->product_variant_id;
@@ -65,6 +101,7 @@ class CartController extends Controller
             'product_variant_id' => $hasVariant ? $request->product_variant_id : null,
             'product_id' => $request->product_id,
             'qty' => (int)$request->qty,
+            'selected_products' => $request->selected ?? false,
         ];
 
         // Nếu sản phẩm có biến thể, kiểm tra và trừ kho
@@ -89,6 +126,7 @@ class CartController extends Controller
                 $item['product_variant_id'] === $data['product_variant_id']
             ) {
                 $cart[$index]['qty'] += $data['qty'];
+                $cart[$index]['selected_products'] = $data['selected_products'];
                 $productExists = true;
                 break;
             }

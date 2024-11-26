@@ -22,7 +22,7 @@ class OrderController extends Controller
     }
     public function orderDetail($order_id){
         if(Auth::check()){
-            $orderList = OrderList::with(['orders', 'orders.address', 'users'])
+            $orderList = OrderList::with(['orders', 'orders.address','orders.payments', 'users'])
             ->where('order_id', $order_id)
             ->get();
             $data = ProductOder::with('products','product_variants')->where('order_id',$order_id)->get();

@@ -21,7 +21,9 @@ class PageController extends Controller
         $bestViewedProducts = Product::orderBy('view', 'desc')->take(9)->get();
         $categories = Category::all();
         $product_variants = ProductVariant::with("options")->get();
+        // session()->flush();
         return view('user.home', compact('products', 'categories', 'bestViewedProducts','product_variants','cart'));
+
     }
 
 
