@@ -159,4 +159,12 @@ Route::post('/address', [AuthenController::class, 'store'])->name('address.store
 
 Route::post('add-order', [CheckoutController::class, 'AddOrder'])->name('AddOrder');
 Route::post('momo_payment', [CheckoutController::class, 'momoPayment'])->name('momoPayment');
+<<<<<<< HEAD
 Route::get('store-checkout',[CheckoutController :: class,'storeCheckout'])->name('storeCheckout');
+=======
+
+// search và lọc giá
+
+
+Route::get('/products', [ProductController::class, 'productList'])->name('products.list');
+>>>>>>> master
