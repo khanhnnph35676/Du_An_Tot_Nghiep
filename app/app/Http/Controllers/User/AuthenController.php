@@ -17,11 +17,11 @@ use App\Models\Address;
 class AuthenController extends Controller
 {
     public function logout(Request $request)
-{
-    Auth::logout(); // Đăng xuất người dùng
+    {
+        Auth::logout(); // Đăng xuất người dùng
 
-    return redirect()->route('loginAdmin')->with('status', 'Bạn đã đăng xuất thành công.');
-}
+        return redirect()->route('loginAdmin')->with('status', 'Bạn đã đăng xuất thành công.');
+    }
 
     public function loginAdmin()
     {
@@ -33,10 +33,10 @@ class AuthenController extends Controller
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
-            if(Auth::user()->rule_id == 1){
+            if (Auth::user()->rule_id == 1) {
                 return redirect()->intended('admin');
             }
-            if(Auth::user()->rule_id == 2){
+            if (Auth::user()->rule_id == 2) {
                 return redirect()->back()->with([
                     'message' => 'Tài khoản không tồn tài'
                 ]);
@@ -139,10 +139,10 @@ class AuthenController extends Controller
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
-            if(Auth::user()->rule_id == 2){
+            if (Auth::user()->rule_id == 2) {
                 return redirect()->intended('');
             }
-            if(Auth::user()->rule_id == 1){
+            if (Auth::user()->rule_id == 1) {
                 return redirect()->back()->with([
                     'message' => 'Tài khoản không tồn tài'
                 ]);
@@ -168,25 +168,33 @@ class AuthenController extends Controller
     // xoá địa chỉ
     public function destroy($id)
     {
-        try {
-            // Tìm và xóa địa chỉ trong database
-            $address = Address::findOrFail($id);
-            $address->delete();
+        $addresses = session()->get('addresses', []);
+        $address = Address::findOrFail($id);
+        $address->delete();
 
-            return response()->json(['success' => true, 'message' => 'Địa chỉ đã được xóa']);
-        } catch (\Exception $e) {
-            return response()->json(['success' => false, 'message' => 'Xóa địa chỉ thất bại']);
-        }
+        return response()->json(['success' => true, 'message' => 'Địa chỉ đã được xóa']);
     }
     //Thêm địa chỉ mới
     public function store(Request $request)
     {
-        // dd($request->all());
-        Address::create([
+        $addresses = session()->get('addresses', []);
+        $user_id =  Auth::user()->id ?? null;
+        $addAddress =  Address::create([
             'address' => $request->province . ', ' . $request->district . ', ' . $request->ward,
             'home_address' => $request->home_address,
-            'user_id' => Auth::user()->id
+            'user_id' => $user_id
         ]);
+        if($user_id == null){
+            $newAddress = [
+                'id' => $addAddress->id,
+                'address' => $request->province . ', ' . $request->district . ', ' . $request->ward,
+                'home_address' => $request->home_address,
+                'user_id' => $user_id
+            ];
+
+            $addresses[] = $newAddress;
+            session()->put('addresses', $addresses);
+        }
         return redirect()->back()->with([
             'message' => 'Thêm địa chỉ thành công'
         ]);

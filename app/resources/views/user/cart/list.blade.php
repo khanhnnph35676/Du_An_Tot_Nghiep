@@ -13,40 +13,48 @@
     <!-- Single Page Header End -->
 
     <!-- Cart Page Start -->
-
-    @if (session('success'))
-        <div class="success">
-            <div class="alert alert-primary alert-dismissible alert-alt solid fade show">
-                @if (session('success'))
-                    <strong>{{ session('success') }}</strong>
-                @endif
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        </div>
-    @endif
     <div class="container-fluid py-5">
         <div class="container py-5">
+            @if (session('success'))
+                <div class="success">
+                    <div class="alert alert-primary alert-dismissible alert-alt solid fade show">
+                        @if (session('success'))
+                            <strong>{{ session('success') }}</strong>
+                        @endif
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                </div>
+            @endif
             <div class="table-responsive">
                 <table class="table">
                     <thead>
                         <tr>
+                            <th class="text-center align-middle">
+                                <input type="checkbox" id="select-all" style="transform: scale(1.2);"
+                                    class="form-check-input">
+                            </th>
                             <th scope="col">Sản phẩm</th>
-                            <th scope="col">Giá</th>
                             <th scope="col">Số lượng</th>
+                            <th scope="col">Giá</th>
                             <th scope="col">Thao tác</th>
                         </tr>
                     </thead>
                     <tbody>
                         @php
-                            print_r($cart);
+                            // print_r($cart);
                             // print_r(Auth::user()->rule_id );
-                            $price = 0;
                         @endphp
                         @if (Auth::user())
                             @foreach ($products as $product)
                                 @foreach ($cart as $item)
                                     @if ($product->type == 1 && $item['product_variant_id'] == '' && $product->id == $item['product_id'])
                                         <tr>
+                                            <td style="width:100px;" class="text-center align-middle">
+                                                <input type="checkbox" class="form-check-input select-item"
+                                                    name="selected_products[{{ $product->id }}]" value="1"
+                                                    style="transform: scale(1.2);" onchange="updateCart2(this)"
+                                                    @if ($item['selected_products'] == 1) checked @endif>
+                                            </td>
                                             <th scope="row">
                                                 <div class="d-flex align-items-center">
                                                     <img src=" {{ asset($product->image) }}"
@@ -56,27 +64,27 @@
                                                 </div>
                                             </th>
                                             <td>
-                                                @php
-                                                    $price += $product->price;
-                                                @endphp
-                                                <p class="mb-0 mt-4">{{ number_format($product->price) . ' VNĐ' }}</p>
-                                            </td>
-                                            <td>
                                                 <div class="input-group quantity mt-4" style="width: 100px;">
                                                     <div class="input-group-btn">
-                                                        <button class="btn btn-sm btn-minus rounded-circle bg-light border">
+                                                        <button class="btn btn-sm btn-minus rounded-circle bg-light border"
+                                                            onclick="updateCart({{ $item['product_id'] }}, {{ $item['product_variant_id'] ?? 'null' }}, {{ $item['qty'] - 1 }})">
                                                             <i class="fa fa-minus"></i>
                                                         </button>
                                                     </div>
                                                     <input type="text"
                                                         class="form-control form-control-sm text-center border-0"
+                                                        id="qty-{{ $item['product_id'] }}-{{ $item['product_variant_id'] ?? 'null' }}"
                                                         value="{{ $item['qty'] }}">
                                                     <div class="input-group-btn">
-                                                        <button class="btn btn-sm btn-plus rounded-circle bg-light border">
+                                                        <button class="btn btn-sm btn-plus rounded-circle bg-light border"
+                                                            onclick="updateCart({{ $item['product_id'] }}, {{ $item['product_variant_id'] ?? 'null' }}, {{ $item['qty'] + 1 }})">
                                                             <i class="fa fa-plus"></i>
                                                         </button>
                                                     </div>
                                                 </div>
+                                            </td>
+                                            <td>
+                                                <p class="mb-0 mt-4">{{ number_format($product->price) . ' Vnđ' }}</p>
                                             </td>
                                             <td>
                                                 <form action="{{ route('removeItemCartDetail', $item['product_id']) }}"
@@ -98,6 +106,12 @@
                                                 Auth::id() == $item['user_id']
                                         )
                                             <tr>
+                                                <td style="width:100px;" class="text-center align-middle">
+                                                    <input type="checkbox" class="form-check-input select-item"
+                                                        name="selected_products[{{ $product->id }}]" value="1"
+                                                        style="transform: scale(1.2);" onchange="updateCart2(this)"
+                                                        @if ($item['selected_products'] == 1) checked @endif>
+                                                </td>
                                                 <th scope="row">
                                                     <div class="d-flex align-items-center">
                                                         <img src=" {{ asset($productVariant->image) }}"
@@ -107,31 +121,31 @@
                                                     </div>
                                                 </th>
                                                 <td>
-                                                    @php
-                                                        $price += $productVariant->price;
-                                                    @endphp
-                                                    <p class="mb-0 mt-4">
-                                                        {{ number_format($productVariant->price) . ' VNĐ' }}
-                                                    </p>
-                                                </td>
-                                                <td>
                                                     <div class="input-group quantity mt-4" style="width: 100px;">
                                                         <div class="input-group-btn">
                                                             <button
-                                                                class="btn btn-sm btn-minus rounded-circle bg-light border">
+                                                                class="btn btn-sm btn-minus rounded-circle bg-light border"
+                                                                onclick="updateCart({{ $item['product_id'] }}, {{ $item['product_variant_id'] ?? 'null' }}, {{ $item['qty'] - 1 }})">
                                                                 <i class="fa fa-minus"></i>
                                                             </button>
                                                         </div>
                                                         <input type="text"
                                                             class="form-control form-control-sm text-center border-0"
+                                                            id="qty-{{ $item['product_id'] }}-{{ $item['product_variant_id'] ?? 'null' }}"
                                                             value="{{ $item['qty'] }}">
                                                         <div class="input-group-btn">
                                                             <button
-                                                                class="btn btn-sm btn-plus rounded-circle bg-light border">
+                                                                class="btn btn-sm btn-plus rounded-circle bg-light border"
+                                                                onclick="updateCart({{ $item['product_id'] }}, {{ $item['product_variant_id'] ?? 'null' }}, {{ $item['qty'] + 1 }})">
                                                                 <i class="fa fa-plus"></i>
                                                             </button>
                                                         </div>
                                                     </div>
+                                                </td>
+                                                <td>
+                                                    <p class="mb-0 mt-4">
+                                                        {{ number_format($productVariant->price) . ' Vnđ' }}
+                                                    </p>
                                                 </td>
                                                 <td>
                                                     <form
@@ -153,8 +167,18 @@
                         @else
                             @foreach ($products as $product)
                                 @foreach ($cart as $item)
-                                    @if ($product->type == 1 && $item['product_variant_id'] == '' && $product->id == $item['product_id'])
+                                    @if (
+                                        $product->type == 1 &&
+                                            $item['product_variant_id'] == '' &&
+                                            $product->id == $item['product_id'] &&
+                                            $item['user_id'] == 0)
                                         <tr>
+                                            <td style="width:100px;" class="text-center align-middle">
+                                                <input type="checkbox" class="form-check-input select-item"
+                                                    name="selected_products[{{ $product->id }}]" value="1"
+                                                    style="transform: scale(1.2);" onchange="updateCart2(this)"
+                                                    @if ($item['selected_products'] == 1) checked @endif>
+                                            </td>
                                             <th scope="row">
                                                 <div class="d-flex align-items-center">
                                                     <img src=" {{ asset($product->image) }}"
@@ -164,27 +188,27 @@
                                                 </div>
                                             </th>
                                             <td>
-                                                @php
-                                                    $price += $product->price;
-                                                @endphp
-                                                <p class="mb-0 mt-4">{{ number_format($product->price) . ' VNĐ' }}</p>
-                                            </td>
-                                            <td>
                                                 <div class="input-group quantity mt-4" style="width: 100px;">
                                                     <div class="input-group-btn">
-                                                        <button class="btn btn-sm btn-minus rounded-circle bg-light border">
+                                                        <button class="btn btn-sm btn-minus rounded-circle bg-light border"
+                                                            onclick="updateCart({{ $item['product_id'] }}, {{ $item['product_variant_id'] ?? 'null' }}, {{ $item['qty'] - 1 }})">
                                                             <i class="fa fa-minus"></i>
                                                         </button>
                                                     </div>
                                                     <input type="text"
                                                         class="form-control form-control-sm text-center border-0"
+                                                        id="qty-{{ $item['product_id'] }}-{{ $item['product_variant_id'] ?? 'null' }}"
                                                         value="{{ $item['qty'] }}">
                                                     <div class="input-group-btn">
-                                                        <button class="btn btn-sm btn-plus rounded-circle bg-light border">
+                                                        <button class="btn btn-sm btn-plus rounded-circle bg-light border"
+                                                            onclick="updateCart({{ $item['product_id'] }}, {{ $item['product_variant_id'] ?? 'null' }}, {{ $item['qty'] + 1 }})">
                                                             <i class="fa fa-plus"></i>
                                                         </button>
                                                     </div>
                                                 </div>
+                                            </td>
+                                            <td>
+                                                <p class="mb-0 mt-4">{{ number_format($product->price) . ' Vnđ' }}</p>
                                             </td>
                                             <td>
                                                 <form action="{{ route('removeItemCartDetail', $item['product_id']) }}"
@@ -200,11 +224,14 @@
                                         </tr>
                                     @endif
                                     @foreach ($productVariants as $productVariant)
-                                        @if (
-                                            $product->id == $item['product_id'] &&
-                                                $item['product_variant_id'] == $productVariant->id &&
-                                                $item['user_id'] == null)
+                                        @if ($product->id == $item['product_id'] && $item['product_variant_id'] == $productVariant->id && $item['user_id'] == 0)
                                             <tr>
+                                                <td style="width:100px;" class="text-center align-middle">
+                                                    <input type="checkbox" class="form-check-input select-item"
+                                                        name="selected_products[{{ $product->id }}]" value="1"
+                                                        style="transform: scale(1.2);" onchange="updateCart2(this)"
+                                                        @if ($item['selected_products'] == 1) checked @endif>
+                                                </td>
                                                 <th scope="row">
                                                     <div class="d-flex align-items-center">
                                                         <img src=" {{ asset($productVariant->image) }}"
@@ -214,36 +241,43 @@
                                                     </div>
                                                 </th>
                                                 <td>
-                                                    @php
-                                                        $price += $productVariant->price;
-                                                    @endphp
-                                                    <p class="mb-0 mt-4">
-                                                        {{ number_format($productVariant->price) . ' VNĐ' }}
-                                                    </p>
-                                                </td>
-                                                <td>
                                                     <div class="input-group quantity mt-4" style="width: 100px;">
                                                         <div class="input-group-btn">
                                                             <button
-                                                                class="btn btn-sm btn-minus rounded-circle bg-light border">
+                                                                class="btn btn-sm btn-minus rounded-circle bg-light border"
+                                                                onclick="updateCart({{ $item['product_id'] }}, {{ $item['product_variant_id'] ?? 'null' }}, {{ $item['qty'] - 1 }})">
                                                                 <i class="fa fa-minus"></i>
                                                             </button>
                                                         </div>
                                                         <input type="text"
                                                             class="form-control form-control-sm text-center border-0"
+                                                            id="qty-{{ $item['product_id'] }}-{{ $item['product_variant_id'] ?? 'null' }}"
                                                             value="{{ $item['qty'] }}">
                                                         <div class="input-group-btn">
                                                             <button
-                                                                class="btn btn-sm btn-plus rounded-circle bg-light border">
+                                                                class="btn btn-sm btn-plus rounded-circle bg-light border"
+                                                                onclick="updateCart({{ $item['product_id'] }}, {{ $item['product_variant_id'] ?? 'null' }}, {{ $item['qty'] + 1 }})">
                                                                 <i class="fa fa-plus"></i>
                                                             </button>
                                                         </div>
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <button class="btn btn-md rounded-circle bg-light border mt-4">
-                                                        <i class="fa fa-times text-danger"></i>
-                                                    </button>
+                                                    <p class="mb-0 mt-4">
+                                                        {{ number_format($productVariant->price) . ' Vnđ' }}
+                                                    </p>
+                                                </td>
+                                                <td>
+                                                    <form
+                                                        action="{{ route('removeItemCart', $item['product_variant_id']) }}"
+                                                        method="POST" style="display:inline;">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit"
+                                                            class="btn btn-md rounded-circle bg-light border mt-4">
+                                                            <i class="fa fa-times text-danger"></i>
+                                                        </button>
+                                                    </form>
                                                 </td>
                                             </tr>
                                         @endif
@@ -256,59 +290,138 @@
             </div>
             <div class="mt-5">
                 <input type="text" class="border-0 border-bottom rounded me-5 py-3 mb-4" placeholder="Mã giảm giá">
-                <button class="btn border-secondary rounded-pill px-4 py-3 text-primary" type="button">Áp dụng</button>
+                <button class="btn border-secondary rounded-pill px-4 py-3 text-primary" type="button">Áp
+                    dụng</button>
             </div>
             <div class="row g-4 justify-content-end">
                 <div class="col-8"></div>
                 <div class="col-sm-8 col-md-7 col-lg-6 col-xl-4">
                     <div class="bg-light rounded">
                         <div class="p-4">
-                            <h1 class="display-6 mb-4">Cart <span class="fw-normal">Total</span></h1>
+                            <h2 class="display-6 mb-4">Tổng <span class="fw-normal">Giỏ hàng</span></h2>
                             <div class="d-flex justify-content-between mb-4">
-                                <h5 class="mb-0 me-4">Subtotal:</h5>
-                                <p class="mb-0"> @php echo number_format($price).' VNĐ';  @endphp</p>
+                                <h5 class="mb-0 me-4">Tổng giá sản phẩm</h5>
+                                @php
+                                    $checkPrice = false;
+                                @endphp
+                                @php
+                                    $price = 0; // Khởi tạo biến tổng giá
+                                @endphp
+                                @if (Auth::check())
+                                    @foreach ($cart as $item)
+                                        @foreach ($products as $product)
+                                            @if (
+                                                $product->type == 1 &&
+                                                    $item['product_variant_id'] == '' &&
+                                                    $product->id == $item['product_id'] &&
+                                                    Auth::id() == $item['user_id'] &&
+                                                    $item['selected_products'] == 1)
+                                                @php
+                                                    $price += $product->price * $item['qty'];
+                                                @endphp
+                                            @endif
+                                        @endforeach
+                                        @foreach ($productVariants as $productVariant)
+                                            @if (
+                                                $productVariant->product_id == $item['product_id'] &&
+                                                    $item['product_variant_id'] == $productVariant->id &&
+                                                    Auth::id() == $item['user_id'] &&
+                                                    $item['selected_products'] == 1)
+                                                @php
+                                                    $price += $productVariant->price * $item['qty'];
+                                                @endphp
+                                            @endif
+                                        @endforeach
+                                    @endforeach
+                                @else
+                                    @foreach ($cart as $item)
+                                        @foreach ($products as $product)
+                                            @if (
+                                                $product->type == 1 &&
+                                                    $item['product_variant_id'] == '' &&
+                                                    $product->id == $item['product_id'] &&
+                                                    $item['user_id'] == 0 &&
+                                                    $item['selected_products'] == 1)
+                                                @php
+                                                    $price += $product->price * $item['qty'];
+                                                @endphp
+                                            @endif
+                                        @endforeach
+                                        @foreach ($productVariants as $productVariant)
+                                            @if (
+                                                $productVariant->product_id == $item['product_id'] &&
+                                                    $item['product_variant_id'] == $productVariant->id &&
+                                                    $item['user_id'] == 0 &&
+                                                    $item['selected_products'] == 1)
+                                                @php
+                                                    $price += $productVariant->price * $item['qty'];
+                                                @endphp
+                                            @endif
+                                        @endforeach
+                                    @endforeach
+                                @endif
+                                @if ($price > 0)
+                                    <p class="mb-0"> <strong>{{ number_format($price) }} Vnđ</strong> </p>
+                                @else
+                                    <p class='mb-0'> <strong>0 Vnđ </strong> </p>
+                                @endif
                             </div>
                             <div class="d-flex justify-content-between">
-                                <h5 class="mb-0 me-4">Shipping</h5>
+                                <h5 class="mb-0 me-4">Phí vận chuyển</h5>
                                 <div class="">
-                                    <p class="mb-0">Flat rate: 15,000 VNĐ</p>
+                                    <p class="mb-0"><strong> 15,000 Vnđ</strong></p>
                                 </div>
                             </div>
-                            <p class="mb-0 text-end">Shipping to Ha Noi.</p>
                         </div>
                         <div class="py-4 mb-4 border-top border-bottom d-flex justify-content-between">
-                            <h5 class="mb-0 ps-4 me-4">Total</h5>
-                            <p class="mb-0 pe-4">@php echo number_format($price + 15000).' VNĐ';  @endphp</p>
+                            <h5 class="mb-0 ps-4 me-4">Tổng giá</h5>
+                            <p class="mb-0 pe-4"><strong>@php echo number_format($price + 15000).' Vnđ';  @endphp</strong> </p>
                         </div>
-                        @php
-                            $hasEmptyUserId = false;
-                        @endphp
-                        @if (Auth::user())
+                        @if (Auth::check())
+                            @php
+                                $hasSelectedProduct = false;
+                            @endphp
                             @foreach ($cart as $item)
-                                @if ($item['user_id'] == Auth::user()->id)
+                                @if ($item['user_id'] == Auth::user()->id && isset($item['selected_products']) && $item['selected_products'] == 1)
                                     @php
-                                        $hasEmptyUserId = true;
+                                        $hasSelectedProduct = true;
                                         break;
                                     @endphp
                                 @endif
                             @endforeach
-                        @endif
-                        @if (Auth::check())
-                            @if (Auth::user()->id && ($hasEmptyUserId = false))
-                                <a href=""
-                                    class="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4">
-                                    Proceed Checkout
-                                </a>
-                            @elseif(Auth::user()->id && ($hasEmptyUserId = true))
+
+                            @if ($hasSelectedProduct)
                                 <a href="{{ route('storeCheckout') }}"
                                     class="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4">
-                                    Proceed Checkout
+                                    Thanh toán
                                 </a>
                             @else
-                                <a href="{{ route('user.login') }}"
+                                <p class="text-danger text-center">
+                                    Bạn không có sản phẩm để thanh toán. Hãy chọn ít nhất một sản phẩm.
+                                </p>
+                            @endif
+                        @else
+                            @php
+                                $hasSelectedProduct = false;
+                            @endphp
+                            @foreach ($cart as $item)
+                                @if ($item['user_id'] == 0 && $item['selected_products'] == 1)
+                                    @php
+                                        $hasSelectedProduct = true;
+                                        break;
+                                    @endphp
+                                @endif
+                            @endforeach
+
+                            @if ($hasSelectedProduct)
+                                <a href="{{ route('storeCheckout') }}"
                                     class="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4">
-                                    Proceed Checkout
+                                    Thanh toán
                                 </a>
+                            @else
+                                <p class="text-danger text-center">
+                                    Bạn không có sản phẩm để thanh toán. Hãy chọn ít nhất một sản phẩm.
+                                </p>
                             @endif
                         @endif
 
@@ -346,7 +459,79 @@
                 @endforeach
             </div>
         </div>
+
     </div>
+    <script>
+        function updateCart(productId, variantId, newQty) {
+            fetch('{{ route('updateCart') }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    },
+                    body: JSON.stringify({
+                        product_id: productId,
+                        product_variant_id: variantId,
+                        qty: newQty,
+                    }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        location.reload();
+                    }
+                });
+        }
+        // NÚT CHỌN NHIỀU SẢN PHẨM
+        document.getElementById('select-all').addEventListener('change', function() {
+            // Lấy tất cả checkbox có class 'select-item'
+            var checkboxes = document.querySelectorAll('.select-item');
+
+            // Duyệt qua các checkbox và thay đổi trạng thái của chúng
+            checkboxes.forEach(function(checkbox) {
+                checkbox.checked = document.getElementById('select-all').checked;
+                updateCart2(checkbox); // Cập nhật trạng thái của từng checkbox vào session
+            });
+        });
+        // Kiểm tra checkbox và bật/tắt nút thanh toán
+        document.querySelectorAll('.select-item').forEach(function(checkbox) {
+            checkbox.addEventListener('change', function() {
+                var isAnyChecked = document.querySelectorAll('.select-item:checked').length > 0;
+                document.getElementById('checkout-btn').disabled = !isAnyChecked;
+            });
+        });
+
+        // Khởi tạo trạng thái nút thanh toán khi tải trang
+        window.onload = function() {
+            var isAnyChecked = document.querySelectorAll('.select-item:checked').length > 0;
+            document.getElementById('checkout-btn').disabled = !isAnyChecked;
+        }
+
+        function updateCart2(checkbox) {
+            const productId = checkbox.name.split('[')[1].split(']')[0]; // Lấy product_id từ name attribute
+            const isSelected = checkbox.checked ? 1 : 0; // Nếu checkbox được chọn, selected = 1, nếu không là 0
+
+            // Gửi AJAX request để cập nhật session giỏ hàng với selected_products
+            fetch('/update-selected-product', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify({
+                        product_id: productId,
+                        selected: isSelected
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data); // Kiểm tra dữ liệu trả về
+                    location.reload();
+                })
+                .catch(error => console.error('Error:', error));
+        }
+    </script>
+
     <!-- Cart Page End -->
 @endsection
 

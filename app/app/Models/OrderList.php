@@ -13,6 +13,7 @@ class OrderList extends Model
         'order_id',
         'option_name',
         'user_id',
+        'check_user'
     ];
     public function users()
     {

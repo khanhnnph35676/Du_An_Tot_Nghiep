@@ -383,10 +383,13 @@
                                 </div>
                                 <div class="col-6">
                                     <!-- Hiển thị tên và giá sản phẩm -->
-                                    <form action="{{ route('addToCart') }}" method="POST">
+                                    <form action="{{ route('addToCart') }}" method="POST"
+                                        id="addToCartForm{{ $product->id }}">
                                         @csrf
                                         <input type="hidden" name="product_id" value="{{ $product->id }}">
                                         <input hidden name="qty" value="1">
+                                        <input type="hidden" id="optionValueInput{{ $product->id }}"
+                                            name="product_variant_id" value="">
 
                                         <a href="{{ route('product.detail', $product->id) }}"
                                             class="h5">{{ $product->name }}</a>
@@ -404,22 +407,16 @@
                                                     @endphp
                                                     <button type="button"
                                                         class="btn border border-secondary rounded-pill px-3 text-primary"
-                                                        onclick="showOptionValue('{{ $product->id }}', '{{ $product_variant->id }}')"
-                                                        >
+                                                        onclick="selectVariant('{{ $product_variant->id }}', '{{ $product->id }}')">
                                                         <span>{{ $product_variant->options->option_value }}</span>
                                                     </button>
                                                 @endif
                                             @endforeach
-
-                                            <input type="hidden" id="optionValueInput{{ $product->id }}"
-                                                name="product_variant_id" value="">
                                         </div>
 
-                                        <button type="button" onclick="validateSelection('{{ $product->id }}')"
+                                        <button type="button" id="addToCartButton{{ $product->id }}"
                                             class="btn border border-secondary rounded-pill px-3 text-primary"
-                                            data-bs-toggle="modal" data-bs-target="#exampleModal{{ $product->id }}"
-                                            @if ($hasVariants) disabled @endif
-                                            id="addToCartButton{{ $product->id }}">
+                                            onclick="openModalIfValid('{{ $product->id }}', {{ $hasVariants ? 'true' : 'false' }})">
                                             <i class="fa fa-shopping-bag me-2 text-primary"></i>
                                             Thêm vào giỏ
                                         </button>
@@ -444,8 +441,11 @@
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary"
                                                             data-bs-dismiss="modal">Đóng</button>
-                                                        <button type="submit" id="addToCartButton{{ $product->id }}"
-                                                            class="btn btn-primary">Thêm vào giỏ</button>
+                                                        <button type="submit"
+                                                            id="finalAddToCartButton{{ $product->id }}"
+                                                            class="btn btn-primary">
+                                                            Thêm vào giỏ
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -618,6 +618,25 @@
                 return false;
             }
             return true;
+        }
+
+        // Hàm để chọn biến thể
+        function selectVariant(variantId, productId) {
+            // Lưu giá trị ID biến thể vào input hidden
+            document.getElementById(`optionValueInput${productId}`).value = variantId;
+        }
+
+        // Kiểm tra trước khi hiển thị modal
+        function openModalIfValid(productId, hasVariants) {
+            const selectedVariant = document.getElementById(`optionValueInput${productId}`).value;
+
+            if (hasVariants && !selectedVariant) {
+                return false;
+            }
+
+            // Mở modal nếu là sản phẩm đơn thể hoặc đã chọn biến thể
+            const modal = new bootstrap.Modal(document.getElementById(`exampleModal${productId}`));
+            modal.show();
         }
     </script>
 @endsection
