@@ -133,8 +133,11 @@ Route::get('store-tetimonial',[PageController :: class,'storeTestimonial'])->nam
 Route::delete('remove-item-cart-detail/{product_id}', [CartController::class, 'removeItemCartDetail'])->name('removeItemCartDetail');
 Route::delete('remove-item-cart/{product_variant_id}', [CartController::class, 'removeItemCart'])->name('removeItemCart');
 Route::post('add-to-cart',[CartController :: class,'addToCart'])->name('addToCart');
+Route::post('/cart/update', [CartController::class, 'updateCart'])->name('updateCart');
+
+
 Route::get('store-list-cart',[PageController :: class,'storeListCart'])->name('storeListCart');
-Route::get('store-checkout',[PageController :: class,'storeCheckout'])->name('storeCheckout');
+
 
 Route::get('/user/profile', [UserProfileController::class, 'index'])->name('user.profile');
 Route::get('/order-history', [UserOrderController::class, 'index'])->name('order.history');
@@ -152,7 +155,7 @@ Route::post('/user/logout', [AuthenController::class, 'logoutUser'])->name('logo
 // địa chỉ người dùng
 Route::delete('/address/{id}', [AuthenController::class, 'destroy'])->name('address.destroy');
 Route::post('/address', [AuthenController::class, 'store'])->name('address.store');
+
 Route::post('add-order', [CheckoutController::class, 'AddOrder'])->name('AddOrder');
-
 Route::post('momo_payment', [CheckoutController::class, 'momoPayment'])->name('momoPayment');
-
+Route::get('store-checkout',[CheckoutController :: class,'storeCheckout'])->name('storeCheckout');

@@ -7,13 +7,42 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\Order;
+use App\Models\Payment;
 use App\Models\OrderList;
 use App\Models\ProductOder;
+use App\Models\Product;
 use App\Models\Address;
+use App\Models\ProductVariant;
 use Illuminate\Support\Facades\Redis;
 
 class CheckoutController extends Controller
 {
+    public function storeCheckout(Request $request)
+    {
+        $cart = session()->get('cart', []);
+
+        $address = [];
+        if (Auth::user()) {
+            $address = Address::where('user_id', Auth::user()->id)->get();
+        } else {
+            $address = [];
+            return redirect()->intended('');
+        }
+        // $selectedProductIds = $request->input('selected_products', []);
+        $products = Product::get();
+        // whereIn('id', $selectedProductIds)->
+        $productVariants = ProductVariant::get();
+        $payments = Payment::get();
+        return view('user.cart.checkout')->with([
+            'address' => $address,
+            'cart' => $cart,
+            'products' => $products,
+            'productVariants' => $productVariants,
+            'payments' => $payments
+        ]);
+    }
+
+
     public function execPostRequest($url, $data)
     {
         $ch = curl_init($url);
@@ -51,7 +80,7 @@ class CheckoutController extends Controller
             return strtoupper(substr(md5(uniqid(rand(), true)), 0, $length));
         }
 
-        if($request->payment_id == 1){
+        if ($request->payment_id == 1) {
             $order = [
                 'payment_id' => $request->payment_id,
                 'status' => 1,
@@ -71,7 +100,7 @@ class CheckoutController extends Controller
             $cart = session()->get('cart', []);
             foreach ($cart as $key => $value) {
                 if (Auth::user()->id == $value['user_id']) {
-                  $product_variant_id = $value['product_variant_id']?$value['product_variant_id']:null;
+                    $product_variant_id = $value['product_variant_id'] ? $value['product_variant_id'] : null;
                     $products = [
                         'order_id' => $addOrder->id,  // ID đơn hàng
                         'product_id' => $value['product_id'],
@@ -88,7 +117,7 @@ class CheckoutController extends Controller
             return redirect()->route('order.history')->with([
                 'message' => 'Chúc mừng thanh toán thành công qua COD'
             ]);
-        }else {
+        } else {
             $endpoint = "https://test-payment.momo.vn/v2/gateway/api/create";
             $order = [
                 'payment_id' => $request->payment_id,

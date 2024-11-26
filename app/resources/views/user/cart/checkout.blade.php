@@ -190,7 +190,7 @@
                             </table>
                         </div>
                         @php
-                            // print_r($cart);
+                            print_r($cart);
                         @endphp
                         <div id="payment-button">
                             <!-- Mặc định hiển thị cho COD -->

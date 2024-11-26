@@ -61,26 +61,6 @@ class PageController extends Controller
         $productVariants = ProductVariant::get();
         return view('user.cart.list', compact('bestProducts','cart','products','productVariants'));
     }
-    public function storeCheckout(){
-        $cart = session()->get('cart', []);
-        $products = Product::get();
-        $address =[];
-        if(Auth::user()){
-            $address = Address::where('user_id',Auth::user()->id)->get();
-        }else{
-            $address =[];
-            return redirect()->intended('');
-        }
-        $productVariants = ProductVariant::get();
-        $payments = Payment::get();
-        return view('user.cart.checkout')->with([
-            'address' => $address,
-            'cart' => $cart,
-            'products' => $products,
-            'productVariants' => $productVariants,
-            'payments' => $payments
-        ]);
-    }
     public function storeTestimonial(){
         $cart = session()->get('cart', []);
         return view('user.testimonial')->with([

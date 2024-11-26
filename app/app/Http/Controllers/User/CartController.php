@@ -10,6 +10,40 @@ use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
+    public function updateCart(Request $request)
+    {
+        $user_id = Auth::id();
+        $product_id = $request->product_id;
+        $product_variant_id = $request->product_variant_id;
+        $new_qty = (int)$request->qty;
+
+        if ($new_qty <= 0) {
+            return response()->json(['success' => false, 'message' => 'Số lượng phải lớn hơn 0.']);
+        }
+
+        $cart = session()->get('cart', []);
+        $updated = false;
+
+        foreach ($cart as &$item) {
+            if (
+                $item['user_id'] === $user_id &&
+                $item['product_id'] == $product_id &&
+                $item['product_variant_id'] == $product_variant_id
+            ) {
+                $item['qty'] = $new_qty;
+                $updated = true;
+                break;
+            }
+        }
+
+        if (!$updated) {
+            return response()->json(['success' => false, 'message' => 'Sản phẩm không tồn tại trong giỏ hàng.']);
+        }
+
+        session()->put('cart', $cart);
+        return response()->json(['success' => true, 'message' => 'Cập nhật giỏ hàng thành công.']);
+    }
+
     public function addToCart(Request $request)
     {
         $user_id = Auth::id() ?? null;
