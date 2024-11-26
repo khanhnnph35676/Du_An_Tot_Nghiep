@@ -25,15 +25,39 @@ class PageController extends Controller
     }
 
 
-    public function storeListProduct()
+    public function storeListProduct(Request $request)
     {
         $cart = session()->get('cart', []);
-        $products = Product::with('categories')->paginate(12);
+    
+        // Initialize the query for products
+        $query = Product::query();
+    
+        // Filter by search keyword
+        if ($request->has('search') && $request->search) {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+    
+        // Filter by price
+        if ($request->has('price') && $request->price) {
+            $query->where('price', '<=', $request->price);
+        }
+    
+        // Filter by category
+        if ($request->has('category_id') && $request->category_id) {
+            $query->whereHas('categories', function ($q) use ($request) {
+                $q->where('categories.id', $request->category_id);
+            });
+        }
+    
+        // Get the filtered products
+        $products = $query->paginate(12);
         $categories = Category::all();
         $bestProducts = Product::orderBy('view', 'desc')->take(6)->get();
-
-        return view('user.product.list', compact('products', 'categories', 'bestProducts','cart'));
+    
+        return view('user.product.list', compact('products', 'categories', 'bestProducts', 'cart'));
     }
+    
+    
 
     public function storeProductDetail($id)
     {

@@ -156,3 +156,7 @@ Route::post('add-order', [CheckoutController::class, 'AddOrder'])->name('AddOrde
 
 Route::post('momo_payment', [CheckoutController::class, 'momoPayment'])->name('momoPayment');
 
+// search và lọc giá
+
+
+Route::get('/products', [ProductController::class, 'productList'])->name('products.list');
