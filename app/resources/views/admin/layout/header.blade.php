@@ -31,7 +31,7 @@
                          </span>
                          <div class="dropdown-menu p-0 m-0">
                              <form>
-                                 <input class="form-control" type="search" placeholder="Search" aria-label="Search">
+                                 <input class="form-control" type="search" placeholder="Tìm kiếm" aria-label="Search">
                              </form>
                          </div>
                      </div>
@@ -107,11 +107,11 @@
                          <div class="dropdown-menu dropdown-menu-right">
                              <a href="" class="dropdown-item">
                                  <i class="icon-user"></i>
-                                 <span class="ml-2">Profile </span>
+                                 <span class="ml-2">Thông tin cá nhân </span>
                              </a>
                              <a href="" class="dropdown-item">
                                  <i class="icon-envelope-open"></i>
-                                 <span class="ml-2">Inbox </span>
+                                 <span class="ml-2">Giao tiếp khách hàng </span>
                              </a>
                              <div class="dropdown-item">
                                  <form action="{{ route('admin.logout') }}" method="POST" style="display: inline;">

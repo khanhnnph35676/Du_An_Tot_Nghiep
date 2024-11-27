@@ -13,8 +13,8 @@
             <div class="row page-titles mx-0">
                 <div class="col-sm-6 p-md-0">
                     <div class="welcome-text">
-                        <h4>Hi, welcome back!</h4>
-                        <span class="ml-1">Datatable</span>
+                        <h4>Xin chào, chào mừng trở lại!</h4>
+                        <span class="ml-1">Cập nhật tài khoản</span>
                     </div>
                 </div>
                 <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
@@ -34,10 +34,10 @@
                         @method('PUT') <!-- Thêm phương thức PUT -->
                         <div class="card">
                             <div class="card-header">
-                                <h4 class="card-title">Update Customer</h4>
+                                <h4 class="card-title">Cập nhật tài khoản</h4>
                                 <div class="d-flex">
-                                    <a href="{{ route('admin.listCustomer') }}" class="btn btn-dark mr-3">Back</a>
-                                    <button type="submit" class="btn btn-secondary mr-3">Save</button>
+                                    <a href="{{ route('admin.listCustomer') }}" class="btn btn-dark mr-3">Quay lại</a>
+                                    <button type="submit" class="btn btn-secondary mr-3">Cập nhật</button>
                                 </div>
                             </div>
                             @if ($errors->any())
@@ -55,11 +55,11 @@
                                     <div class="col-8 p-3 mr-4 ml-4 border">
                                         <!-- Form nhập thông tin khách hàng -->
                                         <div class="form-group">
-                                            <label for="name">Name:</label>
+                                            <label for="name">Họ tên:</label>
                                             <input name="name" class="form-control" type="text" placeholder="Name" readonly
                                                 value="{{ old('name', $user->name) }}">
                                             @error('name')
-                                                <div class="alert alert-danger"><strong>Error!</strong> {{ $message }}
+                                                <div class="alert alert-danger"><strong>Lỗi!</strong> {{ $message }}
                                                 </div>
                                             @enderror
                                         </div>
@@ -68,27 +68,27 @@
                                             <input name="email" class="form-control" type="email" placeholder="Email" readonly
                                                 value="{{ old('email', $user->email) }}">
                                             @error('email')
-                                                <div class="alert alert-danger"><strong>Error!</strong> {{ $message }}
+                                                <div class="alert alert-danger"><strong>Lỗi!</strong> {{ $message }}
                                                 </div>
                                             @enderror
                                         </div>
                                         <div class="form-group">
-                                            <label for="phone">Phone:</label>
+                                            <label for="phone">Địa chỉ:</label>
                                             <input name="phone" class="form-control" type="text" placeholder="Phone" readonly
                                                 value="{{ old('phone', $user->phone) }}">
                                             @error('phone')
-                                                <div class="alert alert-danger"><strong>Error!</strong> {{ $message }}
+                                                <div class="alert alert-danger"><strong>Lỗi!</strong> {{ $message }}
                                                 </div>
                                             @enderror
                                         </div>
                                         <div class="form-group">
-                                            <label for="password">Password:</label>
+                                            <label for="password">Mật khẩu:</label>
                                             <input name="password" class="form-control" type="password" readonly
                                                 placeholder="Password">
-                                            <small class="form-text text-muted">Leave blank to keep the current
+                                            <small class="form-text text-muted">Để trống để giữ dòng điện
                                                 password.</small>
                                             @error('password')
-                                                <div class="alert alert-danger"><strong>Error!</strong> {{ $message }}
+                                                <div class="alert alert-danger"><strong>Lỗi!</strong> {{ $message }}
                                                 </div>
                                             @enderror
                                         </div>
@@ -96,23 +96,23 @@
                                     <div class="col-3 p-3 border">
                                         <!-- Form thêm các thông tin bổ sung -->
                                         <div class="form-group">
-                                            <label for="gender">Gender:</label>
+                                            <label for="gender">Giới tính:</label>
                                             <div class="basic-form">
                                                 <div class="form-group">
                                                     <label class="radio-inline">
                                                         <input type="radio" name="gender" value="male"
-                                                            {{ $user->gender == 'male' ? 'checked' : '' }}> Male
+                                                            {{ $user->gender == 'male' ? 'checked' : '' }}> Nam
                                                     </label>
                                                     <label class="radio-inline ml-3">
                                                         <input type="radio" name="gender" value="female"
-                                                            {{ $user->gender == 'female' ? 'checked' : '' }}> Female
+                                                            {{ $user->gender == 'female' ? 'checked' : '' }}> Nữ
                                                     </label>
                                                     <label class="radio-inline ml-3">
                                                         <input type="radio" name="gender" value="other"
-                                                            {{ $user->gender == 'other' ? 'checked' : '' }}> Other
+                                                            {{ $user->gender == 'other' ? 'checked' : '' }}> Giới tính khác
                                                     </label>
                                                     @error('gender')
-                                                        <div class="alert alert-danger"><strong>Error!</strong>
+                                                        <div class="alert alert-danger"><strong>Lỗi!</strong>
                                                             {{ $message }}
                                                         </div>
                                                     @enderror
@@ -121,7 +121,7 @@
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="avatar">Avatar:</label>
+                                            <label for="avatar">Ảnh đại diện:</label>
                                             <div class="image-upload-container">
                                                 <img id="imagePreview" src="{{ asset('storage/' . $user->avatar) }}"
                                                     alt="Image Preview"
@@ -132,25 +132,24 @@
                                                     style="display:none;">Remove Image</button>
                                             </div>
                                             @error('avatar')
-                                                <div class="alert alert-danger"><strong>Error!</strong> {{ $message }}
+                                                <div class="alert alert-danger"><strong>Lỗi!</strong> {{ $message }}
                                                 </div>
                                             @enderror
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="birth_date">Birth Date:</label>
+                                            <label for="birth_date">Ngày sinh:</label>
                                             <input name="birth_date" type="date" class="form-control"
                                                 value="{{ old('birth_date', $user->birth_date) }}">
                                             @error('birth_date')
-                                                <div class="alert alert-danger"><strong>Error!</strong> {{ $message }}
+                                                <div class="alert alert-danger"><strong>Lỗi!</strong> {{ $message }}
                                                 </div>
                                             @enderror
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="rule_id">Role:</label>
+                                            <label for="rule_id">Chức vụ:</label>
                                             <select name="rule_id" class="form-control" required>
-                                                <option value="">Select Role</option>
                                                 @foreach ($rules as $rule)
                                                     <option value="{{ $rule->id }}"
                                                         {{ $user->rule_id == $rule->id ? 'selected' : '' }}>
@@ -158,7 +157,7 @@
                                                 @endforeach
                                             </select>
                                             @error('rule_id')
-                                                <div class="alert alert-danger"><strong>Error!</strong> {{ $message }}
+                                                <div class="alert alert-danger"><strong>Lỗi!</strong> {{ $message }}
                                                 </div>
                                             @enderror
                                         </div>

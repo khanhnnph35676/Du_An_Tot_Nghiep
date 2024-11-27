@@ -4,71 +4,70 @@
  <div class="quixnav">
      <div class="quixnav-scroll">
          <ul class="metismenu" id="menu">
-             <li class="nav-label first">Main Menu</li>
+             <li class="nav-label first text-white">Mục chính</li>
              <li><a class="has-arrow" href="javascript:void()" aria-expanded="false"><i
-                         class="icon icon-single-04"></i><span class="nav-text">Dashboard</span></a>
+                         class="icon icon-app-store"></i><span class="nav-text">Trang chủ</span></a>
                  <ul aria-expanded="false">
-                     <li><a href="{{ route('admin.admin1') }}">Dashboard 1</a></li>
-                     <li><a href="./index2.html">Dashboard 2</a></li>
+                     <li><a href="{{ route('admin.admin1') }}">Trang chủ 1</a></li>
+                     <li><a href="./index2.html">Trang chủ 2</a></li>
                  </ul>
              </li>
-             <li class="nav-label">Content</li>
+             <li><a href="{{ route('admin.profile') }}"><i class="icon icon-single-04"></i>Thông tin cá nhân</a></li>
+             <li class="nav-label text-white">Nội dung</li>
              {{-- Danh mục quản lý sản phẩm, danh mục sản phẩm --}}
              <li><a class="has-arrow" href="javascript:void()" aria-expanded="false"><i
-                         class="icon icon-app-store"></i><span class="nav-text">Catalog</span></a>
+                         class="fa-solid fa-cart-shopping"></i>
+                     <span class="nav-text">Quản lý sản phẩm</span></a>
                  <ul aria-expanded="false">
-                     <li><a href="{{route('admin.listProducts')}}">Product</a></li>
-                     <li><a href="{{route('admin.listCategories')}}">Categories</a></li>
+                     <li><a href="{{ route('admin.listProducts') }}">Sản phẩm</a></li>
+                     <li><a href="{{ route('admin.listCategories') }}">Danh mục</a></li>
                  </ul>
              </li>
              {{-- Danh mục quản lý người dùng --}}
              <li><a class="has-arrow" href="javascript:void()" aria-expanded="false"><i
-                         class="icon icon-chart-bar-33"></i><span class="nav-text">Customer</span></a>
+                         class="fa-solid fa-users"></i><span class="nav-text">Quản lý tài khoản</span></a>
                  <ul aria-expanded="false">
-                     <li><a href="{{route('admin.listCustomer')}}">All Customers</a></li>
+                     <li><a href="{{ route('admin.listCustomer') }}">Người dùng</a></li>
                      {{-- <li><a href="{{route('admin.listTestimonial')}}">Testimonial Manager</a></li> --}}
                  </ul>
              </li>
              {{-- Danh mục quản lý cửa hàng: Sản phẩm order, Giảm giá, Phương thức thanh toán, Thống kê  --}}
              <li><a class="has-arrow" href="javascript:void()" aria-expanded="false"><i
-                         class="icon icon-world-2"></i><span class="nav-text">Store</span></a>
+                         class="fa-solid fa-shop"></i><span class="nav-text">Quản lý cửa hàng</span></a>
                  <ul aria-expanded="true">
-                     <li><a href="{{route('admin.listOrders')}}">Order</a></li>
-                     <li><a href="{{route('admin.listDiscounts')}}">Discounts</a></li>
-                     <li><a href="{{route('admin.formPayment') }}">Payment</a></li>
-                     <li><a href="./ui-accordion.html">Statistics</a></li>
-                 </ul>
-             </li>
-             {{-- Danh mục giao tiếp với khách --}}
-             <li><a class="has-arrow" href="javascript:void()" aria-expanded="false"><i
-                         class="icon icon-app-store"></i><span class="nav-text">Apps </span></a>
-                 <ul aria-expanded="false">
-                     <li><a href="{{ route('admin.profile') }}">Profile</a></li>
-                     <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">Email</a>
-                         <ul aria-expanded="false">
-                             <li><a href="{{ route('admin.inbox') }}">Inbox</a></li>
-                             <li><a href="{{ route('admin.compose') }}">Compose</a></li>
-                         </ul>
-                     </li>
-                     <li><a href="./app-profile.html">Chatbox</a></li>
-                     <li><a href="{{ route('admin.calender')}}">Calenda</a></li>
+                     <li><a href="{{ route('admin.listOrders') }}">Đơn hàng</a></li>
+                     <li><a href="{{ route('admin.listDiscounts') }}">Giảm giá</a></li>
+                     <li><a href="{{ route('admin.formPayment') }}">Phương thức thanh toán</a></li>
                  </ul>
              </li>
              {{-- Danh mục quản lý Blog --}}
              <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
-                <i class="fa-solid fa-blog"></i><span class="nav-text">Quản lý Blog</span></a>
+                     <i class="fa-solid fa-blog"></i><span class="nav-text">Quản lý bài viết</span></a>
                  <ul aria-expanded="true">
-                    <li><a href="{{ route('admin.blog.list')}}">Danh sách Blog</a></li>
+                     <li><a href="{{ route('admin.blog.list') }}">Bài viết</a></li>
+                     <li><a href="#">Danh mục</a></li>
                  </ul>
              </li>
-             {{-- Danh mục cài đặt: Thoát admin --}}
-             <li><a class="has-arrow" href="javascript:void()" aria-expanded="false"><i class="icon icon-plug"></i><span
-                         class="nav-text">Systems</span></a>
+             <li><a class="has-arrow" href="javascript:void()" aria-expanded="false"><i
+                         class="icon icon-chart-bar-33"></i><span class="nav-text">Thống kê</span></a>
+                 <ul aria-expanded="true">
+                     <li><a href="./ui-accordion.html">Biểu đồ 1 </a></li>
+                     <li><a href="./ui-accordion.html">Biều đồ 2</a></li>
+                     <li><a href="./ui-accordion.html">Biều đồ 3</a></li>
+                 </ul>
+             </li>
+             {{-- Danh mục giao tiếp với khách --}}
+             <li><a class="has-arrow" href="javascript:void()" aria-expanded="false"><i
+                         class="fa-solid fa-envelope"></i>
+                     <span class="nav-text">Email </span>
+                 </a>
                  <ul aria-expanded="false">
-                     <li><a href="./uc-select2.html">Logout</a></li>
+                     <li><a href="{{ route('admin.inbox') }}">Hộp thư đến</a></li>
+                     <li><a href="{{ route('admin.compose') }}">Soạn thư</a></li>
                  </ul>
              </li>
-
+             <li><a href="./app-profile.html"> <i class="fa-solid fa-comments"></i>Giao tiếp khách hàng</a></li>
+             <li><a href="{{ route('admin.calender') }}"><i class="fa-solid fa-calendar-days"></i>Lịch</a></li>
          </ul>
      </div>
  </div>

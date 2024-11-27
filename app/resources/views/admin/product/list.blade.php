@@ -37,18 +37,15 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h4 class="card-title">List Product</h4>
+                            <h4 class="card-title">Danh sách sản phẩm</h4>
                             <div class="btn-group" role="group">
                                 <a href="{{ route('admin.restorProduct') }}" class="btn btn-dark mr-2">
-                                    <i class="fa fa-trash"></i> Restore Product</a>
-                                <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown">Add
-                                    Product</button>
-                                <div class="dropdown-menu bg-secondary mr-3">
-                                    <div class="d-flex flex-column">
-                                        <a href="{{ route('admin.productSimple') }}" class='btn btn-secondary'>Product
-                                            Simple</a>
-                                        <a href="{{ route('admin.productDetail') }}" class='btn btn-secondary'>Product
-                                            Configurable</a>
+                                    <i class="fa fa-trash mr-1"></i>Thùng rác</a>
+                                <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown">Thêm sản phẩm</button>
+                                <div class="dropdown-menu bg-secondary mr-4">
+                                    <div class="d-flex flex-column p-1">
+                                        <a href="{{ route('admin.productSimple') }}" class='btn btn-secondary'>Sản phẩm đơn thể</a>
+                                        <a href="{{ route('admin.productDetail') }}" class='btn btn-secondary'>Sản phẩm có biến thể</a>
                                     </div>
                                 </div>
                             </div>
@@ -59,15 +56,15 @@
                                     <thead>
                                         <tr>
                                             <th>Id</th>
-                                            <th>Name</th>
-                                            <th>Image</th>
-                                            <th>Price</th>
-                                            <th>Stock</th>
-                                            <th>View</th>
-                                            <th>Category</th>
-                                            <th>Description</th>
-                                            <th>Type</th>
-                                            <th>Action</th>
+                                            <th>Tến sản phẩm</th>
+                                            <th>Ảnh</th>
+                                            <th>Giá</th>
+                                            <th>Tồn kho</th>
+                                            <th>Lượt xem</th>
+                                            <th>Danh mục</th>
+                                            <th>Nội dung</th>
+                                            <th>Loại</th>
+                                            <th>Thao tác</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -99,16 +96,16 @@
                                                 <td> {{ number_format($value->price) }} vnđ </td>
                                                 <td> {{ $value->qty }} </td>
                                                 <td> {{ $value->view }} </td>
-                                                <td> {{ $value->categories ? $value->categories->name : 'No Category' }}
+                                                <td> {{ $value->categories ? $value->categories->name : 'Không có danh mục' }}
                                                 </td>
                                                 <td>{{ Str::limit(html_entity_decode(strip_tags($value->description)), 20) }}
                                                 </td>
 
                                                 <td>
                                                     @if ($value->type == '1')
-                                                        <span class='badge badge-pill badge-success'> Simple</span>
+                                                        <span class='badge badge-pill badge-success'> Đơn thể</span>
                                                     @else
-                                                        <span class='badge badge-pill badge-secondary'> Configurable </span>
+                                                        <span class='badge badge-pill badge-secondary'> Có biến thể </span>
                                                         @php
                                                             $count = 0;
                                                         @endphp
@@ -126,17 +123,17 @@
                                                 <td>
                                                     @if ($value->type == '1')
                                                         <a
-                                                            href="{{ route('admin.formUpdateProductSimple', ['type' => $value->type, 'idProduct' => $value->id]) }}"class='btn btn-secondary'>Update
+                                                            href="{{ route('admin.formUpdateProductSimple', ['type' => $value->type, 'idProduct' => $value->id]) }}"class='btn btn-secondary'>Sửa
                                                         </a>
                                                     @else
                                                         <a
-                                                            href="{{ route('admin.formUpdateProductConfigurable', ['type' => $value->type, 'idProduct' => $value->id]) }}"class='btn btn-secondary'>Update
+                                                            href="{{ route('admin.formUpdateProductConfigurable', ['type' => $value->type, 'idProduct' => $value->id]) }}"class='btn btn-secondary'>Sửa
                                                         </a>
                                                     @endif
                                                     <!-- Button trigger modal -->
                                                     <button class="btn btn-dark" data-toggle="modal"
                                                         data-target="#deleteProductAdmin"
-                                                        data-id="{{ $value->id }}">Delete</button>
+                                                        data-id="{{ $value->id }}">Xoá</button>
                                                 </td>
                                             </tr>
                                         @endforeach

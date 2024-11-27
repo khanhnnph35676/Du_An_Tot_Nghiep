@@ -3,7 +3,6 @@
 
 @endpush
 @section('content')
-<link href=" {{asset('focus-2/focus-2/vendor/fullcalendar/css/fullcalendar.min.css')}} " rel="stylesheet">
      <!--**********************************
             Content body start
         ***********************************-->
@@ -24,8 +23,6 @@
                     </div>
                 </div>
                 <!-- row -->
-
-
                 <div class="row">
                     <div class="col-lg-3">
                         <div class="card">
@@ -55,7 +52,7 @@
                     </div>
                     <div class="col-lg-9">
                         <div class="card">
-                            <div class="card-body">
+                            <div class="card-body" style="z-index: 0;">
                                 <div id="calendar" class="app-fullcalendar"></div>
                             </div>
                         </div>
@@ -69,11 +66,11 @@
                                 </div>
                                 <div class="modal-body"></div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Close</button>
-                                    <button type="button" class="btn btn-success save-event waves-effect waves-light">Create
+                                    <button type="button" class="btn btn-dark waves-effect border" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-secondary save-event waves-effect waves-light">Create
                                         event</button>
 
-                                    <button type="button" class="btn btn-danger delete-event waves-effect waves-light" data-dismiss="modal">Delete</button>
+                                    <button type="button" class="btn btn-secondary delete-event waves-effect waves-light" data-dismiss="modal">Delete</button>
                                 </div>
                             </div>
                         </div>
@@ -107,8 +104,8 @@
                                     </form>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Close</button>
-                                    <button type="button" class="btn btn-danger waves-effect waves-light save-category" data-dismiss="modal">Save</button>
+                                    <button type="button" class="btn btn-dark waves-effect" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-secondary waves-effect waves-light save-category" data-dismiss="modal">Save</button>
                                 </div>
                             </div>
                         </div>
@@ -121,20 +118,7 @@
             Content body end
         ***********************************-->
         <!-- Required vendors -->
-    <script src=" {{ asset('focus-2/focus-2/vendor/global/global.min.js') }} "></script>
-    <script src=" {{ asset('focus-2/focus-2/js/quixnav-init.js') }} "></script>
-    <script src=" {{ asset('js/custom.min.js') }} "></script>
-    <!--removeIf(production)-->
-    <!-- Demo scripts -->
-    <script src=" {{ asset('focus-2/focus-2/js/styleSwitcher.js') }}"></script>
 
-
-
-    <script src=" {{ asset('focus-2/focus-2/vendor/jqueryui/js/jquery-ui.min.js') }} "></script>
-    <script src=" {{ asset('focus-2/focus-2/vendor/moment/moment.min.js') }} "></script>
-
-    <script src=" {{ asset('focus-2/focus-2/vendor/fullcalendar/js/fullcalendar.min.js') }} "></script>
-    <script src=" {{ asset('focus-2/focus-2/js/plugins-init/fullcalendar-init.js') }} "></script>
 @endsection
 
 @push('scriptHome')

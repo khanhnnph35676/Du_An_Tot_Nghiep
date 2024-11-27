@@ -188,12 +188,6 @@
         <!--**********************************
             Content body end
         ***********************************-->
-        <!-- Required vendors -->
-    <script src=" {{ asset('focus-2/focus-2/vendor/global/global.min.js') }} "></script>
-    <script src=" {{ asset('focus-2/focus-2/js/quixnav-init.js') }} "></script>
-    <script src=" {{ asset('js/custom.min.js') }} "></script>
-    <!--removeIf(production)-->
-    <!-- Demo scripts -->
 @endsection
 
 @push('scriptHome')
