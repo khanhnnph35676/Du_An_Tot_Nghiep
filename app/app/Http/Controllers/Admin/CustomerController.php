@@ -15,7 +15,7 @@ class CustomerController extends Controller
     public function listCustomer()
     {
         $rules = Rule::all();
-        $users = User::all();
+        $users = User::where('rule_id',2)->get();
         return view('admin.customer.list', compact('users', 'rules'));
     }
 

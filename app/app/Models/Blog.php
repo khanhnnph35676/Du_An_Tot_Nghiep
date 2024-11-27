@@ -8,18 +8,23 @@ use Illuminate\Database\Eloquent\Model;
 
 class Blog extends Model
 {
-    // SoftDeletes
-    use HasFactory;
-    protected $table = 'blogs';
+    // use HasFactory;
+    public $timestamp = false;
     public $fillable = [
-        'status',
-        'post_image',
-        'list_image	',
-        'title',
-        'short_content',
-        'author',
-        'full_content',
-        'published_at',
-        'category_id',
+        'BlogContent',
+        'Status',
+        'BlogDesc',
+        'BlogTitle',
+        'BlogSlug',
+        'BlogImage',
+        'created_at',
+        'updated_at',
+        'blog_category_id',
     ];
+    protected $primaryKey = 'idBlog';
+    protected $table = 'blog';
+    public function blog_categories()
+    {
+        return $this->belongsTo(BlogCategory::class, 'blog_category_id','id');
+    }
 }

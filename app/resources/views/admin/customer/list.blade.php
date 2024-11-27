@@ -11,13 +11,13 @@
             <div class="row page-titles mx-0">
                 <div class="col-sm-6 p-md-0">
                     <div class="welcome-text">
-                        <h4>Hi, welcome back!</h4>
-                        <span class="ml-1">Customer List</span>
+                        <h4>Xin chào, chào mừng trở lại!</h4>
+                        <span class="ml-1">Danh sách người dùng</span>
                     </div>
                 </div>
                 <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
                     <ol class="breadcrumb">
-                        {{-- <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Home</a></li> --}}
+                        <li class="breadcrumb-item"><a href="">Home</a></li>
                         <li class="breadcrumb-item active"><a href="javascript:void(0)">Customers</a></li>
                     </ol>
                 </div>
@@ -38,9 +38,9 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h4 class="card-title">List Customers</h4>
+                            <h4 class="card-title">Danh sách người dùng</h4>
                             <div class="btn-group" role="group">
-                                <a href="{{ route('admin.customerCreate') }}" class="btn btn-secondary">Add Customer</a>
+                                <a href="{{ route('admin.customerCreate') }}" class="btn btn-secondary">Thêm tài khoản</a>
                             </div>
                         </div>
                         <div class="card-body">
@@ -48,44 +48,55 @@
                                 <table id="example" class="display">
                                     <thead>
                                         <tr>
-                                            <th>Stt</th>
-                                            <th>Name</th>
+                                            <th class="text-center">Id</th>
+                                            <th>Họ tên</th>
                                             <th>Email</th>
-                                            <th>Avatar</th>
-                                            <th>Phone</th>
-                                            <th>Gender</th>
-                                            <th>Birth Date</th>
-                                            <th>Rule</th>
-                                            <th>Action</th>
+                                            <th>Số điện thoại</th>
+                                            <th>Giới tính</th>
+                                            <th>Ngày sinh</th>
+                                            {{-- <th>Chức vụ</th> --}}
+                                            <th>Thao tác</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach ($users as $key => $user)
                                             <tr>
-                                                <td>{{ $key + 1 }}</td>
-                                                <td>{{ $user->name }}</td>
-                                                <td>{{ $user->email }}</td>
+                                                <td class="text-center">{{ $user->id }}</td>
                                                 <td>
                                                     @if ($user->avatar)
-                                                        <img src="{{ asset('storage/' . $user->avatar) }}"
-                                                            alt="{{ $user->name }}"
-                                                            style="width: 50px; height: 50px; object-fit: cover;">
-                                                    @endif
+                                                    <img src="{{ asset('storage/' . $user->avatar) }}"
+                                                        alt="{{ $user->name }}"  class="rounded mr-2"
+                                                        style="width: 42px; height: 42px; object-fit: cover;">
+                                                @else
+                                                    <img src="{{ asset('storage/avatars/OIP.jpg') }}" class="rounded mr-2"
+                                                    style="width: 42px; height: 42px; object-fit: cover;" alt="">
+                                                @endif
+                                                    {{ $user->name }}</td>
+                                                <td>{{ $user->email }}</td>
+                                                <td>{{ $user->phone?$user->phone: 'Không có'}}</td>
+                                                <td>
+                                                    {{ $user->gender == 'male'?"Nam":''}}
+                                                    {{ $user->gender == 'female'?"Nữ":''}}
                                                 </td>
-                                                <td>{{ $user->phone }}</td>
-                                                <td>{{ ucfirst($user->gender) }}</td>
-                                                <td>{{ $user->birth_date ? \Carbon\Carbon::parse($user->birth_date)->format('d-m-Y') : 'N/A' }}
+                                                <td>
+                                                    {{ $user->birth_date ? \Carbon\Carbon::parse($user->birth_date)->format('d-m-Y') : 'N/A' }}
                                                 </td>
-                                                <td>{{ optional($user->rule)->rule_name }}</td>
+                                                {{-- <td>
+                                                    <span class="badge badge-info">{{ optional($user->rule)->rule_name }}</span>
+                                                        {{-- @if (optional($user->rule)->id === 2)
+
+                                                        @else
+                                                            <span class="badge badge-secondary">{{ optional($user->rule)->rule_name }}</span>
+                                                        @endif --}}
                                                 <td>
                                                     <div class="d-flex">
                                                         <a href="{{ route('admin.customerEdit', $user->id) }}"
-                                                            class="btn btn-secondary mr-1">Update</a>
+                                                            class="btn btn-secondary mr-1">Sửa</a>
                                                         <form action="{{ route('admin.customerDestroy', $user->id) }}"
                                                             method="POST" onsubmit="return confirm('Are you sure?');">
                                                             @csrf
                                                             @method('DELETE')
-                                                            <button type="submit" class="btn btn-dark">Delete</button>
+                                                            <button type="submit" class="btn btn-dark">Xoá</button>
                                                         </form>
                                                     </div>
                                                 </td>
