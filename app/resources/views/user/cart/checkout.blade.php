@@ -34,7 +34,7 @@
 
                         </div>
                         @php
-                            print_r($addresses);
+                            // print_r($addresses);
                             $countAddresses = 0;
                             $address_id = null;
                         @endphp
@@ -144,7 +144,7 @@
 
                                     @php
                                         $sumPrice = 0;
-                                        print_r($cart);
+                                        // print_r($cart);
                                     @endphp
                                     @if (Auth::check())
                                         @foreach ($products as $product)

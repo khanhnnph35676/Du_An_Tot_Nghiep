@@ -14,7 +14,7 @@ use App\Models\Product;
 use App\Models\Address;
 use App\Models\ProductVariant;
 use Illuminate\Support\Facades\Redis;
-
+use Illuminate\Support\Facades\Hash;
 class CheckoutController extends Controller
 {
     public function storeCheckout()
@@ -109,9 +109,16 @@ class CheckoutController extends Controller
                     'email' => $request->email,
                     'phone' => $request->phone,
                     'rule_id' => 2,
-                    'password' => 'adc123'
+                    'password' => Hash::make('adc123')
                 ];
                 $user = User::create($user);
+                Auth::login($user);
+                $address = Address::where('user_id', NULL)->get();
+                foreach ($address as $value) {
+                    $value->update([
+                        'user_id' => $user->id
+                    ]);
+                }
                 $orderList = [
                     'order_id' => $addOrder->id,
                     'user_id' => $user->id,
@@ -177,15 +184,24 @@ class CheckoutController extends Controller
                 $user = [
                     'name' => $request->name,
                     'email' => $request->email,
-                    'phone' => $request->phone
+                    'phone' => $request->phone,
+                    'rule_id' => 2,
+                    'password' => Hash::make('adc123')
                 ];
                 $user = User::create($user);
+                Auth::login($user);
                 $orderList = [
                     'order_id' => $addOrder->id,
                     'user_id' => $user->id,
                     'check_user' => $check_user,
                 ];
                 OrderList::create($orderList);
+                $address = Address::where('user_id', NULL)->get();
+                foreach ($address as $value) {
+                    $value->update([
+                        'user_id' => $user->id
+                    ]);
+                }
             } else {
                 $orderList = [
                     'order_id' => $addOrder->id,
