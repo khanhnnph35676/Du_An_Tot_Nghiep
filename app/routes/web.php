@@ -14,6 +14,7 @@ use App\Http\Controllers\User\UserProfileController;
 use App\Http\Controllers\User\UserOrderController;
 use App\Http\Controllers\User\CartController;
 use App\Http\Controllers\User\CheckoutController;
+use App\Http\Controllers\StatisticsController;
 
 
 // DDawng nhập, đăng kí, đăng xuất, quên mật khẩu
@@ -37,9 +38,11 @@ Route::middleware(['auth.check'])->group(function () {
 Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
     Route::post('logout', [AuthenController::class, 'logout'])->name('logout');
     // trang chủ
-    Route::get('/', function () {
-        return view('admin.home');
-    })->name('admin1');
+    // Route::get('/', function () {
+    //     return view('admin.home');
+    // })->name('admin1');
+    //Thống kê 
+    Route::get('/', [StatisticsController::class, 'index'])->name('admin1');
     // Trang san phẩm
     Route::get('list-product',[ProductController::class,'listProducts'])->name('listProducts');
     Route::get('product-detail',[ProductController::class,'productDetail'])->name('productDetail');
