@@ -43,6 +43,7 @@ Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
     // })->name('admin1');
     //Thống kê 
     Route::get('/', [StatisticsController::class, 'index'])->name('admin1');
+    Route::get('/statistics', [StatisticsController::class, 'chart'])->name('chart');
     // Trang san phẩm
     Route::get('list-product',[ProductController::class,'listProducts'])->name('listProducts');
     Route::get('product-detail',[ProductController::class,'productDetail'])->name('productDetail');

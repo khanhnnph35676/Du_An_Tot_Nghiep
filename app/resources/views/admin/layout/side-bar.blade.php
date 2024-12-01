@@ -8,7 +8,10 @@
              <li><a class="has-arrow" href="javascript:void()" aria-expanded="false"><i
                          class="icon icon-app-store"></i><span class="nav-text">Trang chủ</span></a>
                  <ul aria-expanded="false">
-                     <li><a href="{{ route('admin.admin1') }}">Trang chủ 1</a></li>
+                     <li><a href="{{ route('admin.admin1') }}">Thống kê sản phẩm</a></li>
+                 </ul>
+                 <ul aria-expanded="false">
+                     <li><a href="{{ route('admin.chart') }}">Biểu đồ kinh doanh</a></li>
                  </ul>
              </li>
              <li><a href="{{ route('admin.profile') }}"><i class="icon icon-single-04"></i>Thông tin cá nhân</a></li>
