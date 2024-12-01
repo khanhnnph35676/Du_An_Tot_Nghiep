@@ -17,32 +17,6 @@ class StatisticsController extends Controller
         // Tổng sản phẩm bán ra
         $totalProductsSold = ProductOder::sum('quantity');
 
-        // // Top sản phẩm bán chạy theo tuần, tháng, năm
-        // $topWeekly = ProductOder::selectRaw('product_id, SUM(quantity) as total_sold')
-        // ->where('created_at', '>=', Carbon::now()->startOfWeek())
-        //     ->groupBy('product_id')
-        //     ->orderByDesc('total_sold')
-        //     ->with('product')
-        //     ->take(5)
-        //     ->get();
-
-        // $topMonthly = ProductOder::selectRaw('product_id, SUM(quantity) as total_sold')
-        // ->where('created_at', '>=', Carbon::now()->startOfMonth())
-        //     ->groupBy('product_id')
-        //     ->orderByDesc('total_sold')
-        //     ->with('product')
-        //     ->take(5)
-        //     ->get();
-
-        // $topYearly = ProductOder::selectRaw('product_id, SUM(quantity) as total_sold')
-        // ->where('created_at', '>=', Carbon::now()->startOfYear())
-        //     ->groupBy('product_id')
-        //     ->orderByDesc('total_sold')
-        //     ->with('product')
-        //     ->take(5)
-        //     ->get();
-
-
         // Xác định khoảng thời gian (mặc định là tuần)
         $timePeriod = $request->input('timePeriod', 'week');
 
@@ -62,6 +36,7 @@ class StatisticsController extends Controller
         }
 
         $topProducts = $query->get();
+        // dd($topProducts);
 
         // Nếu yêu cầu từ AJAX, trả về dữ liệu JSON
         if ($request->ajax()) {
@@ -76,14 +51,6 @@ class StatisticsController extends Controller
         ->take(5)
             ->get();
 
-        // return view('admin.home', compact(
-        //     'totalRevenue',
-        //     'totalProductsSold',
-        //     'topWeekly',
-        //     'topMonthly',
-        //     'topYearly',
-        //     'topRevenueProducts'
-        // ));
         return view('admin.home', compact(
                 'totalRevenue',
                 'totalProductsSold',
