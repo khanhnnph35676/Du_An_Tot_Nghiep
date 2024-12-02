@@ -41,7 +41,7 @@
                     </thead>
                     <tbody>
                         @php
-                            print_r($cart);
+                            // print_r($cart);
                             // print_r(Auth::user()->rule_id );
                         @endphp
                         @if (Auth::user())
@@ -511,9 +511,9 @@
                         // Hiển thị lỗi nếu không cập nhật thành công
                         errorMessageElement.textContent = data.message;
                         errorMessageElement.style.display = 'block';
-                        setTimeout(() => {
-                            location.reload(); // Reload trang sau 1 giây
-                        }, 300);
+                        // setTimeout(() => {
+                        //     location.reload(); // Reload trang sau 1 giây
+                        // }, 300);
                     }
                 })
                 .catch(error => {
@@ -544,9 +544,9 @@
                         const errorMessageElement = document.getElementById(`error-message-${productId}`);
                         errorMessageElement.textContent = data.message;
                         errorMessageElement.style.display = 'block';
-                        setTimeout(() => {
-                            location.reload(); // Reload trang sau 1 giây
-                        }, 300);
+                        // setTimeout(() => {
+                        //     location.reload(); // Reload trang sau 1 giây
+                        // }, 300);
                     }
                 });
         }
