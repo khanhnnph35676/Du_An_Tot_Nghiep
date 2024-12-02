@@ -609,7 +609,6 @@
             }
         }
 
-
         function validateSelection(productId) {
             const input = document.getElementById('optionValueInput' + productId);
             const addToCartButton = document.getElementById('addToCartButton' + productId);

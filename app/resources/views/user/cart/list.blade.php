@@ -73,7 +73,8 @@
                                                     </div>
                                                     <input type="text"
                                                         class="form-control form-control-sm text-center border-0"
-                                                        id="qty-{{ $item['product_id'] }} }}" value="{{ $item['qty'] }}">
+                                                        id="qty-non-variant-{{ $item['product_id'] }}"
+                                                        value="{{ $item['qty'] }}">
                                                     <div class="input-group-btn">
                                                         <button class="btn btn-sm btn-plus rounded-circle bg-light border"
                                                             onclick="updateQtyNonVariant({{ $item['product_id'] }}, {{ $item['qty'] + 1 }})">
@@ -81,7 +82,8 @@
                                                         </button>
                                                     </div>
                                                 </div>
-                                                <span id="error-message" class="mt-1" style="color: red; display: none;"></span>
+                                                <span id="error-message-{{ $item['product_id'] }}" class="mt-1"
+                                                    style="color: red; display: none;"></span>
                                             </td>
                                             <td>
                                                 <p class="mb-0 mt-4">{{ number_format($product->price) . ' Vnđ' }}</p>
@@ -141,7 +143,8 @@
                                                             </button>
                                                         </div>
                                                     </div>
-                                                    <span id="error-message" class="mt-1" style="color: red; display: none;"></span>
+                                                    <span id="error-message" class="mt-1"
+                                                        style="color: red; display: none;"></span>
                                                 </td>
                                                 <td>
                                                     <p class="mb-0 mt-4">
@@ -207,7 +210,8 @@
                                                         </button>
                                                     </div>
                                                 </div>
-                                                <span id="error-message" class="mt-1" style="color: red; display: none;"></span>
+                                                <span id="error-message" class="mt-1"
+                                                    style="color: red; display: none;"></span>
                                             </td>
                                             <td>
                                                 <p class="mb-0 mt-4">{{ number_format($product->price) . ' Vnđ' }}</p>
@@ -263,7 +267,8 @@
                                                             </button>
                                                         </div>
                                                     </div>
-                                                    <span id="error-message" class="mt-1" style="color: red; display: none;"></span>
+                                                    <span id="error-message" class="mt-1"
+                                                        style="color: red; display: none;"></span>
                                                 </td>
                                                 <td>
                                                     <p class="mb-0 mt-4">
@@ -482,14 +487,14 @@
                     if (data.success) {
                         location.reload();
                     } else {
-                        const errorMessageElement = document.getElementById('error-message');
-                        errorMessageElement.textContent = data.message; // Gán thông báo lỗi vào span
-                        errorMessageElement.style.display = 'block'; // Hiển thị phần tử
+                        const errorMessageElement = document.getElementById(`error-message-${productId}`);
+                        errorMessageElement.textContent = data.message;
+                        errorMessageElement.style.display = 'block';
                         setTimeout(() => {
                             location.reload(); // Reload trang sau 1 giây
-                        }, 1000);
+                        }, 300);
                     }
-                })
+                });
         }
 
         function updateCart(productId, variantId, newQty) {
@@ -507,15 +512,15 @@
                 })
                 .then(response => response.json())
                 .then(data => {
+                    const errorMessageElement = document.getElementById('error-message');
                     if (data.success) {
                         location.reload();
                     } else {
-                        const errorMessageElement = document.getElementById('error-message');
                         errorMessageElement.textContent = data.message;
                         errorMessageElement.style.display = 'block';
                         setTimeout(() => {
                             location.reload(); // Reload trang sau 1 giây
-                        }, 1000);
+                        }, 300);
                     }
                 });
         }

@@ -59,29 +59,31 @@ class CartController extends Controller
         // Lấy giỏ hàng từ session
         $cart = session()->get('cart', []);
         $updated = false;
-
-        foreach ($cart as &$item) {
+        $product = Product::find($request->product_id);
+        foreach ($cart as &$item) { // Thêm tham chiếu & để sửa trực tiếp mảng
             if (
                 $item['user_id'] === $user_id &&
                 $item['product_id'] == $product_id
             ) {
-                $product = Product::find($item['product_id']);
-                if ($product->qty <= 0) {
-                    $updated = false;
-                    break;
-                } else {
-                    $product->update(['qty' => $product->qty + ($item['qty'] - $new_qty)]);
+                if ($product->qty > 0 && $item['qty'] < $new_qty) {
+                    $product->update(['qty' => $product->qty - 1]);
                     $item['qty'] = $new_qty;
                     $updated = true;
-                    break;
+                } elseif ($item['qty'] > $new_qty) {
+                    $product->update(['qty' => $product->qty + 1]);
+                    $item['qty'] = $new_qty;
+                    $updated = true;
+                } else {
+                    $updated = false;
                 }
+                break;
             }
         }
         if (!$updated) {
             return response()->json(['success' => false, 'message' => 'Số lượng sản phẩm đã hết']);
         }
         session()->put('cart', $cart);
-        // return response()->json(['success' => true, 'message' => 'Cập nhật giỏ hàng thành công.']);
+        return response()->json(['success' => true, 'message' => 'Cập nhật giỏ hàng thành công.']);
     }
 
     public function updateCart(Request $request)
@@ -99,22 +101,29 @@ class CartController extends Controller
         $updated = false;
 
         foreach ($cart as &$item) {
+            $productVariant = ProductVariant::find($item['product_variant_id']);
             if (
                 $item['user_id'] === $user_id &&
                 $item['product_id'] == $product_id &&
                 $item['product_variant_id'] == $product_variant_id
             ) {
-                $productVariant = ProductVariant::find($item['product_variant_id']);
-                if($productVariant->stock <= 0){
-                    $updated = false;
-                    break;
-                }else{
-                    $productVariant->update(['stock' => $productVariant->stock + ($item['qty'] - $new_qty)]);
+                if ($productVariant->stock > 0 && $item['qty'] - $new_qty < 0) {
+                    $productVariant->update(['stock' => $productVariant->stock - 1]);
                     $item['qty'] = $new_qty;
                     $updated = true;
                     break;
+                } elseif($item['qty'] - $new_qty > 0) {
+                    $productVariant = ProductVariant::find($item['product_variant_id']);
+                    $productVariant->update(['stock' => $productVariant->stock + 1]);
+                    $item['qty'] = $new_qty;
+                    $updated = true;
+                    break;
+                }else{
+                    $updated = false;
+                    break;
                 }
-
+                $updated = false;
+                break;
             }
         }
 
