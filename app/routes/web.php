@@ -140,6 +140,9 @@ Route::post('/cart/update', [CartController::class, 'updateCart'])->name('update
 Route::post('/update-selected-product', [CartController::class, 'updateSelectedProduct'])->name('updateSelectedProduct');
 Route::post('/updateCartNonVariant', [CartController::class, 'updateCartNonVariant'])->name('updateCartNonVariant');
 
+Route::post('/update-qty-cart-variant', [CartController::class, 'updateQtyCartVariant'])->name('updateQtyCartVariant');
+
+
 
 Route::get('store-list-cart',[PageController :: class,'storeListCart'])->name('storeListCart');
 

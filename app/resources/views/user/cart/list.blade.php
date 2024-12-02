@@ -41,7 +41,7 @@
                     </thead>
                     <tbody>
                         @php
-                            // print_r($cart);
+                            print_r($cart);
                             // print_r(Auth::user()->rule_id );
                         @endphp
                         @if (Auth::user())
@@ -74,7 +74,8 @@
                                                     <input type="text"
                                                         class="form-control form-control-sm text-center border-0"
                                                         id="qty-non-variant-{{ $item['product_id'] }}"
-                                                        value="{{ $item['qty'] }}">
+                                                        value="{{ $item['qty'] }}"
+                                                        onchange="updateQtyByInput('{{ $item['product_id'] }}', '{{ $item['product_variant_id'] ?? 'null' }}', this.value)">
                                                     <div class="input-group-btn">
                                                         <button class="btn btn-sm btn-plus rounded-circle bg-light border"
                                                             onclick="updateQtyNonVariant({{ $item['product_id'] }}, {{ $item['qty'] + 1 }})">
@@ -84,6 +85,9 @@
                                                 </div>
                                                 <span id="error-message-{{ $item['product_id'] }}" class="mt-1"
                                                     style="color: red; display: none;"></span>
+                                                <span
+                                                    id="error-message-{{ $item['product_id'] }}-{{ $item['product_variant_id'] ?? 'null' }}"
+                                                    class="mt-1 text-danger" style="display: none;"></span>
                                             </td>
                                             <td>
                                                 <p class="mb-0 mt-4">{{ number_format($product->price) . ' Vnđ' }}</p>
@@ -134,7 +138,8 @@
                                                         <input type="text"
                                                             class="form-control form-control-sm text-center border-0"
                                                             id="qty-{{ $item['product_id'] }}-{{ $item['product_variant_id'] ?? 'null' }}"
-                                                            value="{{ $item['qty'] }}">
+                                                            value="{{ $item['qty'] }}"
+                                                            onchange="updateQtyByInput('{{ $item['product_id'] }}', '{{ $item['product_variant_id'] ?? 'null' }}', this.value)">
                                                         <div class="input-group-btn">
                                                             <button
                                                                 class="btn btn-sm btn-plus rounded-circle bg-light border"
@@ -145,6 +150,9 @@
                                                     </div>
                                                     <span id="error-message" class="mt-1"
                                                         style="color: red; display: none;"></span>
+                                                    <span
+                                                        id="error-message-{{ $item['product_id'] }}-{{ $item['product_variant_id'] ?? 'null' }}"
+                                                        class="mt-1 text-danger" style="display: none;"></span>
                                                 </td>
                                                 <td>
                                                     <p class="mb-0 mt-4">
@@ -258,7 +266,8 @@
                                                         <input type="text"
                                                             class="form-control form-control-sm text-center border-0"
                                                             id="qty-{{ $item['product_id'] }}-{{ $item['product_variant_id'] ?? 'null' }}"
-                                                            value="{{ $item['qty'] }}">
+                                                            value="{{ $item['qty'] }}"
+                                                            onchange="updateQtyByInput('{{ $item['product_id'] }}', '{{ $item['product_variant_id'] ?? 'null' }}', this.value)">
                                                         <div class="input-group-btn">
                                                             <button
                                                                 class="btn btn-sm btn-plus rounded-circle bg-light border"
@@ -269,6 +278,9 @@
                                                     </div>
                                                     <span id="error-message" class="mt-1"
                                                         style="color: red; display: none;"></span>
+                                                    <span
+                                                        id="error-message-{{ $item['product_id'] }}-{{ $item['product_variant_id'] ?? 'null' }}"
+                                                        class="mt-1 text-danger" style="display: none;"></span>
                                                 </td>
                                                 <td>
                                                     <p class="mb-0 mt-4">
@@ -470,6 +482,48 @@
 
     </div>
     <script>
+        // nhập số nó cũng tự update
+        function updateQtyByInput(productId, variantId, newQty) {
+            const parsedQty = parseInt(newQty, 10);
+            if (isNaN(parsedQty) || parsedQty <= 0) {
+                alert('Số lượng phải là số nguyên lớn hơn 0.');
+                return;
+            }
+
+            fetch('{{ route('updateQtyCartVariant') }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    },
+                    body: JSON.stringify({
+                        product_id: productId,
+                        product_variant_id: variantId !== 'null' ? variantId : null,
+                        qty: parsedQty,
+                    }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    const errorMessageElement = document.getElementById(`error-message-${productId}-${variantId}`);
+                    if (data.success) {
+                        location.reload();
+                    } else {
+                        // Hiển thị lỗi nếu không cập nhật thành công
+                        errorMessageElement.textContent = data.message;
+                        errorMessageElement.style.display = 'block';
+                        setTimeout(() => {
+                            location.reload(); // Reload trang sau 1 giây
+                        }, 300);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+
+
+
         function updateQtyNonVariant(productId, newQty) {
             fetch('{{ route('updateCartNonVariant') }}', {
                     method: 'POST',

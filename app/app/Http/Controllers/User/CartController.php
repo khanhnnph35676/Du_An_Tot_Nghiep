@@ -10,6 +10,59 @@ use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
+    public function updateQtyCartVariant(Request $request)
+    {
+        $user_id = Auth::id() ?? 0;
+        $product_id = $request->product_id;
+        $product_variant_id = $request->product_variant_id;
+        $new_qty = (int)$request->qty;
+
+        // Kiểm tra số lượng
+        if ($new_qty <= 0) {
+            return response()->json(['success' => false, 'message' => 'Số lượng phải lớn hơn 0.']);
+        }
+
+        // Lấy giỏ hàng từ session
+        $cart = session()->get('cart', []);
+        $updated = false;
+        foreach ($cart as &$item) {
+            $productVariant = ProductVariant::find($item['product_variant_id']);
+            $product =  Product::find($item['product_id']);
+            if (
+                $item['user_id'] === $user_id &&
+                $item['product_id'] == $product_id &&
+                $item['product_variant_id']  == $product_variant_id &&
+                $item['product_variant_id'] != ''
+            ) {
+                if (($productVariant->stock + $item['qty']) >= $new_qty && $new_qty <= 50) {
+                    $productVariant->update(['stock' => ($productVariant->stock + $item['qty']) - $new_qty]);
+                    $item['qty'] = $new_qty;
+                    $updated = true;
+                }
+                break;
+            }
+            elseif (empty($item['product_variant_id']))
+            {
+                if (($product->qty + $item['qty']) >= $new_qty && $new_qty <= 50) {
+                    $product->update(['qty' => ($product->qty + $item['qty']) - $new_qty]);
+                    $item['qty'] = $new_qty;
+                    $updated = true;
+                }
+                break;
+            }
+        }
+
+        if (!$updated) {
+            return response()->json(['success' => false, 'message' => 'Không đủ số lượng trong kho hoặc bạn đang nhập quá 50 số lượng.']);
+        }
+
+        session()->put('cart', $cart);
+        return response()->json(['success' => true, 'message' => 'Cập nhật giỏ hàng thành công.']);
+    }
+
+
+
+
     public function updateSelectedProduct(Request $request)
     {
         $productId = $request->input('product_id');
@@ -112,13 +165,13 @@ class CartController extends Controller
                     $item['qty'] = $new_qty;
                     $updated = true;
                     break;
-                } elseif($item['qty'] - $new_qty > 0) {
+                } elseif ($item['qty'] - $new_qty > 0) {
                     $productVariant = ProductVariant::find($item['product_variant_id']);
                     $productVariant->update(['stock' => $productVariant->stock + 1]);
                     $item['qty'] = $new_qty;
                     $updated = true;
                     break;
-                }else{
+                } else {
                     $updated = false;
                     break;
                 }
