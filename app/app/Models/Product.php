@@ -34,4 +34,8 @@ class Product extends Model
     {
         return $this->hasMany(Testimonial::class);
     }
+    public function productOrders()
+    {
+        return $this->hasMany(ProductOder::class);
+    }
 }

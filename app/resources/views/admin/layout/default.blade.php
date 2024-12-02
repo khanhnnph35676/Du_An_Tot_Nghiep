@@ -17,10 +17,17 @@
     <link rel="stylesheet" href="{{ asset('focus-2/focus-2/vendor/select2/css/select2.min.css') }}">
     <link href="{{ asset('focus-2/focus-2/vendor/fullcalendar/css/fullcalendar.min.css') }}" rel="stylesheet">
     {{--  <link rel="stylesheet" href="{{asset('backend/css/all.min.css')}}"> --}}
+    {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css"> --}}
+
     <style>
         .dropdown-item {
             padding: 10px;
         }
+        .xdsoft_datetimepicker {
+            display: block !important;
+            visibility: visible !important;
+        }
+
     </style>
     @stack('styleHome')
 </head>

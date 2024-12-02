@@ -8,8 +8,10 @@
              <li><a class="has-arrow" href="javascript:void()" aria-expanded="false"><i
                          class="icon icon-app-store"></i><span class="nav-text">Trang chủ</span></a>
                  <ul aria-expanded="false">
-                     <li><a href="{{ route('admin.admin1') }}">Trang chủ 1</a></li>
-                     <li><a href="./index2.html">Trang chủ 2</a></li>
+                     <li><a href="{{ route('admin.admin1') }}">Thống kê sản phẩm</a></li>
+                 </ul>
+                 <ul aria-expanded="false">
+                     <li><a href="{{ route('admin.chart') }}">Biểu đồ kinh doanh</a></li>
                  </ul>
              </li>
              <li><a href="{{ route('admin.profile') }}"><i class="icon icon-single-04"></i>Thông tin cá nhân</a></li>
@@ -48,14 +50,13 @@
                      <li><a href="#">Danh mục</a></li>
                  </ul>
              </li>
-             <li><a class="has-arrow" href="javascript:void()" aria-expanded="false"><i
+             {{-- <li><a class="has-arrow" href="javascript:void()" aria-expanded="false"><i
                          class="icon icon-chart-bar-33"></i><span class="nav-text">Thống kê</span></a>
                  <ul aria-expanded="true">
-                     <li><a href="./ui-accordion.html">Biểu đồ 1 </a></li>
-                     <li><a href="./ui-accordion.html">Biều đồ 2</a></li>
-                     <li><a href="./ui-accordion.html">Biều đồ 3</a></li>
+                     <li><a href="{{ route('admin.statistics') }}">Thống kê </a></li>
+
                  </ul>
-             </li>
+             </li> --}}
              {{-- Danh mục giao tiếp với khách --}}
              <li><a class="has-arrow" href="javascript:void()" aria-expanded="false"><i
                          class="fa-solid fa-envelope"></i>
