@@ -45,6 +45,44 @@ class CartController extends Controller
 
         return response()->json(['message' => 'Giỏ hàng đã được cập nhật.']);
     }
+    public function updateCartNonVariant(Request $request)
+    {
+        $user_id = Auth::id() ?? 0;
+        $product_id = $request->product_id;
+        $new_qty = (int)$request->qty;
+
+        // Kiểm tra số lượng
+        if ($new_qty <= 0) {
+            return response()->json(['success' => false, 'message' => 'Số lượng phải lớn hơn 0.']);
+        }
+
+        // Lấy giỏ hàng từ session
+        $cart = session()->get('cart', []);
+        $updated = false;
+
+        foreach ($cart as &$item) {
+            if (
+                $item['user_id'] === $user_id &&
+                $item['product_id'] == $product_id
+            ) {
+                $product = Product::find($item['product_id']);
+                if ($product->qty <= 0) {
+                    $updated = false;
+                    break;
+                } else {
+                    $product->update(['qty' => $product->qty + ($item['qty'] - $new_qty)]);
+                    $item['qty'] = $new_qty;
+                    $updated = true;
+                    break;
+                }
+            }
+        }
+        if (!$updated) {
+            return response()->json(['success' => false, 'message' => 'Số lượng sản phẩm đã hết']);
+        }
+        session()->put('cart', $cart);
+        // return response()->json(['success' => true, 'message' => 'Cập nhật giỏ hàng thành công.']);
+    }
 
     public function updateCart(Request $request)
     {
@@ -66,14 +104,22 @@ class CartController extends Controller
                 $item['product_id'] == $product_id &&
                 $item['product_variant_id'] == $product_variant_id
             ) {
-                $item['qty'] = $new_qty;
-                $updated = true;
-                break;
+                $productVariant = ProductVariant::find($item['product_variant_id']);
+                if($productVariant->stock <= 0){
+                    $updated = false;
+                    break;
+                }else{
+                    $productVariant->update(['stock' => $productVariant->stock + ($item['qty'] - $new_qty)]);
+                    $item['qty'] = $new_qty;
+                    $updated = true;
+                    break;
+                }
+
             }
         }
 
         if (!$updated) {
-            return response()->json(['success' => false, 'message' => 'Sản phẩm không tồn tại trong giỏ hàng.']);
+            return response()->json(['success' => false, 'message' => 'Số lượng sản phẩm đã hết']);
         }
 
         session()->put('cart', $cart);
@@ -113,6 +159,12 @@ class CartController extends Controller
             } else {
                 return response()->json(['error' => 'Sản phẩm không đủ số lượng.'], 400);
             }
+        } else {
+            $product = Product::find($request->product_id);
+            if ($product && $product->qty > 0) {
+                $product->qty -= 1;
+                $product->save();
+            }
         }
 
         // Xử lý giỏ hàng
@@ -144,8 +196,12 @@ class CartController extends Controller
     public function removeItemCart($product_variant_id)
     {
         $cart = session()->get('cart', []);
+        $productVariant = ProductVariant::find($product_variant_id);
         foreach ($cart as $index => $item) {
             if ($item['product_variant_id'] == $product_variant_id) {
+                $productVariant->update([
+                    'stock' => $productVariant->stock + $item['qty']
+                ]);
                 unset($cart[$index]);
             }
         }
@@ -154,9 +210,13 @@ class CartController extends Controller
     }
     public function removeItemCartDetail($product_id)
     {
+        $product = Product::find($product_id);
         $cart = session()->get('cart', []);
         foreach ($cart as $index => $item) {
             if ($item['product_id'] == $product_id) {
+                $product->update([
+                    'qty' => $product->qty + $item['qty']
+                ]);
                 unset($cart[$index]);
             }
         }

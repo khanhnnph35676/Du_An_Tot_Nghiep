@@ -10,7 +10,8 @@ class UserOrderController extends Controller
 {
     public function index()
     {
-        $orderLists = OrderList::with('orders','orders.address' ,'users')->get();
+        $user_id = Auth::user()->id ?? null;
+        $orderLists = OrderList::with('orders','orders.address' ,'users')->where('user_id',$user_id)->get();
         $productOrders =  ProductOder::with('products','product_variants')->get();
         $cart = session()->get('cart', []);
         return view('user.order-history')->with([
