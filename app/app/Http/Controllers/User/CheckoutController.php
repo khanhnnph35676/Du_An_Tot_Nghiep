@@ -91,155 +91,83 @@ class CheckoutController extends Controller
         }
         $cart = session()->get('cart', []);
         $addresses = session()->get('addresses', []);
-        if ($request->payment_id == 1) {
-            $order = [
-                'payment_id' => $request->payment_id,
-                'status' => 1,
-                'sum_price' => $request->sum_price,
-                'address_id' => $request->selected_address,
-                'order_code' => generateRandomCode(),
+        $order = [
+            'payment_id' => $request->payment_id,
+            'status' => 1,
+            'sum_price' => $request->sum_price,
+            'address_id' => $request->selected_address,
+            'order_code' => generateRandomCode(),
+        ];
+
+        $addOrder = Order::create($order);
+        $user_id = Auth::user()->id ?? null;
+        $check_user = Auth::user() ? 1 : 0;
+        if ($user_id == null) {
+            $user = [
+                'name' => $request->name,
+                'email' => $request->email,
+                'phone' => $request->phone,
+                'rule_id' => 2,
+                'password' => Hash::make('adc123')
             ];
+            $user = User::create($user);
+            Auth::login($user);
+            $address = Address::where('user_id', NULL)->get();
+            foreach ($address as $value) {
+                $value->update([
+                    'user_id' => $user->id
+                ]);
+            }
+            $orderList = [
+                'order_id' => $addOrder->id,
+                'user_id' => $user->id,
+                'check_user' => $check_user,
+            ];
+            OrderList::create($orderList);
+        } else {
+            $orderList = [
+                'order_id' => $addOrder->id,
+                'user_id' => $user_id,
+                'check_user' => $check_user,
+            ];
+            OrderList::create($orderList);
+        }
 
-            $addOrder = Order::create($order);
-            $user_id = Auth::user()->id ?? null;
-            $check_user = Auth::user() ? 1 : 0;
-            if ($user_id == null) {
-                $user = [
-                    'name' => $request->name,
-                    'email' => $request->email,
-                    'phone' => $request->phone,
-                    'rule_id' => 2,
-                    'password' => Hash::make('adc123')
+        foreach ($cart as $key => $value) {
+            if ($user_id == $value['user_id']) {
+                $product_variant_id = $value['product_variant_id'] ? $value['product_variant_id'] : null;
+                $products = [
+                    'order_id' => $addOrder->id,  // ID đơn hàng
+                    'product_id' => $value['product_id'],
+                    'product_variant_id' =>  $product_variant_id,
+                    'quantity' => $value['qty'],
+                    'price' => $request->price
                 ];
-                $user = User::create($user);
-                Auth::login($user);
-                $address = Address::where('user_id', NULL)->get();
-                foreach ($address as $value) {
-                    $value->update([
-                        'user_id' => $user->id
-                    ]);
-                }
-                $orderList = [
-                    'order_id' => $addOrder->id,
-                    'user_id' => $user->id,
-                    'check_user' => $check_user,
-                ];
-                OrderList::create($orderList);
+                // Tạo một bản ghi mới cho mỗi sản phẩm
+                ProductOder::create($products);
+                unset($cart[$key]);
             } else {
-                $orderList = [
-                    'order_id' => $addOrder->id,
-                    'user_id' => $user_id,
-                    'check_user' => $check_user,
+                $product_variant_id = $value['product_variant_id'] ? $value['product_variant_id'] : null;
+                $products = [
+                    'order_id' => $addOrder->id,  // ID đơn hàng
+                    'product_id' => $value['product_id'],
+                    'product_variant_id' =>  $product_variant_id,
+                    'quantity' => $value['qty'],
+                    'price' => $request->price
                 ];
-                OrderList::create($orderList);
+                // Tạo một bản ghi mới cho mỗi sản phẩm
+                ProductOder::create($products);
+                unset($cart[$key]);
             }
-
-            foreach ($cart as $key => $value) {
-                if ($user_id == $value['user_id']) {
-                    $product_variant_id = $value['product_variant_id'] ? $value['product_variant_id'] : null;
-                    $products = [
-                        'order_id' => $addOrder->id,  // ID đơn hàng
-                        'product_id' => $value['product_id'],
-                        'product_variant_id' =>  $product_variant_id,
-                        'quantity' => $value['qty'],
-                        'price' => $request->price
-                    ];
-                    // Tạo một bản ghi mới cho mỗi sản phẩm
-                    ProductOder::create($products);
-                    unset($cart[$key]);
-                } else {
-                    $product_variant_id = $value['product_variant_id'] ? $value['product_variant_id'] : null;
-                    $products = [
-                        'order_id' => $addOrder->id,  // ID đơn hàng
-                        'product_id' => $value['product_id'],
-                        'product_variant_id' =>  $product_variant_id,
-                        'quantity' => $value['qty'],
-                        'price' => $request->price
-                    ];
-                    // Tạo một bản ghi mới cho mỗi sản phẩm
-                    ProductOder::create($products);
-                    unset($cart[$key]);
-                }
-            }
-            session()->put('cart', $cart);
-            session()->forget('addresses');
+        }
+        session()->put('cart', $cart);
+        session()->forget('addresses');
+        if ($request->payment_id == 1) {
             return redirect()->route('order.history')->with([
                 'message' => 'Chúc mừng thanh toán thành công qua COD'
             ]);
         } else {
             $endpoint = "https://test-payment.momo.vn/v2/gateway/api/create";
-            $order = [
-                'payment_id' => $request->payment_id,
-                'status' => 1,
-                'sum_price' => $request->sum_price,
-                'address_id' => $request->selected_address,
-                'order_code' => generateRandomCode(),
-            ];
-
-            $addOrder = Order::create($order);
-            $user_id = Auth::user()->id ?? null;
-            $check_user = Auth::user() ? 1 : 0;
-            // Lấy tất cả các sản phẩm
-            if ($user_id == null) {
-                $user = [
-                    'name' => $request->name,
-                    'email' => $request->email,
-                    'phone' => $request->phone,
-                    'rule_id' => 2,
-                    'password' => Hash::make('adc123')
-                ];
-                $user = User::create($user);
-                Auth::login($user);
-                $orderList = [
-                    'order_id' => $addOrder->id,
-                    'user_id' => $user->id,
-                    'check_user' => $check_user,
-                ];
-                OrderList::create($orderList);
-                $address = Address::where('user_id', NULL)->get();
-                foreach ($address as $value) {
-                    $value->update([
-                        'user_id' => $user->id
-                    ]);
-                }
-            } else {
-                $orderList = [
-                    'order_id' => $addOrder->id,
-                    'user_id' => $user_id,
-                    'check_user' => $check_user,
-                ];
-                OrderList::create($orderList);
-            }
-            $cart = session()->get('cart', []);
-            foreach ($cart as $key => $value) {
-                if ($user_id == $value['user_id']) {
-                    $product_variant_id = $value['product_variant_id'] ? $value['product_variant_id'] : null;
-                    $products = [
-                        'order_id' => $addOrder->id,  // ID đơn hàng
-                        'product_id' => $value['product_id'],
-                        'product_variant_id' =>  $product_variant_id,
-                        'quantity' => $value['qty'],
-                        'price' => $request->price
-                    ];
-                    // Tạo một bản ghi mới cho mỗi sản phẩm
-                    ProductOder::create($products);
-                    unset($cart[$key]);
-                } else {
-                    $product_variant_id = $value['product_variant_id'] ? $value['product_variant_id'] : null;
-                    $products = [
-                        'order_id' => $addOrder->id,  // ID đơn hàng
-                        'product_id' => $value['product_id'],
-                        'product_variant_id' =>  $product_variant_id,
-                        'quantity' => $value['qty'],
-                        'price' => $request->price
-                    ];
-                    // Tạo một bản ghi mới cho mỗi sản phẩm
-                    ProductOder::create($products);
-                    unset($cart[$key]);
-                }
-            }
-            session()->put('cart', $cart);
-            session()->forget('addresses');
             $partnerCode = 'MOMOBKUN20180529';
             $accessKey = 'klm05TvNBzhg7h7j';
             $secretKey = 'at67qH6mk8w5Y1nAyMoYKMWACiEi2bsa';
@@ -274,9 +202,9 @@ class CheckoutController extends Controller
             $result = $this->execPostRequest($endpoint, json_encode($data));
             $jsonResult = json_decode($result, true);
             return redirect()->to($jsonResult['payUrl']);
-            return redirect()->route('order.history')->with([
-                'message' => 'Chúc mừng thanh toán thành công qua COD'
-            ]);
+            // return redirect()->route('order.history')->with([
+            //     'message' => 'Chúc mừng thanh toán thành công qua COD'
+            // ]);
         }
     }
 }

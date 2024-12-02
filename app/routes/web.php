@@ -131,7 +131,6 @@ Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
     });
 });
 Route::get('/',[PageController :: class,'storeHome'])->name('storeHome');
-Route::get('/product/{id}', [ProductController::class, 'show'])->name('product.detail');
 Route::get('list-product',[PageController :: class,'storeListProduct'])->name('storeListProduct');
 Route::get('/product/{id}', action: [PageController::class, 'storeProductDetail'])->name('product.detail');
 Route::get('store-contact',[PageController :: class,'storeContact'])->name('storeContact');
@@ -143,6 +142,10 @@ Route::delete('remove-item-cart/{product_variant_id}', [CartController::class, '
 Route::post('add-to-cart',[CartController :: class,'addToCart'])->name('addToCart');
 Route::post('/cart/update', [CartController::class, 'updateCart'])->name('updateCart');
 Route::post('/update-selected-product', [CartController::class, 'updateSelectedProduct'])->name('updateSelectedProduct');
+Route::post('/updateCartNonVariant', [CartController::class, 'updateCartNonVariant'])->name('updateCartNonVariant');
+
+Route::post('/update-qty-cart-variant', [CartController::class, 'updateQtyCartVariant'])->name('updateQtyCartVariant');
+
 
 
 Route::get('store-list-cart',[PageController :: class,'storeListCart'])->name('storeListCart');

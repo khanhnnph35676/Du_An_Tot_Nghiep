@@ -10,6 +10,59 @@ use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
+    public function updateQtyCartVariant(Request $request)
+    {
+        $user_id = Auth::id() ?? 0;
+        $product_id = $request->product_id;
+        $product_variant_id = $request->product_variant_id;
+        $new_qty = (int)$request->qty;
+
+        // Kiểm tra số lượng
+        if ($new_qty <= 0) {
+            return response()->json(['success' => false, 'message' => 'Số lượng phải lớn hơn 0.']);
+        }
+
+        // Lấy giỏ hàng từ session
+        $cart = session()->get('cart', []);
+        $updated = false;
+        foreach ($cart as &$item) {
+            $productVariant = ProductVariant::find($item['product_variant_id']);
+            $product =  Product::find($item['product_id']);
+            if (
+                $item['user_id'] === $user_id &&
+                $item['product_id'] == $product_id &&
+                $item['product_variant_id']  == $product_variant_id &&
+                $item['product_variant_id'] != ''
+            ) {
+                if (($productVariant->stock + $item['qty']) >= $new_qty && $new_qty <= 50) {
+                    $productVariant->update(['stock' => ($productVariant->stock + $item['qty']) - $new_qty]);
+                    $item['qty'] = $new_qty;
+                    $updated = true;
+                }
+                break;
+            }
+            elseif (empty($item['product_variant_id']))
+            {
+                if (($product->qty + $item['qty']) >= $new_qty && $new_qty <= 50) {
+                    $product->update(['qty' => ($product->qty + $item['qty']) - $new_qty]);
+                    $item['qty'] = $new_qty;
+                    $updated = true;
+                }
+                break;
+            }
+        }
+
+        if (!$updated) {
+            return response()->json(['success' => false, 'message' => 'Không đủ số lượng trong kho hoặc bạn đang nhập quá 50 số lượng.']);
+        }
+
+        session()->put('cart', $cart);
+        return response()->json(['success' => true, 'message' => 'Cập nhật giỏ hàng thành công.']);
+    }
+
+
+
+
     public function updateSelectedProduct(Request $request)
     {
         $productId = $request->input('product_id');
@@ -45,6 +98,46 @@ class CartController extends Controller
 
         return response()->json(['message' => 'Giỏ hàng đã được cập nhật.']);
     }
+    public function updateCartNonVariant(Request $request)
+    {
+        $user_id = Auth::id() ?? 0;
+        $product_id = $request->product_id;
+        $new_qty = (int)$request->qty;
+
+        // Kiểm tra số lượng
+        if ($new_qty <= 0) {
+            return response()->json(['success' => false, 'message' => 'Số lượng phải lớn hơn 0.']);
+        }
+
+        // Lấy giỏ hàng từ session
+        $cart = session()->get('cart', []);
+        $updated = false;
+        $product = Product::find($request->product_id);
+        foreach ($cart as &$item) { // Thêm tham chiếu & để sửa trực tiếp mảng
+            if (
+                $item['user_id'] === $user_id &&
+                $item['product_id'] == $product_id
+            ) {
+                if ($product->qty > 0 && $item['qty'] < $new_qty) {
+                    $product->update(['qty' => $product->qty - 1]);
+                    $item['qty'] = $new_qty;
+                    $updated = true;
+                } elseif ($item['qty'] > $new_qty) {
+                    $product->update(['qty' => $product->qty + 1]);
+                    $item['qty'] = $new_qty;
+                    $updated = true;
+                } else {
+                    $updated = false;
+                }
+                break;
+            }
+        }
+        if (!$updated) {
+            return response()->json(['success' => false, 'message' => 'Số lượng sản phẩm đã hết']);
+        }
+        session()->put('cart', $cart);
+        return response()->json(['success' => true, 'message' => 'Cập nhật giỏ hàng thành công.']);
+    }
 
     public function updateCart(Request $request)
     {
@@ -61,19 +154,34 @@ class CartController extends Controller
         $updated = false;
 
         foreach ($cart as &$item) {
+            $productVariant = ProductVariant::find($item['product_variant_id']);
             if (
                 $item['user_id'] === $user_id &&
                 $item['product_id'] == $product_id &&
                 $item['product_variant_id'] == $product_variant_id
             ) {
-                $item['qty'] = $new_qty;
-                $updated = true;
+                if ($productVariant->stock > 0 && $item['qty'] - $new_qty < 0) {
+                    $productVariant->update(['stock' => $productVariant->stock - 1]);
+                    $item['qty'] = $new_qty;
+                    $updated = true;
+                    break;
+                } elseif ($item['qty'] - $new_qty > 0) {
+                    $productVariant = ProductVariant::find($item['product_variant_id']);
+                    $productVariant->update(['stock' => $productVariant->stock + 1]);
+                    $item['qty'] = $new_qty;
+                    $updated = true;
+                    break;
+                } else {
+                    $updated = false;
+                    break;
+                }
+                $updated = false;
                 break;
             }
         }
 
         if (!$updated) {
-            return response()->json(['success' => false, 'message' => 'Sản phẩm không tồn tại trong giỏ hàng.']);
+            return response()->json(['success' => false, 'message' => 'Số lượng sản phẩm đã hết']);
         }
 
         session()->put('cart', $cart);
@@ -113,6 +221,12 @@ class CartController extends Controller
             } else {
                 return response()->json(['error' => 'Sản phẩm không đủ số lượng.'], 400);
             }
+        } else {
+            $product = Product::find($request->product_id);
+            if ($product && $product->qty > 0) {
+                $product->qty -= 1;
+                $product->save();
+            }
         }
 
         // Xử lý giỏ hàng
@@ -144,8 +258,12 @@ class CartController extends Controller
     public function removeItemCart($product_variant_id)
     {
         $cart = session()->get('cart', []);
+        $productVariant = ProductVariant::find($product_variant_id);
         foreach ($cart as $index => $item) {
             if ($item['product_variant_id'] == $product_variant_id) {
+                $productVariant->update([
+                    'stock' => $productVariant->stock + $item['qty']
+                ]);
                 unset($cart[$index]);
             }
         }
@@ -154,9 +272,13 @@ class CartController extends Controller
     }
     public function removeItemCartDetail($product_id)
     {
+        $product = Product::find($product_id);
         $cart = session()->get('cart', []);
         foreach ($cart as $index => $item) {
             if ($item['product_id'] == $product_id) {
+                $product->update([
+                    'qty' => $product->qty + $item['qty']
+                ]);
                 unset($cart[$index]);
             }
         }

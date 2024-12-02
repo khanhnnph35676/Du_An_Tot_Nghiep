@@ -16,7 +16,7 @@
     <!-- Checkout Page Start -->
     <div class="container-fluid py-5">
         <div class="container py-5">
-            <h1 class="mb-4">Billing details</h1>
+            <h1 class="mb-4">Thanh toán</h1>
             <form action="{{ route('AddOrder') }}" method="POST">
                 @csrf
                 <div class="row g-5">
@@ -71,7 +71,7 @@
                                                     <div class="d-flex mt-2">
                                                         <!-- Radio để chọn địa chỉ -->
                                                         <input type="radio" name="selected_address"
-                                                            id="address-{{ $item->id}}" value="{{ $item->id }}"
+                                                            id="address-{{ $item->id }}" value="{{ $item->id }}"
                                                             class="me-2" {{ $key2 === 0 ? 'checked' : '' }}>
                                                         <!-- Hiển thị địa chỉ -->
                                                         <input type="text" class="form-control me-2"
@@ -80,11 +80,11 @@
                                                             readonly>
                                                         <!-- Nút chọn -->
                                                         <button class="btn btn-primary select-address me-2" type="button"
-                                                            data-id="{{$item->id }}">Chọn</button>
+                                                            data-id="{{ $item->id }}">Chọn</button>
 
                                                         <!-- Nút xóa -->
                                                         <button class="btn btn-danger delete-address" type="button"
-                                                            data-id="{{$item->id}}">Xóa</button>
+                                                            data-id="{{ $item->id }}">Xóa</button>
                                                     </div>
                                                 @endif
                                             @endforeach
@@ -149,7 +149,14 @@
                                     @if (Auth::check())
                                         @foreach ($products as $product)
                                             @foreach ($cart as $item)
-                                                @if ($product->id == $item['product_id'] && $product->type == 1 && Auth::id() == $item['user_id'])
+                                                @if (
+                                                    $product->id == $item['product_id'] &&
+                                                        $product->type == 1 &&
+                                                        Auth::id() == $item['user_id'] &&
+                                                        $item['selected_products'] === 1)
+                                                    @php
+                                                        $sumPrice += $product->price * $item['qty'] 
+                                                    @endphp
                                                     <tr class="mt-1 mb-1">
                                                         <th scope="row">
                                                             <div class="d-flex align-items-center">
@@ -174,10 +181,11 @@
                                                     @if (
                                                         $product->id == $item['product_id'] &&
                                                             $item['product_variant_id'] == $productVariant->id &&
-                                                            Auth::id() == $item['user_id']
-                                                    )
+                                                            Auth::id() == $item['user_id'] &&
+                                                            $item['selected_products'] === 1)
                                                         @php
-                                                            $sumPrice += $productVariant->price;
+                                                            $sumPrice +=
+                                                                $productVariant->price*$item['qty'];
                                                         @endphp
                                                         <tr>
                                                             <td scope="row">
@@ -205,7 +213,14 @@
                                     @else
                                         @foreach ($products as $product)
                                             @foreach ($cart as $item)
-                                                @if ($product->id == $item['product_id'] && $product->type == 1 && $item['user_id'] == 0 && $item['selected_products'] == 1)
+                                                @if (
+                                                    $product->id == $item['product_id'] &&
+                                                        $product->type == 1 &&
+                                                        $item['user_id'] == 0 &&
+                                                        $item['selected_products'] === 1)
+                                                    @php
+                                                        $sumPrice += $product->price * $product->qty;
+                                                    @endphp
                                                     <tr class="mt-1 mb-1">
                                                         <th scope="row">
                                                             <div class="d-flex align-items-center">
@@ -231,9 +246,10 @@
                                                         $product->id == $item['product_id'] &&
                                                             $item['product_variant_id'] == $productVariant->id &&
                                                             $item['user_id'] == 0 &&
-                                                            $item['selected_products'] == 1)
+                                                            $item['selected_products'] === 1)
                                                         @php
-                                                            $sumPrice += $productVariant->price;
+                                                            $sumPrice +=
+                                                                $productVariant->price * $productVariant->$item['qty'];
                                                         @endphp
                                                         <tr>
                                                             <td scope="row">
@@ -264,29 +280,30 @@
                                         <th scope="row">
                                         </th>
                                         <td class="py-3">
-                                            <p class="mb-0 text-dark py-4">Shipping</p>
+                                            <p class="mb-0 text-dark py-4">Phí vận chuyển</p>
                                         </td>
                                         <td colspan="3" class="py-3">
                                             <div class="form-check text-start">
                                             </div>
                                             <div class="form-check text-start">
-                                                <label class="form-check-label" for="Shipping-2">Flat rate: 15.000
-                                                    vnđ</label>
+                                                <label class="form-check-label" for="Shipping-2">15.000 Vnđ</label>
                                             </div>
                                             <div class="form-check text-start">
                                             </div>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th scope="row">
-                                        </th>
-                                        <td class="py-3">
-                                            <p class="mb-0 text-dark text-uppercase py-3">TOTAL</p>
-                                        </td>
                                         <td class="py-3"></td>
                                         <td class="py-3">
-                                            <div class="border-bottom border-top">
-                                                <p class="m-2 text-dark">{{ number_format($sumPrice + 15000) }} vnđ</p>
+                                            <p class="mb-0 text-dark py-4">Tổng giá</p>
+                                        </td>
+                                        <td colspan="3" class="py-3">
+                                            <div class="form-check text-start">
+                                            </div>
+                                            <div class="form-check text-start">
+                                                <label class="form-check-label" for="Shipping-2">{{ number_format($sumPrice + 15000) }} Vnđ</label>
+                                            </div>
+                                            <div class="form-check text-start">
                                             </div>
                                         </td>
                                     </tr>
@@ -308,7 +325,7 @@
                             Thanh toán qua ATM Momo
                         </button>
                         @error('payment_id')
-                            <div class="alert alert-danger"><strong>Error!</strong> {{ $message }}
+                            <div class="alert alert-danger"><strong>Lỗi!</strong> {{ $message }}
                             </div>
                         @enderror
             </form>
