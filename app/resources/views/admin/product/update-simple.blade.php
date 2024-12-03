@@ -5,6 +5,13 @@
 
 @section('content')
     <link rel="stylesheet" href="{{ asset('backend/css/product.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.ckeditor.com/4.22.0/standard/ckeditor.js"></script>
+    <style>
+        .cke_notification {
+            display: none !important;
+        }
+    </style>
     <div class="content-body">
         <div class="container-fluid">
             <div class="row page-titles mx-0">
@@ -55,8 +62,8 @@
                                         <div class="form-group">
                                             <label for="">Tên sản phẩm:</label>
                                             <input type="number" name="type" value="1" hidden>
-                                            <input class="form-control" type="text" name="name" placeholder="Tên sản phẩm"
-                                                value="{{ $product->name }}">
+                                            <input class="form-control" type="text" name="name"
+                                                placeholder="Tên sản phẩm" value="{{ $product->name }}">
                                             @error('name')
                                                 <div class="alert alert-danger"><strong>Lỗi!</strong> {{ $message }}
                                                 </div>
@@ -117,9 +124,12 @@
                                     </div>
                                     <div class="form-group mt-3" style="width: 100%">
                                         <h5>Mô tả sản phẩm:</h5>
-                                        <textarea class="summernote" name="description" id="description">
-                                            {{ $product->description }}
-                                        </textarea>
+                                        <textarea class="form-control" name="description" id="description">{{ $product->description }}</textarea>
+                                        <script>
+                                            $(document).ready(function() {
+                                                CKEDITOR.replace('description');
+                                            });
+                                        </script>
                                         {{-- <input type="hidden" name="description" id="description"> --}}
                                     </div>
                                 </div>

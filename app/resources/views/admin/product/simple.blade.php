@@ -5,6 +5,14 @@
 
 @section('content')
     <link rel="stylesheet" href="{{ asset('backend/css/product.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.ckeditor.com/4.22.0/standard/ckeditor.js"></script>
+    <style>
+        .cke_notification {
+            display: none !important;
+        }
+    </style>
+    <link rel="stylesheet" href="{{ asset('backend/css/product.css') }}">
     <div class="content-body">
         <div class="container-fluid">
             <div class="row page-titles mx-0">
@@ -94,8 +102,12 @@
                                     </div>
                                     <div class="form-group mt-3" style="width: 100%">
                                         <h5>Mô tả sản phẩm: </h5>
-                                        <textarea class="summernote" name="description" id="description"></textarea>
-                                        {{-- <input type="hidden" name="description" id="description"> --}}
+                                        <textarea class="form-control" name="description" id="description"></textarea>
+                                        <script>
+                                            $(document).ready(function() {
+                                                CKEDITOR.replace('description');
+                                            });
+                                        </script>
                                     </div>
                                 </div>
                             </div>
