@@ -1,4 +1,4 @@
-@if($variants->isNotEmpty())
+    @if($variants->isNotEmpty())
     <ul>
         @foreach ($variants as $variant)
             <li>{{ $variant->option_name }} - {{ $variant->option_value }}</li>

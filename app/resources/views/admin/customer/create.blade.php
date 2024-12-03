@@ -12,14 +12,14 @@
             <div class="row page-titles mx-0">
                 <div class="col-sm-6 p-md-0">
                     <div class="welcome-text">
-                        <h4>Hi, welcome back!</h4>
-                        <span class="ml-1">Datatable</span>
+                        <h4>Xin chào, chào mừng trở lại!</h4>
+                        <span class="ml-1">Thêm tài khoản</span>
                     </div>
                 </div>
                 <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="javascript:void(0)">Table</a></li>
-                        <li class="breadcrumb-item active"><a href="javascript:void(0)">Add Customer</a></li>
+                        <li class="breadcrumb-item"><a href="javascript:void(0)">Danh sách người dùng</a></li>
+                        <li class="breadcrumb-item active"><a href="javascript:void(0)">Thêm tài khoản</a></li>
                     </ol>
                 </div>
             </div>
@@ -31,10 +31,10 @@
                         @csrf
                         <div class="card">
                             <div class="card-header">
-                                <h4 class="card-title">Add New Customer</h4>
+                                <h4 class="card-title">Thêm mới tài khoản</h4>
                                 <div class="d-flex">
-                                    <a href="{{ route('admin.listCustomer') }}" class="btn btn-dark mr-3">Back</a>
-                                    <button type="submit" class="btn btn-secondary mr-3">Save</button>
+                                    <a href="{{ route('admin.listCustomer') }}" class="btn btn-dark mr-3">Quay lại</a>
+                                    <button type="submit" class="btn btn-secondary mr-3">Thêm mới</button>
                                 </div>
                             </div>
                             <div class="card-body">
@@ -42,10 +42,10 @@
                                     <div class="col-8 p-3 mr-4 ml-4 border">
                                         <!-- Form nhập thông tin khách hàng -->
                                         <div class="form-group">
-                                            <label for="name">Name:</label>
-                                            <input name="name" class="form-control" type="text" placeholder="Name">
+                                            <label for="name">Họ tên:</label>
+                                            <input name="name" class="form-control" type="text" placeholder="Họ tên">
                                             @error('name')
-                                                <div class="alert alert-danger"><strong>Error!</strong> {{ $message }}
+                                                <div class="alert alert-danger"><strong>Lỗi!</strong> {{ $message }}
                                                 </div>
                                             @enderror
                                         </div>
@@ -53,24 +53,24 @@
                                             <label for="email">Email:</label>
                                             <input name="email" class="form-control" type="email" placeholder="Email">
                                             @error('email')
-                                                <div class="alert alert-danger"><strong>Error!</strong> {{ $message }}
+                                                <div class="alert alert-danger"><strong>Lỗi!</strong> {{ $message }}
                                                 </div>
                                             @enderror
                                         </div>
                                         <div class="form-group">
-                                            <label for="phone">Phone:</label>
-                                            <input name="phone" class="form-control" type="text" placeholder="Phone">
+                                            <label for="phone">Số điện thoại:</label>
+                                            <input name="phone" class="form-control" type="text" placeholder="Số điện thoại">
                                             @error('phone')
-                                                <div class="alert alert-danger"><strong>Error!</strong> {{ $message }}
+                                                <div class="alert alert-danger"><strong>Lỗi!</strong> {{ $message }}
                                                 </div>
                                             @enderror
                                         </div>
                                         <div class="form-group">
-                                            <label for="password">Password:</label>
+                                            <label for="password">Mật khẩu:</label>
                                             <input name="password" class="form-control" type="password"
-                                                placeholder="Password">
+                                                placeholder="Mật khẩu">
                                             @error('password')
-                                                <div class="alert alert-danger"><strong>Error!</strong> {{ $message }}
+                                                <div class="alert alert-danger"><strong>Lỗi!</strong> {{ $message }}
                                                 </div>
                                             @enderror
                                         </div>
@@ -78,20 +78,20 @@
                                     <div class="col-3 p-3 border">
                                         <!-- Form thêm các thông tin bổ sung -->
                                         <div class="form-group">
-                                            <label for="gender">Gender:</label>
+                                            <label for="gender">Giới tính:</label>
                                             <div class="basic-form">
                                                 <div class="form-group">
                                                     <label class="radio-inline">
-                                                        <input type="radio" name="gender" value="male"> Male
+                                                        <input type="radio" name="gender" value="male"> Nam
                                                     </label>
                                                     <label class="radio-inline ml-3">
-                                                        <input type="radio" name="gender" value="female"> Female
+                                                        <input type="radio" name="gender" value="female"> Nữ
                                                     </label>
                                                     <label class="radio-inline ml-3">
-                                                        <input type="radio" name="gender" value="other"> Other
+                                                        <input type="radio" name="gender" value="other"> Giới tính khác
                                                     </label>
                                                     @error('gender')
-                                                        <div class="alert alert-danger"><strong>Error!</strong>
+                                                        <div class="alert alert-danger"><strong>Lỗi!</strong>
                                                             {{ $message }}
                                                         </div>
                                                     @enderror
@@ -100,7 +100,7 @@
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="avatar">Avatar:</label>
+                                            <label for="avatar">Ảnh đại diện:</label>
                                             <div class="image-upload-container">
                                                 <img id="imagePreview" src="#" alt="Image Preview"
                                                     style="display:none; width:100px; height:100px;" />
@@ -110,30 +110,29 @@
                                                     style="display:none;">x</button>
                                             </div>
                                             @error('avatar')
-                                                <div class="alert alert-danger"><strong>Error!</strong> {{ $message }}
+                                                <div class="alert alert-danger"><strong>Lỗi!</strong> {{ $message }}
                                                 </div>
                                             @enderror
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="birth_date">Birth Date:</label>
+                                            <label for="birth_date">Ngày sinh:</label>
                                             <input name="birth_date" type="date" class="form-control">
                                             @error('birth_date')
-                                                <div class="alert alert-danger"><strong>Error!</strong> {{ $message }}
+                                                <div class="alert alert-danger"><strong>Lỗi!</strong> {{ $message }}
                                                 </div>
                                             @enderror
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="rule_id">Role:</label>
+                                            <label for="rule_id">Chức vụ:</label>
                                             <select name="rule_id" class="form-control">
-                                                <option value="">Select Role</option>
                                                 @foreach ($rules as $rule)
                                                     <option value="{{ $rule->id }}">{{ $rule->rule_name }}</option>
                                                 @endforeach
                                             </select>
                                             @error('rule_id')
-                                                <div class="alert alert-danger"><strong>Error!</strong> {{ $message }}
+                                                <div class="alert alert-danger"><strong>Lỗi!</strong> {{ $message }}
                                                 </div>
                                             @enderror
                                         </div>

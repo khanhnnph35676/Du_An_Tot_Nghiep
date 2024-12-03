@@ -11,6 +11,12 @@
                         <span class="ml-1">Cập nhật danh mục</span>
                     </div>
                 </div>
+                <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="javascript:void(0)">Danh sách danh mục</a></li>
+                        <li class="breadcrumb-item active"><a href="javascript:void(0)">Cập nhật danh mục</a></li>
+                    </ol>
+                </div>
             </div>
             <div class="row">
                 <div class="col-12">

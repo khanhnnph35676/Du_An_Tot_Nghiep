@@ -9,12 +9,15 @@
                          class="icon icon-app-store"></i><span class="nav-text">Trang chủ</span></a>
                  <ul aria-expanded="false">
                      <li><a href="{{ route('admin.admin1') }}">Thống kê sản phẩm</a></li>
-                 </ul>
-                 <ul aria-expanded="false">
                      <li><a href="{{ route('admin.chart') }}">Biểu đồ kinh doanh</a></li>
                  </ul>
              </li>
-             <li><a href="{{ route('admin.profile') }}"><i class="icon icon-single-04"></i>Thông tin cá nhân</a></li>
+             <li>
+                 <a  href="{{ route('admin.profile') }}" aria-expanded="false">
+                     <i class="icon icon-single-04"></i>
+                     <span class="nav-text">Thông tin cá nhân</span>
+                 </a>
+             </li>
              <li class="nav-label text-white">Nội dung</li>
              {{-- Danh mục quản lý sản phẩm, danh mục sản phẩm --}}
              <li><a class="has-arrow" href="javascript:void()" aria-expanded="false"><i
@@ -67,8 +70,14 @@
                      <li><a href="{{ route('admin.compose') }}">Soạn thư</a></li>
                  </ul>
              </li>
-             <li><a href="./app-profile.html"> <i class="fa-solid fa-comments"></i>Giao tiếp khách hàng</a></li>
-             <li><a href="{{ route('admin.calender') }}"><i class="fa-solid fa-calendar-days"></i>Lịch</a></li>
+             <li><a href="./app-profile.html"> <i class="fa-solid fa-comments"></i>
+                     <span class="nav-text">
+                         Giao tiếp khách hàng</span>
+                 </a></li>
+             <li><a href="{{ route('admin.calender') }}"><i class="fa-solid fa-calendar-days"></i>
+                <span  class="nav-text">
+                    Lịch
+                </span></a></li>
          </ul>
      </div>
  </div>

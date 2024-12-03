@@ -9,14 +9,14 @@
             <div class="row page-titles mx-0">
                 <div class="col-sm-6 p-md-0">
                     <div class="welcome-text">
-                        <h4>Hi, welcome back!</h4>
-                        <span class="ml-1">Datatable</span>
+                        <h4>Xin chào, chào mừng trở lại!</h4>
+                        <span class="ml-1">Thùng rác</span>
                     </div>
                 </div>
                 <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="javascript:void(0)">Table</a></li>
-                        <li class="breadcrumb-item active"><a href="javascript:void(0)">Datatable</a></li>
+                        <li class="breadcrumb-item"><a href="javascript:void(0)">Danh sách sản phẩm</a></li>
+                        <li class="breadcrumb-item active"><a href="javascript:void(0)">Thùng rác</a></li>
                     </ol>
                 </div>
             </div>
@@ -37,9 +37,9 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h4 class="card-title">Restore Product</h4>
+                            <h4 class="card-title">Sản phẩm đã xoá</h4>
                             <div class="btn-group" role="group">
-                                <a href="{{ route('admin.listProducts') }}" class="btn btn-dark mr-2">Back</a>
+                                <a href="{{ route('admin.listProducts') }}" class="btn btn-dark mr-2">Quay lại</a>
                             </div>
                         </div>
                         <div class="card-body">
@@ -48,15 +48,14 @@
                                     <thead>
                                         <tr>
                                             <th>Id</th>
-                                            <th>Name</th>
-                                            <th>Image</th>
-                                            <th>Price</th>
-                                            <th>Stick</th>
-                                            <th>View</th>
-                                            <th>Category</th>
-                                            <th>Description</th>
-                                            <th>Type</th>
-                                            <th>Action</th>
+                                            <th>Tên sản phẩm</th>
+                                            <th>Ảnh sản phẩm</th>
+                                            <th>Giá</th>
+                                            <th>Tồn kho</th>
+                                            <th>Lượt xem</th>
+                                            <th>Danh mục</th>
+                                            <th>Loại</th>
+                                            <th>Thao tác</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -74,26 +73,25 @@
                                                         @endif
                                                     @endforeach
                                                 </td>
-                                                <td> {{ number_format($value->price) }} vnđ </td>
+                                                <td> {{ number_format($value->price) }} Vnđ </td>
                                                 <td> {{ $value->qty }} </td>
                                                 <td> {{ $value->view }} </td>
-                                                <td> {{ $value->categories ? $value->categories->name : 'No Category' }}
+                                                <td> {{ $value->categories ? $value->categories->name : 'Không có danh mục' }}
                                                 </td>
-                                                <td style="width:20%;"> {{ Str::limit($value->description, 20) }} </td>
                                                 <td>
-                                                    @if ($value->type == '1')
-                                                        <span class='badge badge-pill badge-success'> Simple</span>
+                                                    @if ($value->type == 1)
+                                                        <span class='badge badge-pill badge-success'> Đơn thể</span>
                                                     @else
-                                                        <span class='badge badge-pill badge-secondary'> Configurable </span>
+                                                        <span class='badge badge-pill badge-secondary'> Có biến thể </span>
                                                     @endif
                                                 </td>
                                                 <td>
                                                     <button class="btn btn-dark" data-toggle="modal"
                                                         data-target="#restorePro"
-                                                        data-id="{{ $value->id }}">Restore</button>
+                                                        data-id="{{ $value->id }}">Khôi phục</button>
                                                     <button class="btn btn-danger" data-toggle="modal"
                                                         data-target="#deleteProductAdmin"
-                                                        data-id="{{ $value->id }}">Delete</button>
+                                                        data-id="{{ $value->id }}">Xoá</button>
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -107,24 +105,22 @@
                                                         style="width: 50px; height: 50px; object-fit: cover;"
                                                         alt="">
                                                 </td>
-                                                <td> {{ number_format($variant->price) }} vnđ </td>
+                                                <td> {{ number_format($variant->price) }} Vnđ </td>
                                                 <td> {{ $variant->stock }} </td>
                                                 <td> {{ $value->view }} </td>
-                                                <td> {{ $value->categories ? $value->categories->name : 'No Category' }}
-                                                </td>
-                                                <td style="width:20%;"> {{ Str::limit($value->description, 20) }}
+                                                <td> {{ $value->categories ? $value->categories->name : 'Không có danh mục' }}
                                                 </td>
                                                 <td>
-                                                    <span class='badge badge-pill badge-success'> Simple</span>
+                                                    <span class='badge badge-pill badge-secondary'> Có biến thể</span>
                                                 </td>
                                                 <td>
                                                     <button class="btn btn-dark" data-toggle="modal"
                                                     data-target="#restoreVariant"
-                                                    data-id="{{ $variant->id }}">Restore</button>
+                                                    data-id="{{ $variant->id }}">Khôi phục</button>
 
                                                     <button class="btn btn-danger" data-toggle="modal"
                                                         data-target="#deleteForceVariant"
-                                                        data-id="{{ $variant->id }}">Delete</button>
+                                                        data-id="{{ $variant->id }}">Xoá</button>
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -168,7 +164,7 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Delete Product</h5>
+                    <h5 class="modal-title">Thông báo</h5>
                     <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
                     </button>
                 </div>
@@ -176,7 +172,7 @@
                     @method('delete')
                     @csrf
                     <div class="modal-body">
-                        <p>You are delete this product</p>
+                        <p>Bạn có muốn xoá sản phẩm này không?</p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
@@ -191,7 +187,7 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Delete Product Variant</h5>
+                    <h5 class="modal-title">Thông báo</h5>
                     <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
                     </button>
                 </div>
@@ -199,7 +195,7 @@
                     @method('delete')
                     @csrf
                     <div class="modal-body">
-                        <p>You are delete this product</p>
+                        <p>Bạn có muốn xoá sản phẩm biến thể này không?</p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
@@ -214,7 +210,7 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Restor Product Variant</h5>
+                    <h5 class="modal-title">Thông báo</h5>
                     <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
                     </button>
                 </div>
@@ -222,7 +218,7 @@
                     @csrf
                     @method('PATCH')
                     <div class="modal-body">
-                        <p>Are you sure you want to restore this product variant?</p>
+                        <p>Bạn có muốn khôi phục này không?</p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>

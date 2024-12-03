@@ -9,14 +9,14 @@
             <div class="row page-titles mx-0">
                 <div class="col-sm-6 p-md-0">
                     <div class="welcome-text">
-                        <h4>Hi, welcome back!</h4>
-                        <p class="mb-0">Your business dashboard template</p>
+                        <h4>Xin chào, chào mừng trở lại!</h4>
+                        <p class="mb-0">Thông tin cá nhân</p>
                     </div>
                 </div>
                 <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="javascript:void(0)">App</a></li>
-                        <li class="breadcrumb-item active"><a href="javascript:void(0)">Profile</a></li>
+                        <li class="breadcrumb-item"><a href="javascript:void(0)">Trang chủ</a></li>
+                        <li class="breadcrumb-item active"><a href="javascript:void(0)">Thông tin cá nhân</a></li>
                     </ol>
                 </div>
             </div>
@@ -35,10 +35,10 @@
                                 <div class="row justify-content-center">
                                     <div class="col-xl-8">
                                         <div class="row">
-                                            <div class="col-xl-4 col-sm-4 border-right-1 prf-col">
+                                            <div class="col-xl-6 col-sm-4 border-right-1 prf-col">
                                                 <div class="profile-name">
                                                     <h4 class="text-primary">{{ auth()->user()->name }}</h4>
-                                                    <p>UX / UI Designer</p>
+                                                    <p>{{ auth()->user()->rule_id == 1 ? 'Quản lý web' : 'Nhân viên' }} </p>
                                                 </div>
                                             </div>
                                             <div class="col-xl-4 col-sm-4 border-right-1 prf-col">
@@ -49,11 +49,11 @@
                                                 </div>
                                             </div>
                                             <!-- <div class="col-xl-4 col-sm-4 prf-col">
-                                                <div class="profile-call">
-                                                    <h4 class="text-muted">(+1) 321-837-1030</h4>
-                                                    <p>Phone No.</p>
-                                                </div>
-                                            </div> -->
+                                                    <div class="profile-call">
+                                                        <h4 class="text-muted">(+1) 321-837-1030</h4>
+                                                        <p>Phone No.</p>
+                                                    </div>
+                                                </div> -->
                                         </div>
                                     </div>
                                 </div>
@@ -66,23 +66,17 @@
                 <div class="col-lg-4">
                     <div class="card">
                         <div class="card-body">
-                            <div class="profile-statistics">
-                                <div class="text-center mt-4 border-bottom-1 pb-3">
-                                    <div class="row">
-                                        <div class="col">
-                                            <h3 class="m-b-0">150</h3><span>Follower</span>
-                                        </div>
-                                        <div class="col">
-                                            <h3 class="m-b-0">140</h3><span>Place Stay</span>
-                                        </div>
-                                        <div class="col">
-                                            <h3 class="m-b-0">45</h3><span>Reviews</span>
-                                        </div>
-                                    </div>
-                                    <div class="mt-4"><a href="javascript:void()"
-                                            class="btn btn-primary pl-5 pr-5 mr-3 mb-4">Follow</a> <a
-                                            href="javascript:void()" class="btn btn-dark pl-5 pr-5 mb-4">Send
-                                            Message</a>
+                            <div class="profile-tab">
+                                <div class="custom-tab-1">
+                                    <ul class="nav nav-tabs">
+                                        <li class="nav-item"><a href="#about-me" data-toggle="tab"
+                                                class="nav-link active show ">Ảnh đại diện</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content text-center mt-3">
+                                            <img src="{{Storage::url(auth()->user()->avatar) }}" alt=""
+                                            class="rounded-circle"
+                                            style="width: 200px; height: 200px; object-fit: cover;">
                                     </div>
                                 </div>
                             </div>
@@ -96,20 +90,20 @@
                                 <div class="custom-tab-1">
                                     <ul class="nav nav-tabs">
                                         <li class="nav-item"><a href="#about-me" data-toggle="tab"
-                                                class="nav-link active show ">About Me</a>
+                                                class="nav-link active show ">Thông tin</a>
                                         </li>
                                     </ul>
                                     <div class="tab-content">
                                         <div id="about-me" class="tab-pane fade active show">
                                             <div class="profile-about-me">
                                                 <div class="pt-4 border-bottom-1 pb-4">
-                                                    <h4 class="text-primary">Personal Information</h4>
+                                                    <h4 class="text-primary">Thông tin cá nhân</h4>
                                                 </div>
                                             </div>
                                             <div class="profile-personal-info">
                                                 <div class="row mb-4">
                                                     <div class="col-3">
-                                                        <h5 class="f-w-500">Name <span class="pull-right">:</span>
+                                                        <h5 class="f-w-500">Họ tên <span class="pull-right">:</span>
                                                         </h5>
                                                     </div>
                                                     <div class="col-9"><span>{{ auth()->user()->name }}</span>
@@ -125,22 +119,25 @@
                                                 </div>
                                                 <div class="row mb-4">
                                                     <div class="col-3">
-                                                        <h5 class="f-w-500">Phone <span class="pull-right">:</span></h5>
+                                                        <h5 class="f-w-500">Số điện thoại <span
+                                                                class="pull-right">:</span></h5>
                                                     </div>
                                                     <div class="col-9"><span>{{ auth()->user()->phone }}</span>
                                                     </div>
                                                 </div>
                                                 <div class="row mb-4">
                                                     <div class="col-3">
-                                                        <h5 class="f-w-500">Gender <span class="pull-right">:</span>
+                                                        <h5 class="f-w-500">Giới tính <span class="pull-right">:</span>
                                                         </h5>
                                                     </div>
-                                                    <div class="col-9"><span>{{ auth()->user()->gender }}</span>
+                                                    <div class="col-9">
+                                                        <span>{{ auth()->user()->gender == 'male' ? 'Nam' : 'Nữ' }}</span>
                                                     </div>
                                                 </div>
                                                 <div class="row mb-4">
                                                     <div class="col-3">
-                                                        <h5 class="f-w-500">Birthday <span class="pull-right">:</span></h5>
+                                                        <h5 class="f-w-500">Ngày sinh <span class="pull-right">:</span>
+                                                        </h5>
                                                     </div>
                                                     <div class="col-9"><span>{{ auth()->user()->birth_date }}</span>
                                                     </div>
@@ -159,8 +156,8 @@
         </div>
     </div>
     <!--**********************************
-        Content body end
-    ***********************************-->
+            Content body end
+        ***********************************-->
     <script src="{{ asset('backend/js/product.js') }}"></script>
 
     <script>

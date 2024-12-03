@@ -10,14 +10,14 @@
             <div class="row page-titles mx-0">
                 <div class="col-sm-6 p-md-0">
                     <div class="welcome-text">
-                        <h4>Hi, welcome back!</h4>
-                        <span class="ml-1">Datatable</span>
+                        <h4>Xin chào, chào mừng trở lại!</h4>
+                        <span class="ml-1">Thêm mới sản phẩm</span>
                     </div>
                 </div>
                 <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="javascript:void(0)">Table</a></li>
-                        <li class="breadcrumb-item active"><a href="javascript:void(0)">Datatable</a></li>
+                        <li class="breadcrumb-item"><a href="javascript:void(0)">Danh sách sản phẩm</a></li>
+                        <li class="breadcrumb-item active"><a href="javascript:void(0)">Thêm mới sản phẩm</a></li>
                     </ol>
                 </div>
             </div>
@@ -29,10 +29,10 @@
                         @csrf
                         <div class="card">
                             <div class="card-header">
-                                <h4 class="card-title">Add New Product Configurable</h4>
+                                <h4 class="card-title">Thêm mới sản phẩm có biến thể</h4>
                                 <div class="d-flex">
-                                    <a href="{{ route('admin.listProducts') }}" class="btn btn-dark mr-3">Back</a>
-                                    <button type="submit" type="submit" class="btn btn-secondary">Save</button>
+                                    <a href="{{ route('admin.listProducts') }}" class="btn btn-dark mr-3">Quay lại</a>
+                                    <button type="submit" type="submit" class="btn btn-secondary">Thêm mới</button>
                                 </div>
                             </div>
                             <div class="card-body">
@@ -41,28 +41,29 @@
                                         {{-- form thêm cho product --}}
                                         {{-- <input class="form-control" type="text" placeholder="Name" name="id" hidden> --}}
                                         <div class="form-group">
-                                            <label for="">Name:</label>
-                                            <input class="form-control" type="text" placeholder="Name" name="name">
+                                            <label for="">Tên sản phẩm:</label>
+                                            <input class="form-control" type="text" placeholder="Tên sản phẩm"
+                                                name="name">
                                             @error('name')
-                                                <div class="alert alert-danger"><strong>Error!</strong> {{ $message }}
+                                                <div class="alert alert-danger"><strong>Lỗi!</strong> {{ $message }}
                                                 </div>
                                             @enderror
                                         </div>
                                         <div class="form-group">
-                                            <label for="">Quanlity:</label>
-                                            <input class="form-control" type="text" name='qty' placeholder="Quanlity"
+                                            <label for="">Số lượng:</label>
+                                            <input class="form-control" type="text" name='qty' placeholder="Số lượng"
                                                 readonly>
                                         </div>
                                         <div class="form-group">
-                                            <label for="">Price:</label>
-                                            <input class="form-control" type="text" name="price" placeholder="Price">
+                                            <label for="">Giá:</label>
+                                            <input class="form-control" type="text" name="price" placeholder="Giá">
                                             @error('price')
-                                                <div class="alert alert-danger"><strong>Error!</strong> {{ $message }}
+                                                <div class="alert alert-danger"><strong>Lỗi!</strong> {{ $message }}
                                                 </div>
                                             @enderror
                                         </div>
                                         <div class="form-group">
-                                            <label>Variant options:</label>
+                                            <label>Biến thể:</label>
                                             <div class="form-check form-check-inline">
                                                 @foreach ($variants as $value)
                                                     <label class="form-check-label">
@@ -79,7 +80,7 @@
                                     </div>
                                     <div class="col-3 p-3 border">
                                         <div class="form-group">
-                                            <label>Category:</label>
+                                            <label>Danh mục:</label>
                                             <select class="form-control" id="sel1" name='category_id'>
                                                 @foreach ($categories as $value)
                                                     <option value="{{ $value->id }}">{{ $value->name }}</option>
@@ -87,43 +88,47 @@
                                             </select>
                                         </div>
                                         <div class="form-group">
+                                            <label for="">Ảnh chính: </label>
                                             <input type="file" class="form-control" name="image" accept="image/*">
                                         </div>
                                         <div class="form-group">
-                                            <input type="file" class="form-control" name="gallerie_image[]" accept="image/*"multiple>
+                                            <label for="">Ảnh phụ: </label>
+                                            <input type="file" class="form-control" name="gallerie_image[]"
+                                                accept="image/*"multiple>
                                         </div>
                                     </div>
                                     {{-- phần biến thể phải làm bằng front-end
                                         1,nếu click chọn loại thì in ra danh sách loại
                                         2,Chọn loại 2 cái nó sẽ in ra 2 bản ghi để thêm product varian  --}}
                                     <div class="card-body border mt-3">
+                                        <h5>Danh sách sản phẩm</h5>
                                         <div class="table-responsive">
                                             <table id="example" class="display">
                                                 <thead>
                                                     <tr>
-                                                        <th>Option Value</th>
-                                                        <th>Image</th>
-                                                        <th>Sku</th>
-                                                        <th>Stick</th>
-                                                        <th>Price</th>
+                                                        <th></th>
+                                                        <th>Ảnh sản phẩm</th>
+                                                        <th>Tên biến thể</th>
+                                                        <th>Tồn kho</th>
+                                                        <th>GIá</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                 </tbody>
                                                 @error('variant_sku')
-                                                    <div class="alert alert-danger"><strong>Error!</strong> {{ $message }}
+                                                    <div class="alert alert-danger"><strong>Lỗi!</strong> {{ $message }}
                                                     </div>
                                                 @enderror
                                                 @error('variant_stock')
-                                                    <div class="alert alert-danger"><strong>Error!</strong> {{ $message }}
+                                                    <div class="alert alert-danger"><strong>Lỗi!</strong> {{ $message }}
                                                     </div>
                                                 @enderror
                                                 @error('variant_price')
-                                                    <div class="alert alert-danger"><strong>Error!</strong> {{ $message }}
+                                                    <div class="alert alert-danger"><strong>Lỗi!</strong> {{ $message }}
                                                     </div>
                                                 @enderror
                                                 @error('option_value')
-                                                    <div class="alert alert-danger"><strong>Error!</strong> {{ $message }}
+                                                    <div class="alert alert-danger"><strong>Lỗi!</strong> {{ $message }}
                                                     </div>
                                                 @enderror
 
@@ -131,7 +136,7 @@
                                         </div>
                                     </div>
                                     <div class="form-group mt-3" style="width: 100%">
-                                        <h5>Description</h5>
+                                        <h5>Mô tả sản phẩm: </h5>
                                         <textarea class="summernote" name="description" id="description"></textarea>
                                         {{-- <input type="hidden" name="description" id="description"> --}}
                                     </div>
@@ -143,9 +148,10 @@
             </div>
         </div>
     </div>
+    </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-         window.onload = function() {
+        window.onload = function() {
             // Tự động ẩn thông báo lỗi sau 1 giây
             var errorElements = document.querySelectorAll('.alert-danger');
             errorElements.forEach(function(errorElement) {
@@ -221,7 +227,7 @@
                         $('#example tbody').append('<tr>' +
                             '<td>' + variant + '</td>' +
                             '<td>' +
-                                '<input type="file" name="variant_image[]" class="form-control">'  +
+                            '<input type="file" name="variant_image[]" class="form-control">' +
                             '</td>' +
                             '<td class="pr-4"><input name="variant_sku[]" type="text" class="form-control"></td>' +
                             '<td class="pr-4"><input name="variant_stock[]" type="text" class="form-control"></td>' +

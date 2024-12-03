@@ -3,10 +3,7 @@
     <!-- Datatable -->
 @endpush
 @section('content')
-    <!--**********************************
-                                                                    Content body start
-
-                                                                    ***********************************-->
+    <!--**********************************Content body start***********************************-->
     <style>
         .checkItem {
             text-align: center;
@@ -19,14 +16,14 @@
             <div class="row page-titles mx-0">
                 <div class="col-sm-6 p-md-0">
                     <div class="welcome-text">
-                        <h4>Hi, welcome back!</h4>
-                        <span class="ml-1">Datatable</span>
+                        <h4>Xin chào, chào mừng trở lại!</h4>
+                        <span class="ml-1">Thêm mới mã giảm giá</span>
                     </div>
                 </div>
                 <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="javascript:void(0)">Table</a></li>
-                        <li class="breadcrumb-item active"><a href="javascript:void(0)">Datatable</a></li>
+                        <li class="breadcrumb-item"><a href="javascript:void(0)">Danh sách mã giảm giá</a></li>
+                        <li class="breadcrumb-item active"><a href="javascript:void(0)">Thêm mới mã giảm giá</a></li>
                     </ol>
                 </div>
             </div>
@@ -38,10 +35,10 @@
                         @csrf
                         <div class="card">
                             <div class="card-header">
-                                <h4 class="card-title">Add New Discount</h4>
+                                <h4 class="card-title">Thêm mới mã giảm giá</h4>
                                 <div class="d-flex">
-                                    <a href="{{ route('admin.listDiscounts') }}" class="btn btn-dark mr-3">Back</a>
-                                    <button type="submit" name="submit" class="btn btn-secondary">Save</button>
+                                    <a href="{{ route('admin.listDiscounts') }}" class="btn btn-dark mr-3">Quay lại</a>
+                                    <button type="submit" name="submit" class="btn btn-secondary">Thêm mới</button>
                                 </div>
                             </div>
                             <div class="card-body">
@@ -49,47 +46,45 @@
                                     <div class="col-12 p-3 mr-4 ml-4 border">
                                         {{-- Form fields for product id, discount, priority, start date, and end date --}}
                                         <div class="form-group">
-                                            <label for="">Name Discount:</label>
-                                            <input class="form-control" type="text" placeholder="Name Discount"
+                                            <label for="">Mã giảm giá:</label>
+                                            <input class="form-control" type="text" placeholder="Mã giảm giá"
                                                 name="name">
                                             @error('name')
-                                                <div class="alert alert-danger"><strong>Error!</strong> {{ $message }}
+                                                <div class="alert alert-danger"><strong>Lỗi!</strong> {{ $message }}
                                                 </div>
                                             @enderror
                                         </div>
                                         <div class="form-group">
-                                            <label for="">Discount:</label>
-                                            <input class="form-control" type="text" placeholder="Discount"
+                                            <label for="">Giảm theo phần trăm:</label>
+                                            <input class="form-control" type="text" placeholder="Phần trăm"
                                                 name="discount">
                                             @error('discount')
-                                                <div class="alert alert-danger"><strong>Error!</strong> {{ $message }}
+                                                <div class="alert alert-danger"><strong>Lỗi!</strong> {{ $message }}
                                                 </div>
                                             @enderror
                                         </div>
                                         <div class="form-group">
-                                            <label for="">Priority:</label>
-                                            <input class="form-control" type="text" placeholder="Priority"
+                                            <label for="">Độ ưu tiên:</label>
+                                            <input class="form-control" type="text" placeholder="Độ ưu tiên"
                                                 name="priority">
                                             @error('priority')
-                                                <div class="alert alert-danger"><strong>Error!</strong> {{ $message }}
+                                                <div class="alert alert-danger"><strong>Lỗi!</strong> {{ $message }}
                                                 </div>
                                             @enderror
                                         </div>
                                         <div class="form-group">
-                                            <label for="">Start date:</label>
-                                            <input class="form-control" type="date" placeholder="Start date"
-                                                name="start_date">
+                                            <label for="">Ngày bắt đầu: </label>
+                                            <input class="form-control" type="date" name="start_date">
                                             @error('start_date')
-                                                <div class="alert alert-danger"><strong>Error!</strong> {{ $message }}
+                                                <div class="alert alert-danger"><strong>Lỗi!</strong> {{ $message }}
                                                 </div>
                                             @enderror
                                         </div>
                                         <div class="form-group">
-                                            <label for="">End date:</label>
-                                            <input class="form-control" type="date" placeholder="End date"
-                                                name="end_date">
+                                            <label for="">Ngày kết thúc:</label>
+                                            <input class="form-control" type="date" name="end_date">
                                             @error('end_date')
-                                                <div class="alert alert-danger"><strong>Error!</strong> {{ $message }}
+                                                <div class="alert alert-danger"><strong>Lỗi!</strong> {{ $message }}
                                                 </div>
                                             @enderror
                                         </div>
@@ -102,7 +97,7 @@
                                             <div class="accordion__item">
                                                 <div class="accordion__header collapsed" data-toggle="collapse"
                                                     data-target="#bordered_no-gutter_collapseThree">
-                                                    <span class="accordion__header--text"> Select products </span>
+                                                    <span class="accordion__header--text"> Danh sách sản phẩm </span>
                                                     <span class="accordion__header--indicator style_two"></span>
                                                 </div>
                                                 <div id="bordered_no-gutter_collapseThree" class="collapse accordion__body"
@@ -114,13 +109,13 @@
                                                                     <tr>
                                                                         <th><input type="checkbox" id="checkAll"></th>
                                                                         <th>Id</th>
-                                                                        <th>Name</th>
-                                                                        <th>Image</th>
-                                                                        <th>Price</th>
-                                                                        <th>Stock</th>
-                                                                        <th>View</th>
-                                                                        <th>Category</th>
-                                                                        <th>Type</th>
+                                                                        <th>Tên sản phẩm</th>
+                                                                        <th>Ảnh sản phẩm</th>
+                                                                        <th>GIá</th>
+                                                                        <th>Tồn kho</th>
+                                                                        <th>Lượt xem</th>
+                                                                        <th>Danh mục</th>
+                                                                        <th>Loại</th>
 
                                                                     </tr>
                                                                 </thead>
@@ -191,8 +186,8 @@
         </div>
     </div>
     <!--**********************************
-                                                                    Content body end
-                                                                ***********************************-->
+                                                                            Content body end
+                                                                        ***********************************-->
     <script>
         // Lắng nghe sự kiện click trên checkbox chính
         document.getElementById('checkAll').addEventListener('click', function(e) {

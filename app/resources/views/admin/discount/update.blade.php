@@ -4,26 +4,37 @@
 @endpush
 @section('content')
     <!--**********************************
-                                Content body start
-                            ***********************************-->
+                                                Content body start
+                                            ***********************************-->
     <div class="content-body">
         <div class="container-fluid">
             <div class="row page-titles mx-0">
                 <div class="col-sm-6 p-md-0">
                     <div class="welcome-text">
-                        <h4>Hi, welcome back!</h4>
-                        <span class="ml-1">Datatable</span>
+                        <h4>Xin chào, chào mừng trở lại!</h4>
+                        <span class="ml-1">Cập nhật mã giảm giá</span>
                     </div>
                 </div>
                 <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="javascript:void(0)">Table</a></li>
-                        <li class="breadcrumb-item active"><a href="javascript:void(0)">Datatable</a></li>
+                        <li class="breadcrumb-item"><a href="javascript:void(0)">Danh sách mã giảm giá</a></li>
+                        <li class="breadcrumb-item active"><a href="javascript:void(0)">Cập nhật mã giảm giá</a></li>
                     </ol>
                 </div>
             </div>
             <!-- row -->
-
+            @if (session('message'))
+                <div class="message">
+                    <div class="alert alert-primary alert-dismissible alert-alt solid fade show">
+                        <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close"><span><i
+                                    class="mdi mdi-close"></i></span>
+                        </button>
+                        @if (session('message'))
+                            <strong>{{ session('message') }}</strong>
+                        @endif
+                    </div>
+                </div>
+            @endif
             <div class="row">
                 <div class="col-12">
                     <form action="{{ route('admin.discount.update', $discount->id) }}" method="POST">
@@ -32,48 +43,68 @@
 
                         <div class="card">
                             <div class="card-header">
-                                <h4 class="card-title">Update New Discount</h4>
+                                <h4 class="card-title">Cập nhật mã giảm giá</h4>
                                 <div class="d-flex">
-                                    <a href="{{ route('admin.listDiscounts') }}" class="btn btn-dark mr-3">Back</a>
-                                    <button type="submit" name="submit" class="btn btn-secondary">Save</button>
+                                    <a href="{{ route('admin.listDiscounts') }}" class="btn btn-dark mr-3">Quay lại</a>
+                                    <button type="submit" name="submit" class="btn btn-secondary">Cập nhật</button>
                                 </div>
                             </div>
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-12 p-3 mr-4 ml-4 border">
                                         <div class="form-group">
-                                            <label for="">Name Discount:</label>
-                                            <input class="form-control" type="text" placeholder="Discount"
-                                                name="name" value="{{ $discount->name }}">
-                                            <input class="form-control" type="text" placeholder="Discount"
-                                                name="id" value="{{ $discount->id }}" hidden>
+                                            <label for="">Mã giảm giá:</label>
+                                            <input class="form-control" type="text" placeholder="Discount" name="name"
+                                                value="{{ $discount->name }}">
+                                            @error('name')
+                                                <div class="alert alert-danger"><strong>Lỗi!</strong> {{ $message }}
+                                                </div>
+                                            @enderror
+                                            <input class="form-control" type="text" placeholder="Discount" name="id"
+                                                value="{{ $discount->id }}" hidden>
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="">Discount:</label>
-                                            <input class="form-control" type="text" placeholder="Discount"
+                                            <label for="">Giảm theo phần trăm:</label>
+                                            <input class="form-control" type="text" placeholder="Phần trăm"
                                                 name="discount" value="{{ $discount->discount }}">
+                                            @error('discount')
+                                                <div class="alert alert-danger"><strong>Lỗi!</strong> {{ $message }}
+                                                </div>
+                                            @enderror
                                         </div>
                                         <div class="form-group">
-                                            <label for="">Priority:</label>
-                                            <input class="form-control" type="text" placeholder="Priority"
+                                            <label for="">Độ ưu tiên:</label>
+                                            <input class="form-control" type="text" placeholder="Đố ưu tiên"
                                                 name="priority" value="{{ $discount->priority }}">
+                                            @error('priority')
+                                                <div class="alert alert-danger"><strong>Lỗi!</strong> {{ $message }}
+                                                </div>
+                                            @enderror
                                         </div>
                                         <div class="form-group">
-                                            <label for="">Start date:</label>
-                                            <input class="form-control" type="date" placeholder="Start date"
+                                            <label for="">Ngày bắt đầu:</label>
+                                            <input class="form-control" type="date" placeholder="Ngày/Tháng/Năm"
                                                 name="start_date" value="{{ $discount->start_date }}">
+                                            @error('start_date')
+                                                <div class="alert alert-danger"><strong>Lỗi!</strong> {{ $message }}
+                                                </div>
+                                            @enderror
                                         </div>
                                         <div class="form-group">
-                                            <label for="">End date:</label>
-                                            <input class="form-control" type="date" placeholder="End date"
+                                            <label for="">Ngày kết thúc:</label>
+                                            <input class="form-control" type="date" placeholder="Ngày/Tháng/Năm"
                                                 name="end_date" value="{{ $discount->end_date }}">
+                                            @error('end_date')
+                                                <div class="alert alert-danger"><strong>Lỗi!</strong> {{ $message }}
+                                                </div>
+                                            @enderror
                                         </div>
                                         <div id="accordion-four" class="accordion accordion-no-gutter accordion-bordered">
                                             <div class="accordion__item">
                                                 <div class="accordion__header collapsed" data-toggle="collapse"
                                                     data-target="#bordered_no-gutter_collapseThree">
-                                                    <span class="accordion__header--text"> Select products </span>
+                                                    <span class="accordion__header--text"> Danh sách sản phẩm </span>
                                                     <span class="accordion__header--indicator style_two"></span>
                                                 </div>
                                                 <div id="bordered_no-gutter_collapseThree" class="collapse accordion__body"
@@ -85,13 +116,13 @@
                                                                     <tr>
                                                                         <th><input type="checkbox" id="checkAll"></th>
                                                                         <th>Id</th>
-                                                                        <th>Name</th>
-                                                                        <th>Image</th>
-                                                                        <th>Price</th>
-                                                                        <th>Stock</th>
-                                                                        <th>View</th>
-                                                                        <th>Category</th>
-                                                                        <th>Type</th>
+                                                                        <th>Tên sản phẩm</th>
+                                                                        <th>Ảnh sản phẩm</th>
+                                                                        <th>Giá</th>
+                                                                        <th>Tồn kho</th>
+                                                                        <th>Lượt xem</th>
+                                                                        <th>Danh mục</th>
+                                                                        <th>Loại</th>
 
                                                                     </tr>
                                                                 </thead>
@@ -103,8 +134,7 @@
                                                                                     @foreach ($discountProduct as $item)
                                                                                         @if ($item['product_id'] == $value->id)
                                                                                             checked
-                                                                                        @endif
-                                                                                    @endforeach
+                                                                                        @endif @endforeach
                                                                                     class="checkItem">
                                                                             </td>
                                                                             <td> {{ $value->id }} </td>
@@ -134,7 +164,7 @@
                                                                                 vnđ </td>
                                                                             <td> {{ $value->qty }} </td>
                                                                             <td> {{ $value->view }} </td>
-                                                                            <td> {{ $value->categories ? $value->categories->name : 'No Category' }}
+                                                                            <td> {{ $value->categories ? $value->categories->name : 'Không có danh mục' }}
                                                                             </td>
                                                                             <td>
                                                                                 @if ($value->type == '1')
@@ -166,8 +196,8 @@
         </div>
     </div>
     <!--**********************************
-                                Content body end
-                            ***********************************-->
+                                                Content body end
+                                            ***********************************-->
 @endsection
 @push('scriptHome')
 @endpush

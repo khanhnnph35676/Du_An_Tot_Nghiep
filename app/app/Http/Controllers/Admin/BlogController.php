@@ -1,12 +1,11 @@
 <?php
+
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BlogRequest;
-use App\Http\Requests\StoreBlogRequest;
 use App\Models\Blog;
-use App\Models\Blog_categories;
-use App\Models\Category;
+use App\Models\BlogCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use PhpParser\Node\Stmt\Block;
@@ -15,75 +14,71 @@ class BlogController extends Controller
 {
     public function index()
     {
-        // Lấy danh sách bài viết từ cơ sở dữ liệu (nếu có)
-        $list_blog = Blog::with('blog_categories')->get(); // Thay thế bằng logic lấy dữ liệu từ model
-        // dd($blogs);
-        return view('admin.blog.list', compact('list_blog'));
+        $blog_categories = BlogCategory::get();
+        $list_blog = Blog::with('blog_categories')->get();
+        return view('admin.blog.list', compact('list_blog','blog_categories'));
     }
 
-    public function submit_add_blog(Request $request)
+    public function submit_add_blog(BlogRequest $request)
     {
-        $data = $request->all();
-        $blog = new Blog();
-
-        $blog->BlogTitle = $data['BlogTitle'];
-        $blog->BlogContent = $data['BlogContent'];
-        $blog->Status = $data['Status'];
-        $blog->BlogDesc = $data['BlogDesc'];
-        $blog->BlogSlug = $data['BlogSlug'];
-
-        $image = $request->file('BlogImage');
-        $get_name_image = $image->getClientOriginalName();
-        $name_image = current(explode('.', $get_name_image));
-        $new_image = $name_image . rand(0, 99) . '.' . $image->getClientOriginalExtension();
-        $image->storeAs('public/images/blog', $new_image);
-        $blog->BlogImage = $new_image;
-
-        $blog->save();
-        return redirect()->back()->with('insert-message', 'Thêm bài viết thành công');
-    }
-
-
-    public function blog_details($BlogSlug)
-    {
-
-        $Blog = Blog::where('BlogSlug', $BlogSlug)->first();
-
-
-        if ($Blog->Status != 0){
-        return view("admin.blog.blog-details")->with(compact('Blog'));
-        }
-    }
-    public function edit_blog($idBlog)
-    {
-        $blog = Blog::where('idBlog', $idBlog)->first();
-
-        return view("admin.blog.edit-blog")->with(compact('blog'));
-    }
-
-    public function submit_edit_blog(Request $request, $idBlog)
-    {
-        $data = $request->all();
-        $blog = Blog::find($idBlog);
-
-        $blog->BlogTitle = $data['BlogTitle'];
-        $blog->BlogContent = $data['BlogContent'];
-        $blog->Status = $data['Status'];
-        $blog->BlogDesc = $data['BlogDesc'];
-        $blog->BlogSlug = $data['BlogSlug'];
-
-        if ($request->file('BlogImage')) {
+        $new_image = null;
+        if ($request->hasFile('BlogImage')) {
             $image = $request->file('BlogImage');
             $get_name_image = $image->getClientOriginalName();
             $name_image = current(explode('.', $get_name_image));
             $new_image = $name_image . rand(0, 99) . '.' . $image->getClientOriginalExtension();
             $image->storeAs('public/images/blog/', $new_image);
-            $blog->BlogImage = $new_image;
-
-            $get_old_img = Blog::where('idBlog', $idBlog)->first();
-            Storage::delete('public/images/blog/' . $get_old_img->BlogImage);
         }
-        $blog->save();
+        $data=[
+            'BlogTitle' => $request->BlogTitle,
+            'BlogContent' => $request->BlogContent,
+            'BlogSlug' => $request->BlogSlug,
+            'Status' => $request->Status,
+            'BlogDesc'=>$request->BlogDesc,
+            'BlogImage' => $new_image,
+            'blog_category_id' => $request->blog_category_id
+        ];
+        Blog::create($data);
+        return redirect()->back()->with('message', 'Thêm bài viết thành công');
+    }
+
+    public function blog_details($BlogSlug)
+    {
+        $Blog = Blog::with('blog_categories')->where('BlogSlug', $BlogSlug)->first();
+        $blog_categories = BlogCategory::get();
+        if ($Blog->Status != 0) {
+            return view("admin.blog.blog-details")->with(compact('Blog','blog_categories'));
+        }
+    }
+    public function edit_blog($idBlog)
+    {
+        $blog = Blog::find($idBlog);
+        $blog_categories = BlogCategory::get();
+        return view("admin.blog.edit-blog")->with(compact('blog','blog_categories'));
+    }
+
+    public function submit_edit_blog(BlogRequest $request, $idBlog)
+    {
+        $blog = Blog::find($idBlog);
+        $new_image = $blog->BlogImage;
+        if ($request->hasFile('BlogImage')) {
+            $image = $request->file('BlogImage');
+            $get_name_image = $image->getClientOriginalName();
+            $name_image = current(explode('.', $get_name_image));
+            $new_image = $name_image . rand(0, 99) . '.' . $image->getClientOriginalExtension();
+            $image->storeAs('public/images/blog/', $new_image);
+            Storage::delete('public/images/blog/' . $blog->BlogImage);
+        }
+        $data=[
+            'BlogTitle' => $request->BlogTitle,
+            'BlogContent' => $request->BlogContent,
+            'BlogSlug' => $request->BlogSlug,
+            'Status' => $request->Status,
+            'BlogDesc'=>$request->BlogDesc,
+            'BlogImage' => $new_image,
+            'blog_category_id' => $request->blog_category_id
+        ];
+        $blog->update($data);
         return redirect()->back()->with('message', 'Sửa bài viết thành công');
     }
 
@@ -165,22 +160,14 @@ class BlogController extends Controller
     //     return redirect()->back()->with('insert-message', 'Cập nhật dữ liệu thành công');
     // }
 
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        // Tìm blog theo ID và xóa nó
-        $blog = Blog::findOrFail($id);
-
-        // Xóa ảnh nếu có
+        $blog = Blog::findOrFail($request->idBlog);
         if ($blog->blog_image) {
             Storage::delete('public/storage/images/blog/' . $blog->BlogImage);
         }
-
-
-        // Xóa bài blog
         $blog->delete();
-
-        // Thông báo xóa thành công
-        return redirect()->route('admin.blog.list')->with('delete-message', 'Blog đã được xóa thành công.');
+        return redirect()->route('admin.blog.list')->with('message', 'Bài viết đã được xóa thành công.');
     }
     // public function updateBlog(Request $request, $id)
     // {

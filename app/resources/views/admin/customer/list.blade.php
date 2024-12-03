@@ -17,8 +17,8 @@
                 </div>
                 <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="">Home</a></li>
-                        <li class="breadcrumb-item active"><a href="javascript:void(0)">Customers</a></li>
+                        <li class="breadcrumb-item"><a href="">Trang chủ</a></li>
+                        <li class="breadcrumb-item active"><a href="javascript:void(0)">Danh sách người dùng</a></li>
                     </ol>
                 </div>
             </div>
@@ -93,7 +93,7 @@
                                                         <a href="{{ route('admin.customerEdit', $user->id) }}"
                                                             class="btn btn-secondary mr-1">Sửa</a>
                                                         <form action="{{ route('admin.customerDestroy', $user->id) }}"
-                                                            method="POST" onsubmit="return confirm('Are you sure?');">
+                                                            method="POST" onsubmit="return confirm('Bạn có muốn xoá tài khoản này không?');">
                                                             @csrf
                                                             @method('DELETE')
                                                             <button type="submit" class="btn btn-dark">Xoá</button>

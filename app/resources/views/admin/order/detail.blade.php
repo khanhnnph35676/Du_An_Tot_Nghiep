@@ -9,14 +9,14 @@
             <div class="row page-titles mx-0">
                 <div class="col-sm-6 p-md-0">
                     <div class="welcome-text">
-                        <h4>Hi, welcome back!</h4>
-                        <span class="ml-1">Datatable</span>
+                        <h4>Xin chào, chào mừng trở lại!</h4>
+                        <span class="ml-1">Chi tiết đơn hàng</span>
                     </div>
                 </div>
                 <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="javascript:void(0)">Table</a></li>
-                        <li class="breadcrumb-item active"><a href="javascript:void(0)">Datatable</a></li>
+                        <li class="breadcrumb-item"><a href="javascript:void(0)">Danh sách đơn hàng</a></li>
+                        <li class="breadcrumb-item active"><a href="javascript:void(0)">Chi tiết đơn hàng</a></li>
                     </ol>
                 </div>
             </div>
@@ -41,10 +41,10 @@
                             @csrf
                             <div class="card">
                                 <div class="card-header">
-                                    <h2>Quản lý đơn hàng</h2>
+                                    <h2>Chi tiết đơn hàng</h2>
                                     <div class="d-flex">
-                                        <a href="{{ route('admin.listOrders') }}" class="btn btn-dark mr-3">Back</a>
-                                        <button type="submit" name="submit" class="btn btn-secondary">Save</button>
+                                        <a href="{{ route('admin.listOrders') }}" class="btn btn-dark mr-3">Quay lại</a>
+                                        <button type="submit" name="submit" class="btn btn-secondary">Cập nhật</button>
                                     </div>
                                 </div>
                                 <div class="card-body">
@@ -73,7 +73,7 @@
                                                     <div class="table-responsive">
                                                         <table id="example" class="display">
                                                             <div class="head-line d-flex align-items-center">
-                                                                <h3 class="mr-3">Đơn hàng </h3>
+                                                                <h3 class="m-0 mr-3">Đơn hàng </h3>
                                                                 <span
                                                                     class="badge badge-light">{{ $order->orders->status == 1 ? 'Chờ xác nhận' : '' }}</span>
                                                                 <span

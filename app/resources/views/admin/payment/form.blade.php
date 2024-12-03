@@ -13,14 +13,14 @@
                 <div class="row page-titles mx-0">
                     <div class="col-sm-6 p-md-0">
                         <div class="welcome-text">
-                            <h4>Hi, welcome back!</h4>
-                            <span class="ml-1">Datatable</span>
+                            <h4>Xin chào, chào mừng trở lại!</h4>
+                            <span class="ml-1">Phương thức thanh toán</span>
                         </div>
                     </div>
                     <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="javascript:void(0)">Table</a></li>
-                            <li class="breadcrumb-item active"><a href="javascript:void(0)">Datatable</a></li>
+                            <li class="breadcrumb-item"><a href="javascript:void(0)">Trang chủ</a></li>
+                            <li class="breadcrumb-item active"><a href="javascript:void(0)">Phương thức thanh toán</a></li>
                         </ol>
                     </div>
                 </div>
@@ -41,9 +41,9 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <h4 class="card-title">List Payment Method</h4>
+                                <h4 class="card-title">Phương thức thanh toán</h4>
                                 <div class="btn-group" role="group">
-                                    <a href="{{ route('admin.createPayment')}}" class="btn btn-secondary">Add Payment Method</a>
+                                    <a href="{{ route('admin.createPayment')}}" class="btn btn-secondary">Thêm mới</a>
                                 </div>
                             </div>
                             <div class="card-body">
@@ -51,10 +51,10 @@
                                     <table id="example" class="display">
                                         <thead>
                                             <tr>
-                                                <th>ID</th>
-                                                <th>Name</th>
-                                                <th>Image</th>
-                                                <th>Action</th>
+                                                <th>Id</th>
+                                                <th>Tên phương thức</th>
+                                                <th>Ảnh</th>
+                                                <th>Thao tác</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -66,11 +66,14 @@
                                                     style="width: 50px; height: 50px; object-fit: cover;"
                                                     alt=""></td>
                                                 <td>
-                                                    <a href="{{ route('admin.updatePayment', $payment->id)}}" class="btn btn-primary">Update</a>
+                                                    <a href="{{ route('admin.updatePayment', $payment->id)}}" class="btn btn-primary">Sửa</a>
                                                     <form action="{{ route('admin.payment.destroy', $payment->id) }}" method="POST" style="display: inline-block;">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button type="submit" class="btn btn-dark" onclick="return confirm('Bạn có muốn xóa {{$payment->name}} (Mã: {{$payment->id}}) không???')">Delete</button>
+                                                        <button type="submit" class="btn btn-dark"
+                                                            onclick="returnconfirm('Bạn có muốn xóa {{$payment->name}} (Mã: {{$payment->id}}) không???')">
+                                                            Xoá
+                                                        </button>
                                                     </form>
                                                 </td>
                                             </tr>
