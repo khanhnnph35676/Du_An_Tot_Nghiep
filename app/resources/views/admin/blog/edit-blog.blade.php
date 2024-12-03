@@ -9,8 +9,6 @@
         }
     </style>
 
-    <link rel="stylesheet" href="{{ asset('backend/css/blog.css') }}">
-
     <div class="content-body">
         <div class="container-fluid">
             @if (session('message'))

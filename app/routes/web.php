@@ -15,12 +15,15 @@ use App\Http\Controllers\User\UserOrderController;
 use App\Http\Controllers\User\CartController;
 use App\Http\Controllers\User\CheckoutController;
 use App\Http\Controllers\StatisticsController;
-
-
-// DDawng nhập, đăng kí, đăng xuất, quên mật khẩu
-//controller bên store
+use App\Http\Controllers\CKEditorController;
 use App\Http\Controllers\User\PageController;
 use App\Http\Controllers\User\AuthenController;
+
+
+
+Route::post('/ckeditor/upload', [CKEditorController::class, 'upload'])->name('ckeditor.upload');
+
+
 
 Route::get('login-admin', [AuthenController::class, 'loginAdmin'])->name('loginAdmin');
 Route::post('login-admin', [AuthenController::class, 'postLoginAdmin'])->name('postLogin');

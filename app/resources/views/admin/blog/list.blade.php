@@ -2,7 +2,7 @@
 
 @section('content')
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.ckeditor.com/4.22.0/standard/ckeditor.js"></script>
+    <script src="https://cdn.ckeditor.com/4.25.0/standard/ckeditor.js"></script>
     <style>
         .cke_notification {
             display: none !important;
@@ -178,7 +178,7 @@
                                     <!-- Mô tả ngắn -->
                                     <div class="form-group">
                                         <label>Mô tả ngắn *</label>
-                                        <textarea class="form-control" name="BlogDesc" id="BlogDesc">{{ old('BlogDesc') }}</textarea>
+                                        <textarea class="form-control" name="BlogDesc" id="BlogDesc"></textarea>
                                         <script>
                                             $(document).ready(function() {
                                                 CKEDITOR.replace('BlogDesc');
@@ -188,7 +188,7 @@
                                     <!-- Nội dung -->
                                     <div class="form-group">
                                         <label>Nội dung *</label>
-                                        <textarea class="form-control" name="BlogContent">{{ old('BlogContent') }}</textarea>
+                                        <textarea class="form-control" name="BlogContent"></textarea>
                                         <script>
                                             $(document).ready(function() {
                                                 CKEDITOR.replace('BlogContent');
