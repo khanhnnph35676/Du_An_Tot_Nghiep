@@ -9,7 +9,7 @@ use App\Models\Gallerie;
 use App\Models\DiscountProduct;
 use App\Models\ProductVariant;
 use Illuminate\Http\Request;
-
+use App\Http\Requests\DiscountRequest;
 class DiscountController extends Controller
 {
     public function listDiscounts(){
@@ -30,15 +30,8 @@ class DiscountController extends Controller
             'variants' => $variants
         ]);
     }
-    public function storeDiscount(Request $request)
+    public function storeDiscount(DiscountRequest $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'discount' => 'required|numeric|min:0', // Discount phải là số dương
-            'priority' => 'required|integer|min:1', // Priority phải là số nguyên dương
-            'start_date' => 'required|date|date_format:Y-m-d', // Định dạng ngày phải là Y-m-d
-            'end_date' => 'required|date|date_format:Y-m-d|after_or_equal:start_date', // Ngày kết thúc phải sau hoặc bằng ngày bắt đầu
-        ]);
         $data = [
             'name' => $request->name,
             'discount' => $request->discount,
@@ -66,6 +59,7 @@ class DiscountController extends Controller
 
     public function updateDiscount(Request $request)
     {
+
         $galleries = Gallerie::get();
         $variants = ProductVariant::get();
         $products = Product::with([
@@ -75,7 +69,7 @@ class DiscountController extends Controller
         $discountProduct = DiscountProduct::where('name_discount',$discount->name)->get();
         return view('admin.discount.update', compact('discount','galleries','variants','products','discountProduct'));
     }
-    public function update(Request $request)
+    public function update(DiscountRequest $request)
     {
         $discountBefore = Discount::where('id', $request->id)->first();
         $discountProductBefore = DiscountProduct::where('name_discount', $discountBefore->name)->get();
@@ -101,7 +95,7 @@ class DiscountController extends Controller
         }else{
             DiscountProduct::where('name_discount', $discountBefore->name)->delete();
         }
-        return redirect()->route('admin.listDiscounts')->with('message', 'Cập nhật dữ liệu thành công');
+        return redirect()->back()->with('message', 'Cập nhật dữ liệu thành công');
     }
 
     public function destroy(Request $request)

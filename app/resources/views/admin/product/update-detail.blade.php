@@ -10,14 +10,14 @@
             <div class="row page-titles mx-0">
                 <div class="col-sm-6 p-md-0">
                     <div class="welcome-text">
-                        <h4>Hi, welcome back!</h4>
-                        <span class="ml-1">Datatable</span>
+                        <h4>Xin chào, chào mừng trở lại!</h4>
+                        <span class="ml-1">Cập nhật sản phẩm</span>
                     </div>
                 </div>
                 <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="javascript:void(0)">Table</a></li>
-                        <li class="breadcrumb-item active"><a href="javascript:void(0)">Datatable</a></li>
+                        <li class="breadcrumb-item"><a href="javascript:void(0)">Dánh sách sản phẩm</a></li>
+                        <li class="breadcrumb-item active"><a href="javascript:void(0)">Cập nhật sản phẩm</a></li>
                     </ol>
                 </div>
             </div>
@@ -43,10 +43,10 @@
                         @method('patch')
                         <div class="card">
                             <div class="card-header">
-                                <h4 class="card-title">Add New Product Configurable</h4>
+                                <h4 class="card-title">Cập nhật sản phẩm có biến thể</h4>
                                 <div class="d-flex">
-                                    <a href="{{ route('admin.listProducts') }}" class="btn btn-dark mr-3">Back</a>
-                                    <button type="submit" type="submit" class="btn btn-secondary">Save</button>
+                                    <a href="{{ route('admin.listProducts') }}" class="btn btn-dark mr-3">Quay lại</a>
+                                    <button type="submit" type="submit" class="btn btn-secondary">Cập nhật</button>
                                 </div>
                             </div>
                             <div class="card-body">
@@ -55,31 +55,31 @@
                                         {{-- form thêm cho product --}}
                                         {{-- <input class="form-control" type="text" placeholder="Name" name="id" hidden> --}}
                                         <div class="form-group">
-                                            <label for="">Name:</label>
-                                            <input class="form-control" type="text" placeholder="Name" name="name"
+                                            <label for="">Tên sản phẩm:</label>
+                                            <input class="form-control" type="text" placeholder="Tên sản phẩm" name="name"
                                                 value="{{ $product->name }}">
                                             @error('name')
-                                                <div class="alert alert-danger"><strong>Error!</strong> {{ $message }}
+                                                <div class="alert alert-danger"><strong>Lỗi!</strong> {{ $message }}
                                                 </div>
                                             @enderror
                                         </div>
                                         <div class="form-group">
-                                            <label for="">Quanlity:</label>
-                                            <input class="form-control" type="text" name='qty' placeholder="Quanlity"
+                                            <label for="">Số lượng:</label>
+                                            <input class="form-control" type="text" name='qty' placeholder="Số lượng"
                                                 value="{{ $product->qty }}" readonly>
                                         </div>
                                         <div class="form-group">
-                                            <label for="">Price:</label>
-                                            <input class="form-control" type="text" name="price" placeholder="Price"
+                                            <label for="">Giá:</label>
+                                            <input class="form-control" type="text" name="price" placeholder="GIá"
                                                 value="{{ $product->price }}">
                                             @error('price')
-                                                <div class="alert alert-danger"><strong>Error!</strong> {{ $message }}
+                                                <div class="alert alert-danger"><strong>Lỗi!</strong> {{ $message }}
                                                 </div>
                                             @enderror
                                         </div>
                                         @if (count($productVariants) === 0)
                                             <div class="form-group">
-                                                <label>Variant options:</label>
+                                                <label>Biến thể:</label>
                                                 <div class="form-check form-check-inline">
                                                     @foreach ($variants as $value)
                                                         <label class="form-check-label">
@@ -97,7 +97,7 @@
                                     </div>
                                     <div class="col-3 p-3 border">
                                         <div class="form-group">
-                                            <label>Category:</label>
+                                            <label>Danh mục:</label>
                                             <select class="form-control" id="sel1" name='category_id'>
                                                 @foreach ($categories as $value)
                                                     <option value="{{ $value->id }}"
@@ -107,9 +107,11 @@
                                             </select>
                                         </div>
                                         <div class="form-group">
+                                            <label for="">Ảnh chính</label>
                                             <input type="file" class="form-control" name="image" accept="image/*">
                                         </div>
                                         <div class="form-group">
+                                            <label for="">Ảnh phụ</label>
                                             <input type="file" class="form-control" name="gallerie_image[]"
                                                 accept="image/*"multiple>
                                         </div>
@@ -120,15 +122,16 @@
                                         2,Chọn loại 2 cái nó sẽ in ra 2 bản ghi để thêm product varian  --}}
                                     <div class="card-body border mt-3">
                                         <div class="table-responsive">
+                                            <h5>Danh sách biến thể</h5>
                                             <table id="example" class="display">
                                                 <thead>
                                                     <tr>
-                                                        <th>Option Value</th>
-                                                        <th>Image</th>
-                                                        <th>Sku</th>
-                                                        <th>Stock</th>
-                                                        <th>Price</th>
-                                                        <th>Action</th>
+                                                        <th></th>
+                                                        <th>Ảnh</th>
+                                                        <th>Tên Biến thể</th>
+                                                        <th>Tồn kho</th>
+                                                        <th>Giá</th>
+                                                        <th></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -171,22 +174,22 @@
                                                     @endif
                                                 </tbody>
                                                 @error('variant_sku')
-                                                    <div class="alert alert-danger"><strong>Error!</strong>
+                                                    <div class="alert alert-danger"><strong>Lỗi!</strong>
                                                         {{ $message }}
                                                     </div>
                                                 @enderror
                                                 @error('variant_stock')
-                                                    <div class="alert alert-danger"><strong>Error!</strong>
+                                                    <div class="alert alert-danger"><strong>Lỗi!</strong>
                                                         {{ $message }}
                                                     </div>
                                                 @enderror
                                                 @error('variant_price')
-                                                    <div class="alert alert-danger"><strong>Error!</strong>
+                                                    <div class="alert alert-danger"><strong>Lỗi!</strong>
                                                         {{ $message }}
                                                     </div>
                                                 @enderror
                                                 @error('option_value')
-                                                    <div class="alert alert-danger"><strong>Error!</strong>
+                                                    <div class="alert alert-danger"><strong>Lỗi!</strong>
                                                         {{ $message }}
                                                     </div>
                                                 @enderror
@@ -195,7 +198,7 @@
                                         </div>
                                     </div>
                                     <div class="form-group mt-3" style="width: 100%">
-                                        <h5>Description</h5>
+                                        <h5>Mô tả sản phẩm:</h5>
                                         <textarea class="summernote" name="description" id="description">
                                             {{ $product->description }}
                                         </textarea>

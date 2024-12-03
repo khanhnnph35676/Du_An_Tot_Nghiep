@@ -41,7 +41,7 @@ Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
     // Route::get('/', function () {
     //     return view('admin.home');
     // })->name('admin1');
-    //Thống kê 
+    //Thống kê
     Route::get('/', [StatisticsController::class, 'index'])->name('admin1');
     Route::get('/statistics', [StatisticsController::class, 'chart'])->name('chart');
     // Trang san phẩm
@@ -117,10 +117,10 @@ Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
     // quản lý blog
     Route::get('/blog', [BlogController::class, 'index'])->name('blog.list');
     Route::post('/submit-add-blog', [BlogController::class, 'submit_add_blog'])->name('submit_add_blog'); // Thêm blog
-    Route::post('/submit-edit-blog/{idBlog}', [BlogController::class, 'submit_edit_blog'])->name('blog.submit-edit-blog');; // Sửa blog
+    Route::patch('/submit-edit-blog/{idBlog}', [BlogController::class, 'submit_edit_blog'])->name('blog.submit-edit-blog');; // Sửa blog
     Route::get('/edit-blog/{idBlog}', [BlogController::class, 'edit_blog'])->name('blog.edit_blog');
     Route::get('/admin/blog/{BlogSlug}', [BlogController::class, 'blog_details'])->name('blog.blog_details');
-    Route::delete('/admin/blog/{id}', [BlogController::class, 'destroy'])->name('blog.delete');
+    Route::delete('/admin/blog', [BlogController::class, 'destroy'])->name('blog.delete');
     // Route::get('/blog-category', [BlogController::class, 'category'])->name('blog.category');
     // Route::get('/blog-category-with-blog/{id}', [BlogController::class, 'categoryWithBlog'])->name('blog.category.list');// Lấu danh mục blog và tên blog
     // Route::post('storeBlog', [BlogController::class, 'storeBlog'])->name('blog.store'); //Lưu danh mục blog

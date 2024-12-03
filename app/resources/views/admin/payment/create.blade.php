@@ -11,14 +11,14 @@
             <div class="row page-titles mx-0">
                 <div class="col-sm-6 p-md-0">
                     <div class="welcome-text">
-                        <h4>Hi, welcome back!</h4>
-                        <span class="ml-1">Datatable</span>
+                        <h4>Xin chào, chào mừng trở lại!</h4>
+                        <span class="ml-1">Thêm Phương thức thanh toán</span>
                     </div>
                 </div>
                 <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="javascript:void(0)">Table</a></li>
-                        <li class="breadcrumb-item active"><a href="javascript:void(0)">Datatable</a></li>
+                        <li class="breadcrumb-item"><a href="javascript:void(0)">Phương thức thanh toán</a></li>
+                        <li class="breadcrumb-item active"><a href="javascript:void(0)">Thêm phương thức thanh toán</a></li>
                     </ol>
                 </div>
             </div>
@@ -30,26 +30,27 @@
                         @csrf
                         <div class="card">
                             <div class="card-header">
-                                <h4 class="card-title">List of Payment method</h4>
+                                <h4 class="card-title">Thêm phương thức thanh toán</h4>
                                 <div class="d-flex">
-                                    <a href="{{ route('admin.formPayment') }}" class="btn btn-dark mr-3">Back</a>
-                                    <button type="submit" name="submit" class="btn btn-secondary">Save</button>
+                                    <a href="{{ route('admin.formPayment') }}" class="btn btn-dark mr-3">Quay lại</a>
+                                    <button type="submit" name="submit" class="btn btn-secondary">Thêm mới</button>
                                 </div>
                             </div>
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-8 p-3 mr-4  ml-4 border">
                                         <div class="form-group">
-                                            <label for="">Name:</label>
-                                            <input class="form-control" type="text" placeholder="Name" name="name">
+                                            <label for="">Tên phương thức:</label>
+                                            <input class="form-control" type="text" placeholder="Tên phương thức" name="name">
                                         </div>
                                         <div class="form-group">
-                                            <label for="imageUpload">Image:</label>
+                                            <label for="imageUpload">Ảnh:</label>
                                             <input type="file" class="form-control-file" name="image" accept="image/*">
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                        </div>
                     </form>
                 </div>
 

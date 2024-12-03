@@ -56,7 +56,7 @@
                                         <!-- Form nhập thông tin khách hàng -->
                                         <div class="form-group">
                                             <label for="name">Họ tên:</label>
-                                            <input name="name" class="form-control" type="text" placeholder="Name" readonly
+                                            <input name="name" class="form-control" type="text" placeholder="Họ tên" readonly
                                                 value="{{ old('name', $user->name) }}">
                                             @error('name')
                                                 <div class="alert alert-danger"><strong>Lỗi!</strong> {{ $message }}
@@ -74,7 +74,7 @@
                                         </div>
                                         <div class="form-group">
                                             <label for="phone">Địa chỉ:</label>
-                                            <input name="phone" class="form-control" type="text" placeholder="Phone" readonly
+                                            <input name="phone" class="form-control" type="text" placeholder="Số điện thoại" readonly
                                                 value="{{ old('phone', $user->phone) }}">
                                             @error('phone')
                                                 <div class="alert alert-danger"><strong>Lỗi!</strong> {{ $message }}
@@ -84,7 +84,7 @@
                                         <div class="form-group">
                                             <label for="password">Mật khẩu:</label>
                                             <input name="password" class="form-control" type="password" readonly
-                                                placeholder="Password">
+                                                placeholder="Mật khẩu">
                                             <small class="form-text text-muted">Để trống để giữ dòng điện
                                                 password.</small>
                                             @error('password')

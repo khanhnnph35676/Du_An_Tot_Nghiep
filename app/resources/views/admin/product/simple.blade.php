@@ -10,14 +10,14 @@
             <div class="row page-titles mx-0">
                 <div class="col-sm-6 p-md-0">
                     <div class="welcome-text">
-                        <h4>Hi, welcome back!</h4>
-                        <span class="ml-1">Datatable</span>
+                        <h4>Xin chào, chào mừng trở lại!</h4>
+                        <span class="ml-1">Thêm mới sản phẩm</span>
                     </div>
                 </div>
                 <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="javascript:void(0)">Table</a></li>
-                        <li class="breadcrumb-item active"><a href="javascript:void(0)">Datatable</a></li>
+                        <li class="breadcrumb-item"><a href="javascript:void(0)">Danh sách sản phẩm</a></li>
+                        <li class="breadcrumb-item active"><a href="javascript:void(0)">Thêm mới sản phẩm</a></li>
                     </ol>
                 </div>
             </div>
@@ -29,10 +29,10 @@
                         @csrf
                         <div class="card">
                             <div class="card-header">
-                                <h4 class="card-title">Add New Product Configurable</h4>
+                                <h4 class="card-title">Thêm mới sản phẩm đơn thể</h4>
                                 <div class="d-flex">
-                                    <a href="{{ route('admin.listProducts') }}" class="btn btn-dark mr-3">Back</a>
-                                    <button type="submit" type="submit" class="btn btn-secondary">Save</button>
+                                    <a href="{{ route('admin.listProducts') }}" class="btn btn-dark mr-3">Quay lại</a>
+                                    <button type="submit" type="submit" class="btn btn-secondary">Thêm mới</button>
                                 </div>
                             </div>
                             <div class="card-body">
@@ -40,35 +40,36 @@
                                     <div class="col-8 p-3 mr-4  ml-4 border">
                                         {{-- form thêm cho product --}}
                                         <div class="form-group">
-                                            <label for="">Name:</label>
-                                            <input type="number"  name="type" value="1" hidden>
-                                            <input class="form-control" type="text" name="name" placeholder="Name">
+                                            <label for="">Tên sản phẩm: </label>
+                                            <input type="number" name="type" value="1" hidden>
+                                            <input class="form-control" type="text" name="name"
+                                                placeholder="Tên sản phẩm">
                                             @error('name')
-                                                <div class="alert alert-danger"><strong>Error!</strong> {{ $message }}
+                                                <div class="alert alert-danger"><strong>Lỗi!</strong> {{ $message }}
                                                 </div>
                                             @enderror
                                         </div>
                                         <div class="form-group">
-                                            <label for="">Quanlity:</label>
+                                            <label for="">Số lượng: </label>
                                             <input class="form-control" type="text" name="qty"
-                                                placeholder="Quanlity">
+                                                placeholder="Số lượng">
                                             @error('qty')
-                                                <div class="alert alert-danger"><strong>Error!</strong> {{ $message }}
+                                                <div class="alert alert-danger"><strong>Lỗi!</strong> {{ $message }}
                                                 </div>
                                             @enderror
                                         </div>
                                         <div class="form-group">
-                                            <label for="">Price:</label>
-                                            <input class="form-control" type="text" name="price" placeholder="Price">
+                                            <label for="">Giá: </label>
+                                            <input class="form-control" type="text" name="price" placeholder="Giá">
                                             @error('price')
-                                                <div class="alert alert-danger"><strong>Error!</strong> {{ $message }}
+                                                <div class="alert alert-danger"><strong>Lỗi!</strong> {{ $message }}
                                                 </div>
                                             @enderror
                                         </div>
                                     </div>
                                     <div class="col-3 p-3 border">
                                         <div class="form-group">
-                                            <label>Category:</label>
+                                            <label>Danh mục: </label>
                                             <select class="form-control" id="sel1" name="category_id">
                                                 @foreach ($listCategories as $category)
                                                     <option value="{{ $category->id }}">{{ $category->name }}</option>
@@ -78,20 +79,21 @@
 
                                         {{-- Ảnh chính --}}
                                         <div class="form-group">
-                                            <label for="">Main Image</label>
+                                            <label for="">Ảnh chính: </label>
                                             <input type="file" name="image" class="form-control" accept="image/*">
                                             @error('image')
-                                                <div class="alert alert-danger"><strong>Error!</strong> {{ $message }}
+                                                <div class="alert alert-danger"><strong>Lỗi!</strong> {{ $message }}
                                                 </div>
                                             @enderror
                                         </div>
                                         <div class="form-group">
-                                            <label for="">Gallerie Image</label>
-                                            <input type="file" class="form-control" name="gallerie_image[]" accept="image/*"multiple>
+                                            <label for="">Ảnh phụ: </label>
+                                            <input type="file" class="form-control" name="gallerie_image[]"
+                                                accept="image/*"multiple>
                                         </div>
                                     </div>
                                     <div class="form-group mt-3" style="width: 100%">
-                                        <h5>Description</h5>
+                                        <h5>Mô tả sản phẩm: </h5>
                                         <textarea class="summernote" name="description" id="description"></textarea>
                                         {{-- <input type="hidden" name="description" id="description"> --}}
                                     </div>
@@ -99,12 +101,12 @@
                             </div>
                     </form>
                 </div>
-
             </div>
         </div>
     </div>
+    </div>
     <script>
-         window.onload = function() {
+        window.onload = function() {
             // Tự động ẩn thông báo lỗi sau 1 giây
             var errorElements = document.querySelectorAll('.alert-danger');
             errorElements.forEach(function(errorElement) {

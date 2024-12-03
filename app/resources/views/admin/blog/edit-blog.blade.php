@@ -11,8 +11,6 @@
 
     <link rel="stylesheet" href="{{ asset('backend/css/blog.css') }}">
 
-
-
     <div class="content-body">
         <div class="container-fluid">
             @if (session('message'))
@@ -38,22 +36,22 @@
                                         <div class="col-sm-12">
                                             <div class="card">
                                                 <div class="card-body">
-                                                    <form method="post"
-                                                        action="{{ route('admin.blog.submit-edit-blog', $blog->idBlog) }}"
-                                                        id="form-add-blog" data-toggle="validator"
-                                                        enctype="multipart/form-data">
+                                                    <form method="post" id="form-add-blog" data-toggle="validator"
+                                                        enctype="multipart/form-data"
+                                                        action="{{ route('admin.blog.submit-edit-blog', ['idBlog' => $blog->idBlog]) }}">
                                                         @csrf
+                                                        @method('patch')
                                                         <div class="card-header d-flex justify-content-between">
-                                                            <h2>Chỉnh sửa Blog</h2>
+                                                            <h2>Chỉnh sửa bài viết</h2>
                                                             <div class="d-flex">
                                                                 <a href="{{ route('admin.blog.list') }}"
                                                                     class="btn btn-dark mr-3">Trở về</a>
-                                                                    <input type="submit" class="btn btn-primary mr-2" id="btn-submit"
-                                                                    value="Sửa tin tức">
+                                                                <input type="submit" class="btn btn-secondary"
+                                                                    id="btn-submit" value="Sửa tin tức">
                                                             </div>
                                                         </div>
                                                         <div class="row">
-                                                            <div class="col-md-12">
+                                                            <div class="col-8">
                                                                 <div class="form-group">
                                                                     <label>Tiêu đề *</label>
                                                                     <input type="text" name="BlogTitle"
@@ -61,12 +59,14 @@
                                                                         class="form-control slug" onkeyup="ChangeToSlug()"
                                                                         placeholder="Nhập tiêu đề tin tức" required>
                                                                     <div class="help-block with-errors"></div>
+                                                                    @error('BlogTitle')
+                                                                        <small class="text-danger">{{ $message }}</small>
+                                                                    @enderror
                                                                 </div>
-                                                            </div>
-                                                            <input type="hidden" name="BlogSlug"
-                                                                value="{{ $blog->BlogSlug }}" class="form-control"
-                                                                id="convert_slug">
-                                                            <div class="col-md-12">
+                                                                <input type="hidden" name="BlogSlug"
+                                                                    value="{{ $blog->BlogSlug }}" class="form-control"
+                                                                    id="convert_slug">
+
                                                                 <div class="form-group">
                                                                     <label>Ảnh tin tức *</label>
                                                                     <input type="file" name="BlogImage" id="images"
@@ -76,12 +76,12 @@
                                                                     <div class="d-flex flex-wrap" id="image-list">
                                                                         <div id="image-item-0" class="image-item">
                                                                             <img src="{{ asset('/storage/images/blog/' . $blog->BlogImage) }}"
-                                                                                class="img-fluid rounded avatar-100 mr-3 mt-2">
+                                                                                class="img-fluid rounded avatar-100 mr-3 mt-2"
+                                                                                style="width: auto; height: 200px; object-fit: cover;">
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                            </div>
-                                                            <div class="col-md-12">
+
                                                                 <div class="form-group">
                                                                     <label>Mô tả ngắn *</label>
                                                                     <textarea class="form-control" name="BlogDesc">{{ $blog->BlogDesc }}</textarea>
@@ -92,8 +92,7 @@
                                                                     </script>
                                                                     <div class="text-danger alert-desblog"></div>
                                                                 </div>
-                                                            </div>
-                                                            <div class="col-md-12">
+
                                                                 <div class="form-group">
                                                                     <label>Nội dung *</label>
                                                                     <textarea class="form-control" name="BlogContent">{{ $blog->BlogContent }}</textarea>
@@ -102,10 +101,9 @@
                                                                             CKEDITOR.replace('BlogContent');
                                                                         });
                                                                     </script>
-                                                                    <div class="text-danger alert-contentblog"></div>
                                                                 </div>
                                                             </div>
-                                                            <div class="col-md-12">
+                                                            <div class="col-4">
                                                                 <div class="form-group">
                                                                     <label>Trạng thái *</label>
                                                                     <select class="selectpicker form-control"
@@ -118,6 +116,17 @@
                                                                         </option>
                                                                     </select>
                                                                 </div>
+                                                                <div class="form-group">
+                                                                    <label>Danh mục *</label>
+                                                                    <select class="selectpicker form-control"
+                                                                        data-style="py-0" name="blog_category_id">
+                                                                        @foreach ($blog_categories as $item)
+                                                                            <option value="{{ $item->id }}"
+                                                                                {{ $blog->blog_category_id  == $item->id ? 'selected' : '' }}>{{ $item->blog_categories_name }}</option>
+                                                                            </option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                         {{-- <a href="{{URL::to('/manage-blog')}}" class="btn btn-light mr-2">Trở Về</a> --}}
@@ -125,6 +134,7 @@
                                                 </div>
                                             </div>
                                         </div>
+
                                     </div>
                                 </div>
                             </div>
