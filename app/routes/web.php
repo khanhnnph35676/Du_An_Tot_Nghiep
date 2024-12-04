@@ -24,7 +24,6 @@ use App\Http\Controllers\User\AuthenController;
 Route::post('/ckeditor/upload', [CKEditorController::class, 'upload'])->name('ckeditor.upload');
 
 
-
 Route::get('login-admin', [AuthenController::class, 'loginAdmin'])->name('loginAdmin');
 Route::post('login-admin', [AuthenController::class, 'postLoginAdmin'])->name('postLogin');
 Route::get('register-admin', [AuthenController::class, 'registerAdmin'])->name('registerAdmin');
