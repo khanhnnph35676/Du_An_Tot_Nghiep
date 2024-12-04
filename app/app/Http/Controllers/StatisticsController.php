@@ -66,7 +66,9 @@ class StatisticsController extends Controller
 
         // Tạo query cho Orders và ProductOrders
         $query = Order::query();
-        $productOrders = ProductOder::join('orders', 'product_orders.order_id', '=', 'orders.id');
+        $productOrders = ProductOder::join('orders', 'product_orders.order_id', '=', 'orders.id')
+        ->select('product_orders.*', 'orders.*')
+        ->get(); // Lấy dữ liệu thành collection
 
         // Nếu có ngày bắt đầu và kết thúc, lọc theo khoảng thời gian
         if ($startDate && $endDate) {
@@ -81,7 +83,6 @@ class StatisticsController extends Controller
             $query->whereBetween('created_at', $this->getDateRangeByFilter('month'));
             $productOrders->whereBetween('orders.created_at', $this->getDateRangeByFilter('month'));
         }
-
         // Lấy dữ liệu và nhóm theo thời gian
         $orders = $query->where('status', '=', 4)->get();
         $data = $orders->groupBy(function ($order) use ($filter) {
@@ -97,7 +98,6 @@ class StatisticsController extends Controller
             $totalOrders = $group->count();
             $groupOrderIds = $group->pluck('id'); // Lấy danh sách order_id trong group
             $totalSold = $productOrders->whereIn('order_id', $groupOrderIds)->sum('quantity');
-
             return [
                 'time_period' => $group->first()->created_at,
                 'total_revenue' => $totalRevenue,
