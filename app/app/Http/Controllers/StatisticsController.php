@@ -83,7 +83,7 @@ class StatisticsController extends Controller
         }
 
         // Lấy dữ liệu và nhóm theo thời gian
-        $orders = $query->get();
+        $orders = $query->where('status', '=', 4)->get();
         $data = $orders->groupBy(function ($order) use ($filter) {
             return match ($filter) {
                 'day' => Carbon::parse($order->created_at)->format('Y-m-d'),
@@ -95,7 +95,8 @@ class StatisticsController extends Controller
         })->map(function ($group) use ($productOrders) {
             $totalRevenue = $group->sum('sum_price');
             $totalOrders = $group->count();
-            $totalSold = $productOrders->whereIn('order_id', $group->pluck('id'))->sum('quantity');
+            $groupOrderIds = $group->pluck('id'); // Lấy danh sách order_id trong group
+            $totalSold = $productOrders->whereIn('order_id', $groupOrderIds)->sum('quantity');
 
             return [
                 'time_period' => $group->first()->created_at,
