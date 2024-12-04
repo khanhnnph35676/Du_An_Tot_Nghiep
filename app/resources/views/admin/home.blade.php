@@ -57,25 +57,11 @@
 
             </div>
             <div class="row">
-                <div class="col-xl-8 col-lg-8 col-md-8">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4 class="card-title">Sales Overview</h4>
-                        </div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-xl-12 col-lg-8">
-                                    <div id="morris-bar-chart"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <div class="col-xl-4 col-lg-4 col-md-4">
                     <div class="card">
                         <div class="card-body text-center">
                             <div class="m-t-10">
-                                <h4 class="card-title">Top sản phẩm bán chạy</h4>
+                                <h4 class="card-title">Top 5 sản phẩm bán chạy</h4>
                             </div>
                             <div class="widget-card-circle">
                                 <div class="row">
@@ -120,8 +106,80 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-xl-4 col-lg-4 col-md-4">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <div class="m-t-10">
+                                <h4 class="card-title">Top sản phẩm có số lượng bán thấp nhất</h4>
+                            </div>
+                            <div class="widget-card-circle">
+                                <table class="table table-bordered table-striped mt-3">
+                                    <thead class="table-dark">
+                                        <tr>
+                                            <th scope="col">STT</th>
+                                            <th scope="col">Ảnh sản phẩm</th>
+                                            <th scope="col">Tên sản phẩm</th>
+                                            <th scope="col">Số lượng đã bán</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($products as $index => $product)
+                                            <tr>
+                                                <td class="text-dark">{{ $index + 1 }}</td>
+                                                <td>
+                                                    <img src="{{ $product->image }}" alt="Ảnh sản phẩm" class="img-thumbnail" style="width: 50px; height: 50px; object-fit: cover;">
+                                                </td>
+                                                <td class="text-dark">{{ $product->name }}</td>
+                                                <td class="text-dark">{{ $product->total_sold ?? 0 }}</td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-4">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <div class="m-t-10">
+                                <h4 class="card-title">Top 5 sản phẩm bán chạy</h4>
+                            </div>
+                            <div class="widget-card-circle">
+                                <div class="row">
+                                    <!-- Top sản phẩm bán chạy -->
+                                    <div class="row mb-2">
+                                        <div class="col-lg-12">
+                                            <table class="table table-striped table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th>#</th>
+                                                        <th>User Name</th>
+                                                        <th>Email</th>
+                                                        <th>Successful Orders</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach ($topUsers as $index => $user)
+                                                        <tr>
+                                                            <td>{{ $index + 1 }}</td>
+                                                            <td>{{ $user->name }}</td>
+                                                            <td>{{ $user->email }}</td>
+                                                            <td>{{ $user->successful_orders }}</td>
+                                                        </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="col-lg-12">
+            {{-- <div class="col-lg-12">
                 <div class="card card-block card-stretch card-height">
                     <div class="card-header d-flex align-items-center justify-content-between">
                         <div class="header-title">
@@ -157,7 +215,7 @@
                         <div id="chart-sale" style="height: 250px;"></div>
                     </div>
                 </div>
-            </div>
+            </div> --}}
         </div>
     </div>
     <!--**********************************

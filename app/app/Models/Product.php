@@ -34,8 +34,27 @@ class Product extends Model
     {
         return $this->hasMany(Testimonial::class);
     }
+
     public function productOrders()
     {
-        return $this->hasMany(ProductOder::class);
+        return $this->hasMany(ProductOder::class, 'product_id');
+    }
+    public function soldQuantity()
+    {
+        return $this->productOrders()
+            ->whereHas('order', function ($query) {
+                $query->where('status', 4); // Chỉ tính đơn hàng có status = 4
+            })
+            ->selectRaw('SUM(quantity) as total_sold')
+            ->groupBy('product_id');
+    }   
+    public function totalSold()
+    {
+        return $this->productOrders()
+            ->whereHas('order', function ($query) {
+                $query->where('status', 4);
+            })
+            ->selectRaw('COALESCE(SUM(quantity), 0) as total_sold')
+            ->groupBy('product_id');
     }
 }
