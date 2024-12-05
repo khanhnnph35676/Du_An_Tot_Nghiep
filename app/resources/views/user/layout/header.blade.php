@@ -13,12 +13,12 @@
                  <small class="me-3"><i class="fas fa-map-marker-alt me-2 text-secondary"></i> <a href="#"
                          class="text-white">1 Trịnh Văn Bô</a></small>
                  <small class="me-3"><i class="fas fa-envelope me-2 text-secondary"></i><a href="#"
-                         class="text-white">Email@Example.com</a></small>
+                         class="text-white">khanhnnph35676@fpt.edu.vn</a></small>
              </div>
-             <div class="top-link pe-2">
-                 <a href="#" class="text-white"><small class="text-white mx-2">Privacy Policy</small>/</a>
-                 <a href="#" class="text-white"><small class="text-white mx-2">Terms of Use</small>/</a>
-                 <a href="#" class="text-white"><small class="text-white ms-2">Sales and Refunds</small></a>
+             <div class="pe-2">
+                 <a href="#" class="text-white"><small class="text-white mx-2">Chính sách bảo mật</small>/</a>
+                 <a href="#" class="text-white"><small class="text-white mx-2">Điều khoản</small>/</a>
+                 <a href="#" class="text-white"><small class="text-white ms-2">Bán hàng và hoàn tiền</small></a>
              </div>
          </div>
      </div>
@@ -34,8 +34,12 @@
              </button>
              <div class="collapse navbar-collapse bg-white" id="navbarCollapse">
                  <div class="navbar-nav mx-auto">
+
                      <a href="{{ route('storeHome') }}"
                          class="nav-item nav-link {{ request()->routeIs('storeHome') ? 'active' : '' }}">Trang chủ</a>
+                     <a href="{{ route('storeIntro') }}"
+                         class="nav-item nav-link {{ request()->routeIs('storeIntro') ? 'active' : '' }}">Giới
+                         thiệu</a>
                      <a href="{{ route('storeListProduct') }}"
                          class="nav-item nav-link {{ request()->routeIs('storeListProduct') ? 'active' : '' }}">Sản
                          Phẩm</a>
@@ -48,7 +52,8 @@
                          </div>
                      </div>
                      <a href="{{ route('storeContact') }}"
-                         class="nav-item nav-link {{ request()->routeIs('storeProductDetail') ? 'active' : '' }}">Contact</a>
+                         class="nav-item nav-link {{ request()->routeIs('storeProductDetail') ? 'active' : '' }}">Liên
+                         hệ</a>
                  </div>
                  <div class="d-flex m-3 me-0">
                      <button class="btn-search btn border border-secondary btn-md-square rounded-circle bg-white me-4"
@@ -97,10 +102,10 @@
                                      <hr class="dropdown-divider">
                                  </li>
                                  <li>
-                                    <form action="{{ route('logoutUser') }}" method="POST" style="display: inline;">
-                                        @csrf
-                                        <button type="submit" class="dropdown-item">Đăng xuất</button>
-                                    </form>
+                                     <form action="{{ route('logoutUser') }}" method="POST" style="display: inline;">
+                                         @csrf
+                                         <button type="submit" class="dropdown-item">Đăng xuất</button>
+                                     </form>
                                  </li>
                              @else
                                  <li><a class="dropdown-item" href="{{ route('user.login') }}">Đăng nhập</a>
@@ -119,25 +124,25 @@
  </div>
  <!-- Navbar End -->
  <!-- Modal Search Start -->
-<div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-fullscreen">
-        <div class="modal-content rounded-0">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Search by keyword</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body d-flex align-items-center">
-                <!-- Gửi từ khóa tìm kiếm qua form -->
-                <form action="{{ route('storeListProduct') }}" method="GET" class="input-group w-75 mx-auto d-flex">
-                    <input type="search" name="search" class="form-control p-3" placeholder="Nhập từ khóa..."
-                        value="{{ request('search') }}" aria-describedby="search-icon-1">
-                    <button type="submit" id="search-icon-1" class="input-group-text p-3">
-                        <i class="fa fa-search"></i>
-                    </button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Modal Search End -->
-
+ <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+     <div class="modal-dialog modal-fullscreen">
+         <div class="modal-content rounded-0">
+             <div class="modal-header">
+                 <h5 class="modal-title" id="exampleModalLabel">Search by keyword</h5>
+                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+             </div>
+             <div class="modal-body d-flex align-items-center">
+                 <!-- Gửi từ khóa tìm kiếm qua form -->
+                 <form action="{{ route('storeListProduct') }}" method="GET"
+                     class="input-group w-75 mx-auto d-flex">
+                     <input type="search" name="search" class="form-control p-3" placeholder="Nhập từ khóa..."
+                         value="{{ request('search') }}" aria-describedby="search-icon-1">
+                     <button type="submit" id="search-icon-1" class="input-group-text p-3">
+                         <i class="fa fa-search"></i>
+                     </button>
+                 </form>
+             </div>
+         </div>
+     </div>
+ </div>
+ <!-- Modal Search End -->

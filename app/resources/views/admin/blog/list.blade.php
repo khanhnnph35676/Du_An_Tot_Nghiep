@@ -2,7 +2,7 @@
 
 @section('content')
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.ckeditor.com/4.25.0/standard/ckeditor.js"></script>
+    <script src="https://cdn.ckeditor.com/4.22.0/standard/ckeditor.js"></script>
     <style>
         .cke_notification {
             display: none !important;

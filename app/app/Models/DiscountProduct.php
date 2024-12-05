@@ -12,5 +12,10 @@ class DiscountProduct extends Model
     public $fillable = [
         'product_id',
         'name_discount',
+        'discount_id'
     ];
+    public function discounts()
+    {
+        return $this->belongsTo(Discount::class, 'discount_id');
+    }
 }

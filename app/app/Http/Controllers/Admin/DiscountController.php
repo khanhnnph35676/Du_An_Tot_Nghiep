@@ -47,13 +47,12 @@ class DiscountController extends Controller
             foreach ($request->product_id as $value) {
                 $dataDiscount = [
                     'product_id' => $value,
-                    'name_discount' => $name
+                    'name_discount' => $name,
+                    'discount_id' => $discount->id
                 ];
                 DiscountProduct::create($dataDiscount);
             }
         }
-        $data = $request->all();
-        Discount::query()->create($data);
         return redirect()->route('admin.listDiscounts')->with('message', 'Thêm dữ liệu thành công');
     }
 
@@ -101,7 +100,7 @@ class DiscountController extends Controller
     public function destroy(Request $request)
     {
         $discount = Discount::find($request->id);
-        $discount->delete();
+        $discount->forceDelete();
         return redirect()->route('admin.listDiscounts')->with('message', 'Xóa dữ liệu thành công');
     }
 }

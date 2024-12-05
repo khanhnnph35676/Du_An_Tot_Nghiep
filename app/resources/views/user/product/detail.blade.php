@@ -19,6 +19,7 @@
                 <div class="col-lg-8 col-xl-9">
                     <div class="row g-4">
                         {{-- form thêm vào giỏ hàng --}}
+
                         <div class="col-lg-6">
                             <div>
                                 <img src=" {{ asset($product->image) }} " style="width:100%;" class="img-fluid rounded"
@@ -26,42 +27,45 @@
                             </div>
                         </div>
                         <div class="col-lg-6">
-                            <h4 class="fw-bold mb-4">{{ $product->name }}</h4>
-                            <h3 class="fw-bold mb-4">{{ number_format($product->price) }} Vnđ</h3>
-                            <div class="d-flex align-items-center mb-4">
-                                <span class="me-3">Số lượng: </span>
-                                <div class="input-group quantity" style="width: 100px;">
-                                    <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-minus rounded-circle bg-light border" type='button'>
-                                            <i class="fa fa-minus"></i>
-                                        </button>
-                                    </div>
-                                    <input type="text" class="qty form-control form-control-sm text-center border-0"
-                                        value="1">
-                                    <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-plus rounded-circle bg-light border" type='button'>
-                                            <i class="fa fa-plus"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="d-flex align-items-center mb-2">
-                                <span class="me-2">Loại: </span>
-                                @if ($product->type == 1)
-                                    Không có
-                                @else
-                                    @foreach ($productVariant as $item)
-                                        <button class="badge bg-white text-dark border m-1 variant-option" type="button"
-                                            data-variant-id="{{ $item->id }}">
-                                            {{ $item->options->option_value }}
-                                        </button>
-                                    @endforeach
-                                @endif
-                            </div>
-                            <p id="variantError" class="text-danger" style="display: none;"></p>
-                            <br>
                             <form action="" method="POST">
                                 @csrf
+                                <h4 class="fw-bold mb-4">{{ $product->name }}</h4>
+                                <h3 class="fw-bold mb-4">{{ number_format($product->price) }} Vnđ</h3>
+                                <div class="d-flex align-items-center mb-4">
+                                    <span class="me-3">Số lượng: </span>
+                                    <div class="input-group quantity" style="width: 100px;">
+                                        <div class="input-group-btn">
+                                            <button class="btn btn-sm btn-minus rounded-circle bg-light border"
+                                                type='button'>
+                                                <i class="fa fa-minus"></i>
+                                            </button>
+                                        </div>
+                                        <input type="text" class="qty form-control form-control-sm text-center border-0"
+                                            value="1">
+                                        <div class="input-group-btn">
+                                            <button class="btn btn-sm btn-plus rounded-circle bg-light border"
+                                                type='button'>
+                                                <i class="fa fa-plus"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center mb-2">
+                                    <span class="me-2">Loại: </span>
+                                    @if ($product->type == 1)
+                                        Không có
+                                    @else
+                                        @foreach ($productVariant as $item)
+                                            <button class="badge bg-white text-dark border m-1 variant-option"
+                                                type="button" data-variant-id="{{ $item->id }}">
+                                                {{ $item->options->option_value }}
+                                            </button>
+                                        @endforeach
+                                    @endif
+                                </div>
+                                <p id="variantError" class="text-danger" style="display: none;"></p>
+                                <br>
+
                                 {{-- <input type="text" name="product_id" value="{{$product_id}}">
                                 <input type="text" name="product_variant_id" value="{{$product_id}}"> --}}
                                 <button class="btn border border-secondary rounded-pill mt-2 px-4 py-2 mb-4 text-primary"
@@ -141,7 +145,7 @@
                         </div>
                         {{-- Leave a Reply --}}
                         <form action="#">
-                            <h4 class="mb-5 fw-bold">Leave a Reply</h4>
+                            <h4 class="mb-5 fw-bold">Để lại câu trả lời</h4>
                             <div class="row g-4">
                                 <div class="col-lg-6">
                                     <div class="border-bottom rounded">
@@ -292,45 +296,6 @@
                 // Lấy thông tin sản phẩm
                 const productId = this.getAttribute('data-product-id');
                 const variantId = selectedVariant ? selectedVariant.getAttribute('data-variant-id') : null;
-
-                // Gửi yêu cầu tới server
-                fetch('add-to-cart', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')
-                                .getAttribute('content'),
-                        },
-                        body: JSON.stringify({
-                            product_id: productId,
-                            product_variant_id: variantId,
-                            qty: quantity,
-                        }),
-                    })
-                    .then((response) => {
-                        if (!response.ok) {
-                            return response.json().then((data) => {
-                                throw new Error(data.error || 'Có lỗi xảy ra!');
-                            });
-                        }
-                        return response.json();
-                    })
-                    .then((data) => {
-                        // Hiển thị thông báo thành công
-                        const successMessage = document.createElement('span');
-                        successMessage.classList.add('text-success', 'ms-2');
-                        successMessage.textContent = 'Sản phẩm đã được thêm vào giỏ hàng!';
-                        addToCartButton.parentNode.appendChild(successMessage);
-
-                        // Xóa thông báo thành công sau 3 giây
-                        setTimeout(() => {
-                            successMessage.remove();
-                        }, 3000);
-                    })
-                    .catch((error) => {
-                        variantError.style.display = 'inline'; // Hiển thị lỗi từ server
-                        variantError.textContent = error.message;
-                    });
             });
             document.querySelectorAll('.variant-option').forEach(button => {
                 button.addEventListener('click', function() {
