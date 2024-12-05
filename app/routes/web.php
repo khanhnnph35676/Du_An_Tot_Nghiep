@@ -137,6 +137,7 @@ Route::get('list-product',[PageController :: class,'storeListProduct'])->name('s
 Route::get('/product/{id}', action: [PageController::class, 'storeProductDetail'])->name('product.detail');
 Route::get('store-contact',[PageController :: class,'storeContact'])->name('storeContact');
 Route::get('store-tetimonial',[PageController :: class,'storeTestimonial'])->name('storeTestimonial');
+Route::get('store-intro',[PageController :: class,'storeIntro'])->name('storeIntro');
 
 
 Route::delete('remove-item-cart-detail/{product_id}', [CartController::class, 'removeItemCartDetail'])->name('removeItemCartDetail');

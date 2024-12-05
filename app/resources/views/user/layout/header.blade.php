@@ -37,8 +37,8 @@
 
                      <a href="{{ route('storeHome') }}"
                          class="nav-item nav-link {{ request()->routeIs('storeHome') ? 'active' : '' }}">Trang chủ</a>
-                     <a href="{{ route('storeListProduct') }}"
-                         class="nav-item nav-link {{ request()->routeIs('storeListProduct') ? 'active' : '' }}">Giới
+                     <a href="{{ route('storeIntro') }}"
+                         class="nav-item nav-link {{ request()->routeIs('storeIntro') ? 'active' : '' }}">Giới
                          thiệu</a>
                      <a href="{{ route('storeListProduct') }}"
                          class="nav-item nav-link {{ request()->routeIs('storeListProduct') ? 'active' : '' }}">Sản

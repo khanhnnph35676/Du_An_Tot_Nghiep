@@ -62,7 +62,6 @@
                                             <th>Tồn kho</th>
                                             <th>Lượt xem</th>
                                             <th>Danh mục</th>
-                                            <th>Nội dung</th>
                                             <th>Loại</th>
                                             <th>Thao tác</th>
                                         </tr>
@@ -98,7 +97,6 @@
                                                 <td> {{ $value->view }} </td>
                                                 <td> {{ $value->categories ? $value->categories->name : 'Không có danh mục' }}
                                                 </td>
-                                                <td>{{ Str::limit(html_entity_decode(strip_tags($value->description)), 20) }}
                                                 </td>
 
                                                 <td>

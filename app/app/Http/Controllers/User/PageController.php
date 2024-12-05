@@ -8,12 +8,17 @@ use App\Models\Product;
 use App\Models\Address;
 use App\Models\ProductVariant;
 use App\Models\Payment;
+use App\Models\DiscountProduct;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class PageController extends Controller
 {
 
+    public function storeIntro(){
+        $cart = session()->get('cart', []);
+        return view('user.introduct')->with('cart', $cart);
+    }
     public function storeHome()
     {
         $cart = session()->get('cart', []);
@@ -21,8 +26,10 @@ class PageController extends Controller
         $bestViewedProducts = Product::orderBy('view', 'desc')->take(9)->get();
         $categories = Category::all();
         $product_variants = ProductVariant::with("options")->get();
+
+        $discount = DiscountProduct::with("discounts")->get();
         // session()->flush();
-        return view('user.home', compact('products', 'categories', 'bestViewedProducts','product_variants','cart'));
+        return view('user.home', compact('products', 'categories', 'bestViewedProducts','product_variants','cart','discount'));
 
     }
 
