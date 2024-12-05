@@ -12,7 +12,7 @@
             <div class="row justify-content-center align-items-center">
                 <div class="col-md-6">
                     <div class="auth-form">
-                        <h4 class="text-center">Forgot Your Password?</h4>
+                        <h4 class="text-center">Quên mật khẩu</h4>
                         <form action="{{ route('password.email') }}" method="POST">
                             @csrf
                             <div class="form-group">
@@ -20,7 +20,7 @@
                                 <input type="email" name="email" class="form-control" required>
                             </div>
                             <div class="text-center">
-                                <button type="submit" class="btn btn-primary btn-block">Send Password Reset Link</button>
+                                <button type="submit" class="btn btn-primary btn-block">Gửi liên kết đặt lại mật khẩu</button>
                             </div>
                             @if (session('status'))
                                 <div class="alert alert-success mt-3">{{ session('status') }}</div>

@@ -14,28 +14,28 @@
                 <div class="logo-container">
                     <img src="{{ asset('images/logo.png') }}" alt="Logo" class="logo">
                 </div>
-                <h2>Register</h2>
+                <h2>Đăng ký</h2>
                 <form action="{{ route('user.postLogin') }}" method="POST">
                     @csrf
-                    <label for="name">Name</label>
+                    <label for="name">Họ tên</label>
                     <div class="input-container">
-                        <input type="name" id="name" name="name" placeholder="Enter your name" required>
+                        <input type="name" id="name" name="name" placeholder="Họ tên" required>
                     </div>
                     <label for="email">Email</label>
                     <div class="input-container">
-                        <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                        <input type="email" id="email" name="email" placeholder="Email" required>
                     </div>
 
-                    <label for="password">Password</label>
+                    <label for="password">Mật khẩu</label>
                     <div class="input-container">
                         <input type="password" id="password" name="password" placeholder="********" required>
                     </div>
-                    <button type="submit" class="submit-button">Sign up</button>
+                    <button type="submit" class="submit-button">Đăng ký</button>
                 </form>
-                <p class="signup-link">Already have an account ? <a href="{{ route('user.login') }}">Log in</a></p>
+                <p class="signup-link">Bạn đã có tài khoản? <a href="{{ route('user.login') }}">Log in</a></p>
             </div>
             <div class="background-section">
-                <h3>Hey, <br> Register <br> Yoursel</h3>
+                <h3><br> Đăng ký <br> tài khoản</h3>
             </div>
         </div>
     </div>

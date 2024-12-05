@@ -210,7 +210,8 @@
                                                     <input type="text"
                                                         class="form-control form-control-sm text-center border-0"
                                                         id="qty-{{ $item['product_id'] }} }}"
-                                                        value="{{ $item['qty'] }}">
+                                                        value="{{ $item['qty'] }}"
+                                                        onchange="updateQtyByInput('{{ $item['product_id'] }}', '{{ $item['product_variant_id'] ?? 'null' }}', this.value)">
                                                     <div class="input-group-btn">
                                                         <button class="btn btn-sm btn-plus rounded-circle bg-light border"
                                                             onclick="updateQtyNonVariant({{ $item['product_id'] }}, {{ $item['qty'] + 1 }})">
@@ -486,7 +487,12 @@
         function updateQtyByInput(productId, variantId, newQty) {
             const parsedQty = parseInt(newQty, 10);
             if (isNaN(parsedQty) || parsedQty <= 0) {
-                alert('Số lượng phải là số nguyên lớn hơn 0.');
+                const errorMessage = document.getElementById(`error-message`);
+                errorMessage.textContent = "Số lượng phải là số nguyên lớn hơn 0.";
+                errorMessage.style.display = 'block';
+                setTimeout(() => {
+                    location.reload(); // Reload trang sau 1 giây
+                }, 300);
                 return;
             }
 
@@ -517,7 +523,8 @@
                     }
                 })
                 .catch(error => {
-                    console.error('Error:', error);
+                    errorMessageElement.textContent = data.message;
+                    errorMessageElement.style.display = 'block';
                 });
         }
 

@@ -20,7 +20,7 @@
                         <div class="row no-gutters">
                             <div class="col-xl-12">
                                 <div class="auth-form">
-                                    <h4 class="text-center mb-4">Sign in your account</h4>
+                                    <h4 class="text-center mb-4">Đăng nhập tài khoản của bạn</h4>
                                     <form action="{{ route('postLogin') }}" method="POST">
                                         @csrf
                                         <div class="form-group">
@@ -28,26 +28,26 @@
                                             <input type="email" name="email" class="form-control" required>
                                         </div>
                                         <div class="form-group">
-                                            <label><strong>Password</strong></label>
+                                            <label><strong>Mật khẩu</strong></label>
                                             <input type="password" name="password" class="form-control" required>
                                         </div>
                                         <div class="form-row d-flex justify-content-between mt-4 mb-2">
                                             <div class="form-group">
                                                 <div class="form-check ml-2">
                                                     <input class="form-check-input" type="checkbox" id="basic_checkbox_1" name="remember">
-                                                    <label class="form-check-label" for="basic_checkbox_1">Remember me</label>
+                                                    <label class="form-check-label" for="basic_checkbox_1">Lưu tài khoản</label>
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                              <a href="{{ route('password.request') }}">Forgot Password?</a>
+                                              <a href="{{ route('password.request') }}">Quên mật khẩu</a>
                                             </div>
                                         </div>
                                         <div class="text-center">
-                                            <button type="submit" class="btn btn-primary btn-block">Sign me in</button>
+                                            <button type="submit" class="btn btn-primary btn-block">Đăng nhập ngay</button>
                                         </div>
                                     </form>
                                     <div class="new-account mt-3">
-                                        <p>Don't have an account? <a class="text-primary" href="{{ route('registerAdmin') }}">Sign up</a></p>
+                                        <p>Bạn chưa có tài khoản? <a class="text-primary" href="{{ route('registerAdmin') }}">Đăng ký</a></p>
                                     </div>
                                 </div>
                             </div>
