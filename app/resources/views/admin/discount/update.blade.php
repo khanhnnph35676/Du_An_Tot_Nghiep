@@ -83,6 +83,15 @@
                                             @enderror
                                         </div>
                                         <div class="form-group">
+                                            <label for="">Số lượng:</label>
+                                            <input class="form-control" type="text" placeholder="Số lượng"
+                                                name="qty"  value="{{ $discount->qty }}">
+                                            @error('qty')
+                                                <div class="alert alert-danger"><strong>Lỗi!</strong> {{ $message }}
+                                                </div>
+                                            @enderror
+                                        </div>
+                                        <div class="form-group">
                                             <label for="">Ngày bắt đầu:</label>
                                             <input class="form-control" type="date" placeholder="Ngày/Tháng/Năm"
                                                 name="start_date" value="{{ $discount->start_date }}">

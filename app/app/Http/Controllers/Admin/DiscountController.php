@@ -38,6 +38,7 @@ class DiscountController extends Controller
             'priority' => $request->priority,
             'start_date' => $request->start_date,
             'end_date' => $request->end_date,
+            'qty' => $request->qty,
         ];
         if($request->start_date < $request->end_date){
             $discount = Discount::query()->create($data);
@@ -78,6 +79,7 @@ class DiscountController extends Controller
             'priority' => $request->priority,
             'start_date' => $request->start_date,
             'end_date' => $request->end_date,
+            'qty' => $request->qty,
         ];
         Discount::where('id', $request->id)->update($data);
         if (is_array($request->product_id)) {
@@ -87,7 +89,8 @@ class DiscountController extends Controller
             foreach ($request->product_id as $value) {
                 $dataDiscount = [
                     'product_id' => $value,
-                    'name_discount' => $request->name
+                    'name_discount' => $request->name,
+                    'discount_id' => $discountBefore->id
                 ];
                 DiscountProduct::create($dataDiscount);
             }

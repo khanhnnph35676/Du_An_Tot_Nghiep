@@ -113,37 +113,46 @@
                                 <div class="row g-4 d-flex">
                                     @foreach ($products as $product)
                                         <div class="col-md-6 col-lg-4 col-xl-3">
-                                            <div class="rounded position-relative fruite-item">
-                                                <div class="fruite-img">
-                                                    <a href="{{ route('product.detail', $product->id) }}">
-                                                        <img src="{{ asset($product->image) }}"
-                                                            style="width: 50px; height: 250px; object-fit: cover;"
-                                                            class="img-fluid w-100 rounded-top" alt="{{ $product->name }}">
-                                                    </a>
-                                                </div>
-                                                @if ($discount != [])
-                                                    <div class="text-white bg-secondary px-3 py-1 rounded position-absolute"
-                                                        style="top: 5px; left: 5px;">
+                                            <form action="{{ route('addToCart') }}" method="POST">
+                                                @csrf
+                                                <div class="rounded position-relative fruite-item">
+                                                    <div class="fruite-img">
+                                                        <a href="{{ route('product.detail', $product->id) }}">
+                                                            <img src="{{ asset($product->image) }}"
+                                                                style="width: 50px; height: 250px; object-fit: cover;"
+                                                                class="img-fluid w-100 rounded-top"
+                                                                alt="{{ $product->name }}">
+                                                        </a>
+                                                    </div>
+                                                    @if ($discount != [])
                                                         @php
                                                             // print_r($discount);
                                                             $countDiscount = 0;
                                                         @endphp
-
                                                         @foreach ($discount as $key => $item)
-                                                            @if ($item->product_id == $product->id && $discount[$key]->priority <= $discount[$key++]->priority)
-                                                                Giảm {{ number_format($item->discounts->discount) }}%
+                                                            @if (
+                                                                $item->product_id == $product->id &&
+                                                                    $discount[$key]->priority <= $discount[$key++]->priority &&
+                                                                    $item->discounts->start_date < $item->discounts->end_date &&
+                                                                    $item->discounts->qty > 0)
+                                                                <div class="text-white bg-secondary px-3 py-1 rounded position-absolute"
+                                                                    style="top: 5px; left: 5px;">
+                                                                    Giảm {{ number_format($item->discounts->discount) }}%
+                                                                </div>
                                                                 @php
-                                                                    $countDiscount +=$item->discounts->discount
+                                                                    $countDiscount += $item->discounts->discount;
                                                                 @endphp
-                                                                @break;
-                                                            @endif
-                                                        @endforeach
-                                                    </div>
-                                                 @endif
-                                            <form action="{{ route('addToCart') }}" method="POST">
-                                                @csrf
+                                                                <input hidden type="text" name="discount"
+                                                                    value="{{ $countDiscount }}">
+                                                                <input hidden type="text" name="discount_id"
+                                                                    value="{{ $item->discount_id }}">
+                                                            @break;
+                                                        @endif
+                                                    @endforeach
+                                                @endif
                                                 <div class="p-4 border border-secondary border-top-0 rounded-bottom">
                                                     <input type="hidden" name="product_id" value="{{ $product->id }}">
+
                                                     <input hidden name="qty" value="1">
                                                     <h5 class="text-start">{{ $product->name }}</h5>
 
@@ -169,9 +178,11 @@
                                                     </div>
                                                     <div class="d-flex">
                                                         <p class="text-dark fs-5 fw-bold mb-0">
-                                                            {{ number_format( $product->price - $product->price*($countDiscount/100)) }} Vnđ
+                                                            {{ number_format($product->price - $product->price * ($countDiscount / 100)) }}
+                                                            Vnđ
                                                         </p>
-                                                        <del class="fs-6 ms-2"> {{ number_format($product->price) }} Vnđ</del>
+                                                        <del class="fs-6 ms-2"> {{ number_format($product->price) }}
+                                                            Vnđ</del>
                                                     </div>
                                                     <br>
 
@@ -222,19 +233,18 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </form>
-
-                                        </div>
+                                        </form>
                                     </div>
-                                @endforeach
                             </div>
+                            @endforeach
                         </div>
                     </div>
                 </div>
-                <!-- Thêm các tab khác nếu cần -->
             </div>
+            <!-- Thêm các tab khác nếu cần -->
         </div>
     </div>
+</div>
 </div>
 <!-- Fruits Shop End-->
 <!-- Featurs Start -->

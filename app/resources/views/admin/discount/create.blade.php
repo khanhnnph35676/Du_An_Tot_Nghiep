@@ -73,6 +73,15 @@
                                             @enderror
                                         </div>
                                         <div class="form-group">
+                                            <label for="">Số lượng:</label>
+                                            <input class="form-control" type="text" placeholder="Số lượng"
+                                                name="qty">
+                                            @error('qty')
+                                                <div class="alert alert-danger"><strong>Lỗi!</strong> {{ $message }}
+                                                </div>
+                                            @enderror
+                                        </div>
+                                        <div class="form-group">
                                             <label for="">Ngày bắt đầu: </label>
                                             <input class="form-control" type="date" name="start_date">
                                             @error('start_date')
@@ -199,15 +208,6 @@
                 checkbox.checked = e.target.checked;
             });
         });
-        window.onload = function() {
-            // Tự động ẩn thông báo lỗi sau 1 giây
-            var errorElements = document.querySelectorAll('.alert-danger');
-            errorElements.forEach(function(errorElement) {
-                setTimeout(function() {
-                    errorElement.style.display = 'none'; // Ẩn thông báo
-                }, 2000); // 1000 milliseconds = 1 second
-            });
-        };
     </script>
 @endsection
 @push('scriptHome')

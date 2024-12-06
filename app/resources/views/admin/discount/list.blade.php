@@ -53,6 +53,7 @@
                                             <th>Mã giảm giá</th>
                                             <th>Giảm</th>
                                             <th>Độ ưu tiên</th>
+                                            <th>Số lượng</th>
                                             <th>Thời gian bắt đầu</th>
                                             <th>Thời gian kết thúc</th>
                                             <th>Thao tác</th>
@@ -65,6 +66,7 @@
                                                 <td> {{ $discount->name }}</td>
                                                 <td>{{ $discount->discount }} %</td>
                                                 <td>{{ $discount->priority }}</td>
+                                                <td>{{ $discount->qty }}</td>
                                                 <td>{{ $discount->start_date }}</td>
                                                 <td>{{ $discount->end_date }}</td>
                                                 <td>

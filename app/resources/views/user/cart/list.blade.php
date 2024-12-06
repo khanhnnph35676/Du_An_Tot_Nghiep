@@ -47,7 +47,7 @@
                         @if (Auth::user())
                             @foreach ($products as $product)
                                 @foreach ($cart as $item)
-                                    @if ($product->type == 1 && $product->id == $item['product_id'])
+                                    @if ($product->type == 1 && $product->id == $item['product_id'] &&  $item['user_id'] != 0)
                                         <tr>
                                             <td style="width:100px;" class="text-center align-middle">
                                                 <input type="checkbox" class="form-check-input select-item"
@@ -90,7 +90,13 @@
                                                     class="mt-1 text-danger" style="display: none;"></span>
                                             </td>
                                             <td>
-                                                <p class="mb-0 mt-4">{{ number_format($product->price) . ' Vnđ' }}</p>
+                                                <p class="mb-0 mt-4">
+                                                    @if ($item['discount'] != 0)
+                                                        {{ number_format($product->price - ($product->price * $item['discount']) / 100) . ' Vnđ' }}
+                                                    @else
+                                                        {{ number_format($product->price) . ' Vnđ' }}
+                                                    @endif
+                                                </p>
                                             </td>
                                             <td>
                                                 <form action="{{ route('removeItemCartDetail', $item['product_id']) }}"
@@ -156,7 +162,11 @@
                                                 </td>
                                                 <td>
                                                     <p class="mb-0 mt-4">
-                                                        {{ number_format($productVariant->price) . ' Vnđ' }}
+                                                        @if ($item['discount'] != 0)
+                                                            {{ number_format($productVariant->price - ($productVariant->price * $item['discount']) / 100) . ' Vnđ' }}
+                                                        @else
+                                                            {{ number_format($productVariant->price) . ' Vnđ' }}
+                                                        @endif
                                                     </p>
                                                 </td>
                                                 <td>
@@ -223,7 +233,13 @@
                                                     style="color: red; display: none;"></span>
                                             </td>
                                             <td>
-                                                <p class="mb-0 mt-4">{{ number_format($product->price) . ' Vnđ' }}</p>
+                                                <p class="mb-0 mt-4">
+                                                    @if ($item['discount'] != 0)
+                                                        {{ number_format($product->price - ($product->price * $item['discount']) / 100) . ' Vnđ' }}
+                                                    @else
+                                                        {{ number_format($product->price) . ' Vnđ' }}
+                                                    @endif
+                                                </p>
                                             </td>
                                             <td>
                                                 <form action="{{ route('removeItemCartDetail', $item['product_id']) }}"
@@ -285,7 +301,11 @@
                                                 </td>
                                                 <td>
                                                     <p class="mb-0 mt-4">
-                                                        {{ number_format($productVariant->price) . ' Vnđ' }}
+                                                        @if ($item['discount'] != 0)
+                                                            {{ number_format($productVariant->price - ($productVariant->price * $item['discount']) / 100) . ' Vnđ' }}
+                                                        @else
+                                                            {{ number_format($productVariant->price) . ' Vnđ' }}
+                                                        @endif
                                                     </p>
                                                 </td>
                                                 <td>
@@ -381,6 +401,15 @@
                                         @endforeach
                                     @endforeach
                                 @endif
+                                @foreach ($cart as $item)
+                                    @if ($item['discount'] != 0)
+                                        @php
+                                            $price = $price - ($price * $item['discount']) / 100;
+                                        @endphp
+                                    @endif
+                                @endforeach
+
+
                                 @if ($price > 0)
                                     <p class="mb-0"> <strong>{{ number_format($price) }} Vnđ</strong> </p>
                                 @else
@@ -504,7 +533,7 @@
                     },
                     body: JSON.stringify({
                         product_id: productId,
-                        product_variant_id: variantId !== 'null' ? variantId : null,
+                        product_variant_id: variantId !== '0' ? variantId : null,
                         qty: parsedQty,
                     }),
                 })

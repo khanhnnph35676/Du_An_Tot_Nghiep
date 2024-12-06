@@ -15,6 +15,7 @@ class Discount extends Model
         'priority',
         'start_date',
         'end_date',
-        'name'
+        'name',
+        'qty'
     ];
 }
