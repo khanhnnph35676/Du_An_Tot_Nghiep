@@ -41,7 +41,7 @@
                     </thead>
                     <tbody>
                         @php
-                            // print_r($cart);
+                            print_r($cart);
                             // print_r(Auth::user()->rule_id );
                         @endphp
                         @if (Auth::user())
@@ -189,11 +189,9 @@
                         @else
                             @foreach ($products as $product)
                                 @foreach ($cart as $item)
-                                    @if (
-                                        $product->type == 1 &&
-                                            $item['product_variant_id'] == '' &&
-                                            $product->id == $item['product_id'] &&
-                                            $item['user_id'] == 0)
+                                    @if ($product->type == 1 &&
+                                        $product->id == $item['product_id'] &&
+                                        $item['user_id'] == 0)
                                         <tr>
                                             <td style="width:100px;" class="text-center align-middle">
                                                 <input type="checkbox" class="form-check-input select-item"
