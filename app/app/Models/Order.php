@@ -24,18 +24,4 @@ class Order extends Model
     {
         return $this->belongsTo(Payment::class, 'payment_id','id');
     }
-    public function productOrders()
-    {
-        return $this->hasMany(ProductOder::class);
-    }
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
-
-    public function orderList()
-    {
-        return $this->hasMany(OrderList::class);
-    }
-
 }
