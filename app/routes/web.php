@@ -90,7 +90,7 @@ Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
 
     // quản lý nhân viên
     Route::get('list-employees', [CustomerController::class, 'listEmployees'])->name('listEmployees');
-    
+
 
     // trang app
     Route::get('calender',[AppController::class,'calender'])->name('calender');
@@ -103,9 +103,7 @@ Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
     Route::get('list-orders',[OrderController::class,'listOrders'])->name('listOrders');
     Route::get('order-detail/{order_id}',[OrderController::class,'orderDetail'])->name('orderDetail');
     Route::post('order-update/{order_id}',[OrderController::class,'updateOrder'])->name('updateOrder');
-
-
-
+    
     // Quản lý giảm giá
     Route::get('list-discounts',[DiscountController::class,'listDiscounts'])->name('listDiscounts');
     Route::get('create-discounts',[DiscountController::class, 'createDiscount'])->name('createDiscount');
