@@ -15,6 +15,7 @@ use App\Models\Address;
 use App\Models\ProductVariant;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Hash;
+
 class CheckoutController extends Controller
 {
     public function storeCheckout()
@@ -134,30 +135,20 @@ class CheckoutController extends Controller
         }
 
         foreach ($cart as $key => $value) {
-            if ($user_id == $value['user_id']) {
-                $product_variant_id = $value['product_variant_id'] ? $value['product_variant_id'] : null;
-                $products = [
-                    'order_id' => $addOrder->id,  // ID đơn hàng
-                    'product_id' => $value['product_id'],
-                    'product_variant_id' =>  $product_variant_id,
-                    'quantity' => $value['qty'],
-                    'price' => $request->price
-                ];
-                // Tạo một bản ghi mới cho mỗi sản phẩm
-                ProductOder::create($products);
-                unset($cart[$key]);
-            } else {
-                $product_variant_id = $value['product_variant_id'] ? $value['product_variant_id'] : null;
-                $products = [
-                    'order_id' => $addOrder->id,  // ID đơn hàng
-                    'product_id' => $value['product_id'],
-                    'product_variant_id' =>  $product_variant_id,
-                    'quantity' => $value['qty'],
-                    'price' => $request->price
-                ];
-                // Tạo một bản ghi mới cho mỗi sản phẩm
-                ProductOder::create($products);
-                unset($cart[$key]);
+            if ($value['selected_products'] == 1) {
+                if ($user_id == $value['user_id']) {
+                    $product_variant_id = $value['product_variant_id'] ? $value['product_variant_id'] : null;
+                    $products = [
+                        'order_id' => $addOrder->id,  // ID đơn hàng
+                        'product_id' => $value['product_id'],
+                        'product_variant_id' =>  $product_variant_id,
+                        'quantity' => $value['qty'],
+                        'price' => $request->price
+                    ];
+                    // Tạo một bản ghi mới cho mỗi sản phẩm
+                    ProductOder::create($products);
+                    unset($cart[$key]);
+                }
             }
         }
         session()->put('cart', $cart);

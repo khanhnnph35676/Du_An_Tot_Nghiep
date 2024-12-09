@@ -22,7 +22,7 @@ class User extends Authenticatable
         'phone',
         'password',
         'avatar',
-        'number', 
+        'number',
         'gender',
         'birth_date',
         'rule_id',

@@ -64,7 +64,7 @@
             </div>
         </div>
         <!-- Section 1 -->
-        <div class="row" style="max-height:400px;">
+        <div class="row" style="max-height:450px;">
             <div class="col-6">
                 <img src="https://mir-s3-cdn-cf.behance.net/project_modules/fs/9fd15a185094509.655dc7178246f.jpg"
                     alt="Ice cream image 1" style="width: 100%; height:50%; object-fit: cover;">

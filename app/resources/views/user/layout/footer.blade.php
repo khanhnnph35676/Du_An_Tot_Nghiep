@@ -5,14 +5,14 @@
             <div class="row g-4">
                 <div class="col-lg-3">
                     <a href="#">
-                        <h1 class="text-primary mb-0">Fruitables</h1>
-                        <p class="text-secondary mb-0">Fresh products</p>
+                        <h1 class="text-primary mb-0">J-Snack</h1>
+                        <p class="text-secondary mb-0">Sản phẩm chất lượng</p>
                     </a>
                 </div>
                 <div class="col-lg-6">
                     <div class="position-relative mx-auto">
                         <input class="form-control border-0 w-100 py-3 px-4 rounded-pill" type="number" placeholder="Your Email">
-                        <button type="submit" class="btn btn-primary border-0 border-secondary py-3 px-4 position-absolute rounded-pill text-white" style="top: 0; right: 0;">Subscribe Now</button>
+                        <button type="submit" class="btn btn-primary border-0 border-secondary py-3 px-4 position-absolute rounded-pill text-white" style="top: 0; right: 0;">Đăng ký ngay</button>
                     </div>
                 </div>
                 <div class="col-lg-3">
@@ -28,42 +28,41 @@
         <div class="row g-5">
             <div class="col-lg-3 col-md-6">
                 <div class="footer-item">
-                    <h4 class="text-light mb-3">Why People Like us!</h4>
-                    <p class="mb-4">typesetting, remaining essentially unchanged. It was
-                        popularised in the 1960s with the like Aldus PageMaker including of Lorem Ipsum.</p>
-                    <a href="" class="btn border-secondary py-2 px-4 rounded-pill text-primary">Read More</a>
+                    <h4 class="text-light mb-3">Tại sao mọi người thích chúng tôi!</h4>
+                    <p class="mb-4">Chúng tôi mang đến những món ăn vặt ngon miệng, chất lượng và giá cả hợp lý. Khách hàng luôn hài lòng với dịch vụ và sản phẩm của chúng tôi!</p>
+                    <a href="" class="btn border-secondary py-2 px-4 rounded-pill text-primary">Xem thêm</a>
                 </div>
             </div>
             <div class="col-lg-3 col-md-6">
                 <div class="d-flex flex-column text-start footer-item">
-                    <h4 class="text-light mb-3">Shop Info</h4>
-                    <a class="btn-link" href="">About Us</a>
-                    <a class="btn-link" href="">Contact Us</a>
-                    <a class="btn-link" href="">Privacy Policy</a>
-                    <a class="btn-link" href="">Terms & Condition</a>
-                    <a class="btn-link" href="">Return Policy</a>
-                    <a class="btn-link" href="">FAQs & Help</a>
+                    <h4 class="text-light mb-3">Thông Tin Cửa Hàng</h4>
+                    <a class="btn-link" href="">Về Chúng Tôi</a>
+                    <a class="btn-link" href="">Liên Hệ</a>
+                    <a class="btn-link" href="">Chính Sách Bảo Mật</a>
+                    <a class="btn-link" href="">Điều Khoản & Điều Kiện</a>
+                    <a class="btn-link" href="">Chính Sách Đổi Trả</a>
+                    <a class="btn-link" href="">Câu Hỏi Thường Gặp & Hỗ Trợ</a>
                 </div>
             </div>
             <div class="col-lg-3 col-md-6">
                 <div class="d-flex flex-column text-start footer-item">
-                    <h4 class="text-light mb-3">Account</h4>
-                    <a class="btn-link" href="">My Account</a>
-                    <a class="btn-link" href="">Shop details</a>
-                    <a class="btn-link" href="">Shopping Cart</a>
-                    <a class="btn-link" href="">Wishlist</a>
-                    <a class="btn-link" href="">Order History</a>
-                    <a class="btn-link" href="">International Orders</a>
+                    <h4 class="text-light mb-3">Tài Khoản</h4>
+                    <a class="btn-link" href="">Tài Khoản Của Tôi</a>
+                    <a class="btn-link" href="">Chi Tiết Cửa Hàng</a>
+                    <a class="btn-link" href="">Giỏ Hàng</a>
+                    <a class="btn-link" href="">Danh Sách Yêu Thích</a>
+                    <a class="btn-link" href="">Lịch Sử Đặt Hàng</a>
+                    <a class="btn-link" href="">Đơn Hàng Quốc Tế</a>
                 </div>
             </div>
             <div class="col-lg-3 col-md-6">
                 <div class="footer-item">
-                    <h4 class="text-light mb-3">Contact</h4>
-                    <p>Address: 1429 Netus Rd, NY 48247</p>
-                    <p>Email: Example@gmail.com</p>
-                    <p>Phone: +0123 4567 8910</p>
-                    <p>Payment Accepted</p>
-                    <img src="img/payment.png" class="img-fluid" alt="">
+                    <h4 class="text-light mb-3">Liên Hệ</h4>
+                    <p>Địa Chỉ: 1 Trịnh Văn Bô, Nam Từ Liêm, Hà Nội</p>
+                    <p>Email: khanhnnph35676@fpt.edu.vn</p>
+                    <p>Số Điện Thoại:0193817369</p>
+                    <p>Chấp Nhận Thanh Toán</p>
+                    <img src="img/payment.png" class="img-fluid" alt="Phương thức thanh toán">
                 </div>
             </div>
         </div>
@@ -76,17 +75,18 @@
     <div class="container">
         <div class="row">
             <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
-                <span class="text-light"><a href="#"><i class="fas fa-copyright text-light me-2"></i>Your Site Name</a>, All right reserved.</span>
+                <span class="text-light"><a href="#"><i class="fas fa-copyright text-light me-2"></i>Bán đồ ăn vặt J-Snack</a>, Mọi quyền được bảo lưu.</span>
             </div>
             <div class="col-md-6 my-auto text-center text-md-end text-white">
-                <!--/*** This template is free as long as you keep the below author’s credit link/attribution link/backlink. ***/-->
-                <!--/*** If you'd like to use the template without the below author’s credit link/attribution link/backlink, ***/-->
-                <!--/*** you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". ***/-->
-                Designed By <a class="border-bottom" href="https://htmlcodex.com">HTML Codex</a> Distributed By <a class="border-bottom" href="https://themewagon.com">ThemeWagon</a>
+                <!--/*** Mẫu này miễn phí nếu bạn giữ liên kết bản quyền/ghi nhận bên dưới. ***/-->
+                <!--/*** Nếu bạn muốn sử dụng mẫu mà không ghi nhận liên kết, ***/-->
+                <!--/*** bạn có thể mua giấy phép xóa liên kết tại "https://htmlcodex.com/credit-removal". ***/-->
+                Thiết Kế Bởi <a class="border-bottom" href="https://htmlcodex.com">HTML Codex</a> Phân Phối Bởi <a class="border-bottom" href="https://themewagon.com">ThemeWagon</a>
             </div>
         </div>
     </div>
 </div>
+
 <!-- Copyright End -->
 
 <!-- Back to Top -->

@@ -125,6 +125,7 @@ class StatisticsController extends Controller
         //         $subQuery->where('status', 4); // Chỉ tính đơn hàng có status = 4
         //     });
         // }])->get();
+
         $products = Product::withCount(['productOrders as total_sold' => function ($query) {
             $query->selectRaw('COALESCE(SUM(quantity), 0)') // Tính tổng số lượng hoặc 0
             ->whereHas('order', function ($subQuery) {
@@ -133,8 +134,6 @@ class StatisticsController extends Controller
         }])
         ->orderBy('total_sold', 'asc') // Sắp xếp tổng số lượng tăng dần
             ->get();
-
-
 
         $topUsers = User::withCount(['orderLists as successful_orders' => function ($query) {
             $query->whereHas('order', function ($subQuery) {

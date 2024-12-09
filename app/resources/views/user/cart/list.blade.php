@@ -41,18 +41,19 @@
                     </thead>
                     <tbody>
                         @php
-                            print_r($cart);
+                            // print_r($cart);
                             // print_r(Auth::user()->rule_id );
                         @endphp
                         @if (Auth::user())
                             @foreach ($products as $product)
                                 @foreach ($cart as $item)
-                                    @if ($product->type == 1 && $product->id == $item['product_id'] &&  $item['user_id'] != 0)
+                                    @if ($product->type == 1 && $product->id == $item['product_id'] && $item['user_id'] != 0)
                                         <tr>
                                             <td style="width:100px;" class="text-center align-middle">
                                                 <input type="checkbox" class="form-check-input select-item"
                                                     name="selected_products[{{ $product->id }}]" value="1"
-                                                    style="transform: scale(1.2);" onchange="updateCart2(this)"
+                                                    data-variant-id="0" style="transform: scale(1.2);"
+                                                    onchange="updateCart2(this)"
                                                     @if ($item['selected_products'] == 1) checked @endif>
                                             </td>
                                             <th scope="row">
@@ -121,6 +122,7 @@
                                                 <td style="width:100px;" class="text-center align-middle">
                                                     <input type="checkbox" class="form-check-input select-item"
                                                         name="selected_products[{{ $product->id }}]" value="1"
+                                                        data-variant-id="{{ $productVariant->id }}"
                                                         style="transform: scale(1.2);" onchange="updateCart2(this)"
                                                         @if ($item['selected_products'] == 1) checked @endif>
                                                 </td>
@@ -189,14 +191,13 @@
                         @else
                             @foreach ($products as $product)
                                 @foreach ($cart as $item)
-                                    @if ($product->type == 1 &&
-                                        $product->id == $item['product_id'] &&
-                                        $item['user_id'] == 0)
+                                    @if ($product->type == 1 && $product->id == $item['product_id'] && $item['user_id'] == 0)
                                         <tr>
                                             <td style="width:100px;" class="text-center align-middle">
                                                 <input type="checkbox" class="form-check-input select-item"
                                                     name="selected_products[{{ $product->id }}]" value="1"
-                                                    style="transform: scale(1.2);" onchange="updateCart2(this)"
+                                                    data-variant-id="0" style="transform: scale(1.2);"
+                                                    onchange="updateCart2(this)"
                                                     @if ($item['selected_products'] == 1) checked @endif>
                                             </td>
                                             <th scope="row">
@@ -258,6 +259,7 @@
                                                 <td style="width:100px;" class="text-center align-middle">
                                                     <input type="checkbox" class="form-check-input select-item"
                                                         name="selected_products[{{ $product->id }}]" value="1"
+                                                        data-variant-id="{{ $productVariant->id }}"
                                                         style="transform: scale(1.2);" onchange="updateCart2(this)"
                                                         @if ($item['selected_products'] == 1) checked @endif>
                                                 </td>
@@ -349,12 +351,8 @@
                                 @if (Auth::check())
                                     @foreach ($cart as $item)
                                         @foreach ($products as $product)
-                                            @if (
-                                                $product->type == 1 &&
-                                                    $item['product_variant_id'] == '' &&
-                                                    $product->id == $item['product_id'] &&
-                                                    Auth::id() == $item['user_id'] &&
-                                                    $item['selected_products'] == 1)
+                                            @if ($product->type == 1 && $product->id == $item['product_id'] &&
+                                                Auth::id() == $item['user_id'] && $item['selected_products'] == 1)
                                                 @php
                                                     $price += $product->price * $item['qty'];
                                                 @endphp
@@ -375,12 +373,8 @@
                                 @else
                                     @foreach ($cart as $item)
                                         @foreach ($products as $product)
-                                            @if (
-                                                $product->type == 1 &&
-                                                    $item['product_variant_id'] == '' &&
-                                                    $product->id == $item['product_id'] &&
-                                                    $item['user_id'] == 0 &&
-                                                    $item['selected_products'] == 1)
+                                            @if ($product->type == 1 && $product->id == $item['product_id']
+                                                    &&$item['user_id'] == 0 && $item['selected_products'] == 1)
                                                 @php
                                                     $price += $product->price * $item['qty'];
                                                 @endphp
@@ -555,9 +549,6 @@
                 });
         }
 
-
-
-
         function updateQtyNonVariant(productId, newQty) {
             fetch('{{ route('updateCartNonVariant') }}', {
                     method: 'POST',
@@ -613,35 +604,43 @@
                 });
         }
         // NÚT CHỌN NHIỀU SẢN PHẨM
+        // Xử lý sự kiện thay đổi trạng thái cho checkbox "select-all"
         document.getElementById('select-all').addEventListener('change', function() {
             // Lấy tất cả checkbox có class 'select-item'
             var checkboxes = document.querySelectorAll('.select-item');
+            const isChecked = this.checked;
 
             // Duyệt qua các checkbox và thay đổi trạng thái của chúng
             checkboxes.forEach(function(checkbox) {
-                checkbox.checked = document.getElementById('select-all').checked;
-                updateCart2(checkbox); // Cập nhật trạng thái của từng checkbox vào session
+                checkbox.checked = isChecked;
+                updateCart2(checkbox); // Cập nhật trạng thái của checkbox vào giỏ hàng
             });
         });
-        // Kiểm tra checkbox và bật/tắt nút thanh toán
+
+        // Xử lý sự kiện khi checkbox của sản phẩm thay đổi
         document.querySelectorAll('.select-item').forEach(function(checkbox) {
             checkbox.addEventListener('change', function() {
-                var isAnyChecked = document.querySelectorAll('.select-item:checked').length > 0;
-                document.getElementById('checkout-btn').disabled = !isAnyChecked;
+                updateCart2(checkbox); // Cập nhật giỏ hàng
+                toggleCheckoutButton(); // Kiểm tra và bật/tắt nút thanh toán
             });
         });
 
         // Khởi tạo trạng thái nút thanh toán khi tải trang
-        window.onload = function() {
-            var isAnyChecked = document.querySelectorAll('.select-item:checked').length > 0;
+        window.onload = toggleCheckoutButton;
+
+        // Hàm bật/tắt nút thanh toán
+        function toggleCheckoutButton() {
+            const isAnyChecked = document.querySelectorAll('.select-item:checked').length > 0;
             document.getElementById('checkout-btn').disabled = !isAnyChecked;
         }
 
+        // Cập nhật giỏ hàng mà không reload trang
         function updateCart2(checkbox) {
             const productId = checkbox.name.split('[')[1].split(']')[0]; // Lấy product_id từ name attribute
-            const isSelected = checkbox.checked ? 1 : 0; // Nếu checkbox được chọn, selected = 1, nếu không là 0
+            const productVariantId = checkbox.dataset.variantId || 0; // Lấy product_variant_id từ data attribute
+            const isSelected = checkbox.checked ? 1 : 0; // Nếu chọn, selected = 1, nếu không là 0
 
-            // Gửi AJAX request để cập nhật session giỏ hàng với selected_products
+            // Gửi AJAX request để cập nhật giỏ hàng
             fetch('/update-selected-product', {
                     method: 'POST',
                     headers: {
@@ -650,15 +649,19 @@
                     },
                     body: JSON.stringify({
                         product_id: productId,
+                        product_variant_id: productVariantId,
                         selected: isSelected
                     })
                 })
                 .then(response => response.json())
                 .then(data => {
-                    console.log(data); // Kiểm tra dữ liệu trả về
-                    location.reload();
+                    if (data.success) {
+                        location.reload()
+                    }
                 })
-                .catch(error => console.error('Error:', error));
+                .catch(error => {
+                    console.error('Error:', error);
+                });
         }
     </script>
 

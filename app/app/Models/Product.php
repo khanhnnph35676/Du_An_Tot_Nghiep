@@ -47,7 +47,7 @@ class Product extends Model
             })
             ->selectRaw('SUM(quantity) as total_sold')
             ->groupBy('product_id');
-    }   
+    }
     public function totalSold()
     {
         return $this->productOrders()

@@ -44,11 +44,9 @@
                          class="nav-item nav-link {{ request()->routeIs('storeListProduct') ? 'active' : '' }}">Sản
                          Phẩm</a>
                      <div class="nav-item dropdown">
-                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
+                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Trang</a>
                          <div class="dropdown-menu m-0 bg-secondary rounded-0">
-                             <a href="{{ route('storeCheckout') }}" class="dropdown-item">Checkout</a>
-                             <a href="{{ route('storeTestimonial') }}" class="dropdown-item">Testimonial</a>
-                             <a href="404.html" class="dropdown-item">404 Page</a>
+                             <a href="404.html" class="dropdown-item">Bài viết</a>
                          </div>
                      </div>
                      <a href="{{ route('storeContact') }}"

@@ -175,8 +175,8 @@
                         <p>Bạn có muốn xoá sản phẩm này không?</p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Delete</button>
+                        <button type="button" class="btn btn-dark" data-dismiss="modal">Đóng</button>
+                        <button type="submit" class="btn btn-primary">Xoá</button>
                     </div>
                 </form>
             </div>
@@ -198,8 +198,8 @@
                         <p>Bạn có muốn xoá sản phẩm biến thể này không?</p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Delete</button>
+                        <button type="button" class="btn btn-dark" data-dismiss="modal">Đóng</button>
+                        <button type="submit" class="btn btn-primary">Xoá</button>
                     </div>
                 </form>
             </div>
@@ -221,8 +221,8 @@
                         <p>Bạn có muốn khôi phục này không?</p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Restore</button>
+                        <button type="button" class="btn btn-dark" data-dismiss="modal">Đóng</button>
+                        <button type="submit" class="btn btn-primary">Xoá</button>
                     </div>
                 </form>
             </div>
