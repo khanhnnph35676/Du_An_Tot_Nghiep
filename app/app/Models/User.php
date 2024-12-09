@@ -52,4 +52,13 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Rule::class, 'rule_id', 'id');
     }
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    public function orderLists()
+    {
+        return $this->hasMany(OrderList::class);
+    }
 }

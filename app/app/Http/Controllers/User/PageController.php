@@ -8,6 +8,8 @@ use App\Models\Product;
 use App\Models\Address;
 use App\Models\ProductVariant;
 use App\Models\Payment;
+use App\Models\Gallerie;
+
 use App\Models\DiscountProduct;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -22,6 +24,7 @@ class PageController extends Controller
     public function storeHome()
     {
         $cart = session()->get('cart', []);
+        // dd($cart);
         $products = Product::latest()->take(8)->get();
         $bestViewedProducts = Product::orderBy('view', 'desc')->take(9)->get();
         $categories = Category::all();
@@ -67,9 +70,12 @@ class PageController extends Controller
     }
 
 
-
     public function storeProductDetail($id)
     {
+        $galleries = Gallerie::where('product_id',$id)->get();
+
+        $discount = DiscountProduct::with("discounts")->where('product_id',$id)->first();
+
         $cart = session()->get('cart', []);
         $product = Product::with('categories')->findOrFail($id);
         $productVariant =  ProductVariant::with('options')->where('product_id', $id)->get();
@@ -83,16 +89,17 @@ class PageController extends Controller
                                     ->take(6)
                                     ->get();
 
-        return view('user.product.detail', compact('product', 'relatedProducts','cart','productVariant'));
+        return view('user.product.detail', compact('product', 'relatedProducts','cart','productVariant','galleries','discount'));
     }
 
 
     public function storeListCart()
     {
-
+        $cart = session()->get('cart', []);
+        // dd($cart);
         $bestProducts = Product::orderBy('view', 'desc')->take(6)->get();
         // session()->forget('cart');
-        $cart = session()->get('cart', []);
+
         $products = Product::get();
         $productVariants = ProductVariant::get();
         return view('user.cart.list', compact('bestProducts','cart','products','productVariants'));

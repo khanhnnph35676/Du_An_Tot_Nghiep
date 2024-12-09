@@ -4,11 +4,16 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\OrderList;
+use App\Models\Address;
+use Illuminate\Support\Facades\Auth;
 class UserProfileController extends Controller
 {
     public function index()
     {
+        $user = Auth::user();
+        $address = Address::where('user_id', $user->id)->get();
         $orderLists = OrderList::with('orders','orders.address' ,'users')->get();
+
         // Dữ liệu cho testimonials
         $cart = session()->get('cart', []);
         $testimonials = [
@@ -29,6 +34,6 @@ class UserProfileController extends Controller
             // Thêm các testimonial khác...
         ];
 
-        return view('user.profile', compact('testimonials','cart','orderLists'));
+        return view('user.profile', compact('testimonials','cart','orderLists','user','address'));
     }
 }

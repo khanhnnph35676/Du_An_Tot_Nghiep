@@ -67,7 +67,7 @@ class AuthenController extends Controller
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
-                'rule_id' => 1, // giá trị mặc định hoặc có thể được cấu hình
+                'rule_id' => 3, // giá trị mặc định hoặc có thể được cấu hình
             ]);
 
             event(new Registered($user));
