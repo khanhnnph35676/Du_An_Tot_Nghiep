@@ -12,6 +12,12 @@ use Illuminate\Support\Facades\Storage;
 class CustomerController extends Controller
 {
     // Hiển thị danh sách khách hàng
+    public function listEmployees()
+    {
+        $rules = Rule::all();
+        $users = User::where('rule_id',3)->get();
+        return view('admin.customer.list-employees', compact('users', 'rules'));
+    }
     public function listCustomer()
     {
         $rules = Rule::all();

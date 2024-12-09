@@ -13,7 +13,7 @@
                  </ul>
              </li>
              <li>
-                 <a  href="{{ route('admin.profile') }}" aria-expanded="false">
+                 <a href="{{ route('admin.profile') }}" aria-expanded="false">
                      <i class="icon icon-single-04"></i>
                      <span class="nav-text">Thông tin cá nhân</span>
                  </a>
@@ -26,23 +26,27 @@
                  <ul aria-expanded="false">
                      <li><a href="{{ route('admin.listProducts') }}">Sản phẩm</a></li>
                      <li><a href="{{ route('admin.listCategories') }}">Danh mục</a></li>
-                     <li><a href="{{ route('admin.testimonials') }}">Đánh giá</a></li>
                  </ul>
              </li>
              {{-- Danh mục quản lý người dùng --}}
-             <li><a class="has-arrow" href="javascript:void()" aria-expanded="false"><i
-                         class="fa-solid fa-users"></i><span class="nav-text">Quản lý tài khoản</span></a>
-                 <ul aria-expanded="false">
-                     <li><a href="{{ route('admin.listCustomer') }}">Người dùng</a></li>
-                     {{-- <li><a href="{{route('admin.listTestimonial')}}">Testimonial Manager</a></li> --}}
-                 </ul>
-             </li>
+             @if (Auth::user()->rule_id == 1)
+                 <li><a class="has-arrow" href="javascript:void()" aria-expanded="false"><i
+                             class="fa-solid fa-users"></i><span class="nav-text">Quản lý tài khoản</span></a>
+                     <ul aria-expanded="false">
+                         <li><a href="{{ route('admin.listCustomer') }}">Quản lý người dùng</a></li>
+                         <li><a href="{{ route('admin.listEmployees') }}">Quản lý nhân viên</a></li>
+                         {{-- <li><a href="{{route('admin.listTestimonial')}}">Testimonial Manager</a></li> --}}
+                     </ul>
+                 </li>
+             @endif
              {{-- Danh mục quản lý cửa hàng: Sản phẩm order, Giảm giá, Phương thức thanh toán, Thống kê  --}}
              <li><a class="has-arrow" href="javascript:void()" aria-expanded="false"><i
                          class="fa-solid fa-shop"></i><span class="nav-text">Quản lý cửa hàng</span></a>
                  <ul aria-expanded="true">
-                    <li><a href="{{ route('admin.formPayment') }}">Phương thức thanh toán</a></li>
-                     <li><a href="{{ route('admin.listOrders') }}">Đơn hàng</a></li>
+                    @if (Auth::user()->rule_id == 1 || Auth::user()->rule_id == 3)
+                        <li><a href="{{ route('admin.listOrders') }}">Quản lý đơn hàng</a></li>
+                    @endif
+                     <li><a href="{{ route('admin.formPayment') }}">Phương thức thanh toán</a></li>
                      <li><a href="{{ route('admin.listDiscounts') }}">Giảm giá</a></li>
                      <li><a href="{{ route('admin.listPoints') }}">Điểm thưởng</a></li>
                  </ul>
@@ -77,9 +81,9 @@
                          Giao tiếp khách hàng</span>
                  </a></li>
              <li><a href="{{ route('admin.calender') }}"><i class="fa-solid fa-calendar-days"></i>
-                <span  class="nav-text">
-                    Lịch
-                </span></a></li>
+                     <span class="nav-text">
+                         Lịch
+                     </span></a></li>
          </ul>
      </div>
  </div>

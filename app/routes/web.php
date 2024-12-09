@@ -88,6 +88,10 @@ Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
     Route::put('customer-update/{id}', [CustomerController::class, 'customerUpdate'])->name('customerUpdate');
     Route::delete('customer-destroy/{id}', [CustomerController::class, 'customerDestroy'])->name('customerDestroy');
 
+    // quản lý nhân viên
+    Route::get('list-employees', [CustomerController::class, 'listEmployees'])->name('listEmployees');
+    
+
     // trang app
     Route::get('calender',[AppController::class,'calender'])->name('calender');
     Route::get('profile',[AppController::class,'profile'])->name('profile');
@@ -99,6 +103,9 @@ Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
     Route::get('list-orders',[OrderController::class,'listOrders'])->name('listOrders');
     Route::get('order-detail/{order_id}',[OrderController::class,'orderDetail'])->name('orderDetail');
     Route::post('order-update/{order_id}',[OrderController::class,'updateOrder'])->name('updateOrder');
+
+
+
     // Quản lý giảm giá
     Route::get('list-discounts',[DiscountController::class,'listDiscounts'])->name('listDiscounts');
     Route::get('create-discounts',[DiscountController::class, 'createDiscount'])->name('createDiscount');
@@ -143,49 +150,57 @@ Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
     Route::get('update-point/{id}', [PointController::class, 'updatePoint'])->name('updatePoint');
     Route::patch('update-point', [PointController::class, 'updatePatchPoint'])->name('updatePatchPoint');
 
-
-
     });
 });
-Route::get('/',[PageController :: class,'storeHome'])->name('storeHome');
-Route::get('list-product',[PageController :: class,'storeListProduct'])->name('storeListProduct');
-Route::get('/product/{id}', action: [PageController::class, 'storeProductDetail'])->name('product.detail');
-Route::get('store-contact',[PageController :: class,'storeContact'])->name('storeContact');
-Route::get('store-tetimonial',[PageController :: class,'storeTestimonial'])->name('storeTestimonial');
-Route::get('store-intro',[PageController :: class,'storeIntro'])->name('storeIntro');
+Route::middleware(['checkuser'])->group(function () {
+    Route::prefix('')->group(function () {
+        Route::get('/',[PageController :: class,'storeHome'])->name('storeHome');
+        Route::get('list-product',[PageController :: class,'storeListProduct'])->name('storeListProduct');
+        Route::get('/product/{id}', action: [PageController::class, 'storeProductDetail'])->name('product.detail');
+        Route::get('store-contact',[PageController :: class,'storeContact'])->name('storeContact');
+        Route::get('store-tetimonial',[PageController :: class,'storeTestimonial'])->name('storeTestimonial');
+        Route::get('store-intro',[PageController :: class,'storeIntro'])->name('storeIntro');
+
+        // giỏ hàng
+        Route::delete('remove-item-cart-detail/{product_id}', [CartController::class, 'removeItemCartDetail'])->name('removeItemCartDetail');
+        Route::delete('remove-item-cart/{product_variant_id}', [CartController::class, 'removeItemCart'])->name('removeItemCart');
+        Route::post('add-to-cart',[CartController :: class,'addToCart'])->name('addToCart');
+        Route::post('add-to-cart-detail',[CartController :: class,'addToCartDetai'])->name('addToCartDetai');
+
+        Route::post('/cart/update', [CartController::class, 'updateCart'])->name('updateCart');
+        Route::post('/update-selected-product', [CartController::class, 'updateSelectedProduct'])->name('updateSelectedProduct');
+        Route::post('/updateCartNonVariant', [CartController::class, 'updateCartNonVariant'])->name('updateCartNonVariant');
+
+        Route::post('/update-qty-cart-variant', [CartController::class, 'updateQtyCartVariant'])->name('updateQtyCartVariant');
 
 
-Route::delete('remove-item-cart-detail/{product_id}', [CartController::class, 'removeItemCartDetail'])->name('removeItemCartDetail');
-Route::delete('remove-item-cart/{product_variant_id}', [CartController::class, 'removeItemCart'])->name('removeItemCart');
-Route::post('add-to-cart',[CartController :: class,'addToCart'])->name('addToCart');
-Route::post('/cart/update', [CartController::class, 'updateCart'])->name('updateCart');
-Route::post('/update-selected-product', [CartController::class, 'updateSelectedProduct'])->name('updateSelectedProduct');
-Route::post('/updateCartNonVariant', [CartController::class, 'updateCartNonVariant'])->name('updateCartNonVariant');
 
-Route::post('/update-qty-cart-variant', [CartController::class, 'updateQtyCartVariant'])->name('updateQtyCartVariant');
+        Route::get('store-list-cart',[PageController :: class,'storeListCart'])->name('storeListCart');
 
 
+        Route::get('/user/profile', [UserProfileController::class, 'index'])->name('user.profile');
+        Route::get('/order-history', [UserOrderController::class, 'index'])->name('order.history');
 
-Route::get('store-list-cart',[PageController :: class,'storeListCart'])->name('storeListCart');
+        Route::get('/blog', [BlogController::class, 'index'])->name('blog.list');
+        Route::get('/blog-category', [BlogController::class, 'category'])->name('blog.category');
 
 
-Route::get('/user/profile', [UserProfileController::class, 'index'])->name('user.profile');
-Route::get('/order-history', [UserOrderController::class, 'index'])->name('order.history');
+        // địa chỉ người dùng
+        Route::delete('/address/{id}', [AuthenController::class, 'destroy'])->name('address.destroy');
+        Route::post('/address', [AuthenController::class, 'store'])->name('address.store');
 
-Route::get('/blog', [BlogController::class, 'index'])->name('blog.list');
-Route::get('/blog-category', [BlogController::class, 'category'])->name('blog.category');
+        Route::post('add-order', [CheckoutController::class, 'AddOrder'])->name('AddOrder');
+        Route::post('momo_payment', [CheckoutController::class, 'momoPayment'])->name('momoPayment');
+        Route::get('store-checkout',[CheckoutController :: class,'storeCheckout'])->name('storeCheckout');
 
-//Login
-Route::get('/user/login', [AuthenController::class, 'loginHome'])->name('user.login');
-Route::get('/user/register', [AuthenController::class, 'registerHome'])->name('user.register');
-Route::post('/user/login', [AuthenController::class, 'postLogin'])->name('user.postLogin');
-Route::get('/user/forgot-password', [AuthenController::class, 'forgotPassword'])->name('user.forgot-password');
-Route::post('/user/logout', [AuthenController::class, 'logoutUser'])->name('logoutUser');
+        Route::patch('order-update-destroy',[UserOrderController::class,'destroyOrder'])->name('destroyOrder');
+    });
+});
+ //Login
+ Route::get('/user/login', [AuthenController::class, 'loginHome'])->name('user.login');
+ Route::get('/user/register', [AuthenController::class, 'registerHome'])->name('user.register');
+ Route::post('/user/login', [AuthenController::class, 'postLogin'])->name('user.postLogin');
+ Route::get('/user/forgot-password', [AuthenController::class, 'forgotPassword'])->name('user.forgot-password');
+ Route::post('/user/logout', [AuthenController::class, 'logoutUser'])->name('logoutUser');
 
-// địa chỉ người dùng
-Route::delete('/address/{id}', [AuthenController::class, 'destroy'])->name('address.destroy');
-Route::post('/address', [AuthenController::class, 'store'])->name('address.store');
 
-Route::post('add-order', [CheckoutController::class, 'AddOrder'])->name('AddOrder');
-Route::post('momo_payment', [CheckoutController::class, 'momoPayment'])->name('momoPayment');
-Route::get('store-checkout',[CheckoutController :: class,'storeCheckout'])->name('storeCheckout');
