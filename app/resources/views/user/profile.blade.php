@@ -53,10 +53,10 @@
 @section('content')
     <!-- Single Page Header start -->
     <div class="container-fluid page-header py-5">
-        <h1 class="text-center text-white display-6">User Profile</h1>
+        <h1 class="text-center text-white display-6">Thông tin cá nhân</h1>
         <ol class="breadcrumb justify-content-center mb-0">
-            <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item active text-white">Profile</li>
+            <li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
+            <li class="breadcrumb-item active text-white">Thông tin cá nhân</li>
         </ol>
     </div>
     <!-- Single Page Header End -->
@@ -86,22 +86,28 @@
             <div class="col-9 m-0 p-0">
                 <div class="content m-0">
                     <div class="profile-header">
-                        <img src="https://via.placeholder.com/100" alt="User Avatar">
+                        @if ($user->avatar == null)
+                            <img src="{{ asset('storage/avatars/OIP.jpg') }}">
+                        @else
+                            <img src="{{asset('storage/' .$user->avatar)}}" alt=""  style="object-fit: cover;" >
+                        @endif
+
                         <div>
-                            <h2>John Doe</h2>
-                            <p class="text-muted">Email: john.doe@example.com</p>
-                            <p class="text-muted">Phone: (123) 456-7890</p>
+                            <h2>{{$user->name}}</h2>
+                            <p class="text-muted">Email: {{$user->email}}</p>
+                            <p class="text-muted">Phone: {{ $user->phone }}</p>
                         </div>
                     </div>
 
                     <div class="info-card">
-                        <h5>Personal Information</h5>
-                        <p><strong>Address:</strong> 123 Main St, Apt 4B</p>
-                        <p><strong>City:</strong> Springfield</p>
-                        <p><strong>Country:</strong> USA</p>
+                        <h5>Thông tin cá nhân</h5>
+                        @foreach ($address as $value)
+
+                            <p><strong>Địa chỉ: </strong> {{ $value->address }}</p>
+                            <p><strong>Số nhà: </strong>{{ $value->home_address }}</p>
+                        @endforeach
                     </div>
-                    <button class="btn btn-primary btn-edit" data-bs-toggle="modal" data-bs-target="#editProfileModal">Edit
-                        Profile</button>
+                    <button class="btn btn-primary btn-edit" data-bs-toggle="modal" data-bs-target="#editProfileModal">Sửa thông tin</button>
                 </div>
             </div>
         </div>
@@ -114,26 +120,22 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="editProfileModalLabel">Edit Profile</h5>
+                    <h5 class="modal-title" id="editProfileModalLabel">Sửa thông tin</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form>
                         <div class="mb-3">
-                            <label for="firstName" class="form-label">First Name</label>
-                            <input type="text" class="form-control" id="firstName" value="John">
-                        </div>
-                        <div class="mb-3">
-                            <label for="lastName" class="form-label">Last Name</label>
-                            <input type="text" class="form-control" id="lastName" value="Doe">
+                            <label for="firstName" class="form-label">Họ tên</label>
+                            <input type="text" class="form-control" id="firstName" value="{{$user->name}}" placeholder="Nhập tên">
                         </div>
                         <div class="mb-3">
                             <label for="email" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="email" value="john.doe@example.com">
+                            <input type="email" class="form-control" id="email"  value="{{$user->email}}" placeholder="Nhập email"
                         </div>
                         <div class="mb-3">
                             <label for="phone" class="form-label">Phone</label>
-                            <input type="tel" class="form-control" id="phone" value="(123) 456-7890">
+                            <input type="tel" class="form-control" id="phone" value="(123) 456-7890" placeholder="Nhập số điện thoại">
                         </div>
                         <div class="mb-3">
                             <label for="address" class="form-label">Address</label>

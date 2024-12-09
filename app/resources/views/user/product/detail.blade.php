@@ -2,6 +2,9 @@
 @push('styleStore')
 @endpush
 @section('content')
+    <style>
+
+    </style>
     <!-- Single Page Header start -->
     <div class="container-fluid page-header py-5">
         <h1 class="text-center text-white display-6">Chi tiết sản phẩm</h1>
@@ -14,23 +17,48 @@
 
     <!-- Single Product Start -->
     <div class="container-fluid py-5 mt-5">
-        <div class="container py-5">
-            <div class="row g-4 mb-5">
+        <div class="container">
+            <div class="row g-4 mb-5 border">
                 <div class="col-lg-8 col-xl-9">
                     <div class="row g-4">
                         {{-- form thêm vào giỏ hàng --}}
-
-                        <div class="col-lg-6">
+                        <div class="col-lg-5">
                             <div>
-                                <img src=" {{ asset($product->image) }} " style="width:100%;" class="img-fluid rounded"
+                                <img src=" {{ asset($product->image) }} " style="width:100%; max-height:400px;"
                                     alt="Image">
                             </div>
+                            @if ($product->type == 2)
+                                @foreach ($productVariant as $item)
+                                    <img src="{{ asset($item->image) }}" class="me-2 mt-3" class="images_pro"
+                                        style="width: 40px; height: 40px; object-fit: cover;cursor: pointer">
+                                @endforeach
+                            @endif
+                            @if ($galleries != [])
+                                @foreach ($galleries as $item)
+                                    <img src="{{ asset($item->image) }}" class="me-2 mt-3" class="images_pro"
+                                        style="width: 40px; height: 40px; object-fit: cover;cursor: pointer">
+                                @endforeach
+                            @endif
                         </div>
+                        <div class="col-lg-1"></div>
                         <div class="col-lg-6">
-                            <form action="" method="POST">
+                            <form action="{{ route('addToCartDetai') }}" method="POST">
                                 @csrf
-                                <h4 class="fw-bold mb-4">{{ $product->name }}</h4>
-                                <h3 class="fw-bold mb-4">{{ number_format($product->price) }} Vnđ</h3>
+                                <input type="text" name='product_id' value="{{ $product->id }}" hidden>
+                                <input type="text" name="discount_id"
+                                    value="{{ $discount->discounts->id ?? '0' }}"hidden>
+                                <input type="text" name="discount"value="{{ $discount->discounts->discount ?? '0' }}"
+                                    hidden>
+                                <input type="text" name="product_qty"value="{{ $product->qty ?? '0' }}" hidden>
+                                <p class="fw-bold mb-4 fs-3">{{ $product->name }}</p>
+                                <p class="fw-bold mb-4 fs-4" id="variant-price">Giá:
+                                    @if ($discount != [])
+                                        {{ number_format($product->price - ($product->price * $discount->discounts->discount) / 100) }}
+                                        Vnđ
+                                    @else
+                                        {{ number_format($product->price) }} Vnđ
+                                    @endif
+                                </p>
                                 <div class="d-flex align-items-center mb-4">
                                     <span class="me-3">Số lượng: </span>
                                     <div class="input-group quantity" style="width: 100px;">
@@ -40,8 +68,8 @@
                                                 <i class="fa fa-minus"></i>
                                             </button>
                                         </div>
-                                        <input type="text" class="qty form-control form-control-sm text-center border-0"
-                                            value="1">
+                                        <input type="text" name="qty"
+                                            class="qty form-control form-control-sm text-center border-0" value="1">
                                         <div class="input-group-btn">
                                             <button class="btn btn-sm btn-plus rounded-circle bg-light border"
                                                 type='button'>
@@ -50,28 +78,45 @@
                                         </div>
                                     </div>
                                 </div>
+                                @error('qty')
+                                    <span class="text-danger"><strong>Lỗi!</strong> {{ $message }}
+                                    </span>
+                                @enderror
                                 <div class="d-flex align-items-center mb-2">
-                                    <span class="me-2">Loại: </span>
+                                    <span class="me-2">Phân loại: </span>
                                     @if ($product->type == 1)
                                         Không có
                                     @else
                                         @foreach ($productVariant as $item)
                                             <button class="badge bg-white text-dark border m-1 variant-option"
-                                                type="button" data-variant-id="{{ $item->id }}">
+                                                type="button" data-variant-id="{{ $item->id }}"
+                                                data-variant-price="{{ $item->price }}"
+                                                data-variant-stock="{{ $item->stock }}"> <!-- Thêm thuộc tính stock -->
+                                                <img src="{{ asset($item->image) }}" class="me-2"
+                                                    style="width: 20px; height: 20px; object-fit: cover;">
                                                 {{ $item->options->option_value }}
                                             </button>
                                         @endforeach
-                                    @endif
                                 </div>
-                                <p id="variantError" class="text-danger" style="display: none;"></p>
+                                <input id="product_variant_id" type="text" name="product_variant_id" hidden>
+                                <input id="stock" type="text" name="stock" value="0" hidden>
+                                @error('product_variant_id')
+                                    <span class="alert text-danger"><strong>Lỗi!</strong> {{ $message }}
+                                    </span>
+                                @enderror
+                                @endif
                                 <br>
 
                                 {{-- <input type="text" name="product_id" value="{{$product_id}}">
                                 <input type="text" name="product_variant_id" value="{{$product_id}}"> --}}
-                                <button class="btn border border-secondary rounded-pill mt-2 px-4 py-2 mb-4 text-primary"
+                                <button class="btn border border-secondary rounded mt-2 px-4 py-2 mb-4 me-2 text-primary"
                                     id="addToCart" data-product-id="{{ $product->id }}"
                                     data-has-variants="{{ $product->type != 1 ? 'true' : 'false' }}">
                                     <i class="fa fa-shopping-bag me-2 text-primary"></i>Thêm vào giỏ
+                                </button>
+                                <button class="btn border border-secondary rounded mt-2 px-4 py-2 mb-4 text-primary"
+                                    id="mua" data-product-id="{{ $product->id }}"
+                                    data-has-variants="{{ $product->type != 1 ? 'true' : 'false' }}">Mua ngay
                                 </button>
                             </form>
                         </div>
@@ -88,10 +133,12 @@
                                 </div>
                             </nav>
                             <div class="tab-content mb-5">
-                                <div class="tab-pane active" id="nav-about" role="tabpanel" aria-labelledby="nav-about-tab">
+                                <div class="tab-pane active" id="nav-about" role="tabpanel"
+                                    aria-labelledby="nav-about-tab">
                                     <p class="mb-4">{!! $product->description !!}</p>
                                 </div>
-                                <div class="tab-pane" id="nav-mission" role="tabpanel" aria-labelledby="nav-mission-tab">
+                                <div class="tab-pane" id="nav-mission" role="tabpanel"
+                                    aria-labelledby="nav-mission-tab">
                                     <div class="d-flex">
                                         <img src="img/avatar.jpg" class="img-fluid rounded-circle p-3"
                                             style="width: 100px; height: 100px;" alt="">
@@ -143,7 +190,7 @@
                                 </div>
                             </div>
                         </div>
-                        {{-- Leave a Reply --}}
+                        {{-- Đánh giá --}}
                         <form action="#">
                             <h4 class="mb-5 fw-bold">Để lại câu trả lời</h4>
                             <div class="row g-4">
@@ -185,42 +232,13 @@
                         </form>
                     </div>
                 </div>
-                <div class="col-lg-4 col-xl-3">
-                    <div class="row g-4 fruite">
+                <div class="col-lg-4 col-xl-3 border m-0">
+                    <div class="row g-4 fruite ">
                         <div class="col-lg-12">
-                            <h4 class="mb-4">Featured products</h4>
-                            <div class="d-flex align-items-center justify-content-start">
-                                <div class="rounded" style="width: 100px; height: 100px;">
-                                    <img src="img/featur-1.jpg" class="img-fluid rounded" alt="Image">
-                                </div>
-                                <div>
-                                    <h6 class="mb-2">Big Banana</h6>
-                                    <div class="d-flex mb-2">
-                                        <i class="fa fa-star text-secondary"></i>
-                                        <i class="fa fa-star text-secondary"></i>
-                                        <i class="fa fa-star text-secondary"></i>
-                                        <i class="fa fa-star text-secondary"></i>
-                                        <i class="fa fa-star"></i>
-                                    </div>
-                                    <div class="d-flex mb-2">
-                                        <h5 class="fw-bold me-2">2.99 $</h5>
-                                        <h5 class="text-danger text-decoration-line-through">4.11 $</h5>
-                                    </div>
-                                </div>
-                            </div>
+                            <h4 class="mb-4 text-center mt-4">Sản phẩm nổi bật</h4>
                             <div class="d-flex justify-content-center my-4">
                                 <a href="#"
-                                    class="btn border border-secondary px-4 py-3 rounded-pill text-primary w-100">Vew
-                                    More</a>
-                            </div>
-                        </div>
-                        <div class="col-lg-12">
-                            <div class="position-relative">
-                                <img src="img/banner-fruits.jpg" class="img-fluid w-100 rounded" alt="">
-                                <div class="position-absolute"
-                                    style="top: 50%; right: 10px; transform: translateY(-50%);">
-                                    <h3 class="text-secondary fw-bold">Fresh <br> Fruits <br> Banner</h3>
-                                </div>
+                                    class="btn border border-secondary px-4 py-3 rounded-pill text-primary w-100">Xem thêm</a>
                             </div>
                         </div>
                     </div>
@@ -232,8 +250,12 @@
                     @foreach ($relatedProducts as $related)
                         <div class="border border-primary rounded position-relative vesitable-item">
                             <div class="vesitable-img">
-                                <img src="{{ asset($related->image) }}" class="img-fluid w-100 rounded-top"
-                                    alt="{{ $related->name }}">
+                                <a href="{{ route('product.detail', $related->id) }}">
+                                    <img src="{{ asset($related->image) }}"
+                                        style="width: 50px; height: 250px; object-fit: cover;"
+                                        class="img-fluid w-100 rounded-top"
+                                        alt="{{ $related->name }}">
+                                </a>
                             </div>
                             <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
                                 style="top: 10px; right: 10px;">
@@ -241,12 +263,11 @@
                             </div>
                             <div class="p-4 pb-0 rounded-bottom">
                                 <h4>{{ $related->name }}</h4>
-                                <p>{!! $related->description !!}</p>
                                 <div class="d-flex justify-content-between flex-lg-wrap">
                                     <p class="text-dark fs-5 fw-bold">{{ number_format($related->price) }} vnđ</p>
                                     <a href=""
                                         class="btn border border-secondary rounded-pill px-3 py-1 mb-4 text-primary">
-                                        <i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart
+                                        <i class="fa fa-shopping-bag me-2 text-primary"></i> Thêm vào giỏ
                                     </a>
                                 </div>
                             </div>
@@ -259,64 +280,44 @@
     <!-- Single Product End -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const addToCartButton = document.getElementById('addToCart');
-            const variantError = document.getElementById('variantError');
-
-            addToCartButton.addEventListener('click', function(event) {
-                event.preventDefault(); // Ngăn form gửi đi mặc định
-
-                const hasVariants = this.getAttribute('data-has-variants') ===
-                    'true'; // Kiểm tra nếu có biến thể
-                let selectedVariant = null;
-
-                // Kiểm tra biến thể
-                if (hasVariants) {
-                    selectedVariant = document.querySelector('.variant-option.bg-secondary');
-                    if (!selectedVariant) {
-                        variantError.style.display = 'inline'; // Hiển thị lỗi
-                        variantError.textContent = 'Vui lòng chọn phân loại';
-                        return;
-                    }
-                    variantError.style.display = 'none'; // Ẩn lỗi nếu chọn đúng
-                }
-
-                // Lấy số lượng
-                const quantityInput = document.querySelector('input.qty');
-                const quantity = parseInt(quantityInput.value);
-
-                // Kiểm tra số lượng hợp lệ
-                if (!quantity || quantity <= 0) {
-                    variantError.style.display = 'inline';
-                    variantError.textContent = 'Vui lòng nhập số lượng hợp lệ';
-                    return;
-                }
-
-                variantError.style.display = 'none';
-
-                // Lấy thông tin sản phẩm
-                const productId = this.getAttribute('data-product-id');
-                const variantId = selectedVariant ? selectedVariant.getAttribute('data-variant-id') : null;
-            });
             document.querySelectorAll('.variant-option').forEach(button => {
                 button.addEventListener('click', function() {
                     // Nếu nút hiện tại đã là bg-secondary, chuyển về bg-white
                     if (this.classList.contains('bg-secondary')) {
                         this.classList.remove('bg-secondary');
                         this.classList.add('bg-white');
+                        const variantId = this.getAttribute(
+                            'data-variant-id'); // Lấy giá trị variant-id
+                        document.getElementById('product_variant_id').value = 0;
+                        document.getElementById('stock').value = 0; // Đặt lại số lượng khi hủy chọn
                     } else {
                         // Đảm bảo chỉ một nút được chọn, các nút khác chuyển về bg-white
                         document.querySelectorAll('.variant-option').forEach(b => {
                             b.classList.remove('bg-secondary');
                             b.classList.add('bg-white');
                         });
+                        const variantId = this.getAttribute(
+                            'data-variant-id'); // Lấy giá trị variant-id
+                        document.getElementById('product_variant_id').value = variantId;
 
-                        // Chuyển nút hiện tại sang bg-secondary
                         this.classList.remove('bg-white');
                         this.classList.add('bg-secondary');
+
+
+                        const variantPrice = this.getAttribute('data-variant-price');
+                        // Lấy số lượng từ data-variant-price và hiển thị vào trường nhập liệu #stock
+                         // Giả sử bạn có thuộc tính stock cho biến thể
+                        const variantStock = this.getAttribute(
+                            'data-variant-stock');
+
+                        document.getElementById('stock').value =
+                            variantStock; // Cập nhật giá trị stock
                     }
 
-                    // Ẩn thông báo lỗi nếu người dùng chọn hoặc bỏ chọn biến thể
-                    variantError.style.display = 'none';
+                    // Ẩn thông báo lỗi nếu có (đảm bảo biến variantError được định nghĩa)
+                    if (typeof variantError !== 'undefined') {
+                        variantError.style.display = 'none';
+                    }
                 });
             });
         });

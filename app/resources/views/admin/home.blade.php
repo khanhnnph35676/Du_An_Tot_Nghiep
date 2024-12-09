@@ -127,7 +127,7 @@
                                             <tr>
                                                 <td class="text-dark">{{ $index + 1 }}</td>
                                                 <td>
-                                                    <img src="{{ $product->image }}" alt="Ảnh sản phẩm" class="img-thumbnail" style="width: 50px; height: 50px; object-fit: cover;">
+                                                    <img src="{{ asset($product->image)  }}" alt="Ảnh sản phẩm" class="img-thumbnail" style="width: 50px; height: 50px; object-fit: cover;">
                                                 </td>
                                                 <td class="text-dark">{{ $product->name }}</td>
                                                 <td class="text-dark">{{ $product->total_sold ?? 0 }}</td>
@@ -143,7 +143,7 @@
                     <div class="card">
                         <div class="card-body text-center">
                             <div class="m-t-10">
-                                <h4 class="card-title">Top 5 sản phẩm bán chạy</h4>
+                                <h4 class="card-title">Top tài khoản có lượt mua nhiều nhất</h4>
                             </div>
                             <div class="widget-card-circle">
                                 <div class="row">
@@ -153,19 +153,19 @@
                                             <table class="table table-striped table-bordered">
                                                 <thead>
                                                     <tr>
-                                                        <th>#</th>
-                                                        <th>User Name</th>
-                                                        <th>Email</th>
-                                                        <th>Successful Orders</th>
+                                                        <th class="text-dark">#</th>
+                                                        <th class="text-dark">User Name</th>
+                                                        <th class="text-dark">Email</th>
+                                                        <th class="text-dark">Successful Orders</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     @foreach ($topUsers as $index => $user)
                                                         <tr>
-                                                            <td>{{ $index + 1 }}</td>
-                                                            <td>{{ $user->name }}</td>
-                                                            <td>{{ $user->email }}</td>
-                                                            <td>{{ $user->successful_orders }}</td>
+                                                            <td class="text-dark">{{ $index + 1 }}</td>
+                                                            <td class="text-dark">{{ $user->name }}</td>
+                                                            <td class="text-dark">{{ $user->email }}</td>
+                                                            <td class="text-dark">{{ $user->successful_orders }}</td>
                                                         </tr>
                                                     @endforeach
                                                 </tbody>
@@ -243,7 +243,7 @@
                         const row = `
                             <tr>
                                 <td class="text-dark">${index + 1}</td>
-                                <td><img src="{{ $item->product->image }}" alt="" style="width: 50px; height: 50px; object-fit: cover;"></td>
+                                <td><img src=" {{ asset($product->image) }}" alt="" style="width: 50px; height: 50px; object-fit: cover;"></td>
                                 <td class="text-dark">${item.product.name}</td>
                                 <td class="text-dark">${item.total_sold}</td>
                             </tr>
@@ -254,6 +254,7 @@
                 .catch(error => console.error("Error fetching data:", error));
         });
     </script>
+    {{-- {{ $item->product->image }} --}}
 @endsection
 
 @push('scriptHome')

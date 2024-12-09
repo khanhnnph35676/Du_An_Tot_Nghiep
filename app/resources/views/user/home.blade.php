@@ -187,8 +187,7 @@
                                                     <br>
 
                                                     <div class="d-flex">
-                                                        <button type="button"
-                                                            onclick="validateSelection('{{ $product->id }}')"
+                                                        <button onclick="validateSelection('{{ $product->id }}')"
                                                             class="btn border border-secondary rounded px-3 text-primary"
                                                             data-bs-toggle="modal"
                                                             data-bs-target="#exampleModal{{ $product->id }}"
@@ -197,40 +196,6 @@
                                                             <i class="fa fa-shopping-bag me-2 text-primary"></i>
                                                             Thêm vào giỏ
                                                         </button>
-
-                                                        <!-- Modal -->
-                                                        <div class="modal fade" id="exampleModal{{ $product->id }}"
-                                                            tabindex="-1"
-                                                            aria-labelledby="exampleModalLabel{{ $product->id }}"
-                                                            aria-hidden="true">
-                                                            <div class="modal-dialog">
-                                                                <div class="modal-content">
-                                                                    <div class="modal-header">
-                                                                        <h1 class="modal-title fs-5"
-                                                                            id="exampleModalLabel{{ $product->id }}">
-                                                                            <i
-                                                                                class="fa fa-shopping-bag me-2 text-primary"></i>
-                                                                            Thêm vào giỏ
-                                                                        </h1>
-                                                                        <button type="button" class="btn-close"
-                                                                            data-bs-dismiss="modal"
-                                                                            aria-label="Close"></button>
-                                                                    </div>
-                                                                    <div class="modal-body">
-                                                                        Bạn có muốn thêm sản phẩm vào giỏ hàng không?
-                                                                    </div>
-                                                                    <div class="modal-footer">
-                                                                        <button type="button"
-                                                                            class="btn btn-secondary"
-                                                                            data-bs-dismiss="modal">Đóng</button>
-                                                                        <button type="submit"
-                                                                            id="addToCartButton{{ $product->id }}"
-                                                                            class="btn btn-primary">Thêm vào
-                                                                            giỏ</button>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
                                                     </div>
                                                 </div>
                                         </form>
@@ -396,7 +361,8 @@
 
                                     <a href="{{ route('product.detail', $product->id) }}"
                                         class="h5">{{ $product->name }}</a>
-                                    <h4 class="mb-3">{{ number_format($product->price, 2) }} đ</h4>
+                                    <h4 class="mb-3" id="product-price">{{ number_format($product->price, 2) }} đ
+                                    </h4>
 
                                     <div class="variant">
                                         @php
@@ -424,35 +390,6 @@
                                         Thêm vào giỏ
                                     </button>
 
-                                    <!-- Modal -->
-                                    <div class="modal fade" id="exampleModal{{ $product->id }}" tabindex="-1"
-                                        aria-labelledby="exampleModalLabel{{ $product->id }}" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h1 class="modal-title fs-5"
-                                                        id="exampleModalLabel{{ $product->id }}">
-                                                        <i class="fa fa-shopping-bag me-2 text-primary"></i>
-                                                        Thêm vào giỏ
-                                                    </h1>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                        aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    Bạn có muốn thêm sản phẩm vào giỏ hàng không?
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary"
-                                                        data-bs-dismiss="modal">Đóng</button>
-                                                    <button type="submit"
-                                                        id="finalAddToCartButton{{ $product->id }}"
-                                                        class="btn btn-primary">
-                                                        Thêm vào giỏ
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
                                 </form>
                             </div>
                         </div>
@@ -602,6 +539,18 @@
 </div>
 <!-- Tastimonial End -->
 <script>
+    function selectVariant(variantId, productId) {
+        // Lấy giá từ biến thể tương ứng
+        const variant = @json($product_variants).find(v => v.id == variantId);
+        if (variant) {
+            // Cập nhật giá
+            document.getElementById('product-price').innerText = parseFloat(variant.price).toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+            });
+        }
+    }
+
     function showOptionValue(productId, variantId) {
         const input = document.getElementById(`optionValueInput${productId}`);
         const addToCartButton = document.getElementById(`addToCartButton${productId}`);
