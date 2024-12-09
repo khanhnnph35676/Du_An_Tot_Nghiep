@@ -33,7 +33,7 @@ class AuthenController extends Controller
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
-            if (Auth::user()->rule_id == 1) {
+            if (Auth::user()->rule_id == 1 || Auth::user()->rule_id == 3) {
                 return redirect()->intended('admin');
             }
             if (Auth::user()->rule_id == 2) {

@@ -20,7 +20,7 @@ class CheckAuthenticated
         if (!Auth::check()) {
             return redirect()->route('loginAdmin');
         }else{
-            if(Auth::user()->rule_id !=  1){
+            if(Auth::user()->rule_id ==  2){
                 return redirect()->route('loginAdmin');
             }
         }
