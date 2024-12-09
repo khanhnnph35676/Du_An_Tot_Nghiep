@@ -155,7 +155,7 @@
                                                         Auth::id() == $item['user_id'] &&
                                                         $item['selected_products'] === 1)
                                                     @php
-                                                        $sumPrice += $product->price * $item['qty'] 
+                                                        $sumPrice += $product->price * $item['qty'];
                                                     @endphp
                                                     <tr class="mt-1 mb-1">
                                                         <th scope="row">
@@ -184,8 +184,7 @@
                                                             Auth::id() == $item['user_id'] &&
                                                             $item['selected_products'] === 1)
                                                         @php
-                                                            $sumPrice +=
-                                                                $productVariant->price*$item['qty'];
+                                                            $sumPrice += $productVariant->price * $item['qty'];
                                                         @endphp
                                                         <tr>
                                                             <td scope="row">
@@ -301,7 +300,8 @@
                                             <div class="form-check text-start">
                                             </div>
                                             <div class="form-check text-start">
-                                                <label class="form-check-label" for="Shipping-2">{{ number_format($sumPrice + 15000) }} Vnđ</label>
+                                                <label class="form-check-label"
+                                                    for="Shipping-2">{{ number_format($sumPrice + 15000) }} Vnđ</label>
                                             </div>
                                             <div class="form-check text-start">
                                             </div>
@@ -341,7 +341,7 @@
             <form action="">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="addAddressModel">Modal title</h1>
+                        <h1 class="modal-title fs-5" id="addAddressModel">Thêm mới địa chi</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -492,9 +492,6 @@
 
                 // Nếu tất cả địa chỉ bị xóa, có thể hiển thị thông báo
                 const remainingAddresses = document.querySelectorAll('.address-item');
-                if (remainingAddresses.length === 0) {
-                    alert('Tất cả địa chỉ đã bị xóa!');
-                }
             });
         });
         document.querySelectorAll('.delete-address').forEach(function(button) {
@@ -563,47 +560,3 @@
 
 @push('scriptStore')
 @endpush
-
-
-
-
-
-{{-- <div class="row g-4 text-center align-items-center justify-content-center border-bottom py-3">
-    <div class="col-12">
-        <div class="form-check text-start my-3">
-            <input type="checkbox" class="form-check-input bg-primary border-0" id="Transfer-1"
-                name="Transfer" value="Transfer">
-            <label class="form-check-label" for="Transfer-1">Direct Bank Transfer</label>
-        </div>
-        <p class="text-start text-dark">Make your payment directly into our bank account. Please
-            use your Order ID as the payment reference. Your order will not be shipped until the
-            funds have cleared in our account.</p>
-    </div>
-</div>
-<div class="row g-4 text-center align-items-center justify-content-center border-bottom py-3">
-    <div class="col-12">
-        <div class="form-check text-start my-3">
-            <input type="checkbox" class="form-check-input bg-primary border-0" id="Payments-1"
-                name="Payments" value="Payments">
-            <label class="form-check-label" for="Payments-1">Check Payments</label>
-        </div>
-    </div>
-</div>
-<div class="row g-4 text-center align-items-center justify-content-center border-bottom py-3">
-    <div class="col-12">
-        <div class="form-check text-start my-3">
-            <input type="checkbox" class="form-check-input bg-primary border-0" id="Delivery-1"
-                name="Delivery" value="Delivery">
-            <label class="form-check-label" for="Delivery-1">Cash On Delivery</label>
-        </div>
-    </div>
-</div>
-<div class="row g-4 text-center align-items-center justify-content-center border-bottom py-3">
-    <div class="col-12">
-        <div class="form-check text-start my-3">
-            <input type="checkbox" class="form-check-input bg-primary border-0" id="Paypal-1"
-                name="Paypal" value="Paypal">
-            <label class="form-check-label" for="Paypal-1">Paypal</label>
-        </div>
-    </div>
-</div> --}}
