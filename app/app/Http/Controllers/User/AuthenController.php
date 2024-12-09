@@ -163,7 +163,7 @@ class AuthenController extends Controller
     public function logoutUser(Request $request)
     {
         Auth::logout();
-        return redirect()->back();
+        return redirect()->route('storeHome');
     }
     // xoá địa chỉ
     public function destroy($id)

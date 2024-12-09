@@ -74,7 +74,7 @@
         <div class="row">
             <div class="col-3">
                 <ul class="side-bar border rounded p-1">
-                    <h3 class="mb-4 mt-3">Đơn Hàng</h3>
+                    <h3 class="mb-4 mt-3 ms-3">Đơn Hàng</h3>
                     <li class="p-2"><a href="{{ route('user.profile') }}" class="text-dark"><strong>Thông tin cá
                                 nhân</strong> </a> </li>
 
@@ -89,12 +89,12 @@
                         @if ($user->avatar == null)
                             <img src="{{ asset('storage/avatars/OIP.jpg') }}">
                         @else
-                            <img src="{{asset('storage/' .$user->avatar)}}" alt=""  style="object-fit: cover;" >
+                            <img src="{{ asset('storage/' . $user->avatar) }}" alt="" style="object-fit: cover;">
                         @endif
 
                         <div>
-                            <h2>{{$user->name}}</h2>
-                            <p class="text-muted">Email: {{$user->email}}</p>
+                            <h2>{{ $user->name }}</h2>
+                            <p class="text-muted">Email: {{ $user->email }}</p>
                             <p class="text-muted">Phone: {{ $user->phone }}</p>
                         </div>
                     </div>
@@ -102,12 +102,12 @@
                     <div class="info-card">
                         <h5>Thông tin cá nhân</h5>
                         @foreach ($address as $value)
-
                             <p><strong>Địa chỉ: </strong> {{ $value->address }}</p>
                             <p><strong>Số nhà: </strong>{{ $value->home_address }}</p>
                         @endforeach
                     </div>
-                    <button class="btn btn-primary btn-edit" data-bs-toggle="modal" data-bs-target="#editProfileModal">Sửa thông tin</button>
+                    <button class="btn btn-primary btn-edit" data-bs-toggle="modal" data-bs-target="#editProfileModal">Sửa
+                        thông tin</button>
                 </div>
             </div>
         </div>
@@ -127,28 +127,30 @@
                     <form>
                         <div class="mb-3">
                             <label for="firstName" class="form-label">Họ tên</label>
-                            <input type="text" class="form-control" id="firstName" value="{{$user->name}}" placeholder="Nhập tên">
+                            <input type="text" class="form-control" id="firstName" value="{{ $user->name }}"
+                                placeholder="Nhập tên">
                         </div>
                         <div class="mb-3">
                             <label for="email" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="email"  value="{{$user->email}}" placeholder="Nhập email"
-                        </div>
-                        <div class="mb-3">
-                            <label for="phone" class="form-label">Phone</label>
-                            <input type="tel" class="form-control" id="phone" value="(123) 456-7890" placeholder="Nhập số điện thoại">
-                        </div>
-                        <div class="mb-3">
-                            <label for="address" class="form-label">Address</label>
-                            <input type="text" class="form-control" id="address" value="123 Main St, Apt 4B">
-                        </div>
-                        <div class="mb-3">
-                            <label for="city" class="form-label">City</label>
-                            <input type="text" class="form-control" id="city" value="Springfield">
-                        </div>
-                        <div class="mb-3">
-                            <label for="country" class="form-label">Country</label>
-                            <input type="text" class="form-control" id="country" value="USA">
-                        </div>
+                            <input type="email" class="form-control" id="email" value="{{ $user->email }}"
+                                placeholder="Nhập email" </div>
+                            <div class="mb-3">
+                                <label for="phone" class="form-label">Phone</label>
+                                <input type="tel" class="form-control" id="phone" value="(123) 456-7890"
+                                    placeholder="Nhập số điện thoại">
+                            </div>
+                            <div class="mb-3">
+                                <label for="address" class="form-label">Address</label>
+                                <input type="text" class="form-control" id="address" value="123 Main St, Apt 4B">
+                            </div>
+                            <div class="mb-3">
+                                <label for="city" class="form-label">City</label>
+                                <input type="text" class="form-control" id="city" value="Springfield">
+                            </div>
+                            <div class="mb-3">
+                                <label for="country" class="form-label">Country</label>
+                                <input type="text" class="form-control" id="country" value="USA">
+                            </div>
                     </form>
                 </div>
                 <div class="modal-footer">
