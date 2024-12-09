@@ -54,7 +54,7 @@
                                             <tr>
                                                 <td class="text-center">{{ $key + 1 }}</td>
                                                 <td>{{ $value->orders->order_code }}</td>
-                                                <td>{{ $value->users->email }}</td>
+                                                <td>{{ $value->users->email ?? 'N/A' }}</td>
 
                                                 {{-- <td>
                                                     @if ($value->orders && $value->orders->address)

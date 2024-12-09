@@ -43,12 +43,13 @@
              <li><a class="has-arrow" href="javascript:void()" aria-expanded="false"><i
                          class="fa-solid fa-shop"></i><span class="nav-text">Quản lý cửa hàng</span></a>
                  <ul aria-expanded="true">
-                    @if (Auth::user()->rule_id == 1 || Auth::user()->rule_id == 3)
+
                         <li><a href="{{ route('admin.listOrders') }}">Quản lý đơn hàng</a></li>
+                    @if (Auth::user()->rule_id == 1 )
+                        <li><a href="{{ route('admin.formPayment') }}">Phương thức thanh toán</a></li>
+                        <li><a href="{{ route('admin.listDiscounts') }}">Giảm giá</a></li>
+                        <li><a href="{{ route('admin.listPoints') }}">Điểm thưởng</a></li>
                     @endif
-                     <li><a href="{{ route('admin.formPayment') }}">Phương thức thanh toán</a></li>
-                     <li><a href="{{ route('admin.listDiscounts') }}">Giảm giá</a></li>
-                     <li><a href="{{ route('admin.listPoints') }}">Điểm thưởng</a></li>
                  </ul>
              </li>
              {{-- Danh mục quản lý Blog --}}

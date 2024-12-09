@@ -351,11 +351,20 @@
                                 @if (Auth::check())
                                     @foreach ($cart as $item)
                                         @foreach ($products as $product)
-                                            @if ($product->type == 1 && $product->id == $item['product_id'] &&
-                                                Auth::id() == $item['user_id'] && $item['selected_products'] == 1)
-                                                @php
-                                                    $price += $product->price * $item['qty'];
-                                                @endphp
+                                            @if (
+                                                $product->type == 1 &&
+                                                    $product->id == $item['product_id'] &&
+                                                    Auth::id() == $item['user_id'] &&
+                                                    $item['selected_products'] == 1)
+                                                @if ($item['discount'] != 0)
+                                                    @php
+                                                        $price +=($product->price -($product->price * $item['discount']) / 100) *$item['qty'];
+                                                    @endphp
+                                                @else
+                                                    @php
+                                                       $price += $product->price * $item['qty'];
+                                                    @endphp
+                                                @endif
                                             @endif
                                         @endforeach
                                         @foreach ($productVariants as $productVariant)
@@ -364,20 +373,34 @@
                                                     $item['product_variant_id'] == $productVariant->id &&
                                                     Auth::id() == $item['user_id'] &&
                                                     $item['selected_products'] == 1)
-                                                @php
-                                                    $price += $productVariant->price * $item['qty'];
-                                                @endphp
+                                                @if ($item['discount'] != 0)
+                                                    @php
+                                                        $price +=($productVariant->price -($productVariant->price * $item['discount']) / 100) *$item['qty'];
+                                                    @endphp
+                                                @else
+                                                    @php
+                                                        $price += $productVariant->price * $item['qty'];
+                                                    @endphp
+                                                @endif
                                             @endif
                                         @endforeach
                                     @endforeach
                                 @else
                                     @foreach ($cart as $item)
                                         @foreach ($products as $product)
-                                            @if ($product->type == 1 && $product->id == $item['product_id']
-                                                    &&$item['user_id'] == 0 && $item['selected_products'] == 1)
-                                                @php
-                                                    $price += $product->price * $item['qty'];
-                                                @endphp
+                                            @if ($product->type == 1 &&
+                                                    $product->id == $item['product_id'] &&
+                                                    $item['user_id'] == 0 &&
+                                                    $item['selected_products'] == 1)
+                                                @if ($item['discount'] != 0)
+                                                    @php
+                                                        $price +=($product->price -($product->price * $item['discount']) / 100) *$item['qty'];
+                                                    @endphp
+                                                @else
+                                                    @php
+                                                        $price += $product->price * $item['qty'];
+                                                    @endphp
+                                                @endif
                                             @endif
                                         @endforeach
                                         @foreach ($productVariants as $productVariant)
@@ -386,21 +409,19 @@
                                                     $item['product_variant_id'] == $productVariant->id &&
                                                     $item['user_id'] == 0 &&
                                                     $item['selected_products'] == 1)
-                                                @php
-                                                    $price += $productVariant->price * $item['qty'];
-                                                @endphp
+                                                @if ($item['discount'] != 0)
+                                                    @php
+                                                        $price +=($productVariant->price -($productVariant->price * $item['discount']) / 100) *$item['qty'];
+                                                    @endphp
+                                                @else
+                                                    @php
+                                                        $price += $productVariant->price * $item['qty'];
+                                                    @endphp
+                                                @endif
                                             @endif
                                         @endforeach
                                     @endforeach
                                 @endif
-                                @foreach ($cart as $item)
-                                    @if ($item['discount'] != 0)
-                                        @php
-                                            $price = $price - ($price * $item['discount']) / 100;
-                                        @endphp
-                                    @endif
-                                @endforeach
-
 
                                 @if ($price > 0)
                                     <p class="mb-0"> <strong>{{ number_format($price) }} Vnđ</strong> </p>

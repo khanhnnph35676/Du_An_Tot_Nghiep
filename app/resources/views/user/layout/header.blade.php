@@ -108,7 +108,7 @@
                              @else
                                  <li><a class="dropdown-item" href="{{ route('user.login') }}">Đăng nhập</a>
                                  </li>
-                                 <li><a class="dropdown-item" href="{{ route('order.history') }}">Đăng ký</a>
+                                 <li><a class="dropdown-item" href="{{ route('user.register') }}">Đăng ký</a>
                                  </li>
                              @endif
 

@@ -21,6 +21,7 @@ class CheckoutController extends Controller
     public function storeCheckout()
     {
         $cart = session()->get('cart', []);
+        // dd($cart);
         $addresses = session()->get('addresses', []);
 
         $address = [];
@@ -99,25 +100,28 @@ class CheckoutController extends Controller
             'address_id' => $request->selected_address,
             'order_code' => generateRandomCode(),
         ];
-
+        $user =[];
         $addOrder = Order::create($order);
         $user_id = Auth::user()->id ?? null;
         $check_user = Auth::user() ? 1 : 0;
         if ($user_id == null) {
-            $user = [
+            $data_user = [
                 'name' => $request->name,
                 'email' => $request->email,
                 'phone' => $request->phone,
                 'rule_id' => 2,
-                'password' => Hash::make('adc123')
+                'password' => Hash::make($request->pass)
             ];
-            $user = User::create($user);
+            $user = User::create($data_user);
             Auth::login($user);
             $address = Address::where('user_id', NULL)->get();
             foreach ($address as $value) {
                 $value->update([
                     'user_id' => $user->id
                 ]);
+            }
+            foreach ($cart as $key => $value) {
+                $cart[$key]['user_id'] = $user->id;
             }
             $orderList = [
                 'order_id' => $addOrder->id,
@@ -137,6 +141,7 @@ class CheckoutController extends Controller
         foreach ($cart as $key => $value) {
             if ($value['selected_products'] == 1) {
                 if ($user_id == $value['user_id']) {
+                      //  đăng nhập được sản phẩm
                     $product_variant_id = $value['product_variant_id'] ? $value['product_variant_id'] : null;
                     $products = [
                         'order_id' => $addOrder->id,  // ID đơn hàng
@@ -145,12 +150,25 @@ class CheckoutController extends Controller
                         'quantity' => $value['qty'],
                         'price' => $request->price
                     ];
-                    // Tạo một bản ghi mới cho mỗi sản phẩm
+                    ProductOder::create($products);
+                    unset($cart[$key]);
+                }else{
+                    // nếu không đăng nhập vẫn lưu được sản phẩm
+                    $product_variant_id = $value['product_variant_id'] ? $value['product_variant_id'] : null;
+                    $products = [
+                        'order_id' => $addOrder->id,  // ID đơn hàng
+                        'product_id' => $value['product_id'],
+                        'product_variant_id' =>  $product_variant_id,
+                        'quantity' => $value['qty'],
+                        'price' => $request->price
+                    ];
                     ProductOder::create($products);
                     unset($cart[$key]);
                 }
             }
         }
+
+
         session()->put('cart', $cart);
         session()->forget('addresses');
         if ($request->payment_id == 1) {
