@@ -10,6 +10,8 @@ use App\Http\Controllers\Admin\DiscountController;
 use App\Http\Controllers\Admin\PaymentController;
 use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\TestimonialController;
+use App\Http\Controllers\Admin\PointController;
+
 use App\Http\Controllers\User\UserProfileController;
 use App\Http\Controllers\User\UserOrderController;
 use App\Http\Controllers\User\CartController;
@@ -19,9 +21,6 @@ use App\Http\Controllers\CKEditorController;
 use App\Http\Controllers\User\PageController;
 use App\Http\Controllers\User\AuthenController;
 
-
-
-Route::post('/ckeditor/upload', [CKEditorController::class, 'upload'])->name('ckeditor.upload');
 
 
 Route::get('login-admin', [AuthenController::class, 'loginAdmin'])->name('loginAdmin');
@@ -123,13 +122,29 @@ Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
     Route::get('/edit-blog/{idBlog}', [BlogController::class, 'edit_blog'])->name('blog.edit_blog');
     Route::get('/admin/blog/{BlogSlug}', [BlogController::class, 'blog_details'])->name('blog.blog_details');
     Route::delete('/admin/blog', [BlogController::class, 'destroy'])->name('blog.delete');
+
+    // danh mục bài viết
+
     // Route::get('/blog-category', [BlogController::class, 'category'])->name('blog.category');
     // Route::get('/blog-category-with-blog/{id}', [BlogController::class, 'categoryWithBlog'])->name('blog.category.list');// Lấu danh mục blog và tên blog
     // Route::post('storeBlog', [BlogController::class, 'storeBlog'])->name('blog.store'); //Lưu danh mục blog
     // Route::put('editBlog/{id}', [BlogController::class, 'update'])->name('blog.category.update');// Sửa tên danh mục category
     // Route::delete('blog-categories-destroy/{id}', [BlogController::class, 'Blog_categories_destroy'])->name('blog.categories.destroy');//Xóa danh mục Blog
+
     // quản lý testimonial
-    Route::get('/testimonials', [TestimonialController::class, 'index'])->name('admin.testimonials.list');
+    Route::get('/testimonials', [TestimonialController::class, 'listTestimonial'])->name('testimonials');
+    Route::get('/create-testimonial', [TestimonialController::class, 'createTestimonial'])->name('createTestimonial');
+    Route::post('/create-testimonial', [TestimonialController::class, 'StoreTestimonial'])->name('StoreTestimonial');
+    Route::get('/edit-testimonial/{id}', [TestimonialController::class, 'editTestimonial'])->name('editTestimonial');
+    Route::patch('/edit-testimonial', [TestimonialController::class, 'updateTestimonial'])->name('updateTestimonial');
+    Route::delete('/delete-testimonial', [TestimonialController::class, 'deleteTestimonial'])->name('deleteTestimonial');
+    // điểm thưởng
+    Route::get('list-point', [PointController::class, 'index'])->name('listPoints');
+    Route::get('update-point/{id}', [PointController::class, 'updatePoint'])->name('updatePoint');
+    Route::patch('update-point', [PointController::class, 'updatePatchPoint'])->name('updatePatchPoint');
+
+
+
     });
 });
 Route::get('/',[PageController :: class,'storeHome'])->name('storeHome');

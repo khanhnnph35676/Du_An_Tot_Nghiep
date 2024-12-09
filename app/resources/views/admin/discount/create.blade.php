@@ -169,11 +169,11 @@
                                                                                 @if ($value->type == '1')
                                                                                     <span
                                                                                         class='badge badge-pill badge-success'>
-                                                                                        Simple</span>
+                                                                                        Đơn thể</span>
                                                                                 @else
                                                                                     <span
                                                                                         class='badge badge-pill badge-secondary'>
-                                                                                        Configurable </span>
+                                                                                        Có biến thể </span>
                                                                                 @endif
                                                                             </td>
                                                                         </tr>

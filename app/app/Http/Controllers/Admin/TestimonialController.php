@@ -1,10 +1,13 @@
-<?php 
+<?php
+
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\Testimonial;
 use App\Models\User;
+use App\Models\Gallerie;
+use App\Models\ProductVariant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -13,7 +16,8 @@ class TestimonialController extends Controller
     public function listTestimonial()
     {
         // Lấy tất cả testimonials kèm theo thông tin người dùng
-        $testimonials = Testimonial::with('user')->get();
+        $testimonials = Testimonial::with('user', 'product')->get();
+        // dd($testimonials);
         return view('admin.testimonials.index', compact('testimonials'));
     }
 
@@ -21,102 +25,91 @@ class TestimonialController extends Controller
     // Hiển thị form thêm testimonial
     public function createTestimonial()
     {
-        $users = User::all(); // Lấy tất cả người dùng
-        return view('admin.testimonials.create', compact('users'));
+        $galleries = Gallerie::get();
+        $variants = ProductVariant::get();
+        $products = Product::with([
+            'categories:id,name,image,describe'
+        ])->get();
+        $users = User::where('rule_id', 2)->get();
+        return view('admin.testimonials.create', compact('users', 'variants', 'galleries', 'products'));
     }
 
     // Lưu thông tin testimonial mới
     public function StoreTestimonial(Request $request)
     {
+        $request->validate([
+            'product_id' => 'required|array|min:1',
+            'product_id.*' => 'required|exists:products,id',
+            'rating' => 'required|integer|min:1|max:5',
+            'content' => 'required'
+        ], [
+            'product_id.required' => 'Vui lòng chọn ít nhất một sản phẩm.',
+            'product_id.array' => 'Danh sách sản phẩm phải là một mảng.',
+            'product_id.*.exists' => 'Sản phẩm được chọn không tồn tại.',
+            'rating.required' => 'Vui lòng chọn đánh giá.',
+            'rating.integer' => 'Đánh giá phải là một số nguyên.',
+            'rating.min' => 'Đánh giá tối thiểu là :min sao.',
+            'rating.max' => 'Đánh giá tối đa là :max sao.',
+            'content.required' => 'Nội dung chưa nhập',
+        ]);
+
         // Validate dữ liệu
-        $validatedData = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
-            'user_id' => 'required|exists:users,id',
-            'star' => 'required|integer|min:1|max:5',
-            'status' => 'required|boolean',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Kiểm tra ảnh
+        $request->validate([
+            'product_id' => 'required|array|min:1',
+            'product_id.*' => 'required|exists:products,id', // Mỗi phần tử trong mảng phải tồn tại trong bảng `products`
+            'rating' => 'required',
         ]);
-
-        // Xử lý upload hình ảnh nếu có
-        $imagePath = $request->hasFile('image') ? $request->file('image')->store('testimonials', 'public') : null;
-
-        // Tạo testimonial mới
-        Testimonial::create([
-            'title' => $validatedData['title'],
-            'description' => $validatedData['description'],
-            'user_id' => $validatedData['user_id'],
-            'star' => $validatedData['star'],
-            'status' => $validatedData['status'],
-            'image' => $imagePath,
-        ]);
-
-        // Chuyển hướng về trang danh sách testimonial
-        return redirect()->route('admin.listTestimonial')->with('message', 'Thêm testimonial thành công');
+        if (is_array($request->product_id)) {
+            foreach ($request->product_id as $value) {
+                $data = [
+                    'product_id' => $value,
+                    'user_id' => $request->user_id,
+                    'rating' => $request->rating,
+                    'content' => $request->content
+                ];
+                Testimonial::create($data);
+            }
+        }
+        return redirect()->route('admin.testimonials')->with('message', 'Thêm đánh giá thành công');
     }
     public function editTestimonial($id)
     {
-        $testimonial = Testimonial::findOrFail($id);
-        $users = User::all(); // Lấy tất cả người dùng
-        $products = Product::all(); // Lấy tất cả sản phẩm
-        return view('admin.testimonials.edit', compact('testimonial', 'users', 'products'));
+        $testimonial = Testimonial::with('user', 'product')->find($id);
+        $users = User::where('rule_id', 2)->get();
+        return view('admin.testimonials.edit', compact('testimonial', 'users'));
     }
-
 
     // Cập nhật testimonial
-    public function updateTestimonial(Request $request, $id)
+    public function updateTestimonial(Request $request)
     {
         // Validate dữ liệu
-        $validatedData = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
-            'user_id' => 'required|exists:users,id',
-            'product_id' => 'required|exists:products,id', // Kiểm tra sản phẩm
-            'star' => 'required|integer|min:1|max:5',
-            'status' => 'required|boolean',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Kiểm tra ảnh
+        $request->validate([
+            'rating' => 'required|integer|min:1|max:5',
+            'content' => 'required'
+        ], [
+            'rating.required' => 'Vui lòng chọn đánh giá.',
+            'rating.integer' => 'Đánh giá phải là một số nguyên.',
+            'rating.min' => 'Đánh giá tối thiểu là :min sao.',
+            'rating.max' => 'Đánh giá tối đa là :max sao.',
+            'content.required' => 'Nội dung chưa nhập',
         ]);
-
         // Tìm testimonial theo ID
-        $testimonial = Testimonial::findOrFail($id);
+        $testimonial = Testimonial::with('user', 'product')->find($request->id);
 
-        // Cập nhật thông tin testimonial
         $testimonial->update([
-            'title' => $validatedData['title'],
-            'description' => $validatedData['description'],
-            'user_id' => $validatedData['user_id'],
-            'product_id' => $validatedData['product_id'],
-            'star' => $validatedData['star'],
-            'status' => $validatedData['status'],
+            'content' => $request->content,
+            'rating' => $request->rating,
+            'user_id' => $request->user_id,
         ]);
 
-        // Nếu có thay đổi ảnh, xử lý
-        if ($request->hasFile('image')) {
-            // Xóa ảnh cũ nếu có
-            if ($testimonial->product && $testimonial->product->image) {
-                Storage::disk('public')->delete($testimonial->product->image); // Xóa ảnh cũ của sản phẩm
-            }
-
-            // Lưu ảnh mới
-            $testimonial->image = $request->file('image')->store('testimonials', 'public');
-            $testimonial->save(); // Lưu lại thông tin
-        }
-
-        // Chuyển hướng về danh sách testimonials
-        return redirect()->route('admin.listTestimonial')->with('message', 'Sửa testimonial thành công');
+        return redirect()->back()->with('message', 'Sửa đánh giá thành công');
     }
 
-
     // Xóa testimonial
-    public function deleteTestimonial($id)
+    public function deleteTestimonial(Request $request)
     {
-        $testimonial = Testimonial::findOrFail($id);
-
-        if ($testimonial->image) {
-            Storage::disk('public')->delete($testimonial->image);
-        }
+        $testimonial = Testimonial::find($request->id);
         $testimonial->delete();
-
-        return redirect()->route('admin.listTestimonial')->with('message', 'Xoá testimonial thành công');
+        return redirect()->route('admin.testimonials')->with('message', 'Xoá đánh giá thành công');
     }
 }

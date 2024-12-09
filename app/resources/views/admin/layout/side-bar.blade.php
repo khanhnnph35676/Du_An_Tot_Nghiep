@@ -26,6 +26,7 @@
                  <ul aria-expanded="false">
                      <li><a href="{{ route('admin.listProducts') }}">Sản phẩm</a></li>
                      <li><a href="{{ route('admin.listCategories') }}">Danh mục</a></li>
+                     <li><a href="{{ route('admin.testimonials') }}">Đánh giá</a></li>
                  </ul>
              </li>
              {{-- Danh mục quản lý người dùng --}}
@@ -40,9 +41,10 @@
              <li><a class="has-arrow" href="javascript:void()" aria-expanded="false"><i
                          class="fa-solid fa-shop"></i><span class="nav-text">Quản lý cửa hàng</span></a>
                  <ul aria-expanded="true">
+                    <li><a href="{{ route('admin.formPayment') }}">Phương thức thanh toán</a></li>
                      <li><a href="{{ route('admin.listOrders') }}">Đơn hàng</a></li>
                      <li><a href="{{ route('admin.listDiscounts') }}">Giảm giá</a></li>
-                     <li><a href="{{ route('admin.formPayment') }}">Phương thức thanh toán</a></li>
+                     <li><a href="{{ route('admin.listPoints') }}">Điểm thưởng</a></li>
                  </ul>
              </li>
              {{-- Danh mục quản lý Blog --}}

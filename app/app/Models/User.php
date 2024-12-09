@@ -22,7 +22,7 @@ class User extends Authenticatable
         'phone',
         'password',
         'avatar',
-        'number', 
+        'number',
         'gender',
         'birth_date',
         'rule_id',
@@ -51,14 +51,5 @@ class User extends Authenticatable
     public function rule()
     {
         return $this->belongsTo(Rule::class, 'rule_id', 'id');
-    }
-    public function orders()
-    {
-        return $this->hasMany(Order::class);
-    }
-
-    public function orderLists()
-    {
-        return $this->hasMany(OrderList::class);
     }
 }
