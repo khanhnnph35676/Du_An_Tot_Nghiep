@@ -3,9 +3,11 @@
 @endpush
 @section('content')
     <style>
-        .table,.label{
-            color:black;
+        .table,
+        .label {
+            color: black;
         }
+
         input:not(:placeholder-shown) {
             color: black;
         }
@@ -33,7 +35,9 @@
             <h1 class="mb-4">Thanh toán</h1>
             <form action="{{ route('AddOrder') }}" method="POST">
                 @csrf
-                <input type="text" name='pass' value="abc123" hidden>
+                @if (!Auth::check())
+                    <input type="text" name='pass' value="abc123" hidden>
+                @endif
                 <div class="row g-5">
                     <div class="col-md-12 col-lg-6 col-xl-7">
                         <div class="row">
@@ -195,17 +199,14 @@
                                                         </td>
                                                         <td class="align-middle">
                                                             @if ($item['discount'] != 0)
-                                                                @php
-                                                                    $sumPrice +=
-                                                                        ($product->price -
-                                                                            ($product->price * $item['discount']) /
-                                                                                100) *
-                                                                        $item['qty'];
-                                                                @endphp
+                                                                <input type="text" name='price'
+                                                                    value="{{ $product->price - ($product->price * $item['discount']) / 100 }}"
+                                                                    hidden>
+                                                                {{ number_format($product->price - ($product->price * $item['discount']) / 100) . ' Vnđ' }}
                                                             @else
-                                                                @php
-                                                                    $sumPrice += $product->price * $item['qty'];
-                                                                @endphp
+                                                                <input type="text" name='price'
+                                                                    value="{{ $product->price }}" hidden>
+                                                                {{ number_format($product->price) . ' Vnđ' }}
                                                             @endif
                                                         </td>
                                                         <td class="text-center align-middle">{{ $item['qty'] }}</td>
@@ -385,18 +386,35 @@
                                             </div>
                                         </td>
                                     </tr>
-
                                     <tr>
-                                        <td class="py-3"></td>
-                                        <td class="py-3">
+                                        <td class="py-2"></td>
+                                        <td class="py-2">
                                             <p class="mb-0 py-4">Tính tiền</p>
                                         </td>
-                                        <td colspan="3" class="py-3">
+                                        <td colspan="3" class="py-2">
                                             <div class="form-check text-start">
                                             </div>
                                             <div class="form-check text-start">
                                                 <label class="form-check-label"
                                                     for="Shipping-2">{{ number_format($sumPrice + 15000) }} Vnđ</label>
+                                            </div>
+                                            <div class="form-check text-start">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-2"></td>
+                                        <td class="py-2">
+                                            <p class="mb-0 py-4">Điểm nhận được</p>
+                                        </td>
+                                        <td colspan="3" class="py-2">
+                                            <div class="form-check text-start">
+                                            </div>
+                                            <div class="form-check text-start">
+                                                <label class="form-check-label d-flex align-items-center" for="Shipping-2">
+                                                    <img src="{{asset("img/xu.png")}}" class="me-2" style="width: 28px; height: 28px; object-fit: cover;" alt="">
+                                                    <h5>{{ceil( $sumPrice / 1000)}}</h5>
+                                                </label>
                                             </div>
                                             <div class="form-check text-start">
                                             </div>

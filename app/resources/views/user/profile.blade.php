@@ -55,7 +55,7 @@
     <div class="container-fluid page-header py-5">
         <h1 class="text-center text-white display-6">Thông tin cá nhân</h1>
         <ol class="breadcrumb justify-content-center mb-0">
-            <li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
+            <li class="breadcrumb-item"><a href="{{route('storeHome')}}">Trang chủ</a></li>
             <li class="breadcrumb-item active text-white">Thông tin cá nhân</li>
         </ol>
     </div>
@@ -72,18 +72,20 @@
     @endforeach
     <div class="container py-5">
         <div class="row">
-            <div class="col-3">
+            <div class="col-lg-3">
                 <ul class="side-bar border rounded p-1">
                     <h3 class="mb-4 mt-3 ms-3">Đơn Hàng</h3>
-                    <li class="p-2"><a href="{{ route('user.profile') }}" class="text-dark"><strong>Thông tin cá
+                    <li class="p-2 mt-2"><a href="{{ route('user.profile') }}" class="text-dark"><strong>Thông tin cá
                                 nhân</strong> </a> </li>
 
-                    <li class="p-2"><a href="{{ route('order.history') }}" class="text-dark"><strong>Đơn hàng
+                    <li class="p-2 mt-2"><a href="{{ route('order.history') }}" class="text-dark"><strong>Đơn hàng
                                 ({{ $count }})</strong>
                         </a> </li>
+                    <li class="p-2 mt-2"><a href="{{ route('points') }}" class="text-dark"><strong>Điểm thưởng</strong>
+                    </a> </li>
                 </ul>
             </div>
-            <div class="col-9 m-0 p-0">
+            <div class="col-lg-9 m-0 p-0">
                 <div class="content m-0">
                     <div class="profile-header">
                         @if ($user->avatar == null)
@@ -112,7 +114,6 @@
             </div>
         </div>
     </div>
-
 
 
     <!-- Modal Chỉnh Sửa Hồ Sơ -->

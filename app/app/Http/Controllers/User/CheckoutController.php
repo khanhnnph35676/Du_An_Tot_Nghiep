@@ -12,9 +12,11 @@ use App\Models\OrderList;
 use App\Models\ProductOder;
 use App\Models\Product;
 use App\Models\Address;
+use App\Models\Point;
 use App\Models\ProductVariant;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class CheckoutController extends Controller
 {
@@ -71,9 +73,9 @@ class CheckoutController extends Controller
     public function AddOrder(Request $request)
     {
         $request->validate([
-            'sum_price' => 'required|min:1',  // Kiểm tra giá trị là số và lớn hơn 0
-            'selected_address' => 'required|exists:address,id',  // Kiểm tra address_id có tồn tại trong bảng addresses
-            'email' => 'required|email',  // Kiểm tra email hợp lệ
+            'sum_price' => 'required|min:1',
+            'selected_address' => 'required|exists:address,id',
+            'email' => 'required|email',
             'phone' => 'required|min:10',
             'name' => 'required'
         ], [
@@ -83,10 +85,18 @@ class CheckoutController extends Controller
             'address_id.exists' => 'Địa chỉ giao hàng không hợp lệ.',
             'email.required' => 'Vui lòng nhập email.',
             'email.email' => 'Email không hợp lệ.',
+            'email.unique' => 'Email này đã được sử dụng. Vui lòng chọn một email khác.',
             'phone.required' => 'Vui lòng nhập số điện thoại.',
             'phone.min' => 'Số điện thoại phải có ít nhất 10 chữ số.',
             'name.required' => 'Vui lòng nhập tên'
         ]);
+        if (!Auth::check()) {
+            $request->validate([
+                'email' => 'unique:users,email',
+            ], [
+                'email.unique' => 'Email này đã được sử dụng. Vui lòng chọn một email khác.',
+            ]);
+        }
         function generateRandomCode($length = 8)
         {
             return strtoupper(substr(md5(uniqid(rand(), true)), 0, $length));
@@ -100,7 +110,8 @@ class CheckoutController extends Controller
             'address_id' => $request->selected_address,
             'order_code' => generateRandomCode(),
         ];
-        $user =[];
+
+        // $user = [];
         $addOrder = Order::create($order);
         $user_id = Auth::user()->id ?? null;
         $check_user = Auth::user() ? 1 : 0;
@@ -114,6 +125,8 @@ class CheckoutController extends Controller
             ];
             $user = User::create($data_user);
             Auth::login($user);
+
+            // sửa địa chỉ có user_id null thành id
             $address = Address::where('user_id', NULL)->get();
             foreach ($address as $value) {
                 $value->update([
@@ -123,50 +136,77 @@ class CheckoutController extends Controller
             foreach ($cart as $key => $value) {
                 $cart[$key]['user_id'] = $user->id;
             }
-            $orderList = [
+            $dataOrderList = [
                 'order_id' => $addOrder->id,
                 'user_id' => $user->id,
                 'check_user' => $check_user,
             ];
-            OrderList::create($orderList);
+            $orderList = OrderList::create($dataOrderList);
+
+            // Phần gửi mail khi không có tài khoản
         } else {
-            $orderList = [
+            $dataOrderList = [
                 'order_id' => $addOrder->id,
                 'user_id' => $user_id,
                 'check_user' => $check_user,
             ];
-            OrderList::create($orderList);
+            $orderList = OrderList::create($dataOrderList);
         }
 
         foreach ($cart as $key => $value) {
             if ($value['selected_products'] == 1) {
                 if ($user_id == $value['user_id']) {
-                      //  đăng nhập được sản phẩm
-                    $product_variant_id = $value['product_variant_id'] ? $value['product_variant_id'] : null;
-                    $products = [
+                    //  đăng nhập được sản phẩm
+                    $value['product_variant_id'] = 0 ? $product_variant_id =  null : $product_variant_id = $value['product_variant_id'];
+
+                    $dataProducts = [
                         'order_id' => $addOrder->id,  // ID đơn hàng
                         'product_id' => $value['product_id'],
                         'product_variant_id' =>  $product_variant_id,
                         'quantity' => $value['qty'],
                         'price' => $request->price
                     ];
-                    ProductOder::create($products);
+                    ProductOder::create($dataProducts);
                     unset($cart[$key]);
-                }else{
+                } else {
                     // nếu không đăng nhập vẫn lưu được sản phẩm
-                    $product_variant_id = $value['product_variant_id'] ? $value['product_variant_id'] : null;
-                    $products = [
+                    $value['product_variant_id'] = 0 ? $product_variant_id =  null : $product_variant_id = $value['product_variant_id'];
+                    $dataProducts = [
                         'order_id' => $addOrder->id,  // ID đơn hàng
                         'product_id' => $value['product_id'],
                         'product_variant_id' =>  $product_variant_id,
                         'quantity' => $value['qty'],
                         'price' => $request->price
                     ];
-                    ProductOder::create($products);
+                    ProductOder::create($dataProducts);
                     unset($cart[$key]);
                 }
             }
         }
+        //    Mail cho khách đặt hàng / tính cá không đăng nhập và đăng nhập
+        $emailUser = $request->email;
+        $nameUser = $request->name;
+        $userSearch = User::where('email', $emailUser)->where('name', $nameUser)->first();
+        $orders = Order::with('address', 'payments')->find($addOrder->id);
+        $productOrders = ProductOder::with('products', 'product_variants')->where('order_id', $orders->id)->get();
+        $point = Point::where('user_id', $userSearch->id)->first();
+        if ($point != []) {
+            $point->update([
+                'point' => ceil( $point->point + ($orders->sum_price - 15000) / 1000),
+            ]);
+        } else {
+            Point::create([
+                'user_id' => $userSearch->id,
+                'point' =>  ceil(($orders->sum_price - 15000) / 1000),
+            ]);
+        }
+        $titleMail = "Đặt hàng thành công";
+        Mail::send('user.email.success-checkout', compact('orders', 'userSearch', 'productOrders'), function ($email) use ($titleMail, $emailUser) {
+            $email->to($emailUser)->subject($titleMail);
+            $email->from($emailUser, $titleMail);
+        });
+        // thêm điểm
+
 
 
         session()->put('cart', $cart);
@@ -183,8 +223,8 @@ class CheckoutController extends Controller
             $orderInfo = "Thanh toán qua ATM MoMo";
             $amount = $request->sum_price;
             $orderId = $addOrder->order_code;
-            $redirectUrl = "http://127.0.0.1:8000/store-checkout";
-            $ipnUrl = "http://127.0.0.1:8000/store-checkout";
+            $redirectUrl = "http://127.0.0.1:8000/order-history";
+            $ipnUrl = "http://127.0.0.1:8000/order-history";
             $extraData = "";
 
             $requestId = time() . "";
@@ -215,5 +255,11 @@ class CheckoutController extends Controller
             //     'message' => 'Chúc mừng thanh toán thành công qua COD'
             // ]);
         }
+    }
+
+
+    public function SuccessCheckout()
+    {
+        return view('user.email.success-checkout');
     }
 }
