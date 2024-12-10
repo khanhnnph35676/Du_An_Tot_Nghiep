@@ -96,6 +96,8 @@
                                  </li>
                                  <li><a class="dropdown-item" href="{{ route('order.history') }}">Lịch sử đặt hàng</a>
                                  </li>
+                                 <li><a class="dropdown-item" href="{{ route('points') }}">Điểm thưởng</a>
+                                 </li>
                                  <li>
                                      <hr class="dropdown-divider">
                                  </li>

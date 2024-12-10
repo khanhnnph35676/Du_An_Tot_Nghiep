@@ -157,8 +157,8 @@
                                     <tr>
                                         <td>{{ $key + 1 }}</td>
                                         <td>
-                                            <img src="{{ 'http://127.0.0.1:8000/' . $item->products->image }}"
-                                                style="width: 60px; height: 60px; object-fit: cover;">
+                                            {{-- <img src="{{ 'http://127.0.0.1:8000/' . $item->products->image }}"
+                                                style="width: 60px; height: 60px; object-fit: cover;"> --}}
 
                                             <span>{{$item->products->name}}</span>
                                         </td>

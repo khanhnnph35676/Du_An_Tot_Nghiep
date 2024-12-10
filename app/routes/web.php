@@ -103,7 +103,7 @@ Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
     Route::get('list-orders',[OrderController::class,'listOrders'])->name('listOrders');
     Route::get('order-detail/{order_id}',[OrderController::class,'orderDetail'])->name('orderDetail');
     Route::post('order-update/{order_id}',[OrderController::class,'updateOrder'])->name('updateOrder');
-    
+
     // Quản lý giảm giá
     Route::get('list-discounts',[DiscountController::class,'listDiscounts'])->name('listDiscounts');
     Route::get('create-discounts',[DiscountController::class, 'createDiscount'])->name('createDiscount');
@@ -164,17 +164,17 @@ Route::middleware(['checkuser'])->group(function () {
         Route::delete('remove-item-cart/{product_variant_id}', [CartController::class, 'removeItemCart'])->name('removeItemCart');
         Route::post('add-to-cart',[CartController :: class,'addToCart'])->name('addToCart');
         Route::post('add-to-cart-detail',[CartController :: class,'addToCartDetai'])->name('addToCartDetai');
-
+        //Sửa só lượng trong giỏ hàng
         Route::post('/cart/update', [CartController::class, 'updateCart'])->name('updateCart');
         Route::post('/update-selected-product', [CartController::class, 'updateSelectedProduct'])->name('updateSelectedProduct');
         Route::post('/updateCartNonVariant', [CartController::class, 'updateCartNonVariant'])->name('updateCartNonVariant');
-
         Route::post('/update-qty-cart-variant', [CartController::class, 'updateQtyCartVariant'])->name('updateQtyCartVariant');
 
-
-
+        //Trang thông tin khách hàng
         Route::get('store-list-cart',[PageController :: class,'storeListCart'])->name('storeListCart');
         Route::get('/user/profile', [UserProfileController::class, 'index'])->name('user.profile');
+        Route::get('list-points', [UserProfileController::class, 'points'])->name('points');
+
         Route::get('/order-history', [UserOrderController::class, 'index'])->name('order.history');
         Route::get('/blog', [BlogController::class, 'index'])->name('blog.list');
         Route::get('/blog-category', [BlogController::class, 'category'])->name('blog.category');
