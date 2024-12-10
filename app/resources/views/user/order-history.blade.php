@@ -28,6 +28,29 @@
             background-color: #daddd4c7;
         }
 
+        .content-order {
+            overflow: auto;
+            max-height: 600px;
+            /* background: #007bff; */
+        }
+
+        .content-order::-webkit-scrollbar {
+            width: 3px;
+            /* Độ rộng thanh cuộn */
+        }
+
+        .content-order::-webkit-scrollbar-thumb {
+            background: #888;
+            /* Màu của thanh cuộn */
+            border-radius: 4px;
+            /* Bo góc cho thanh cuộn */
+        }
+
+        .content-order::-webkit-scrollbar-thumb:hover {
+            background: #555;
+            /* Màu khi hover */
+        }
+
         .order-details {
             display: none;
             display: grid;
@@ -136,7 +159,7 @@
     <div class="container-fluid page-header py-5">
         <h1 class="text-center text-white display-6">Đơn hàng</h1>
         <ol class="breadcrumb justify-content-center mb-0">
-            <li class="breadcrumb-item"><a href="{{route('storeHome')}}">Trang Chủ</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('storeHome') }}">Trang Chủ</a></li>
             <li class="breadcrumb-item active text-white">Đơn hàng</li>
         </ol>
     </div>
@@ -173,7 +196,7 @@
                                 ({{ $count }})</strong>
                         </a> </li>
                     <li class="p-2 mt-2"><a href="{{ route('points') }}" class="text-dark"><strong>Điểm thưởng</strong>
-                    </a> </li>
+                        </a> </li>
                 </ul>
             </div>
             <div class="col-lg-9  border rounded">
@@ -186,85 +209,29 @@
                     <div class="status-title border rounded" onclick="toggleOrderDetails('delivered')">Đã Giao</div>
                     <div class="status-title border rounded" onclick="toggleOrderDetails('cancelled')">Đã Hủy</div>
                 </div>
-
-                <!-- Chi tiết đơn hàng -->
-                <div id="tatca" class="order-details">
-                    @foreach ($orderLists as $value)
-                        <div class="border p-2 rounded border mb-2" style="width:100%;">
-                            <ul>
-                                <li> Mã đơn hàng: {{ $value->orders->order_code }}
-                                    @if ($value->orders->status == 1)
-                                        <strong class="ms-3 border rounded p-1 text-dark fs-6 bg-white">Chờ Xác
-                                            Nhận</strong>
-                                    @elseif($value->orders->status == 2)
-                                        <strong class="ms-3 border rounded p-1 text-dark fs-6 bg-secondary">Chờ Lấy
-                                            Hàng</strong>
-                                    @elseif($value->orders->status == 3)
-                                        <strong class="ms-3 border rounded p-1 text-dark fs-6 bg-info">Đang Giao
-                                            Hàng</strong>
-                                    @elseif($value->orders->status == 4)
-                                        <strong class="ms-3 border rounded p-1 text-dark fs-6 bg-primary">Đã Giao
-                                            Hàng</strong>
-                                    @elseif($value->orders->status == 5)
-                                        <strong class="ms-3 border rounded p-1 text-dark fs-6 bg-danger">Đã Huỷ</strong>
-                                    @endif
-
-                                </li>
-                                <li> Địa chỉ:
-                                    {{ isset($value->orders->address) ? $value->orders->address->home_address . ', ' . $value->orders->address->address : 'Chưa có địa chỉ' }}
-                                </li>
-                                <li> <strong> Tổng giá: {{ number_format($value->orders->sum_price) }} vnđ</strong>
-                                </li>
-                            </ul>
-                            <div class="order-items-container">
-                                <div class="border p-2 rounded d-flex gap-2 flex-nowrap" id="order-items">
-                                    @foreach ($productOrders as $item)
-                                        @if ($item->order_id == $value->order_id && $item->product_variant_id == null)
-                                            <div class="order-item">
-                                                <img src="{{ asset($item->products->image) }}"
-                                                    style="width: 70px; height: 70px; object-fit: cover;" alt="">
-                                                <p class="text-start m-0">{{ $item->products->name }}</p>
-                                                <p class="text-start m-0">Số lượng: {{ $item->quantity }}</p>
-                                                <p class="text-start m-0">Giá: {{ number_format($item->price) }} vnđ
-                                                </p>
-                                            </div>
-                                        @elseif($item->order_id == $value->order_id && $item->product_variant_id != null)
-                                            <div class="order-item">
-                                                <img src="{{ asset($item->product_variants->image) }}"
-                                                    style="width: 70px; height: 70px; object-fit: cover;" alt="">
-                                                <p class="text-start m-0">
-                                                    {{ $item->products->name . ' - ' . $item->product_variants->sku }}
-                                                </p>
-                                                <p class="text-start m-0">Số lượng: {{ $item->quantity }}</p>
-                                                <p class="text-start m-0">Giá: {{ number_format($item->price) }} vnđ
-                                                </p>
-                                            </div>
-                                        @endif
-                                    @endforeach
-                                </div>
-                                <!-- Nút di chuyển sẽ chỉ hiển thị nếu có hơn 5 sản phẩm -->
-                                <div class="order-items-controls" id="order-items-controls" style="display: none;">
-                                    <button id="prev-btn" class="btn btn-sm btn-secondary">←</button>
-                                    <button id="next-btn" class="btn btn-sm btn-secondary">→</button>
-                                </div>
-                            </div>
-                            <form action="{{ route('destroyOrder') }}" class="mt-3 text-end" method="POST">
-                                @csrf
-                                @method('patch')
-                                <input type="text" value="{{ $value->orders->id }}" name='order_id' hidden>
-                                <button class="huy btn btn border me-2">Huỷ đơn</button>
-                            </form>
-                        </div>
-                    @endforeach
-                </div>
-                <div id="pending" class="order-details">
-                    @foreach ($orderLists as $value)
-                        @if ($value->orders->status == 1)
+                <div class="content-order">
+                    {{-- tất cả order --}}
+                    <div id="tatca" class="order-details">
+                        @foreach ($orderLists as $value)
                             <div class="border p-2 rounded border mb-2" style="width:100%;">
                                 <ul>
                                     <li> Mã đơn hàng: {{ $value->orders->order_code }}
-                                        <strong class="ms-3 border rounded p-1 text-dark fs-6 bg-white">Chờ Xác
-                                            Nhận</strong>
+                                        @if ($value->orders->status == 1)
+                                            <strong class="ms-3 border rounded p-1 text-dark fs-6 bg-white">Chờ Xác
+                                                Nhận</strong>
+                                        @elseif($value->orders->status == 2)
+                                            <strong class="ms-3 border rounded p-1 text-dark fs-6 bg-secondary">Chờ Lấy
+                                                Hàng</strong>
+                                        @elseif($value->orders->status == 3)
+                                            <strong class="ms-3 border rounded p-1 text-dark fs-6 bg-info">Đang Giao
+                                                Hàng</strong>
+                                        @elseif($value->orders->status == 4)
+                                            <strong class="ms-3 border rounded p-1 text-dark fs-6 bg-primary">Đã Giao
+                                                Hàng</strong>
+                                        @elseif($value->orders->status == 5)
+                                            <strong class="ms-3 border rounded p-1 text-dark fs-6 bg-danger">Đã Huỷ</strong>
+                                        @endif
+
                                     </li>
                                     <li> Địa chỉ:
                                         {{ isset($value->orders->address) ? $value->orders->address->home_address . ', ' . $value->orders->address->address : 'Chưa có địa chỉ' }}
@@ -313,233 +280,310 @@
                                     <button class="huy btn btn border me-2">Huỷ đơn</button>
                                 </form>
                             </div>
-                        @endif
-                    @endforeach
-                </div>
-
-                <div id="awaiting" class="order-details">
-                    @foreach ($orderLists as $value)
-                        @if ($value->orders->status == 2)
-                            <div class="border p-2 rounded mb-2" style="width:100%;">
-                                <ul>
-                                    <li> Mã đơn hàng: {{ $value->orders->order_code }}
-                                        <strong class="ms-3 border rounded p-1 text-white fs-6 bg-secondary">Chờ Lấy
-                                            Hàng</strong>
-                                    </li>
-                                    <li> Địa chỉ:
-                                        {{ isset($value->orders->address) ? $value->orders->address->home_address . ', ' . $value->orders->address->address : 'Chưa có địa chỉ' }}
-                                    </li>
-
-                                    <li> <strong> Tổng giá: {{ number_format($value->orders->sum_price) }} vnđ</strong>
-                                    </li>
-                                </ul>
-                                <div class="order-items-container">
-                                    <div class="border p-2 rounded d-flex gap-2 flex-nowrap" id="order-items">
-                                        @foreach ($productOrders as $item)
-                                            @if ($item->order_id == $value->order_id && $item->product_variant_id == null)
-                                                <div class="order-item">
-                                                    <img src="{{ asset($item->products->image) }}"
-                                                        style="width: 70px; height: 70px; object-fit: cover;"
-                                                        alt="">
-                                                    <p class="text-start m-0">{{ $item->products->name }}</p>
-                                                    <p class="text-start m-0">Số lượng: {{ $item->quantity }}</p>
-                                                    <p class="text-start m-0">Giá: {{ number_format($item->price) }} vnđ
-                                                    </p>
-                                                </div>
-                                            @elseif($item->order_id == $value->order_id && $item->product_variant_id != null)
-                                                <div class="order-item">
-                                                    <img src="{{ asset($item->product_variants->image) }}"
-                                                        style="width: 70px; height: 70px; object-fit: cover;"
-                                                        alt="">
-                                                    <p class="text-start m-0">
-                                                        {{ $item->products->name . ' - ' . $item->product_variants->sku }}
-                                                    </p>
-                                                    <p class="text-start m-0">Số lượng: {{ $item->quantity }}</p>
-                                                    <p class="text-start m-0">Giá: {{ number_format($item->price) }} vnđ
-                                                    </p>
-                                                </div>
-                                            @endif
-                                        @endforeach
+                        @endforeach
+                    </div>
+                    {{-- chờ xác nhận --}}
+                    <div id="pending" class="order-details">
+                        @foreach ($orderLists as $value)
+                            @if ($value->orders->status == 1)
+                                <div class="border p-2 rounded border mb-2" style="width:100%;">
+                                    <ul>
+                                        <li> Mã đơn hàng: {{ $value->orders->order_code }}
+                                            <strong class="ms-3 border rounded p-1 text-dark fs-6 bg-white">Chờ Xác
+                                                Nhận</strong>
+                                        </li>
+                                        <li> Địa chỉ:
+                                            {{ isset($value->orders->address) ? $value->orders->address->home_address . ', ' . $value->orders->address->address : 'Chưa có địa chỉ' }}
+                                        </li>
+                                        <li> <strong> Tổng giá: {{ number_format($value->orders->sum_price) }} vnđ</strong>
+                                        </li>
+                                    </ul>
+                                    <div class="order-items-container">
+                                        <div class="border p-2 rounded d-flex gap-2 flex-nowrap" id="order-items">
+                                            @foreach ($productOrders as $item)
+                                                @if ($item->order_id == $value->order_id && $item->product_variant_id == null)
+                                                    <div class="order-item">
+                                                        <img src="{{ asset($item->products->image) }}"
+                                                            style="width: 70px; height: 70px; object-fit: cover;"
+                                                            alt="">
+                                                        <p class="text-start m-0">{{ $item->products->name }}</p>
+                                                        <p class="text-start m-0">Số lượng: {{ $item->quantity }}</p>
+                                                        <p class="text-start m-0">Giá: {{ number_format($item->price) }}
+                                                            vnđ
+                                                        </p>
+                                                    </div>
+                                                @elseif($item->order_id == $value->order_id && $item->product_variant_id != null)
+                                                    <div class="order-item">
+                                                        <img src="{{ asset($item->product_variants->image) }}"
+                                                            style="width: 70px; height: 70px; object-fit: cover;"
+                                                            alt="">
+                                                        <p class="text-start m-0">
+                                                            {{ $item->products->name . ' - ' . $item->product_variants->sku }}
+                                                        </p>
+                                                        <p class="text-start m-0">Số lượng: {{ $item->quantity }}</p>
+                                                        <p class="text-start m-0">Giá: {{ number_format($item->price) }}
+                                                            vnđ
+                                                        </p>
+                                                    </div>
+                                                @endif
+                                            @endforeach
+                                        </div>
+                                        <!-- Nút di chuyển sẽ chỉ hiển thị nếu có hơn 5 sản phẩm -->
+                                        <div class="order-items-controls" id="order-items-controls"
+                                            style="display: none;">
+                                            <button id="prev-btn" class="btn btn-sm btn-secondary">←</button>
+                                            <button id="next-btn" class="btn btn-sm btn-secondary">→</button>
+                                        </div>
                                     </div>
-                                    <!-- Nút di chuyển sẽ chỉ hiển thị nếu có hơn 5 sản phẩm -->
-                                    <div class="order-items-controls" id="order-items-controls" style="display: none;">
-                                        <button id="prev-btn" class="btn btn-sm btn-secondary">←</button>
-                                        <button id="next-btn" class="btn btn-sm btn-secondary">→</button>
+                                    <form action="{{ route('destroyOrder') }}" class="mt-3 text-end" method="POST">
+                                        @csrf
+                                        @method('patch')
+                                        <input type="text" value="{{ $value->orders->id }}" name='order_id' hidden>
+                                        <button class="huy btn btn border me-2">Huỷ đơn</button>
+                                    </form>
+                                </div>
+                            @endif
+                        @endforeach
+                    </div>
+                    {{-- Chờ lấy hàng --}}
+                    <div id="awaiting" class="order-details">
+                        @foreach ($orderLists as $value)
+                            @if ($value->orders->status == 2)
+                                <div class="border p-2 rounded mb-2" style="width:100%;">
+                                    <ul>
+                                        <li> Mã đơn hàng: {{ $value->orders->order_code }}
+                                            <strong class="ms-3 border rounded p-1 text-white fs-6 bg-secondary">Chờ Lấy
+                                                Hàng</strong>
+                                        </li>
+                                        <li> Địa chỉ:
+                                            {{ isset($value->orders->address) ? $value->orders->address->home_address . ', ' . $value->orders->address->address : 'Chưa có địa chỉ' }}
+                                        </li>
+
+                                        <li> <strong> Tổng giá: {{ number_format($value->orders->sum_price) }} vnđ</strong>
+                                        </li>
+                                    </ul>
+                                    <div class="order-items-container">
+                                        <div class="border p-2 rounded d-flex gap-2 flex-nowrap" id="order-items">
+                                            @foreach ($productOrders as $item)
+                                                @if ($item->order_id == $value->order_id && $item->product_variant_id == null)
+                                                    <div class="order-item">
+                                                        <img src="{{ asset($item->products->image) }}"
+                                                            style="width: 70px; height: 70px; object-fit: cover;"
+                                                            alt="">
+                                                        <p class="text-start m-0">{{ $item->products->name }}</p>
+                                                        <p class="text-start m-0">Số lượng: {{ $item->quantity }}</p>
+                                                        <p class="text-start m-0">Giá: {{ number_format($item->price) }}
+                                                            vnđ
+                                                        </p>
+                                                    </div>
+                                                @elseif($item->order_id == $value->order_id && $item->product_variant_id != null)
+                                                    <div class="order-item">
+                                                        <img src="{{ asset($item->product_variants->image) }}"
+                                                            style="width: 70px; height: 70px; object-fit: cover;"
+                                                            alt="">
+                                                        <p class="text-start m-0">
+                                                            {{ $item->products->name . ' - ' . $item->product_variants->sku }}
+                                                        </p>
+                                                        <p class="text-start m-0">Số lượng: {{ $item->quantity }}</p>
+                                                        <p class="text-start m-0">Giá: {{ number_format($item->price) }}
+                                                            vnđ
+                                                        </p>
+                                                    </div>
+                                                @endif
+                                            @endforeach
+                                        </div>
+                                        <!-- Nút di chuyển sẽ chỉ hiển thị nếu có hơn 5 sản phẩm -->
+                                        <div class="order-items-controls" id="order-items-controls"
+                                            style="display: none;">
+                                            <button id="prev-btn" class="btn btn-sm btn-secondary">←</button>
+                                            <button id="next-btn" class="btn btn-sm btn-secondary">→</button>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        @endif
-                    @endforeach
-                </div>
+                            @endif
+                        @endforeach
+                    </div>
+                    {{-- Chờ giao hàng --}}
+                    <div id="shipping" class="order-details">
+                        @foreach ($orderLists as $value)
+                            @if ($value->orders->status == 3)
+                                <div class="border p-2 rounded mb-2" style="width:100%;">
+                                    <ul>
+                                        <li> Mã đơn hàng: {{ $value->orders->order_code }}
+                                            <strong class="ms-3 border rounded p-1 text-white fs-6 bg-info">Đang giao
+                                                hàng</strong>
+                                        </li>
+                                        <li> Địa chỉ:
+                                            {{ isset($value->orders->address) ? $value->orders->address->home_address . ', ' . $value->orders->address->address : 'Chưa có địa chỉ' }}
+                                        </li>
 
-                <div id="shipping" class="order-details">
-                    @foreach ($orderLists as $value)
-                        @if ($value->orders->status == 3)
-                            <div class="border p-2 rounded mb-2" style="width:100%;">
-                                <ul>
-                                    <li> Mã đơn hàng: {{ $value->orders->order_code }}
-                                        <strong class="ms-3 border rounded p-1 text-white fs-6 bg-info">Đang giao
-                                            hàng</strong>
-                                    </li>
-                                    <li> Địa chỉ:
-                                        {{ isset($value->orders->address) ? $value->orders->address->home_address . ', ' . $value->orders->address->address : 'Chưa có địa chỉ' }}
-                                    </li>
-
-                                    <li> <strong> Tổng giá: {{ number_format($value->orders->sum_price) }} vnđ</strong>
-                                    </li>
-                                </ul>
-                                <div class="order-items-container">
-                                    <div class="border p-2 rounded d-flex gap-2 flex-nowrap" id="order-items">
-                                        @foreach ($productOrders as $item)
-                                            @if ($item->order_id == $value->order_id && $item->product_variant_id == null)
-                                                <div class="order-item">
-                                                    <img src="{{ asset($item->products->image) }}"
-                                                        style="width: 70px; height: 70px; object-fit: cover;"
-                                                        alt="">
-                                                    <p class="text-start m-0">{{ $item->products->name }}</p>
-                                                    <p class="text-start m-0">Số lượng: {{ $item->quantity }}</p>
-                                                    <p class="text-start m-0">Giá: {{ number_format($item->price) }} vnđ
-                                                    </p>
-                                                </div>
-                                            @elseif($item->order_id == $value->order_id && $item->product_variant_id != null)
-                                                <div class="order-item">
-                                                    <img src="{{ asset($item->product_variants->image) }}"
-                                                        style="width: 70px; height: 70px; object-fit: cover;"
-                                                        alt="">
-                                                    <p class="text-start m-0">
-                                                        {{ $item->products->name . ' - ' . $item->product_variants->sku }}
-                                                    </p>
-                                                    <p class="text-start m-0">Số lượng: {{ $item->quantity }}</p>
-                                                    <p class="text-start m-0">Giá: {{ number_format($item->price) }} vnđ
-                                                    </p>
-                                                </div>
-                                            @endif
-                                        @endforeach
-                                    </div>
-                                    <!-- Nút di chuyển sẽ chỉ hiển thị nếu có hơn 5 sản phẩm -->
-                                    <div class="order-items-controls" id="order-items-controls" style="display: none;">
-                                        <button id="prev-btn" class="btn btn-sm btn-secondary">←</button>
-                                        <button id="next-btn" class="btn btn-sm btn-secondary">→</button>
-                                    </div>
-                                </div>
-                            </div>
-                        @endif
-                    @endforeach
-                </div>
-
-                <div id="delivered" class="order-details">
-                    @foreach ($orderLists as $value)
-                        @if ($value->orders->status == 4)
-                            <div class="border p-2 rounded mb-2" style="width:100%;">
-                                <ul>
-                                    <li> Mã đơn hàng: {{ $value->orders->order_code }}
-                                        <strong class="ms-3 border rounded p-1 text-white fs-6 bg-primary">Đã giao
-                                            hàng</strong>
-                                    </li>
-                                    <li> Địa chỉ:
-                                        {{ isset($value->orders->address) ? $value->orders->address->home_address . ', ' . $value->orders->address->address : 'Chưa có địa chỉ' }}
-                                    </li>
-
-                                    <li> <strong> Tổng giá: {{ number_format($value->orders->sum_price) }} vnđ</strong>
-                                    </li>
-                                </ul>
-                                <div class="order-items-container">
-                                    <div class="border p-2 rounded d-flex gap-2 flex-nowrap" id="order-items">
-                                        @foreach ($productOrders as $item)
-                                            @if ($item->order_id == $value->order_id && $item->product_variant_id == null)
-                                                <div class="order-item">
-                                                    <img src="{{ asset($item->products->image) }}"
-                                                        style="width: 70px; height: 70px; object-fit: cover;"
-                                                        alt="">
-                                                    <p class="text-start m-0">{{ $item->products->name }}</p>
-                                                    <p class="text-start m-0">Số lượng: {{ $item->quantity }}</p>
-                                                    <p class="text-start m-0">Giá: {{ number_format($item->price) }} vnđ
-                                                    </p>
-                                                </div>
-                                            @elseif($item->order_id == $value->order_id && $item->product_variant_id != null)
-                                                <div class="order-item">
-                                                    <img src="{{ asset($item->product_variants->image) }}"
-                                                        style="width: 70px; height: 70px; object-fit: cover;"
-                                                        alt="">
-                                                    <p class="text-start m-0">
-                                                        {{ $item->products->name . ' - ' . $item->product_variants->sku }}
-                                                    </p>
-                                                    <p class="text-start m-0">Số lượng: {{ $item->quantity }}</p>
-                                                    <p class="text-start m-0">Giá: {{ number_format($item->price) }} vnđ
-                                                    </p>
-                                                </div>
-                                            @endif
-                                        @endforeach
-                                    </div>
-                                    <!-- Nút di chuyển sẽ chỉ hiển thị nếu có hơn 5 sản phẩm -->
-                                    <div class="order-items-controls" id="order-items-controls" style="display: none;">
-                                        <button id="prev-btn" class="btn btn-sm btn-secondary">←</button>
-                                        <button id="next-btn" class="btn btn-sm btn-secondary">→</button>
+                                        <li> <strong> Tổng giá: {{ number_format($value->orders->sum_price) }} vnđ</strong>
+                                        </li>
+                                    </ul>
+                                    <div class="order-items-container">
+                                        <div class="border p-2 rounded d-flex gap-2 flex-nowrap" id="order-items">
+                                            @foreach ($productOrders as $item)
+                                                @if ($item->order_id == $value->order_id && $item->product_variant_id == null)
+                                                    <div class="order-item">
+                                                        <img src="{{ asset($item->products->image) }}"
+                                                            style="width: 70px; height: 70px; object-fit: cover;"
+                                                            alt="">
+                                                        <p class="text-start m-0">{{ $item->products->name }}</p>
+                                                        <p class="text-start m-0">Số lượng: {{ $item->quantity }}</p>
+                                                        <p class="text-start m-0">Giá: {{ number_format($item->price) }}
+                                                            vnđ
+                                                        </p>
+                                                    </div>
+                                                @elseif($item->order_id == $value->order_id && $item->product_variant_id != null)
+                                                    <div class="order-item">
+                                                        <img src="{{ asset($item->product_variants->image) }}"
+                                                            style="width: 70px; height: 70px; object-fit: cover;"
+                                                            alt="">
+                                                        <p class="text-start m-0">
+                                                            {{ $item->products->name . ' - ' . $item->product_variants->sku }}
+                                                        </p>
+                                                        <p class="text-start m-0">Số lượng: {{ $item->quantity }}</p>
+                                                        <p class="text-start m-0">Giá: {{ number_format($item->price) }}
+                                                            vnđ
+                                                        </p>
+                                                    </div>
+                                                @endif
+                                            @endforeach
+                                        </div>
+                                        <!-- Nút di chuyển sẽ chỉ hiển thị nếu có hơn 5 sản phẩm -->
+                                        <div class="order-items-controls" id="order-items-controls"
+                                            style="display: none;">
+                                            <button id="prev-btn" class="btn btn-sm btn-secondary">←</button>
+                                            <button id="next-btn" class="btn btn-sm btn-secondary">→</button>
+                                        </div>
                                     </div>
                                 </div>
-                                <form action="" class="mt-3 text-end" method="POST">
-                                    @csrf
-                                    <input type="text" value="{{ $value->orders->id }}" name='order_id' hidden>
-                                    <button class="huy btn btn border me-2">Đánh giá</button>
-                                </form>
-                            </div>
-                        @endif
-                    @endforeach
-                </div>
+                            @endif
+                        @endforeach
+                    </div>
+                    {{-- Đã giao hàng --}}
+                    <div id="delivered" class="order-details">
+                        @foreach ($orderLists as $value)
+                            @if ($value->orders->status == 4)
+                                <div class="border p-2 rounded mb-2" style="width:100%;">
+                                    <ul>
+                                        <li> Mã đơn hàng: {{ $value->orders->order_code }}
+                                            <strong class="ms-3 border rounded p-1 text-white fs-6 bg-primary">Đã giao
+                                                hàng</strong>
+                                        </li>
+                                        <li> Địa chỉ:
+                                            {{ isset($value->orders->address) ? $value->orders->address->home_address . ', ' . $value->orders->address->address : 'Chưa có địa chỉ' }}
+                                        </li>
 
-                <div id="cancelled" class="order-details">
-                    @foreach ($orderLists as $value)
-                        @if ($value->orders->status == 5)
-                            <div class="border p-2 rounded mb-2" style="width:100%;">
-                                <ul>
-                                    <li> Mã đơn hàng: {{ $value->orders->order_code }}
-                                        <strong class="ms-3 border rounded p-1 text-white fs-6 bg-danger">Đã huỷ</strong>
-                                    </li>
-                                    <li> Địa chỉ:
-                                        {{ isset($value->orders->address) ? $value->orders->address->home_address . ', ' . $value->orders->address->address : 'Chưa có địa chỉ' }}
-                                    </li>
-
-                                    <li> <strong> Tổng giá: {{ number_format($value->orders->sum_price) }} vnđ</strong>
-                                    </li>
-                                </ul>
-                                <div class="order-items-container">
-                                    <div class="border p-2 rounded d-flex gap-2 flex-nowrap" id="order-items">
-                                        @foreach ($productOrders as $item)
-                                            @if ($item->order_id == $value->order_id && $item->product_variant_id == null)
-                                                <div class="order-item">
-                                                    <img src="{{ asset($item->products->image) }}"
-                                                        style="width: 70px; height: 70px; object-fit: cover;"
-                                                        alt="">
-                                                    <p class="text-start m-0">{{ $item->products->name }}</p>
-                                                    <p class="text-start m-0">Số lượng: {{ $item->quantity }}</p>
-                                                    <p class="text-start m-0">Giá: {{ number_format($item->price) }} vnđ
-                                                    </p>
-                                                </div>
-                                            @elseif($item->order_id == $value->order_id && $item->product_variant_id != null)
-                                                <div class="order-item">
-                                                    <img src="{{ asset($item->product_variants->image) }}"
-                                                        style="width: 70px; height: 70px; object-fit: cover;"
-                                                        alt="">
-                                                    <p class="text-start m-0">
-                                                        {{ $item->products->name . ' - ' . $item->product_variants->sku }}
-                                                    </p>
-                                                    <p class="text-start m-0">Số lượng: {{ $item->quantity }}</p>
-                                                    <p class="text-start m-0">Giá: {{ number_format($item->price) }} vnđ
-                                                    </p>
-                                                </div>
-                                            @endif
-                                        @endforeach
+                                        <li> <strong> Tổng giá: {{ number_format($value->orders->sum_price) }} vnđ</strong>
+                                        </li>
+                                    </ul>
+                                    <div class="order-items-container">
+                                        <div class="border p-2 rounded d-flex gap-2 flex-nowrap" id="order-items">
+                                            @foreach ($productOrders as $item)
+                                                @if ($item->order_id == $value->order_id && $item->product_variant_id == null)
+                                                    <div class="order-item">
+                                                        <img src="{{ asset($item->products->image) }}"
+                                                            style="width: 70px; height: 70px; object-fit: cover;"
+                                                            alt="">
+                                                        <p class="text-start m-0">{{ $item->products->name }}</p>
+                                                        <p class="text-start m-0">Số lượng: {{ $item->quantity }}</p>
+                                                        <p class="text-start m-0">Giá: {{ number_format($item->price) }}
+                                                            vnđ
+                                                        </p>
+                                                    </div>
+                                                @elseif($item->order_id == $value->order_id && $item->product_variant_id != null)
+                                                    <div class="order-item">
+                                                        <img src="{{ asset($item->product_variants->image) }}"
+                                                            style="width: 70px; height: 70px; object-fit: cover;"
+                                                            alt="">
+                                                        <p class="text-start m-0">
+                                                            {{ $item->products->name . ' - ' . $item->product_variants->sku }}
+                                                        </p>
+                                                        <p class="text-start m-0">Số lượng: {{ $item->quantity }}</p>
+                                                        <p class="text-start m-0">Giá: {{ number_format($item->price) }}
+                                                            vnđ
+                                                        </p>
+                                                    </div>
+                                                @endif
+                                            @endforeach
+                                        </div>
+                                        <!-- Nút di chuyển sẽ chỉ hiển thị nếu có hơn 5 sản phẩm -->
+                                        <div class="order-items-controls" id="order-items-controls"
+                                            style="display: none;">
+                                            <button id="prev-btn" class="btn btn-sm btn-secondary">←</button>
+                                            <button id="next-btn" class="btn btn-sm btn-secondary">→</button>
+                                        </div>
                                     </div>
-                                    <!-- Nút di chuyển sẽ chỉ hiển thị nếu có hơn 5 sản phẩm -->
-                                    <div class="order-items-controls" id="order-items-controls" style="display: none;">
-                                        <button id="prev-btn" class="btn btn-sm btn-secondary">←</button>
-                                        <button id="next-btn" class="btn btn-sm btn-secondary">→</button>
+                                    <form action="" class="mt-3 text-end" method="POST">
+                                        @csrf
+                                        <input type="text" value="{{ $value->orders->id }}" name='order_id' hidden>
+                                        <button class="huy btn btn border me-2">Đánh giá</button>
+                                    </form>
+                                </div>
+                            @endif
+                        @endforeach
+                    </div>
+
+                    <div id="cancelled" class="order-details">
+                        @foreach ($orderLists as $value)
+                            @if ($value->orders->status == 5)
+                                <div class="border p-2 rounded mb-2" style="width:100%;">
+                                    <ul>
+                                        <li> Mã đơn hàng: {{ $value->orders->order_code }}
+                                            <strong class="ms-3 border rounded p-1 text-white fs-6 bg-danger">Đã
+                                                huỷ</strong>
+                                        </li>
+                                        <li> Địa chỉ:
+                                            {{ isset($value->orders->address) ? $value->orders->address->home_address . ', ' . $value->orders->address->address : 'Chưa có địa chỉ' }}
+                                        </li>
+
+                                        <li> <strong> Tổng giá: {{ number_format($value->orders->sum_price) }} vnđ</strong>
+                                        </li>
+                                    </ul>
+                                    <div class="order-items-container">
+                                        <div class="border p-2 rounded d-flex gap-2 flex-nowrap" id="order-items">
+                                            @foreach ($productOrders as $item)
+                                                @if ($item->order_id == $value->order_id && $item->product_variant_id == null)
+                                                    <div class="order-item">
+                                                        <img src="{{ asset($item->products->image) }}"
+                                                            style="width: 70px; height: 70px; object-fit: cover;"
+                                                            alt="">
+                                                        <p class="text-start m-0">{{ $item->products->name }}</p>
+                                                        <p class="text-start m-0">Số lượng: {{ $item->quantity }}</p>
+                                                        <p class="text-start m-0">Giá: {{ number_format($item->price) }}
+                                                            vnđ
+                                                        </p>
+                                                    </div>
+                                                @elseif($item->order_id == $value->order_id && $item->product_variant_id != null)
+                                                    <div class="order-item">
+                                                        <img src="{{ asset($item->product_variants->image) }}"
+                                                            style="width: 70px; height: 70px; object-fit: cover;"
+                                                            alt="">
+                                                        <p class="text-start m-0">
+                                                            {{ $item->products->name . ' - ' . $item->product_variants->sku }}
+                                                        </p>
+                                                        <p class="text-start m-0">Số lượng: {{ $item->quantity }}</p>
+                                                        <p class="text-start m-0">Giá: {{ number_format($item->price) }}
+                                                            vnđ
+                                                        </p>
+                                                    </div>
+                                                @endif
+                                            @endforeach
+                                        </div>
+                                        <!-- Nút di chuyển sẽ chỉ hiển thị nếu có hơn 5 sản phẩm -->
+                                        <div class="order-items-controls" id="order-items-controls"
+                                            style="display: none;">
+                                            <button id="prev-btn" class="btn btn-sm btn-secondary">←</button>
+                                            <button id="next-btn" class="btn btn-sm btn-secondary">→</button>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        @endif
-                    @endforeach
+                            @endif
+                        @endforeach
+                    </div>
                 </div>
+                <!-- Chi tiết đơn hàng -->
             </div>
         </div>
     </div>

@@ -12,7 +12,10 @@ class UserProfileController extends Controller
     {
         $user = Auth::user();
         $address = Address::where('user_id', $user->id)->get();
-        $orderLists = OrderList::with('orders','orders.address' ,'users')->get();
+        $orderLists = OrderList::with('orders','orders.address' ,'users')
+        ->where('user_id', $user->id)
+        ->orderBy('id', 'desc')
+        ->get();
 
         // Dữ liệu cho testimonials
         $cart = session()->get('cart', []);
@@ -37,7 +40,11 @@ class UserProfileController extends Controller
         return view('user.profile', compact('testimonials','cart','orderLists','user','address'));
     }
     public function points(){
-        $orderLists = OrderList::with('orders','orders.address' ,'users')->get();
+        $user = Auth::user();
+        $orderLists = OrderList::with('orders','orders.address' ,'users')
+        ->where('user_id', $user->id)
+        ->orderBy('id', 'desc')
+        ->get();
         $cart = session()->get('cart', []);
         return view('user.point.index', compact('cart','orderLists'));
     }

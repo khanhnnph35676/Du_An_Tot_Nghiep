@@ -153,7 +153,6 @@ Route::middleware(['auth.check'])->group(function () {
 
 // các trang bắt buộc phải đăng nhập mới có thể vào
 Route::middleware(['checkuser'])->group(function () {
-
     //Trang thông tin khách hàng
     Route::get('/user/profile', [UserProfileController::class, 'index'])->name('user.profile');
     Route::get('list-points', [UserProfileController::class, 'points'])->name('points');
@@ -169,9 +168,7 @@ Route::middleware(['checkuser'])->group(function () {
     Route::patch('order-update-destroy', [UserOrderController::class, 'destroyOrder'])->name('destroyOrder');
     // Route::get('success-checkout',[CheckoutController :: class,'successCheckout'])->name('successCheckout');
 });
-
     // các trang người không đăng nhập có thể vào
-
     // trang chủ
     Route::get('/', [PageController::class, 'storeHome'])->name('storeHome');
 
