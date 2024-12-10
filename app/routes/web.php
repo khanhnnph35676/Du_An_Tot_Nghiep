@@ -90,7 +90,7 @@ Route::group(['prefix' => 'admin','as' => 'admin.'], function () {
 
     // quản lý nhân viên
     Route::get('list-employees', [CustomerController::class, 'listEmployees'])->name('listEmployees');
-    
+
 
     // trang app
     Route::get('calender',[AppController::class,'calender'])->name('calender');
@@ -176,11 +176,8 @@ Route::middleware(['checkuser'])->group(function () {
 
 
         Route::get('store-list-cart',[PageController :: class,'storeListCart'])->name('storeListCart');
-
-
         Route::get('/user/profile', [UserProfileController::class, 'index'])->name('user.profile');
         Route::get('/order-history', [UserOrderController::class, 'index'])->name('order.history');
-
         Route::get('/blog', [BlogController::class, 'index'])->name('blog.list');
         Route::get('/blog-category', [BlogController::class, 'category'])->name('blog.category');
 
@@ -189,10 +186,11 @@ Route::middleware(['checkuser'])->group(function () {
         Route::delete('/address/{id}', [AuthenController::class, 'destroy'])->name('address.destroy');
         Route::post('/address', [AuthenController::class, 'store'])->name('address.store');
 
+        // thanh toán
         Route::post('add-order', [CheckoutController::class, 'AddOrder'])->name('AddOrder');
+        // Route::get('success-checkout',[CheckoutController :: class,'successCheckout'])->name('successCheckout');
         Route::post('momo_payment', [CheckoutController::class, 'momoPayment'])->name('momoPayment');
         Route::get('store-checkout',[CheckoutController :: class,'storeCheckout'])->name('storeCheckout');
-
         Route::patch('order-update-destroy',[UserOrderController::class,'destroyOrder'])->name('destroyOrder');
     });
 });
