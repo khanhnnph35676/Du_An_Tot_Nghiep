@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\TestimonialController;
 use App\Http\Controllers\Admin\PointController;
 
+use App\Http\Controllers\User\UserBlogController;
 use App\Http\Controllers\User\UserProfileController;
 use App\Http\Controllers\User\UserOrderController;
 use App\Http\Controllers\User\CartController;
@@ -175,9 +176,12 @@ Route::middleware(['checkuser'])->group(function () {
         Route::get('/user/profile', [UserProfileController::class, 'index'])->name('user.profile');
         Route::get('list-points', [UserProfileController::class, 'points'])->name('points');
 
+
+       
         Route::get('/order-history', [UserOrderController::class, 'index'])->name('order.history');
         Route::get('/blog', [BlogController::class, 'index'])->name('blog.list');
         Route::get('/blog-category', [BlogController::class, 'category'])->name('blog.category');
+
 
 
         // địa chỉ người dùng
@@ -200,3 +204,10 @@ Route::middleware(['checkuser'])->group(function () {
  Route::post('/user/logout', [AuthenController::class, 'logoutUser'])->name('logoutUser');
 
 
+
+
+ Route::prefix('blogs')->group(function () {
+     Route::get('/', [UserBlogController::class, 'index'])->name('user.blog.index');
+     Route::get('/{BlogSlug}', [UserBlogController::class, 'show'])->name('user.blog.detail');
+ });
+ 
