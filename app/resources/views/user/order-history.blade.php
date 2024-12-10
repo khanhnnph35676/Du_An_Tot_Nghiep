@@ -136,7 +136,7 @@
     <div class="container-fluid page-header py-5">
         <h1 class="text-center text-white display-6">Đơn hàng</h1>
         <ol class="breadcrumb justify-content-center mb-0">
-            <li class="breadcrumb-item"><a href="#">Trang Chủ</a></li>
+            <li class="breadcrumb-item"><a href="{{route('storeHome')}}">Trang Chủ</a></li>
             <li class="breadcrumb-item active text-white">Đơn hàng</li>
         </ol>
     </div>
@@ -164,17 +164,19 @@
             </div>
         @endif
         <div class="row">
-            <div class="col-3">
+            <div class="col-lg-3">
                 <ul class="side-bar border rounded p-1">
                     <h3 class="mb-4 mt-3 ms-3">Đơn Hàng</h3>
-                    <li class="p-2"><a href="{{ route('user.profile') }}" class="text-dark"><strong>Thông tin cá
+                    <li class="p-2 mt-2"><a href="{{ route('user.profile') }}" class="text-dark"><strong>Thông tin cá
                                 nhân</strong> </a> </li>
-                    <li class="p-2"><a href="{{ route('order.history') }}" class="text-dark"><strong>Đơn hàng
+                    <li class="p-2 mt-2"><a href="{{ route('order.history') }}" class="text-dark"><strong>Đơn hàng
                                 ({{ $count }})</strong>
                         </a> </li>
+                    <li class="p-2 mt-2"><a href="{{ route('points') }}" class="text-dark"><strong>Điểm thưởng</strong>
+                    </a> </li>
                 </ul>
             </div>
-            <div class="col-9  border rounded">
+            <div class="col-lg-9  border rounded">
                 <!-- Menu trạng thái đơn hàng -->
                 <div class="order-status-menu">
                     <div class="status-title border rounded" onclick="toggleOrderDetails('tatca')">Tất cả</div>

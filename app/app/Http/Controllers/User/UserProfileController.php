@@ -36,4 +36,9 @@ class UserProfileController extends Controller
 
         return view('user.profile', compact('testimonials','cart','orderLists','user','address'));
     }
+    public function points(){
+        $orderLists = OrderList::with('orders','orders.address' ,'users')->get();
+        $cart = session()->get('cart', []);
+        return view('user.point.index', compact('cart','orderLists'));
+    }
 }

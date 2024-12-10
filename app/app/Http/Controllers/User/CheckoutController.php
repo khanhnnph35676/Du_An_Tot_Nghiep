@@ -12,6 +12,7 @@ use App\Models\OrderList;
 use App\Models\ProductOder;
 use App\Models\Product;
 use App\Models\Address;
+use App\Models\Point;
 use App\Models\ProductVariant;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Hash;
@@ -89,7 +90,7 @@ class CheckoutController extends Controller
             'phone.min' => 'Số điện thoại phải có ít nhất 10 chữ số.',
             'name.required' => 'Vui lòng nhập tên'
         ]);
-        if(!Auth::check()){
+        if (!Auth::check()) {
             $request->validate([
                 'email' => 'unique:users,email',
             ], [
@@ -124,6 +125,8 @@ class CheckoutController extends Controller
             ];
             $user = User::create($data_user);
             Auth::login($user);
+
+            // sửa địa chỉ có user_id null thành id
             $address = Address::where('user_id', NULL)->get();
             foreach ($address as $value) {
                 $value->update([
@@ -180,18 +183,31 @@ class CheckoutController extends Controller
                 }
             }
         }
-    //    Mail cho khách đặt hàng / tính cá không đăng nhập và đăng nhập
+        //    Mail cho khách đặt hàng / tính cá không đăng nhập và đăng nhập
         $emailUser = $request->email;
         $nameUser = $request->name;
         $userSearch = User::where('email', $emailUser)->where('name', $nameUser)->first();
         $orders = Order::with('address', 'payments')->find($addOrder->id);
-        $productOrders = ProductOder::with('products','product_variants')->where('order_id',$orders->id)->get();
+        $productOrders = ProductOder::with('products', 'product_variants')->where('order_id', $orders->id)->get();
+        $point = Point::where('user_id', $userSearch->id)->first();
+        if ($point != []) {
+            $point->update([
+                'point' => ceil( $point->point + ($orders->sum_price - 15000) / 1000),
+            ]);
+        } else {
+            Point::create([
+                'user_id' => $userSearch->id,
+                'point' =>  ceil(($orders->sum_price - 15000) / 1000),
+            ]);
+        }
         $titleMail = "Đặt hàng thành công";
-
         Mail::send('user.email.success-checkout', compact('orders', 'userSearch', 'productOrders'), function ($email) use ($titleMail, $emailUser) {
             $email->to($emailUser)->subject($titleMail);
-            $email->from($emailUser,$titleMail);
+            $email->from($emailUser, $titleMail);
         });
+        // thêm điểm
+
+
 
         session()->put('cart', $cart);
         session()->forget('addresses');

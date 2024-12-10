@@ -386,18 +386,35 @@
                                             </div>
                                         </td>
                                     </tr>
-
                                     <tr>
-                                        <td class="py-3"></td>
-                                        <td class="py-3">
+                                        <td class="py-2"></td>
+                                        <td class="py-2">
                                             <p class="mb-0 py-4">Tính tiền</p>
                                         </td>
-                                        <td colspan="3" class="py-3">
+                                        <td colspan="3" class="py-2">
                                             <div class="form-check text-start">
                                             </div>
                                             <div class="form-check text-start">
                                                 <label class="form-check-label"
                                                     for="Shipping-2">{{ number_format($sumPrice + 15000) }} Vnđ</label>
+                                            </div>
+                                            <div class="form-check text-start">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-2"></td>
+                                        <td class="py-2">
+                                            <p class="mb-0 py-4">Điểm nhận được</p>
+                                        </td>
+                                        <td colspan="3" class="py-2">
+                                            <div class="form-check text-start">
+                                            </div>
+                                            <div class="form-check text-start">
+                                                <label class="form-check-label d-flex align-items-center" for="Shipping-2">
+                                                    <img src="{{asset("img/xu.png")}}" class="me-2" style="width: 28px; height: 28px; object-fit: cover;" alt="">
+                                                    <h5>{{ceil( $sumPrice / 1000)}}</h5>
+                                                </label>
                                             </div>
                                             <div class="form-check text-start">
                                             </div>
