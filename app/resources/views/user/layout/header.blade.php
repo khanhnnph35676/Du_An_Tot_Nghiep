@@ -46,7 +46,7 @@
                      <div class="nav-item dropdown">
                          <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Trang</a>
                          <div class="dropdown-menu m-0 bg-secondary rounded-0">
-                             <a href="404.html" class="dropdown-item">Bài viết</a>
+                             <a class="dropdown-item" href="{{ route('user.blog.index') }}" >Bài viết</a>
                          </div>
                      </div>
                      <a href="{{ route('storeContact') }}"
