@@ -15,10 +15,8 @@ class CkeckUser
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (Auth::check()) {
-            if(Auth::user()->rule_id == 1 || Auth::user()->rule_id == 3){
-                return redirect()->route('user.login');
-            }
+        if (!Auth::check()) {
+            return redirect()->route('storeHome');
         }
         return $next($request);
     }

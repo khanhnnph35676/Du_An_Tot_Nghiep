@@ -1,141 +1,162 @@
 @extends('user.layout.default')
 
 @push('styleHome')
-
-
 @endpush
 
 @section('content')
+    <style>
+        /* Tùy chỉnh phân trang */
+        .pagination {
+            justify-content: center;
+            /* Căn giữa phân trang */
+            margin-top: 20px;
+            /* Khoảng cách trên */
+            text-decoration: #555;
+        }
 
-<style>
-    body {
-        padding-top: 80px; /* Thêm khoảng cách để tránh header che nội dung */
-    }
-    /* Tùy chỉnh phân trang */
-    .pagination {
-        justify-content: center; /* Căn giữa phân trang */
-        margin-top: 20px; /* Khoảng cách trên */
-        text-decoration: #555;
-    }
-    .page-item .page-link {
-        color: #000;  /* Màu sắc của link */
-        padding: 10px 20px; /* Thêm padding cho link */
-        border-radius: 5px; /* Bo góc */
-        transition: background-color 0.3s ease;
-        font-weight: bold;
-    }
-    .page-item.active .page-link {
-        /* Màu nền link đang được chọn */
-        border-color: #28a745; /* Viền màu */
-        color: white; /* Màu chữ */
-    }
-    .page-item .page-link:hover {
-        
-        color: white; /* Màu chữ khi hover */
-    }
+        .page-item .page-link {
+            color: #000;
+            /* Màu sắc của link */
+            padding: 10px 20px;
+            /* Thêm padding cho link */
+            border-radius: 5px;
+            /* Bo góc */
+            transition: background-color 0.3s ease;
+            font-weight: bold;
+        }
 
-    /* Card Blog */
-    .card {
-        border: none;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        border-radius: 8px;
-        transition: all 0.3s ease;
-    }
+        .page-item.active .page-link {
+            /* Màu nền link đang được chọn */
+            border-color: #28a745;
+            /* Viền màu */
+            color: white;
+            /* Màu chữ */
+        }
 
-    .card:hover {
-        transform: translateY(-5px); /* Hiệu ứng hover cho card */
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-    }
+        .page-item .page-link:hover {
 
-    .card-title {
-        font-size: 1.25rem;
-        font-weight: bold;
-    }
+            color: white;
+            /* Màu chữ khi hover */
+        }
 
-    .card-body {
-        padding: 15px;
-    }
+        /* Card Blog */
+        .card {
+            border: none;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
 
-    .card-body p {
-        color: #555;
-    }
+        .card:hover {
+            transform: translateY(-5px);
+            /* Hiệu ứng hover cho card */
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
 
-    .btn-primary {
-      
-       
-    }
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
 
-    .pagination {
-    display: flex; /* Sử dụng flexbox để xếp các phần tử theo hàng ngang */
-    justify-content: center; /* Căn giữa phân trang */
-    list-style: none; /* Xóa dấu chấm hoặc các biểu tượng trong danh sách */
-    margin-top: 20px; /* Khoảng cách phía trên */
-}
+        .card-body {
+            padding: 15px;
+        }
 
-.pagination .page-item {
-    margin: 0 5px; /* Khoảng cách giữa các trang */
-}
+        .card-body p {
+            color: #555;
+        }
 
-.pagination .page-link {
-    
-    padding: 10px 15px; /* Kích thước nút phân trang */
-    
-    border-radius: 5px; /* Bo góc */
-    text-decoration: none; /* Xóa gạch chân */
-}
+        .btn-primary {}
 
-.pagination .page-item.active .page-link {
-     /* Màu nền khi trang được chọn */
-    border-color: #007bff; /* Viền màu khi trang được chọn */
-    color: white; /* Màu chữ khi trang được chọn */
-}
+        .pagination {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            margin-top: 20px;
+        }
 
-.pagination .page-link:hover {
-    /* Màu nền khi hover */
-    border-color: #0056b3; /* Viền màu khi hover */
-    color: white; /* Màu chữ khi hover */
-}
+        .pagination .page-item {
+            margin: 0 5px;
+        }
 
+        .pagination .page-link {
+            padding: 10px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+        }
 
-    /* Hình ảnh hiển thị đẹp */
-    .card-img-top {
-        width: 100%;
-        height: 200px;
-        object-fit: cover;
-        border-radius: 8px;
-    }
-</style>
-<div class="container">
-    <h1 class="text-center mb-4">Danh sách bài viết</h1>
-    
-    <!-- Danh sách bài viết -->
-    <div class="row">
-        @foreach ($blogs as $blog)
-            <div class="col-md-4 mb-4">
-                <div class="card">
-                    <img src="{{ asset('storage/images/blog/' . $blog->BlogImage) }}" class="card-img-top" alt="{{ $blog->BlogTitle}}">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ Str::words(strip_tags($blog->BlogTitle), 5, '...') }}</h5>BlogTitle
-                        <p class="card-text">
-    {!! Str::words(strip_tags($blog->BlogDesc), 10, '...') !!}</p>
+        .pagination .page-item.active .page-link {
+            border-color: #00ff22;
+            color: white;
+        }
 
-                        <a href="{{ route('user.blog.detail', $blog->BlogSlug) }}" class="btn btn-primary">Xem chi tiết</a>
-                    </div>
+        .pagination .page-link:hover {
+            border-color: #00b312;
+            color: white;
+        }
+
+        /* Hình ảnh hiển thị đẹp */
+        .card-img-top {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .small {
+            direction: none;
+        }
+    </style>
+    <!-- Single Page Header start -->
+    <div class="container-fluid page-header py-5">
+        <h1 class="text-center text-white display-6">Bài viết</h1>
+        <ol class="breadcrumb justify-content-center mb-0">
+            <li class="breadcrumb-item"><a href="{{ route('storeHome') }}">Trang Chủ</a></li>
+            <li class="breadcrumb-item active text-white">Bài viết</li>
+        </ol>
+    </div>
+    <!-- Order History Start -->
+    <div class="container mt-5">
+        <!-- Danh sách bài viết -->
+        <div class="row">
+            <div class="col-3 border rounded">
+                <h2 class="mb-4 mt-4">Bài viết nổi bật</h2>
+            </div>
+            <div class="ms-3 pe-5 ps-5 col-8 border rounded">
+                <div class="row">
+                    <h2 class="mb-4 mt-4">Danh sách bài viết</h2>
+                    @foreach ($blogs as $blog)
+                        <div class="col-md-4 mb-4">
+                            <div class="card">
+                                <img src="{{ asset('storage/images/blog/' . $blog->BlogImage) }}" class="card-img-top"
+                                    alt="{{ $blog->BlogTitle }}">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ Str::words(strip_tags($blog->BlogTitle), 8, '...') }}</h5>
+                                    <p class="card-text">
+                                        {!! Str::words(strip_tags($blog->BlogDesc), 10, '...') !!}</p>
+
+                                    <a href="{{ route('user.blog.detail', $blog->BlogSlug) }}" class="btn btn-primary">Xem
+                                        chi
+                                        tiết</a>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+                <div class="pagination-container d-flex justify-content-center align-items-center mt-2">
+                    <ul class="pagination">
+                        {{ $blogs->links() }}
+                    </ul>
+                    <style>
+                        .pagination-summary,
+                        .pagination-info {
+                            display: none !important;
+                        }
+                    </style>
                 </div>
             </div>
-        @endforeach
+        </div>
     </div>
 
-    <!-- Phân trang -->
-    
-    
-    <div class="pagination-container d-flex justify-content-center align-items-center mt-5">
-    <ul class="pagination">
-        {{ $blogs->links() }} <!-- Hiển thị phân trang -->
-    </ul>
-</div>
-
-</div>
-
-</div>
+    </div>
 @endsection
