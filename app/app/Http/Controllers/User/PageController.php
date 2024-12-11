@@ -32,10 +32,10 @@ class PageController extends Controller
 
         $discount = DiscountProduct::with("discounts")->get();
         // session()->flush();
+        // session()->forget('addresses');
         return view('user.home', compact('products', 'categories', 'bestViewedProducts','product_variants','cart','discount'));
 
     }
-
 
     public function storeListProduct(Request $request)
     {

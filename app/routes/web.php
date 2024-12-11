@@ -153,25 +153,7 @@ Route::middleware(['auth.check'])->group(function () {
     });
 });
 
-// các trang bắt buộc phải đăng nhập mới có thể vào
-Route::middleware(['checkuser'])->group(function () {
-    //Trang thông tin khách hàng
-    Route::get('/user/profile', [UserProfileController::class, 'index'])->name('user.profile');
-    Route::get('list-points', [UserProfileController::class, 'points'])->name('points');
-    Route::post('add-voucher', [UserProfileController::class, 'addVoucher'])->name('addVoucher');
 
-    Route::get('/order-history', [UserOrderController::class, 'index'])->name('order.history');
-
-    // địa chỉ người dùng
-    Route::delete('/address/{id}', [AuthenController::class, 'destroy'])->name('address.destroy');
-    Route::post('/address', [AuthenController::class, 'store'])->name('address.store');
-
-    // thao tác thanh toán
-    Route::post('add-order', [CheckoutController::class, 'AddOrder'])->name('AddOrder');
-    Route::post('momo_payment', [CheckoutController::class, 'momoPayment'])->name('momoPayment');
-    Route::patch('order-update-destroy', [UserOrderController::class, 'destroyOrder'])->name('destroyOrder');
-    // Route::get('success-checkout',[CheckoutController :: class,'successCheckout'])->name('successCheckout');
-});
 
 // các trang người không đăng nhập có thể vào
 Route::middleware(['checkadmin'])->group(function () {
@@ -194,22 +176,39 @@ Route::middleware(['checkadmin'])->group(function () {
 
     //Trang thanh toán
     Route::get('store-checkout', [CheckoutController::class, 'storeCheckout'])->name('storeCheckout');
+    // thao tác thanh toán
+    Route::post('add-order', [CheckoutController::class, 'AddOrder'])->name('AddOrder');
+    Route::post('momo_payment', [CheckoutController::class, 'momoPayment'])->name('momoPayment');
+    Route::patch('order-update-destroy', [UserOrderController::class, 'destroyOrder'])->name('destroyOrder');
+    // địa chỉ người dùng
+    Route::delete('/address/{id}', [AuthenController::class, 'destroy'])->name('address.destroy');
+    Route::post('/address', [AuthenController::class, 'store'])->name('address.store');
 
+    // Route::get('success-checkout',[CheckoutController :: class,'successCheckout'])->name('successCheckout');
     //Sửa số lượng trong giỏ hàng
     Route::post('/cart/update', [CartController::class, 'updateCart'])->name('updateCart');
     Route::post('/update-selected-product', [CartController::class, 'updateSelectedProduct'])->name('updateSelectedProduct');
     Route::post('/updateCartNonVariant', [CartController::class, 'updateCartNonVariant'])->name('updateCartNonVariant');
     Route::post('/update-qty-cart-variant', [CartController::class, 'updateQtyCartVariant'])->name('updateQtyCartVariant');
 
-    //đăng nhập đăng ký, đăng xuất , quên mật khẩu
-    Route::get('/user/login', [AuthenController::class, 'loginHome'])->name('user.login');
-    Route::get('/user/register', [AuthenController::class, 'registerHome'])->name('user.register');
-    Route::post('/user/login', [AuthenController::class, 'postLogin'])->name('user.postLogin');
-    Route::get('/user/forgot-password', [AuthenController::class, 'forgotPassword'])->name('user.forgot-password');
-    Route::post('/user/logout', [AuthenController::class, 'logoutUser'])->name('logoutUser');
-    // Bài viết
+    // các trang bắt buộc phải đăng nhập mới có thể vào
+    Route::middleware(['checkuser'])->group(function () {
+        //Trang thông tin khách hàng
+        Route::get('/user/profile', [UserProfileController::class, 'index'])->name('user.profile');
+        Route::get('list-points', [UserProfileController::class, 'points'])->name('points');
+        Route::post('add-voucher', [UserProfileController::class, 'addVoucher'])->name('addVoucher');
+        Route::get('/order-history', [UserOrderController::class, 'index'])->name('order.history');
+    });
+    // Bài viếtaddress
     Route::prefix('blogs')->group(function () {
         Route::get('/', [UserBlogController::class, 'index'])->name('user.blog.index');
         Route::get('/{BlogSlug}', [UserBlogController::class, 'show'])->name('user.blog.detail');
     });
 });
+
+//đăng nhập đăng ký, đăng xuất , quên mật khẩu
+Route::get('/user/login', [AuthenController::class, 'loginHome'])->name('user.login');
+Route::get('/user/register', [AuthenController::class, 'registerHome'])->name('user.register');
+Route::post('/user/login', [AuthenController::class, 'postLogin'])->name('user.postLogin');
+Route::get('/user/forgot-password', [AuthenController::class, 'forgotPassword'])->name('user.forgot-password');
+Route::post('/user/logout', [AuthenController::class, 'logoutUser'])->name('logoutUser');

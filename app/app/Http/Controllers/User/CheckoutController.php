@@ -41,7 +41,7 @@ class CheckoutController extends Controller
             return redirect()->route('storeHome');
         }else{
             foreach($cart as $value){
-                if($value['selected_products'] != 1){
+                if($value['selected_products'] != 1 && $user_id == $value['user_id']){
                     return redirect()->route('storeHome');
                 }
             }

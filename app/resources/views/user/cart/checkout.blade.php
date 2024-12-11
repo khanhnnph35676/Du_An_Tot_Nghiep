@@ -54,48 +54,47 @@
                         </div>
                         @php
                             // print_r($addresses);
+                            // print_r($address);
                             $countAddresses = 0;
                             $address_id = null;
                         @endphp
-                        @if (isset($address))
+                        @if ($address != [])
                             @foreach ($address as $key => $item)
-                                <div class="row address-item" id="address-row-{{ $item['id'] }}">
+                                <div class="row address-item" id="address-row-{{ $item->id }}">
                                     <div class="form-item  align-items-center">
-                                        <!-- Radio để chọn địa chỉ -->
+                                        <br>
                                         @if ($item->user_id != null)
-                                            <br>
                                             <span class="form-label my-3">Địa chỉ {{ $key + 1 }}:<sup>*</sup></span>
                                             <div class="d-flex mt-2">
                                                 <input type="radio" name="selected_address"
-                                                    id="address-{{ $item['id'] }}" value="{{ $item['id'] }}"
+                                                    id="address-{{ $item->id }}" value="{{ $item->id }}"
                                                     class="me-2" {{ $key === 0 ? 'checked' : '' }}>
 
                                                 <!-- Hiển thị địa chỉ -->
                                                 <input type="text" class="form-control me-2" placeholder="Địa chỉ"
-                                                    value="{{ $item['home_address'] . ', ' . $item['address'] }}" readonly>
+                                                    value="{{ $item->home_address . ', ' . $item->address }}" readonly>
                                                 <!-- Nút chọn -->
                                                 <button class="btn btn-primary select-address me-2" type="button"
-                                                    data-id="{{ $item['id'] }}">Chọn</button>
+                                                    data-id="{{ $item->id }}">Chọn</button>
 
                                                 <!-- Nút xóa -->
                                                 <button class="btn btn-danger delete-address" type="button"
-                                                    data-id="{{ $item['id'] }}">Xóa</button>
+                                                    data-id="{{ $item->id }}">Xóa</button>
                                             </div>
                                         @else
                                             @foreach ($addresses as $key2 => $value)
                                                 @if ($value['id'] == $item->id)
-                                                    <br>
-                                                    <label class="form-label">Địa chỉ
-                                                        {{ $key2 + 1 }}:<sup>*</sup></label>
+                                                    <span class="form-label my-3">Địa chỉ
+                                                        {{ $key + 1 }}:<sup>*</sup></span>
                                                     <div class="d-flex mt-2">
-                                                        <!-- Radio để chọn địa chỉ -->
                                                         <input type="radio" name="selected_address"
                                                             id="address-{{ $item->id }}" value="{{ $item->id }}"
-                                                            class="me-2" {{ $key2 === 0 ? 'checked' : '' }}>
+                                                            class="me-2" {{ $key === 0 ? 'checked' : '' }}>
+
                                                         <!-- Hiển thị địa chỉ -->
                                                         <input type="text" class="form-control me-2"
                                                             placeholder="Địa chỉ"
-                                                            value="{{ $value['home_address'] . ', ' . $value['address'] }}"
+                                                            value="{{ $item->home_address . ', ' . $item->address }}"
                                                             readonly>
                                                         <!-- Nút chọn -->
                                                         <button class="btn btn-primary select-address me-2" type="button"
@@ -111,13 +110,16 @@
                                     </div>
                                 </div>
                             @endforeach
-                            <button type="button" class="btn btn-primary mt-2" data-bs-toggle="modal"
-                                data-bs-target="#add_address">Thêm địa chỉ mới</button>
-                            @error('selected_address')
-                                <div class="alert alert-danger p-2 mt-1"><strong>Lỗi!</strong> {{ $message }}
-                                </div>
-                            @enderror
                         @endif
+
+
+                        <button type="button" class="btn btn-primary mt-2" data-bs-toggle="modal"
+                            data-bs-target="#add_address">Thêm địa chỉ mới</button>
+                        @error('selected_address')
+                            <div class="alert alert-danger p-2 mt-1"><strong>Lỗi!</strong> {{ $message }}
+                            </div>
+                        @enderror
+
                         <div class="form-item">
                             <label class="form-label my-3">Số điện thoại<sup>*</sup></label>
                             <input type="tel" class="form-control" placeholder="Số điện thoại" name="phone"
@@ -411,9 +413,11 @@
                                             <div class="form-check text-start">
                                             </div>
                                             <div class="form-check text-start">
-                                                <label class="form-check-label d-flex align-items-center" for="Shipping-2">
-                                                    <img src="{{asset("img/xu.png")}}" class="me-2" style="width: 28px; height: 28px; object-fit: cover;" alt="">
-                                                    <h5>{{ceil( $sumPrice / 1000)}}</h5>
+                                                <label class="form-check-label d-flex align-items-start" for="Shipping-2">
+                                                    <p class="text-dark fs-4 fw-bold">{{ ceil($sumPrice / 1000) }}</p>
+                                                    <img src="{{ asset('img/xu.png') }}" class="me-2"
+                                                        style="width: 28px; height: 28px; object-fit: cover;"
+                                                        alt="">
                                                 </label>
                                             </div>
                                             <div class="form-check text-start">
