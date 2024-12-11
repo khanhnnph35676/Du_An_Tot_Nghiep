@@ -38,12 +38,42 @@ Route::post('password/reset', [AuthenController::class, 'reset'])->name('passwor
 //check đăng nhập
 Route::middleware(['auth.check'])->group(function () {
     Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
+        // đăng xuất
         Route::post('logout', [AuthenController::class, 'logout'])->name('logout');
+
+        // nếu không phải admin không cho vào trang
+        Route::middleware(['checkrule'])->group(function () {
+            // Trang customer
+            Route::get('list-customer', [CustomerController::class, 'listCustomer'])->name('listCustomer');
+            Route::post('customer-store', [CustomerController::class, 'customerStore'])->name('customerStore');
+            Route::get('customer-create', [CustomerController::class, 'customerCreate'])->name('customerCreate');
+            Route::get('customer-edit/{id}', [CustomerController::class, 'customerEdit'])->name('customerEdit');
+            Route::put('customer-update/{id}', [CustomerController::class, 'customerUpdate'])->name('customerUpdate');
+            Route::delete('customer-destroy/{id}', [CustomerController::class, 'customerDestroy'])->name('customerDestroy');
+            // quản lý nhân viên
+            Route::get('list-employees', [CustomerController::class, 'listEmployees'])->name('listEmployees');
+            // Quản lý giảm giá
+            Route::get('list-discounts', [DiscountController::class, 'listDiscounts'])->name('listDiscounts');
+            Route::get('create-discounts', [DiscountController::class, 'createDiscount'])->name('createDiscount');
+            Route::post('storeDiscount', [DiscountController::class, 'storeDiscount'])->name('discount.store');
+            Route::get('update-discounts/{id}', [DiscountController::class, 'updateDiscount'])->name('updateDiscount');
+            Route::put('editDiscount/{id}', [DiscountController::class, 'update'])->name('discount.update');
+            Route::delete('deleteDiscount/{id}', [DiscountController::class, 'destroy'])->name('discount.destroy');
+
+            // Quản lý phương thức thanh toán
+            Route::get('form-payment', [PaymentController::class, 'formPayment'])->name('formPayment');
+            Route::get('create-payments', [PaymentController::class, 'createPayment'])->name('createPayment');
+            Route::post('storePayment', [PaymentController::class, 'storePayment'])->name('payment.store');
+            Route::get('update-payment/{id}', [PaymentController::class, 'updatePayment'])->name('updatePayment');
+            Route::put('editPayment/{id}', [PaymentController::class, 'update'])->name('payment.update');
+            Route::delete('deletePayment/{id}', [PaymentController::class, 'destroy'])->name('payment.destroy');
+            // điểm thưởng
+            Route::get('list-point', [PointController::class, 'index'])->name('listPoints');
+            Route::get('update-point/{id}', [PointController::class, 'updatePoint'])->name('updatePoint');
+            Route::patch('update-point', [PointController::class, 'updatePatchPoint'])->name('updatePatchPoint');
+        });
+
         // trang chủ
-        // Route::get('/', function () {
-        //     return view('admin.home');
-        // })->name('admin1');
-        //Thống kê
         Route::get('/', [StatisticsController::class, 'index'])->name('admin1');
         Route::get('/statistics', [StatisticsController::class, 'chart'])->name('chart');
         // Trang san phẩm
@@ -81,18 +111,6 @@ Route::middleware(['auth.check'])->group(function () {
         Route::get('categorie-edit/{id}', [CategoryController::class, 'editCategory'])->name('categories.edit');
         Route::patch('categorie-edit/{id}', [CategoryController::class, 'pathchEditCategory'])->name('categories.update');
 
-        // Trang customer
-        Route::get('list-customer', [CustomerController::class, 'listCustomer'])->name('listCustomer');
-        Route::post('customer-store', [CustomerController::class, 'customerStore'])->name('customerStore');
-        Route::get('customer-create', [CustomerController::class, 'customerCreate'])->name('customerCreate');
-        Route::get('customer-edit/{id}', [CustomerController::class, 'customerEdit'])->name('customerEdit');
-        Route::put('customer-update/{id}', [CustomerController::class, 'customerUpdate'])->name('customerUpdate');
-        Route::delete('customer-destroy/{id}', [CustomerController::class, 'customerDestroy'])->name('customerDestroy');
-
-        // quản lý nhân viên
-        Route::get('list-employees', [CustomerController::class, 'listEmployees'])->name('listEmployees');
-
-
         // trang app
         Route::get('calender', [AppController::class, 'calender'])->name('calender');
         Route::get('profile', [AppController::class, 'profile'])->name('profile');
@@ -105,21 +123,6 @@ Route::middleware(['auth.check'])->group(function () {
         Route::get('order-detail/{order_id}', [OrderController::class, 'orderDetail'])->name('orderDetail');
         Route::post('order-update/{order_id}', [OrderController::class, 'updateOrder'])->name('updateOrder');
 
-        // Quản lý giảm giá
-        Route::get('list-discounts', [DiscountController::class, 'listDiscounts'])->name('listDiscounts');
-        Route::get('create-discounts', [DiscountController::class, 'createDiscount'])->name('createDiscount');
-        Route::post('storeDiscount', [DiscountController::class, 'storeDiscount'])->name('discount.store');
-        Route::get('update-discounts/{id}', [DiscountController::class, 'updateDiscount'])->name('updateDiscount');
-        Route::put('editDiscount/{id}', [DiscountController::class, 'update'])->name('discount.update');
-        Route::delete('deleteDiscount/{id}', [DiscountController::class, 'destroy'])->name('discount.destroy');
-
-        // Quản lý phương thức thanh toán
-        Route::get('form-payment', [PaymentController::class, 'formPayment'])->name('formPayment');
-        Route::get('create-payments', [PaymentController::class, 'createPayment'])->name('createPayment');
-        Route::post('storePayment', [PaymentController::class, 'storePayment'])->name('payment.store');
-        Route::get('update-payment/{id}', [PaymentController::class, 'updatePayment'])->name('updatePayment');
-        Route::put('editPayment/{id}', [PaymentController::class, 'update'])->name('payment.update');
-        Route::delete('deletePayment/{id}', [PaymentController::class, 'destroy'])->name('payment.destroy');
 
         // quản lý blog
         Route::get('/blog', [BlogController::class, 'index'])->name('blog.list');
@@ -144,10 +147,6 @@ Route::middleware(['auth.check'])->group(function () {
         Route::get('/edit-testimonial/{id}', [TestimonialController::class, 'editTestimonial'])->name('editTestimonial');
         Route::patch('/edit-testimonial', [TestimonialController::class, 'updateTestimonial'])->name('updateTestimonial');
         Route::delete('/delete-testimonial', [TestimonialController::class, 'deleteTestimonial'])->name('deleteTestimonial');
-        // điểm thưởng
-        Route::get('list-point', [PointController::class, 'index'])->name('listPoints');
-        Route::get('update-point/{id}', [PointController::class, 'updatePoint'])->name('updatePoint');
-        Route::patch('update-point', [PointController::class, 'updatePatchPoint'])->name('updatePatchPoint');
     });
 });
 
@@ -168,7 +167,9 @@ Route::middleware(['checkuser'])->group(function () {
     Route::patch('order-update-destroy', [UserOrderController::class, 'destroyOrder'])->name('destroyOrder');
     // Route::get('success-checkout',[CheckoutController :: class,'successCheckout'])->name('successCheckout');
 });
-    // các trang người không đăng nhập có thể vào
+
+// các trang người không đăng nhập có thể vào
+Route::middleware(['checkadmin'])->group(function () {
     // trang chủ
     Route::get('/', [PageController::class, 'storeHome'])->name('storeHome');
 
@@ -206,7 +207,4 @@ Route::middleware(['checkuser'])->group(function () {
         Route::get('/', [UserBlogController::class, 'index'])->name('user.blog.index');
         Route::get('/{BlogSlug}', [UserBlogController::class, 'show'])->name('user.blog.detail');
     });
-
-
-
-
+});

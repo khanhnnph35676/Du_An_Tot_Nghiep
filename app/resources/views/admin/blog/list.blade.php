@@ -71,11 +71,11 @@
                                                 @if ($blog->BlogImage != null)
                                                     <img src="{{ asset('/storage/images/blog/' . $blog->BlogImage) }}"
                                                         alt=""
-                                                        style="width: auto; height: 70px; object-fit: cover;">
+                                                        style="width: 100px; height: 60px; object-fit: cover;">
                                                 @else
                                                     <img src="{{ asset('/storage/images/blog/default.png') }}"
                                                         alt=""
-                                                        style="width: auto; height: 70px; object-fit: cover;">
+                                                        style="width: 100px; height: 60px; object-fit: cover;">
                                                 @endif
                                                 <span class="ml-3">{{ $blog->BlogTitle }}</span>
                                             </td>
