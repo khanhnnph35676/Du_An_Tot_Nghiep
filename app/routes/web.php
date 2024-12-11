@@ -155,6 +155,8 @@ Route::middleware(['checkuser'])->group(function () {
     //Trang thông tin khách hàng
     Route::get('/user/profile', [UserProfileController::class, 'index'])->name('user.profile');
     Route::get('list-points', [UserProfileController::class, 'points'])->name('points');
+    Route::post('add-voucher', [UserProfileController::class, 'addVoucher'])->name('addVoucher');
+
     Route::get('/order-history', [UserOrderController::class, 'index'])->name('order.history');
 
     // địa chỉ người dùng
