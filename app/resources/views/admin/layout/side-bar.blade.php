@@ -35,7 +35,7 @@
                      <ul aria-expanded="false">
                          <li><a href="{{ route('admin.listCustomer') }}">Quản lý người dùng</a></li>
                          <li><a href="{{ route('admin.listEmployees') }}">Quản lý thành viên</a></li>
-                         {{-- <li><a href="{{route('admin.listTestimonial')}}">Testimonial Manager</a></li> --}}
+                         <li><a href="{{route('admin.testimonials')}}">Quản lý đánh giá</a></li>
                      </ul>
                  </li>
              @endif
@@ -78,7 +78,7 @@
                  </ul>
              </li>
              <li><a href="{{route('admin.listChat')}}"> <i class="fa-solid fa-comments"></i>
-                     <span class="nav-text">Giao tiếp khách hàng</span>
+                     <span class="nav-text">Tin nhắn</span>
                  </a></li>
              <li><a href="{{ route('admin.calender') }}"><i class="fa-solid fa-calendar-days"></i>
                      <span class="nav-text">
