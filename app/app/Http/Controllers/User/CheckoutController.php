@@ -23,28 +23,30 @@ class CheckoutController extends Controller
     public function storeCheckout()
     {
         $cart = session()->get('cart', []);
-        // dd($cart);
         $addresses = session()->get('addresses', []);
         $address = [];
-        $user_id = Auth::user()->id ?? null;
+        $user_id = Auth::user()->id ?? 0;
         $address = Address::where('user_id', $user_id)->get();
-
-        // $selectedProductIds = $request->input('selected_products', []);
         $products = Product::get();
-        // whereIn('id', $selectedProductIds)->
         $productVariants = ProductVariant::get();
         $payments = Payment::get();
-        // session()->forget('addresses');
 
-        //cart rỗng không cho thannh toán
-        if($cart == []){
+        // Kiểm tra giỏ hàng rỗng
+        if (empty($cart)) {
             return redirect()->route('storeHome');
-        }else{
-            foreach($cart as $value){
-                if($value['selected_products'] != 1 && $user_id == $value['user_id']){
-                    return redirect()->route('storeHome');
-                }
+        }
+
+        $checkSelect = false; // Biến kiểm tra có ít nhất 1 sản phẩm được chọn
+        foreach ($cart as $value) {
+            if ($value['selected_products'] == 1 && $value['user_id'] == $user_id) {
+                $checkSelect = true;
+                break;
             }
+        }
+
+        // Nếu không có sản phẩm nào được chọn, chuyển hướng về trang chủ
+        if (!$checkSelect) {
+            return redirect()->route('storeHome');
         }
 
         return view('user.cart.checkout')->with([
@@ -56,6 +58,7 @@ class CheckoutController extends Controller
             'addresses' => $addresses
         ]);
     }
+
 
 
     public function execPostRequest($url, $data)
@@ -80,7 +83,7 @@ class CheckoutController extends Controller
         curl_close($ch);
         return $result;
     }
-    public function momoPayment(Request $request) {}
+
     public function AddOrder(Request $request)
     {
         $request->validate([
@@ -203,7 +206,7 @@ class CheckoutController extends Controller
         $point = Point::where('user_id', $userSearch->id)->first();
         if ($point != []) {
             $point->update([
-                'point' => ceil( $point->point + ($orders->sum_price - 15000) / 1000),
+                'point' => ceil($point->point + ($orders->sum_price - 15000) / 1000),
             ]);
         } else {
             Point::create([
@@ -267,6 +270,7 @@ class CheckoutController extends Controller
             // ]);
         }
     }
+
 
 
     public function SuccessCheckout()

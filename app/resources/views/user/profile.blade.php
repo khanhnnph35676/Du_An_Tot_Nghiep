@@ -57,7 +57,7 @@
 
 @if ($errors->any())
     <div class="alert alert-danger">
-        <ul>    
+        <ul>
             @foreach ($errors->all() as $error)
                 <li>{{ $error }}</li>
             @endforeach
@@ -128,7 +128,7 @@
                     <button class="btn btn-primary  " data-bs-toggle="modal" data-bs-target="#editProfileModal">Sửa
                     thông tin</button>
                     </div>
-                    
+
                 </div>
             </div>
         </div>
@@ -144,7 +144,8 @@
                 <h5 class="modal-title" id="editProfileModalLabel">Sửa thông tin</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="{{ route('user.profile.update') }}" method="POST" enctype="multipart/form-data">
+            {{-- {{ route('user.profile.update') }} --}}
+            <form action="" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
                     <!-- Thông tin cá nhân -->
@@ -174,16 +175,16 @@
                     </div>
 
                     <!-- Sửa địa chỉ -->
-                   
+
                     @foreach ($address as $key => $value)
                     <div class="mb-3">
     <label for="address" class="form-label">Địa chỉ</label>
-    <input type="text" class="form-control" id="address" name="address" 
+    <input type="text" class="form-control" id="address" name="address"
            value="{{ optional($address->first())->address }}" placeholder="Nhập địa chỉ">
 </div>
 <div class="mb-3">
     <label for="home_address" class="form-label">Số nhà</label>
-    <input type="text" class="form-control" id="home_address" name="home_address" 
+    <input type="text" class="form-control" id="home_address" name="home_address"
            value="{{ optional($address->first())->home_address }}" placeholder="Nhập số nhà">
 </div>
 
