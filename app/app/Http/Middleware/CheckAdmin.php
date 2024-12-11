@@ -17,7 +17,6 @@ class CheckAdmin
     {
         if (Auth::check()) {
             if(Auth::user()->rule_id ==  3 || Auth::user()->rule_id == 1){
-                Auth::logout();
                 return redirect()->route('storeHome');
             }
         }

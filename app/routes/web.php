@@ -69,6 +69,7 @@ Route::middleware(['auth.check'])->group(function () {
             Route::get('update-payment/{id}', [PaymentController::class, 'updatePayment'])->name('updatePayment');
             Route::put('editPayment/{id}', [PaymentController::class, 'update'])->name('payment.update');
             Route::delete('deletePayment/{id}', [PaymentController::class, 'destroy'])->name('payment.destroy');
+
             // điểm thưởng
             Route::get('list-point', [PointController::class, 'index'])->name('listPoints');
             Route::get('update-point/{id}', [PointController::class, 'updatePoint'])->name('updatePoint');
@@ -78,10 +79,10 @@ Route::middleware(['auth.check'])->group(function () {
         // trang chủ
         Route::get('/', [StatisticsController::class, 'index'])->name('admin1');
         Route::get('/statistics', [StatisticsController::class, 'chart'])->name('chart');
+
         // Trang san phẩm
         Route::get('list-product', [ProductController::class, 'listProducts'])->name('listProducts');
         Route::get('product-detail', [ProductController::class, 'productDetail'])->name('productDetail');
-        // web.php
         Route::get('get-variant-data', [ProductController::class, 'getVariantData']);
         Route::get('product-simple', [ProductController::class, 'productSimple'])->name('productSimple');
         Route::get('update-product-simple/{type}/{idProduct}', [ProductController::class, 'formUpdateProductSimple'])->name('formUpdateProductSimple');

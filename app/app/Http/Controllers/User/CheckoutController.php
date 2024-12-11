@@ -25,7 +25,6 @@ class CheckoutController extends Controller
         $cart = session()->get('cart', []);
         // dd($cart);
         $addresses = session()->get('addresses', []);
-
         $address = [];
         $user_id = Auth::user()->id ?? null;
         $address = Address::where('user_id', $user_id)->get();
@@ -36,9 +35,16 @@ class CheckoutController extends Controller
         $productVariants = ProductVariant::get();
         $payments = Payment::get();
         // session()->forget('addresses');
+
         //cart rỗng không cho thannh toán
         if($cart == []){
             return redirect()->route('storeHome');
+        }else{
+            foreach($cart as $value){
+                if($value['selected_products'] != 1){
+                    return redirect()->route('storeHome');
+                }
+            }
         }
 
         return view('user.cart.checkout')->with([
