@@ -57,7 +57,7 @@
                                                 <td>{{ $key + 1 }}</td>
                                                 <td>
                                                     @if ($value->user->avatar != null)
-                                                        <img src="{{ asset('storage/' . $value->user->avatar) }}"class="rounded mr-2"
+                                                        <img src="{{ asset('storage/' . $value->user->avatar) }}"class="rounded-pill mr-2"
                                                             style="width: 42px; height: 42px; object-fit: cover;">
                                                     @else
                                                         <img src="{{ asset('storage/avatars/OIP.jpg') }}"
@@ -67,17 +67,20 @@
                                                     {{ $value->user->email }}
                                                 </td>
                                                 <td>
-                                                    <img src="{{ asset($value->product->image) }}"
-                                                        style="width: 50px; height: 50px; object-fit: cover;" alt=""
-                                                        class="rounded">
-                                                    {{ $value->product->name }}
+                                                    @if ($value->product != null)
+                                                        <img src="{{ asset($value->product->image) }}"
+                                                            style="width: 50px; height: 50px; object-fit: cover;" alt=""
+                                                            class="rounded">
+                                                        {{ $value->product->name }}
+                                                    @endif
                                                 </td>
                                                 </td>
                                                 <td>
                                                     {{ $value->content }}
                                                 </td>
                                                 <td>{{ $value->rating }}</td>
-                                                <td> <a href="{{ route('admin.editTestimonial', ['id' => $value->id]) }}"
+                                                <td>
+                                                    <a href="{{ route('admin.editTestimonial', ['id' => $value->id]) }}"
                                                         class="btn btn-secondary"> Sửa</a>
                                                     <button type="button" class="btn btn-dark" data-toggle="modal"
                                                         data-target="#deleteTestimonial"

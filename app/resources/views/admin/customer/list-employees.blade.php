@@ -65,7 +65,7 @@
                                                 <td>
                                                     @if ($user->avatar)
                                                         <img src="{{ asset('storage/' . $user->avatar) }}"
-                                                            alt="{{ $user->name }}" class="rounded mr-2"
+                                                            alt="{{ $user->name }}" class="rounded-pill mr-2"
                                                             style="width: 42px; height: 42px; object-fit: cover;">
                                                     @else
                                                         <img src="{{ asset('storage/avatars/OIP.jpg') }}"

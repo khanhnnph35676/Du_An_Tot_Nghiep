@@ -59,8 +59,6 @@ class CheckoutController extends Controller
         ]);
     }
 
-
-
     public function execPostRequest($url, $data)
     {
         $ch = curl_init($url);
@@ -271,10 +269,4 @@ class CheckoutController extends Controller
         }
     }
 
-
-
-    public function SuccessCheckout()
-    {
-        return view('user.email.success-checkout');
-    }
 }
