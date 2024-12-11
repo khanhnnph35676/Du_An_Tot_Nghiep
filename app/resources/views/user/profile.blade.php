@@ -49,6 +49,21 @@
         }
     </style>
 @endpush
+@if (session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
+
+@if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>    
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
 
 @section('content')
     <!-- Single Page Header start -->
@@ -98,6 +113,7 @@
                             <h2>{{ $user->name }}</h2>
                             <p class="text-muted">Email: {{ $user->email }}</p>
                             <p class="text-muted">Phone: {{ $user->phone }}</p>
+                            <p class="text-muted">Giới tính: {{ $user->gender }}</p>
                         </div>
                     </div>
 
@@ -108,8 +124,11 @@
                             <p><strong>Số nhà: </strong>{{ $value->home_address }}</p>
                         @endforeach
                     </div>
-                    <button class="btn btn-primary btn-edit" data-bs-toggle="modal" data-bs-target="#editProfileModal">Sửa
-                        thông tin</button>
+                    <div class="text-end" >
+                    <button class="btn btn-primary  " data-bs-toggle="modal" data-bs-target="#editProfileModal">Sửa
+                    thông tin</button>
+                    </div>
+                    
                 </div>
             </div>
         </div>
@@ -117,50 +136,69 @@
 
 
     <!-- Modal Chỉnh Sửa Hồ Sơ -->
-    <div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="editProfileModalLabel">Sửa thông tin</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
+    <!-- Modal Chỉnh Sửa Hồ Sơ và Địa Chỉ -->
+<div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editProfileModalLabel">Sửa thông tin</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{ route('user.profile.update') }}" method="POST" enctype="multipart/form-data">
+                @csrf
                 <div class="modal-body">
-                    <form>
-                        <div class="mb-3">
-                            <label for="firstName" class="form-label">Họ tên</label>
-                            <input type="text" class="form-control" id="firstName" value="{{ $user->name }}"
-                                placeholder="Nhập tên">
-                        </div>
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="email" value="{{ $user->email }}"
-                                placeholder="Nhập email" </div>
-                            <div class="mb-3">
-                                <label for="phone" class="form-label">Phone</label>
-                                <input type="tel" class="form-control" id="phone" value="(123) 456-7890"
-                                    placeholder="Nhập số điện thoại">
-                            </div>
-                            <div class="mb-3">
-                                <label for="address" class="form-label">Address</label>
-                                <input type="text" class="form-control" id="address" value="123 Main St, Apt 4B">
-                            </div>
-                            <div class="mb-3">
-                                <label for="city" class="form-label">City</label>
-                                <input type="text" class="form-control" id="city" value="Springfield">
-                            </div>
-                            <div class="mb-3">
-                                <label for="country" class="form-label">Country</label>
-                                <input type="text" class="form-control" id="country" value="USA">
-                            </div>
-                    </form>
+                    <!-- Thông tin cá nhân -->
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Họ tên</label>
+                        <input type="text" class="form-control" id="name" name="name" value="{{ $user->name }}" placeholder="Nhập tên">
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" value="{{ $user->email }}" placeholder="Nhập email">
+                    </div>
+                    <div class="mb-3">
+                        <label for="phone" class="form-label">Số điện thoại</label>
+                        <input type="text" class="form-control" id="phone" name="phone" value="{{ $user->phone }}" placeholder="Nhập số điện thoại">
+                    </div>
+                    <div class="mb-3">
+                        <label for="avatar" class="form-label">Ảnh đại diện</label>
+                        <input type="file" class="form-control" id="avatar" name="avatar">
+                    </div>
+                    <div class="mb-3">
+                        <label for="gender" class="form-label">Giới tính</label>
+                        <select class="form-select" id="gender" name="gender">
+                            <option value="male" {{ $user->gender == 'male' ? 'selected' : '' }}>Nam</option>
+                            <option value="female" {{ $user->gender == 'female' ? 'selected' : '' }}>Nữ</option>
+                            <option value="other" {{ $user->gender == 'other' ? 'selected' : '' }}>Khác</option>
+                        </select>
+                    </div>
+
+                    <!-- Sửa địa chỉ -->
+                   
+                    @foreach ($address as $key => $value)
+                    <div class="mb-3">
+    <label for="address" class="form-label">Địa chỉ</label>
+    <input type="text" class="form-control" id="address" name="address" 
+           value="{{ optional($address->first())->address }}" placeholder="Nhập địa chỉ">
+</div>
+<div class="mb-3">
+    <label for="home_address" class="form-label">Số nhà</label>
+    <input type="text" class="form-control" id="home_address" name="home_address" 
+           value="{{ optional($address->first())->home_address }}" placeholder="Nhập số nhà">
+</div>
+
+@endforeach
+
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save Changes</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
+</div>
+
 @endsection
 
 @push('scriptStore')
