@@ -50,8 +50,10 @@ Route::middleware(['auth.check'])->group(function () {
             Route::get('customer-edit/{id}', [CustomerController::class, 'customerEdit'])->name('customerEdit');
             Route::put('customer-update/{id}', [CustomerController::class, 'customerUpdate'])->name('customerUpdate');
             Route::delete('customer-destroy/{id}', [CustomerController::class, 'customerDestroy'])->name('customerDestroy');
+
             // quản lý nhân viên
             Route::get('list-employees', [CustomerController::class, 'listEmployees'])->name('listEmployees');
+
             // Quản lý giảm giá
             Route::get('list-discounts', [DiscountController::class, 'listDiscounts'])->name('listDiscounts');
             Route::get('create-discounts', [DiscountController::class, 'createDiscount'])->name('createDiscount');

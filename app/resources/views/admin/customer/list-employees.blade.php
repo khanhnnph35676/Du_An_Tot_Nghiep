@@ -40,7 +40,7 @@
                         <div class="card-header">
                             <h4 class="card-title">Danh sách nhân viên</h4>
                             <div class="btn-group" role="group">
-                                <a href="{{ route('admin.customerCreate') }}" class="btn btn-secondary">Thêm nhân viên</a>
+                                <a href="{{ route('admin.customerCreate') }}" class="btn btn-secondary">Thêm thành viên</a>
                             </div>
                         </div>
                         <div class="card-body">
@@ -85,13 +85,14 @@
                                                     {{ $user->birth_date ? \Carbon\Carbon::parse($user->birth_date)->format('d-m-Y') : 'N/A' }}
                                                 </td>
                                                 <td>
-                                                    <span
-                                                        class="badge badge-info">{{ optional($user->rule)->rule_name }}</span>
-                                                    @if (optional($user->rule)->id === 2)
+                                                    @if ($user->rule->id == 1)
+                                                    <span class="badge badge-secondary">{{ optional($user->rule)->rule_name }}
+                                                    </span>
                                                     @else
-                                                        <span
-                                                            class="badge badge-secondary">{{ optional($user->rule)->rule_name }}</span>
+                                                        <span class="badge badge-info">{{ optional($user->rule)->rule_name }}
+                                                        </span>
                                                     @endif
+
                                                 <td>
                                                     <div class="d-flex">
                                                         <a href="{{ route('admin.customerEdit', $user->id) }}"

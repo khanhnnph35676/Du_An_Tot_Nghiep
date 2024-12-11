@@ -15,7 +15,7 @@ class CustomerController extends Controller
     public function listEmployees()
     {
         $rules = Rule::all();
-        $users = User::where('rule_id',3)->get();
+        $users = User::whereIn('rule_id', [3, 1])->get();
         return view('admin.customer.list-employees', compact('users', 'rules'));
     }
     public function listCustomer()
@@ -66,9 +66,14 @@ class CustomerController extends Controller
             'avatar' => $avatarPath,
             'rule_id' => $validatedData['rule_id'],
         ]);
+        if($validatedData['rule_id'] == 2){
+            // Chuyển hướng về trang danh sách khách hàng
+            return redirect()->route('admin.listCustomer')->with('message', 'Thêm người dùng thành công');
+        }else{
+            // Chuyển hướng về trang danh sách khách hàng
+            return redirect()->route('admin.listEmployees')->with('message', 'Thêm nhân viên thành công');
+        }
 
-        // Chuyển hướng về trang danh sách khách hàng
-        return redirect()->route('admin.listCustomer')->with('message', 'Thêm người dùng thành công');
     }
 
 
@@ -126,7 +131,13 @@ class CustomerController extends Controller
         }
 
         // Chuyển hướng đến trang chỉnh sửa với ID của khách hàng
-        return redirect()->route('admin.listCustomer')->with('message', 'Sửa thông tin người dùng thành công');
+        if($validatedData['rule_id'] == 2){
+            // Chuyển hướng về trang danh sách khách hàng
+            return redirect()->route('admin.listCustomer')->with('message', 'Sửa thông tin người dùng thành công');
+        }else{
+            // Chuyển hướng về trang danh sách khách hàng
+            return redirect()->route('admin.listEmployees')->with('message', 'Sửa thông tin thành viên thành công');
+        }
     }
 
 
