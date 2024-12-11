@@ -207,6 +207,7 @@ Route::middleware(['checkadmin'])->group(function () {
         Route::get('/order-history', [UserOrderController::class, 'index'])->name('order.history');
     });
 });
+// });
 
 //đăng nhập đăng ký, đăng xuất , quên mật khẩu
 Route::get('/user/login', [AuthenController::class, 'loginHome'])->name('user.login');
