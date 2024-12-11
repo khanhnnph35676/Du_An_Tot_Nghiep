@@ -77,9 +77,8 @@
                      <li><a href="{{ route('admin.compose') }}">Soạn thư</a></li>
                  </ul>
              </li>
-             <li><a href="./app-profile.html"> <i class="fa-solid fa-comments"></i>
-                     <span class="nav-text">
-                         Giao tiếp khách hàng</span>
+             <li><a href="{{route('admin.listChat')}}"> <i class="fa-solid fa-comments"></i>
+                     <span class="nav-text">Giao tiếp khách hàng</span>
                  </a></li>
              <li><a href="{{ route('admin.calender') }}"><i class="fa-solid fa-calendar-days"></i>
                      <span class="nav-text">

@@ -21,6 +21,7 @@ use App\Http\Controllers\StatisticsController;
 use App\Http\Controllers\CKEditorController;
 use App\Http\Controllers\User\PageController;
 use App\Http\Controllers\User\AuthenController;
+use App\Http\Controllers\ChatController;
 
 
 
@@ -75,6 +76,11 @@ Route::middleware(['auth.check'])->group(function () {
             Route::get('update-point/{id}', [PointController::class, 'updatePoint'])->name('updatePoint');
             Route::patch('update-point', [PointController::class, 'updatePatchPoint'])->name('updatePatchPoint');
         });
+
+        // chat
+        Route::get('list-chat', [ChatController::class, 'index'])->name('listChat');
+
+
 
         // trang chủ
         Route::get('/', [StatisticsController::class, 'index'])->name('admin1');

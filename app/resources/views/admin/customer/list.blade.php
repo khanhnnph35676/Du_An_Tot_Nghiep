@@ -67,11 +67,12 @@
                                                     <img src="{{ asset('storage/' . $user->avatar) }}"
                                                         alt="{{ $user->name }}"  class="rounded mr-2"
                                                         style="width: 42px; height: 42px; object-fit: cover;">
-                                                @else
-                                                    <img src="{{ asset('storage/avatars/OIP.jpg') }}" class="rounded mr-2"
-                                                    style="width: 42px; height: 42px; object-fit: cover;" alt="">
-                                                @endif
-                                                    {{ $user->name }}</td>
+                                                    @else
+                                                        <img src="{{ asset('storage/avatars/OIP.jpg') }}" class="rounded mr-2"
+                                                        style="width: 42px; height: 42px; object-fit: cover;" alt="">
+                                                    @endif
+                                                    {{ $user->name }}
+                                                </td>
                                                 <td>{{ $user->email }}</td>
                                                 <td>{{ $user->phone?$user->phone: 'Không có'}}</td>
                                                 <td>
