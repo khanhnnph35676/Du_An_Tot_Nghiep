@@ -191,6 +191,7 @@ Route::middleware(['checkadmin'])->group(function () {
     Route::post('add-order', [CheckoutController::class, 'AddOrder'])->name('AddOrder');
     Route::post('momo_payment', [CheckoutController::class, 'momoPayment'])->name('momoPayment');
     Route::patch('order-update-destroy', [UserOrderController::class, 'destroyOrder'])->name('destroyOrder');
+
     // Route::get('success-checkout',[CheckoutController :: class,'successCheckout'])->name('successCheckout');
 
     // Bài viết
