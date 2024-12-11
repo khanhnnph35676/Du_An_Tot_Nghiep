@@ -36,6 +36,11 @@ class CheckoutController extends Controller
         $productVariants = ProductVariant::get();
         $payments = Payment::get();
         // session()->forget('addresses');
+        //cart rỗng không cho thannh toán
+        if($cart == []){
+            return redirect()->route('storeHome');
+        }
+
         return view('user.cart.checkout')->with([
             'address' => $address,
             'cart' => $cart,

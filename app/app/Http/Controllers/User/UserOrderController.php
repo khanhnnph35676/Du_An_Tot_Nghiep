@@ -16,7 +16,7 @@ class UserOrderController extends Controller
 {
     public function index()
     {
-        $user_id = Auth::user()->id ?? null;
+        $user_id = Auth::user()->id;
         $orderLists = OrderList::with('orders', 'orders.address', 'users')
         ->where('user_id', $user_id)
         ->orderBy('id', 'desc')

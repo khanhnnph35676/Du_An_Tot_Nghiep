@@ -12,7 +12,7 @@ class UserBlogController extends Controller
     {
         $cart = session()->get('cart', []);
 
-        $blogs = Blog::where('Status', 1)->paginate(5); // Lấy các blog đã được phê duyệt
+        $blogs = Blog::where('Status', 1)->paginate(6); // Lấy các blog đã được phê duyệt
         return view('user.blog.list', compact('blogs','cart'));
     }
 
