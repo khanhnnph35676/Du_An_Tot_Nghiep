@@ -25,7 +25,8 @@
             border-radius: 5px;
         }
 
-        h1,h2{
+        h1,
+        h2 {
             color: #333;
         }
 
@@ -91,9 +92,11 @@
             /* Xóa gạch chân */
             transition: background-color 0.3s ease;
         }
-        a{
+
+        a {
             color: white;
         }
+
         /* Thêm hiệu ứng hover */
         .btn:hover {
             background-color: #0057b377;
@@ -105,7 +108,8 @@
     <div class="container-fluid fruite py-5">
         <div class="container py-5">
             <h1 style='color:rgba(129, 196, 8, 1);'>J-snack</h1>
-            <h1>Xin chào </h1> <h3>{{ $userSearch->email }} !</h3>
+            <h1>Xin chào </h1>
+            <h3>{{ $userSearch->email }} !</h3>
             <h2 class="mb-4 text-center">Chúc mừng bạn đã đặt hàng thành công tài cửa hàng bán đò ăn vặt J-Snack .</h2>
             <h2>Dưới đây là thông tin đơn hàng của bạn</h2>
             <div class="row g-4">
@@ -160,7 +164,7 @@
                                             {{-- <img src="{{ 'http://127.0.0.1:8000/' . $item->products->image }}"
                                                 style="width: 60px; height: 60px; object-fit: cover;"> --}}
 
-                                            <span>{{$item->products->name}}</span>
+                                            <span>{{ $item->products->name }}</span>
                                         </td>
                                         <td>{{ number_format($item->price) }} Vnđ</td>
                                     </tr>
@@ -170,7 +174,7 @@
                                         <td>
                                             <img src="{{ 'http://127.0.0.1:8000/' . $item->product_variants->image }}"
                                                 style="width: 60px; height: 60px; object-fit: cover;">
-                                                <span>{{$item->products->name .' - '. $item->product_variants->sku}}</span>
+                                            <span>{{ $item->products->name . ' - ' . $item->product_variants->sku }}</span>
                                         </td>
                                         <td>{{ number_format($item->price) }} Vnđ</td>
                                     </tr>
@@ -188,27 +192,20 @@
                             </tr>
                         </tbody>
                     </table>
-                    <h4 class="mb-5 mt-5 text-center">Thông tin người nhận</h4>
-                    <table class="table">
-                        <tr>
-                            <th style="width:20%;">Họ tên: </th>
-                            <td class="text-start"> {{ $userSearch->name }}</td>
-                        </tr>
-                        <tr>
-                            <th style="width:20%;">Email: </th>
-                            <td class="text-start">{{ $userSearch->email }}</td>
-                        </tr>
-                        <tr>
-                            <th style="width:20%;">Số điện thoại: </th>
-                            <td class="text-start">{{ $userSearch->phone }}</td>
-                        </tr>
-                        <tr>
-                            <th style="width:20%;">Địa chỉ: </th>
-                            <td class="text-start">
-                                {{ $orders->address->home_address . ', ' . $orders->address->address }}
-                            </td>
-                        </tr>
-                    </table>
+                    @if ($userSearch->check_user == 0)
+                        <h4 class="mb-5 mt-5 text-center">Do bạn chưa có mật khẩu nên chúng tôi đã tạo cho bạn tài khoản
+                        </h4>
+                        <table class="table">
+                            <tr>
+                                <th style="width:20%;">Tài khoản: </th>
+                                <td class="text-start">{{ $userSearch->email }}</td>
+                            </tr>
+                            <tr>
+                                <th style="width:20%;">Mật khẩu: </th>
+                                <td class="text-start">abc123 </td>
+                            </tr>
+                        </table>
+                    @endif
                     <a href="{{ route('order.history') }}" class="btn"> Xem đơn hàng </a>
                 </div>
             </div>

@@ -34,7 +34,7 @@
                              class="fa-solid fa-users"></i><span class="nav-text">Quản lý tài khoản</span></a>
                      <ul aria-expanded="false">
                          <li><a href="{{ route('admin.listCustomer') }}">Quản lý người dùng</a></li>
-                         <li><a href="{{ route('admin.listEmployees') }}">Quản lý nhân viên</a></li>
+                         <li><a href="{{ route('admin.listEmployees') }}">Quản lý thành viên</a></li>
                          {{-- <li><a href="{{route('admin.listTestimonial')}}">Testimonial Manager</a></li> --}}
                      </ul>
                  </li>
@@ -47,8 +47,8 @@
                         <li><a href="{{ route('admin.listOrders') }}">Quản lý đơn hàng</a></li>
                     @if (Auth::user()->rule_id == 1 )
                         <li><a href="{{ route('admin.formPayment') }}">Phương thức thanh toán</a></li>
-                        <li><a href="{{ route('admin.listDiscounts') }}">Giảm giá</a></li>
-                        <li><a href="{{ route('admin.listPoints') }}">Điểm thưởng</a></li>
+                        <li><a href="{{ route('admin.listDiscounts') }}">Quản lý giảm giá</a></li>
+                        <li><a href="{{ route('admin.listPoints') }}">Quản lý điểm thưởng</a></li>
                     @endif
                  </ul>
              </li>

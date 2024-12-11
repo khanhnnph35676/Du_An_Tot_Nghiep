@@ -169,9 +169,14 @@ class AuthenController extends Controller
     public function destroy($id)
     {
         $addresses = session()->get('addresses', []);
-        $address = Address::findOrFail($id);
-        $address->delete();
-
+        $address = Address::find($id);
+        $address->forceDelete();
+        foreach($addresses as $key => $value){
+            if($value['id'] == $id){
+                unset($addresses[$key]);
+            }
+        }
+        session()->put('addresses', $addresses);
         return response()->json(['success' => true, 'message' => 'Địa chỉ đã được xóa']);
     }
     //Thêm địa chỉ mới
@@ -184,6 +189,7 @@ class AuthenController extends Controller
             'home_address' => $request->home_address,
             'user_id' => $user_id
         ]);
+
         if($user_id == null){
             $newAddress = [
                 'id' => $addAddress->id,

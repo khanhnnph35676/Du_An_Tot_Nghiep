@@ -225,7 +225,7 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Delete Product Variant</h5>
+                    <h5 class="modal-title">Thông báo</h5>
                     <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
                     </button>
                 </div>
@@ -233,11 +233,11 @@
                     @method('delete')
                     @csrf
                     <div class="modal-body">
-                        <p>You are delete this product varinant</p>
+                        <p>Bạn có muốn xoá sản phẩm biến thể này không</p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Delete</button>
+                        <button type="button" class="btn btn-dark" data-dismiss="modal">Đóng</button>
+                        <button type="submit" class="btn btn-primary">Xoá</button>
                     </div>
                 </form>
             </div>

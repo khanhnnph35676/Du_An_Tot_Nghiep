@@ -2,7 +2,7 @@
 @push('styleStore')
     <style>
         .variant {
-            height: 30px;
+            height: auto;
             display: flex;
             align-items: center;
             margin: 10px 0px 10px 0px;
@@ -154,9 +154,8 @@
                                                     <input type="hidden" name="product_id" value="{{ $product->id }}">
 
                                                     <input hidden name="qty" value="1">
-                                                    <h5 class="text-start">{{ $product->name }}</h5>
-
-                                                    <div class="variant">
+                                                    <p class="text-start text-dark fs-5 fw-bold">{{ $product->name }}</p>
+                                                    <div class="variant d-flex flex-wrap">
                                                         @php
                                                             $hasVariants = false;
                                                         @endphp
@@ -166,11 +165,12 @@
                                                                 @php
                                                                     $hasVariants = true;
                                                                 @endphp
-                                                                <button type="button"
-                                                                    class="btn border border-secondary rounded px-2 me-2 text-primary"
-                                                                    onclick="showOptionValue('{{ $product->id }}', '{{ $product_variant->id }}')">
-                                                                    <span>{{ $product_variant->options->option_value }}</span>
-                                                                </button>
+
+                                                                    <button type="button"class="btn border border-secondary rounded px-2 me-2  mt-2 text-primary"
+                                                                        onclick="showOptionValue('{{ $product->id }}', '{{ $product_variant->id }}')">
+                                                                        <span>{{ $product_variant->options->option_value }}</span>
+                                                                    </button>
+
                                                             @endif
                                                         @endforeach
                                                         <input type="hidden" id="optionValueInput{{ $product->id }}"

@@ -135,12 +135,12 @@
     </div>
     <!--**********************************Content body end ***********************************-->
 
-    <!-- Modal -->
+    <!-- Khôi phục -->
     <div class="modal fade" id="restorePro">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Restore Product</h5>
+                    <h5 class="modal-title">Thông báo</h5>
                     <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
                     </button>
                 </div>
@@ -148,11 +148,11 @@
                     @csrf
                     @method('PATCH')
                     <div class="modal-body">
-                        <p>Are you sure you want to restore this product?</p>
+                        <p>Bạn có muốn khôi phục sản phẩm này không?</p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Restore</button>
+                        <button type="button" class="btn btn-dark" data-dismiss="modal">Đóng</button>
+                        <button type="submit" class="btn btn-primary">Khôi phục</button>
                     </div>
                 </form>
             </div>

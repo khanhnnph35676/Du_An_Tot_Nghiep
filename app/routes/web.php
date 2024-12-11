@@ -50,8 +50,10 @@ Route::middleware(['auth.check'])->group(function () {
             Route::get('customer-edit/{id}', [CustomerController::class, 'customerEdit'])->name('customerEdit');
             Route::put('customer-update/{id}', [CustomerController::class, 'customerUpdate'])->name('customerUpdate');
             Route::delete('customer-destroy/{id}', [CustomerController::class, 'customerDestroy'])->name('customerDestroy');
+
             // quản lý nhân viên
             Route::get('list-employees', [CustomerController::class, 'listEmployees'])->name('listEmployees');
+
             // Quản lý giảm giá
             Route::get('list-discounts', [DiscountController::class, 'listDiscounts'])->name('listDiscounts');
             Route::get('create-discounts', [DiscountController::class, 'createDiscount'])->name('createDiscount');
@@ -67,6 +69,7 @@ Route::middleware(['auth.check'])->group(function () {
             Route::get('update-payment/{id}', [PaymentController::class, 'updatePayment'])->name('updatePayment');
             Route::put('editPayment/{id}', [PaymentController::class, 'update'])->name('payment.update');
             Route::delete('deletePayment/{id}', [PaymentController::class, 'destroy'])->name('payment.destroy');
+
             // điểm thưởng
             Route::get('list-point', [PointController::class, 'index'])->name('listPoints');
             Route::get('update-point/{id}', [PointController::class, 'updatePoint'])->name('updatePoint');
@@ -76,10 +79,10 @@ Route::middleware(['auth.check'])->group(function () {
         // trang chủ
         Route::get('/', [StatisticsController::class, 'index'])->name('admin1');
         Route::get('/statistics', [StatisticsController::class, 'chart'])->name('chart');
+
         // Trang san phẩm
         Route::get('list-product', [ProductController::class, 'listProducts'])->name('listProducts');
         Route::get('product-detail', [ProductController::class, 'productDetail'])->name('productDetail');
-        // web.php
         Route::get('get-variant-data', [ProductController::class, 'getVariantData']);
         Route::get('product-simple', [ProductController::class, 'productSimple'])->name('productSimple');
         Route::get('update-product-simple/{type}/{idProduct}', [ProductController::class, 'formUpdateProductSimple'])->name('formUpdateProductSimple');
@@ -150,6 +153,11 @@ Route::middleware(['auth.check'])->group(function () {
     });
 });
 
+
+// các trang người không đăng nhập có thể vào
+Route::middleware(['checkadmin'])->group(function () {
+    // trang chủ
+
 Route::middleware(['checkuser'])->group(function () {
     Route::get('/', [PageController::class, 'storeHome'])->name('storeHome');
     Route::get('list-product', [PageController::class, 'storeListProduct'])->name('storeListProduct');
@@ -163,7 +171,21 @@ Route::middleware(['checkuser'])->group(function () {
     Route::delete('remove-item-cart/{product_variant_id}', [CartController::class, 'removeItemCart'])->name('removeItemCart');
     Route::post('add-to-cart', [CartController::class, 'addToCart'])->name('addToCart');
     Route::post('add-to-cart-detail', [CartController::class, 'addToCartDetai'])->name('addToCartDetai');
+
+    //Trang thanh toán
+    Route::get('store-checkout', [CheckoutController::class, 'storeCheckout'])->name('storeCheckout');
+    // thao tác thanh toán
+    Route::post('add-order', [CheckoutController::class, 'AddOrder'])->name('AddOrder');
+    Route::post('momo_payment', [CheckoutController::class, 'momoPayment'])->name('momoPayment');
+    Route::patch('order-update-destroy', [UserOrderController::class, 'destroyOrder'])->name('destroyOrder');
+    // địa chỉ người dùng
+    Route::delete('/address/{id}', [AuthenController::class, 'destroy'])->name('address.destroy');
+    Route::post('/address', [AuthenController::class, 'store'])->name('address.store');
+
+    // Route::get('success-checkout',[CheckoutController :: class,'successCheckout'])->name('successCheckout');
+    //Sửa số lượng trong giỏ hàng
     //Sửa só lượng trong giỏ hàng
+
     Route::post('/cart/update', [CartController::class, 'updateCart'])->name('updateCart');
     Route::post('/update-selected-product', [CartController::class, 'updateSelectedProduct'])->name('updateSelectedProduct');
     Route::post('/updateCartNonVariant', [CartController::class, 'updateCartNonVariant'])->name('updateCartNonVariant');
@@ -189,6 +211,12 @@ Route::middleware(['checkuser'])->group(function () {
         Route::get('/user/profile', [UserProfileController::class, 'index'])->name('user.profile');
         Route::get('list-points', [UserProfileController::class, 'points'])->name('points');
         Route::post('add-voucher', [UserProfileController::class, 'addVoucher'])->name('addVoucher');
+        Route::get('/order-history', [UserOrderController::class, 'index'])->name('order.history');
+    });
+    // Bài viếtaddress
+    Route::prefix('blogs')->group(function () {
+        Route::get('/', [UserBlogController::class, 'index'])->name('user.blog.index');
+        Route::get('/{BlogSlug}', [UserBlogController::class, 'show'])->name('user.blog.detail');
 
         Route::get('/order-history', [UserOrderController::class, 'index'])->name('order.history');
 
@@ -244,3 +272,10 @@ Route::middleware(['checkuser'])->group(function () {
         });
     });
 });
+
+//đăng nhập đăng ký, đăng xuất , quên mật khẩu
+Route::get('/user/login', [AuthenController::class, 'loginHome'])->name('user.login');
+Route::get('/user/register', [AuthenController::class, 'registerHome'])->name('user.register');
+Route::post('/user/login', [AuthenController::class, 'postLogin'])->name('user.postLogin');
+Route::get('/user/forgot-password', [AuthenController::class, 'forgotPassword'])->name('user.forgot-password');
+Route::post('/user/logout', [AuthenController::class, 'logoutUser'])->name('logoutUser');
