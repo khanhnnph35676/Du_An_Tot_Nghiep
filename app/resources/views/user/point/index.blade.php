@@ -3,6 +3,7 @@
     <style>
         body {
             background-color: #f8f9fa;
+            color: #333;
         }
 
         .profile-header {
@@ -47,13 +48,35 @@
         .side-bar li:hover {
             background: #b9b7b793;
         }
-        .qty-point{
+
+        .qty-point {
             position: absolute;
             right: 0;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
+            width: auto;
+            height: auto;
             text-align: center;
+            z-index: 1;
+            opacity: 0.7;
+        }
+
+        .point {
+            font-size: 29px;
+            color: #333;
+        }
+
+        .title-point {
+            font-size: 20px;
+            color: #333;
+        }
+
+        .redeem {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+        }
+
+        .name-voucher {
+            font-size: 13px;
         }
     </style>
 @endpush
@@ -67,6 +90,7 @@
             <li class="breadcrumb-item active text-white">Điểm thưởng</li>
         </ol>
     </div>
+
     @php
         $count = 0;
     @endphp
@@ -79,6 +103,27 @@
     @endforeach
     <!-- Single Page Header End -->
     <div class="container py-5">
+        @if (session('message'))
+            <div class="message">
+                <div class="alert alert-primary alert-dismissible alert-alt solid fade show">
+                    @if (session('message'))
+                        <strong>{{ session('message') }}</strong>
+                    @endif
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            </div>
+        @endif
+        @if (session('error'))
+            <div class="error">
+                <div class="alert alert-danger alert-dismissible alert-alt solid fade show">
+                    @if (session('error'))
+                        <strong>{{ session('error') }}</strong>
+                    @endif
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            </div>
+        @endif
+
         <div class="row">
             <div class="col-lg-3">
                 <ul class="side-bar border rounded p-1">
@@ -95,57 +140,76 @@
             </div>
             <div class="col-lg-8 m-0 p-0 ms-4">
                 <div class="row">
-                    <div class="col-lg-9 border rounded p-2 mb-3">
-                        <h5 class="m-3"> Phiếu giảm giá </h5>
-                        <div class="d-flex flex-wrap justify-content-start gap-3 m-2">
-                            <!-- Card 1 -->
-                            <div class="card shadow-sm rounded-3" style="width: 100%; max-width: 200px;">
-                                <span class="qty-point border bg-secondary text-white">x3</span>
-                                <div class="card-body text-center">
-                                    <h5 class="card-title text-success mb-3 text-start">Giảm giá </h5>
-                                    <p class="card-text text-start">Nhận ngay <strong></strong> cho đơn hàng tiếp theo của bạn.</p>
-                                    <p>Miễn phí vận chuyển</p>
-                                    <div class="text-end">
-                                        <a href="#" class="btn btn-primary">Đổi ngay</a>
+                    <div class="col-lg-8 border rounded p-2 mb-3 me-3">
+                        <h3 class="m-3"> Phiếu giảm giá </h3>
+                        <form id="voucherForm" action="{{ route('addVoucher') }}" method="POST">
+                            @csrf
+                            <!-- Input ẩn giữ giá trị voucher_id được chọn -->
+                            <input type="hidden" id="voucher_id" name="voucher_id" value="">
+
+                            <div class="d-flex flex-wrap justify-content-start gap-3 m-2">
+                                <!-- Vòng lặp hiển thị các voucher -->
+                                @foreach ($listVouchers as $voucher)
+                                    <div class="card shadow-sm rounded-3" style="width: 31%; min-height:200px;">
+                                        <span class="qty-point border bg-secondary text-white p-1 d-flex">
+                                            @if ($user_voucher == [])
+                                                x0
+                                            @else
+                                                @foreach ($user_voucher as $value)
+                                                    @if ($value->voucher_id == $voucher->id)
+                                                        x{{ $value->qty }}
+                                                    @endif
+                                                @endforeach
+                                            @endif
+                                        </span>
+                                        <div class="card-body text-center">
+                                            <h6 class="card-title text-success mb-3 text-start">Mã:
+                                                {{ $voucher->code_vocher }}
+                                            </h6>
+                                            <p class="text-start name-voucher">{{ $voucher->name }}</p>
+                                            <!-- Nút để chọn voucher -->
+                                            <button type="button" class="btn btn-primary redeem m-2"
+                                                onclick="setVoucherAndSubmit('{{ $voucher->id }}')">
+                                                <div class="d-flex justify-content-start align-items-start group-point">
+                                                    <div class="text-center">{{ $voucher->point }}</div>
+                                                    <img src="{{ asset('img/xu.png') }}"
+                                                        style="width: 20px; height: 20px; object-fit: cover;"
+                                                        alt="">
+                                                </div>
+                                            </button>
+                                        </div>
                                     </div>
-                                </div>
+                                @endforeach
                             </div>
-                            <div class="card shadow-sm rounded-3" style="width: 100%; max-width: 200px;">
-                                <span class="qty-point border bg-secondary text-white">x3</span>
-                                <div class="card-body text-center">
-                                    <h5 class="card-title text-success mb-3 text-start">Giảm giá </h5>
-                                    <p class="card-text text-start">Nhận ngay <strong></strong> cho đơn hàng tiếp theo của bạn.</p>
-                                    <p>Miễn phí vận chuyển</p>
-                                    <div class="text-end">
-                                        <a href="#" class="btn btn-primary">Đổi ngay</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card shadow-sm rounded-3" style="width: 100%; max-width: 200px;">
-                                <span class="qty-point border bg-secondary text-white">x3</span>
-                                <div class="card-body text-center">
-                                    <h5 class="card-title text-success mb-3 text-start">Giảm giá </h5>
-                                    <p class="card-text text-start">Nhận ngay <strong></strong> cho đơn hàng tiếp theo của bạn.</p>
-                                    <p>Miễn phí vận chuyển</p>
-                                    <div class="text-end">
-                                        <a href="#" class="btn btn-primary">Đổi ngay</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        </form>
                     </div>
 
                     <div class="col-lg-3 border p-2 mb-3 rounded">
-                        <h5 class="m-2 d-flex align-items-center">
-                             <span class=" me-3"> Điểm </span>
-                            <img src="{{asset("img/xu.png")}}"  style="width: 28px; height: 28px; object-fit: cover;" alt="">
+                        <h5 class="m-2 text-start">
+                            <span class="me-3 title-point">Xu của tôi</span>
                         </h5>
+                        <div class="d-flex border rounded justify-content-strat align-items-start group-point me-4">
+                            <div class="text-center point ms-2">{{ $point->point }}</div>
+                            <img src="{{ asset('img/xu.png') }}" style="width: 20px; height: 20px; object-fit: cover;"
+                                alt="">
+                        </div>
+
+                        {{-- <button class="btn btn-primary">Nhận thêm</button> --}}
                     </div>
                 </div>
 
             </div>
         </div>
     </div>
+    <script>
+        function setVoucherAndSubmit(voucherId) {
+            // Gán giá trị voucher_id vào input ẩn
+            document.getElementById('voucher_id').value = voucherId;
+
+            // Submit form
+            document.getElementById('voucherForm').submit();
+        }
+    </script>
 @endsection
 
 @push('scriptStore')

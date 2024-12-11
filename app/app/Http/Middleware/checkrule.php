@@ -4,9 +4,10 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
-class CkeckUser
+use Symfony\Component\HttpFoundation\Response;
+
+class checkrule
 {
     /**
      * Handle an incoming request.
@@ -16,7 +17,11 @@ class CkeckUser
     public function handle(Request $request, Closure $next): Response
     {
         if (!Auth::check()) {
-            return redirect()->route('storeHome');
+            return redirect()->route('loginAdmin');
+        }else{
+            if(Auth::user()->rule_id != 1){
+                return redirect()->route('loginAdmin');
+            }
         }
         return $next($request);
     }
