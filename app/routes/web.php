@@ -151,66 +151,7 @@ Route::middleware(['auth.check'])->group(function () {
 });
 
 Route::middleware(['checkuser'])->group(function () {
-    Route::prefix('')->group(function () {
-        Route::get('/',[PageController :: class,'storeHome'])->name('storeHome');
-        Route::get('list-product',[PageController :: class,'storeListProduct'])->name('storeListProduct');
-        Route::get('/product/{id}', action: [PageController::class, 'storeProductDetail'])->name('product.detail');
-        Route::get('store-contact',[PageController :: class,'storeContact'])->name('storeContact');
-        Route::get('store-tetimonial',[PageController :: class,'storeTestimonial'])->name('storeTestimonial');
-        Route::get('store-intro',[PageController :: class,'storeIntro'])->name('storeIntro');
-
-        // giỏ hàng
-        Route::delete('remove-item-cart-detail/{product_id}', [CartController::class, 'removeItemCartDetail'])->name('removeItemCartDetail');
-        Route::delete('remove-item-cart/{product_variant_id}', [CartController::class, 'removeItemCart'])->name('removeItemCart');
-        Route::post('add-to-cart',[CartController :: class,'addToCart'])->name('addToCart');
-        Route::post('add-to-cart-detail',[CartController :: class,'addToCartDetai'])->name('addToCartDetai');
-        //Sửa só lượng trong giỏ hàng
-        Route::post('/cart/update', [CartController::class, 'updateCart'])->name('updateCart');
-        Route::post('/update-selected-product', [CartController::class, 'updateSelectedProduct'])->name('updateSelectedProduct');
-        Route::post('/updateCartNonVariant', [CartController::class, 'updateCartNonVariant'])->name('updateCartNonVariant');
-        Route::post('/update-qty-cart-variant', [CartController::class, 'updateQtyCartVariant'])->name('updateQtyCartVariant');
-
-        //Trang thông tin khách hàng
-        Route::get('store-list-cart',[PageController :: class,'storeListCart'])->name('storeListCart');
-        Route::get('/user/profile', [UserProfileController::class, 'index'])->name('user.profile');
-        Route::get('list-points', [UserProfileController::class, 'points'])->name('points');
-
-
-       
-        Route::get('/order-history', [UserOrderController::class, 'index'])->name('order.history');
-        Route::get('/blog', [BlogController::class, 'index'])->name('blog.list');
-        Route::get('/blog-category', [BlogController::class, 'category'])->name('blog.category');
-
-        Route::post('/profile/update', [UserProfileController::class, 'update'])->name('user.profile.update');
-        Route::post('/profile/address/update/{id}', [UserProfileController::class, 'updateAddress'])->name('profile.address.update');
-
-
-// các trang bắt buộc phải đăng nhập mới có thể vào
-Route::middleware(['checkuser'])->group(function () {
-    //Trang thông tin khách hàng
-    Route::get('/user/profile', [UserProfileController::class, 'index'])->name('user.profile');
-    Route::get('list-points', [UserProfileController::class, 'points'])->name('points');
-    Route::post('add-voucher', [UserProfileController::class, 'addVoucher'])->name('addVoucher');
-
-    Route::get('/order-history', [UserOrderController::class, 'index'])->name('order.history');
-
-    // địa chỉ người dùng
-    Route::delete('/address/{id}', [AuthenController::class, 'destroy'])->name('address.destroy');
-    Route::post('/address', [AuthenController::class, 'store'])->name('address.store');
-
-    // thao tác thanh toán
-    Route::post('add-order', [CheckoutController::class, 'AddOrder'])->name('AddOrder');
-    Route::post('momo_payment', [CheckoutController::class, 'momoPayment'])->name('momoPayment');
-    Route::patch('order-update-destroy', [UserOrderController::class, 'destroyOrder'])->name('destroyOrder');
-    // Route::get('success-checkout',[CheckoutController :: class,'successCheckout'])->name('successCheckout');
-});
-
-// các trang người không đăng nhập có thể vào
-Route::middleware(['checkadmin'])->group(function () {
-    // trang chủ
     Route::get('/', [PageController::class, 'storeHome'])->name('storeHome');
-
-    //Sản phẩm
     Route::get('list-product', [PageController::class, 'storeListProduct'])->name('storeListProduct');
     Route::get('/product/{id}', action: [PageController::class, 'storeProductDetail'])->name('product.detail');
     Route::get('store-contact', [PageController::class, 'storeContact'])->name('storeContact');
@@ -218,30 +159,88 @@ Route::middleware(['checkadmin'])->group(function () {
     Route::get('store-intro', [PageController::class, 'storeIntro'])->name('storeIntro');
 
     // giỏ hàng
-    Route::get('store-list-cart', [PageController::class, 'storeListCart'])->name('storeListCart');
     Route::delete('remove-item-cart-detail/{product_id}', [CartController::class, 'removeItemCartDetail'])->name('removeItemCartDetail');
     Route::delete('remove-item-cart/{product_variant_id}', [CartController::class, 'removeItemCart'])->name('removeItemCart');
     Route::post('add-to-cart', [CartController::class, 'addToCart'])->name('addToCart');
     Route::post('add-to-cart-detail', [CartController::class, 'addToCartDetai'])->name('addToCartDetai');
-
-    //Trang thanh toán
-    Route::get('store-checkout', [CheckoutController::class, 'storeCheckout'])->name('storeCheckout');
-
-    //Sửa số lượng trong giỏ hàng
+    //Sửa só lượng trong giỏ hàng
     Route::post('/cart/update', [CartController::class, 'updateCart'])->name('updateCart');
     Route::post('/update-selected-product', [CartController::class, 'updateSelectedProduct'])->name('updateSelectedProduct');
     Route::post('/updateCartNonVariant', [CartController::class, 'updateCartNonVariant'])->name('updateCartNonVariant');
     Route::post('/update-qty-cart-variant', [CartController::class, 'updateQtyCartVariant'])->name('updateQtyCartVariant');
 
-    //đăng nhập đăng ký, đăng xuất , quên mật khẩu
-    Route::get('/user/login', [AuthenController::class, 'loginHome'])->name('user.login');
-    Route::get('/user/register', [AuthenController::class, 'registerHome'])->name('user.register');
-    Route::post('/user/login', [AuthenController::class, 'postLogin'])->name('user.postLogin');
-    Route::get('/user/forgot-password', [AuthenController::class, 'forgotPassword'])->name('user.forgot-password');
-    Route::post('/user/logout', [AuthenController::class, 'logoutUser'])->name('logoutUser');
-    // Bài viết
-    Route::prefix('blogs')->group(function () {
-        Route::get('/', [UserBlogController::class, 'index'])->name('user.blog.index');
-        Route::get('/{BlogSlug}', [UserBlogController::class, 'show'])->name('user.blog.detail');
+    //Trang thông tin khách hàng
+    Route::get('store-list-cart', [PageController::class, 'storeListCart'])->name('storeListCart');
+    Route::get('/user/profile', [UserProfileController::class, 'index'])->name('user.profile');
+    Route::get('list-points', [UserProfileController::class, 'points'])->name('points');
+
+
+
+    Route::get('/order-history', [UserOrderController::class, 'index'])->name('order.history');
+    Route::get('/blog', [BlogController::class, 'index'])->name('blog.list');
+    Route::get('/blog-category', [BlogController::class, 'category'])->name('blog.category');
+
+    Route::post('/profile/update', [UserProfileController::class, 'update'])->name('user.profile.update');
+    Route::post('/profile/address/update/{id}', [UserProfileController::class, 'updateAddress'])->name('profile.address.update');
+
+    // các trang bắt buộc phải đăng nhập mới có thể vào
+    Route::middleware(['checkuser'])->group(function () {
+        //Trang thông tin khách hàng
+        Route::get('/user/profile', [UserProfileController::class, 'index'])->name('user.profile');
+        Route::get('list-points', [UserProfileController::class, 'points'])->name('points');
+        Route::post('add-voucher', [UserProfileController::class, 'addVoucher'])->name('addVoucher');
+
+        Route::get('/order-history', [UserOrderController::class, 'index'])->name('order.history');
+
+        // địa chỉ người dùng
+        Route::delete('/address/{id}', [AuthenController::class, 'destroy'])->name('address.destroy');
+        Route::post('/address', [AuthenController::class, 'store'])->name('address.store');
+
+        // thao tác thanh toán
+        Route::post('add-order', [CheckoutController::class, 'AddOrder'])->name('AddOrder');
+        Route::post('momo_payment', [CheckoutController::class, 'momoPayment'])->name('momoPayment');
+        Route::patch('order-update-destroy', [UserOrderController::class, 'destroyOrder'])->name('destroyOrder');
+        // Route::get('success-checkout',[CheckoutController :: class,'successCheckout'])->name('successCheckout');
+    });
+
+    // các trang người không đăng nhập có thể vào
+    Route::middleware(['checkadmin'])->group(function () {
+        // trang chủ
+        Route::get('/', [PageController::class, 'storeHome'])->name('storeHome');
+
+        //Sản phẩm
+        Route::get('list-product', [PageController::class, 'storeListProduct'])->name('storeListProduct');
+        Route::get('/product/{id}', action: [PageController::class, 'storeProductDetail'])->name('product.detail');
+        Route::get('store-contact', [PageController::class, 'storeContact'])->name('storeContact');
+        Route::get('store-tetimonial', [PageController::class, 'storeTestimonial'])->name('storeTestimonial');
+        Route::get('store-intro', [PageController::class, 'storeIntro'])->name('storeIntro');
+
+        // giỏ hàng
+        Route::get('store-list-cart', [PageController::class, 'storeListCart'])->name('storeListCart');
+        Route::delete('remove-item-cart-detail/{product_id}', [CartController::class, 'removeItemCartDetail'])->name('removeItemCartDetail');
+        Route::delete('remove-item-cart/{product_variant_id}', [CartController::class, 'removeItemCart'])->name('removeItemCart');
+        Route::post('add-to-cart', [CartController::class, 'addToCart'])->name('addToCart');
+        Route::post('add-to-cart-detail', [CartController::class, 'addToCartDetai'])->name('addToCartDetai');
+
+        //Trang thanh toán
+        Route::get('store-checkout', [CheckoutController::class, 'storeCheckout'])->name('storeCheckout');
+
+        //Sửa số lượng trong giỏ hàng
+        Route::post('/cart/update', [CartController::class, 'updateCart'])->name('updateCart');
+        Route::post('/update-selected-product', [CartController::class, 'updateSelectedProduct'])->name('updateSelectedProduct');
+        Route::post('/updateCartNonVariant', [CartController::class, 'updateCartNonVariant'])->name('updateCartNonVariant');
+        Route::post('/update-qty-cart-variant', [CartController::class, 'updateQtyCartVariant'])->name('updateQtyCartVariant');
+
+        //đăng nhập đăng ký, đăng xuất , quên mật khẩu
+        Route::get('/user/login', [AuthenController::class, 'loginHome'])->name('user.login');
+        Route::get('/user/register', [AuthenController::class, 'registerHome'])->name('user.register');
+        Route::post('/user/login', [AuthenController::class, 'postLogin'])->name('user.postLogin');
+        Route::get('/user/forgot-password', [AuthenController::class, 'forgotPassword'])->name('user.forgot-password');
+        Route::post('/user/logout', [AuthenController::class, 'logoutUser'])->name('logoutUser');
+        // Bài viết
+        Route::prefix('blogs')->group(function () {
+            Route::get('/', [UserBlogController::class, 'index'])->name('user.blog.index');
+            Route::get('/{BlogSlug}', [UserBlogController::class, 'show'])->name('user.blog.detail');
+        });
     });
 });
