@@ -182,6 +182,8 @@ Route::middleware(['checkuser'])->group(function () {
         Route::get('/blog', [BlogController::class, 'index'])->name('blog.list');
         Route::get('/blog-category', [BlogController::class, 'category'])->name('blog.category');
 
+        Route::post('/profile/update', [UserProfileController::class, 'update'])->name('user.profile.update');
+        Route::post('/profile/address/update/{id}', [UserProfileController::class, 'updateAddress'])->name('profile.address.update');
 
 
         // địa chỉ người dùng
