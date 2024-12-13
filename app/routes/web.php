@@ -55,7 +55,7 @@ Route::middleware(['auth.check'])->group(function () {
             Route::put('customer-update/{id}', [CustomerController::class, 'customerUpdate'])->name('customerUpdate');
             Route::delete('customer-destroy/{id}', [CustomerController::class, 'customerDestroy'])->name('customerDestroy');
 
-            
+
             // quản lý nhân viên
             Route::get('list-employees', [CustomerController::class, 'listEmployees'])->name('listEmployees');
 
@@ -143,13 +143,13 @@ Route::middleware(['auth.check'])->group(function () {
         Route::get('/admin/blog/{BlogSlug}', [BlogController::class, 'blog_details'])->name('blog.blog_details');
         Route::delete('/admin/blog', [BlogController::class, 'destroy'])->name('blog.delete');
 
-Route::get('variant-options', [VariantOptionController::class, 'index'])->name('variant-options.index');
-Route::get('variant-options/create', [VariantOptionController::class, 'create'])->name('variant-options.create');
-Route::post('variant-options', [VariantOptionController::class, 'store'])->name('variant-options.store');
-Route::get('variant-options/{id}/edit', [VariantOptionController::class, 'edit'])->name('variant-options.edit');
-Route::put('variant-options/{id}', [VariantOptionController::class, 'update'])->name('variant-options.update');
+        Route::get('variant-options', [VariantOptionController::class, 'index'])->name('variant-options.index');
+        Route::get('variant-options/create', [VariantOptionController::class, 'create'])->name('variant-options.create');
+        Route::post('variant-options', [VariantOptionController::class, 'store'])->name('variant-options.store');
+        Route::get('variant-options/{id}/edit', [VariantOptionController::class, 'edit'])->name('variant-options.edit');
+        Route::put('variant-options/{id}', [VariantOptionController::class, 'update'])->name('variant-options.update');
 
-Route::delete('variant-options/{variantOption}', [VariantOptionController::class, 'destroy'])->name('variant-options.destroy');
+        Route::delete('variant-options/{variantOption}', [VariantOptionController::class, 'destroy'])->name('variant-options.destroy');
 
         // danh mục bài viết
         // Quản lý danh mục bài viết
@@ -176,7 +176,7 @@ Route::delete('variant-options/{variantOption}', [VariantOptionController::class
 Route::middleware(['checkadmin'])->group(function () {
     // trang chủ
     Route::get('/', [PageController::class, 'storeHome'])->name('storeHome');
-// comment 
+// comment
 Route::get('/product/{id}/testimonials', [TestimonialController::class, 'getProductTestimonials'])
     ->name('product.testimonials');
 

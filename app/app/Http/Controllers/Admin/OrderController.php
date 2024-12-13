@@ -34,8 +34,15 @@ class OrderController extends Controller
     }
     public function updateOrder($order_id,Request $request){
         $data =[
-            'status' => $request->status
+            'status' => $request->status,
+            'check_payment_id' => 0,
         ];
+        if($request->status == 4){
+            $data =[
+                'status' => $request->status,
+                'check_payment_id' => 1,
+            ];
+        }
         $statusOrder = Order::find($order_id);
         $statusOrder->update($data);
         return redirect()->back()->with([

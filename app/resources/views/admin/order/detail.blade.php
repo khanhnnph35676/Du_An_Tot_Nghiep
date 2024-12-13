@@ -75,11 +75,11 @@
                                                             <div class="head-line d-flex align-items-center">
                                                                 <h3 class="m-0 mr-3">Đơn hàng </h3>
                                                                 <span
-                                                                    class="badge badge-light">{{ $order->orders->status == 1 ? 'Chờ xác nhận' : '' }}</span>
+                                                                    class="badge badge-light">{{ $order->orders->status == 0 ? 'Chờ xác nhận' : '' }}</span>
                                                                 <span
-                                                                    class="badge badge-warning">{{ $order->orders->status == 2 ? 'Chờ lấy hàng' : '' }}</span>
+                                                                    class="badge badge-warning">{{ $order->orders->status == 1 ? 'Chờ lấy hàng' : '' }}</span>
                                                                 <span
-                                                                    class="badge badge-info">{{ $order->orders->status == 3 ? 'Đang giao hàng' : '' }}</span>
+                                                                    class="badge badge-info">{{ $order->orders->status == 3 || $order->orders->status == 2 ? 'Đang giao hàng' : '' }}</span>
                                                                 <span
                                                                     class="badge badge-success">{{ $order->orders->status == 4 ? 'Đã giao hàng' : '' }}</span>
                                                                 <span
@@ -152,21 +152,23 @@
                                             <div class="form-group">
                                                 <label>Trạng thái:</label>
                                                 <select id="single-select" name="status">
+                                                    <option value="0"
+                                                    {{ $order->orders->status == 0 ? 'selected' : '' }}> Chưa xác nhận</option>
                                                     <option value="1"
                                                         {{ $order->orders->status == 1 ? 'selected' : '' }}>
-                                                        Chờ xác nhận
+                                                        Xác nhận
                                                     </option>
                                                     <option value="2"
                                                         {{ $order->orders->status == 2 ? 'selected' : '' }}>
-                                                        Chờ lấy hàng
+                                                        Lấy hàng
                                                     </option>
                                                     <option value="3"
                                                         {{ $order->orders->status == 3 ? 'selected' : '' }}>
-                                                        Đang giao hàng
+                                                        Giao hàng
                                                     </option>
                                                     <option value="4"
                                                         {{ $order->orders->status == 4 ? 'selected' : '' }}>
-                                                        Đã giao hàng
+                                                        Xác nhận đã giao
                                                     </option>
                                                     <option value="5"
                                                         {{ $order->orders->status == 5 ? 'selected' : '' }}>

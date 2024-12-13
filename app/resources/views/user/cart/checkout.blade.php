@@ -78,7 +78,7 @@
 
     <!-- Checkout Page Start -->
     <div class="container-fluid py-5">
-        <div class="container py-5">
+        <div class="container py-3 rounded border">
             <h1 class="mb-4">Thanh toán</h1>
             <form action="{{ route('AddOrder') }}" method="POST">
                 @csrf
