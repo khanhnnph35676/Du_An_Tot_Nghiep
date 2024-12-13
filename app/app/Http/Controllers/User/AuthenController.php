@@ -160,6 +160,7 @@ class AuthenController extends Controller
     {
         return view('user.forgot-password');
     }
+    // đăng xuất
     public function logoutUser(Request $request)
     {
         Auth::logout();

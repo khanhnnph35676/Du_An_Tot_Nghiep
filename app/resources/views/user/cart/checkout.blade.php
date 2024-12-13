@@ -54,7 +54,7 @@
     @php
         // print_r($checkOrder);
     @endphp
-    @if ($checkOrder != null )
+    {{-- @if ($checkOrder != null )
         @foreach ($checkOrder as $item)
             @if ($item['payment_id'] == 2)
                 <div class="mess-checkout border">
@@ -62,16 +62,18 @@
                         Bạn đã huỷ thanh toán bằng Momo. Hệ thống sẽ tự chuyển cho bạn sang thanh toán COD
                     </div>
                     <div class="d-flex mt-5 justify-content-end">
-                        <a href="" class="btn btn border me-4">Huỷ</a>
-                        <a href="" class="btn btn-primary me-3">Tiếp tục thanh toán</a>
+                        <a href="{{ route('successCheckout') }}" class="btn btn border me-4">Huỷ</a>
+                        <form action="{{route('payMomo')}}" method="POST">
+                            @csrf
+                            <button class="btn btn-primary me-3">Tiếp tục thanh toán </button>
+                        </form>
                     </div>
-
                 </div>
                 <div class="wrapper">
                 </div>
             @endif
         @endforeach
-    @endif
+    @endif --}}
 
 
     <!-- Checkout Page Start -->

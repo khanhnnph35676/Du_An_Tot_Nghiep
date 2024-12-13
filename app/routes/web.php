@@ -215,7 +215,9 @@ Route::middleware(['checkadmin'])->group(function () {
         Route::post('add-voucher', [UserProfileController::class, 'addVoucher'])->name('addVoucher');
         Route::get('/order-history', [UserOrderController::class, 'index'])->name('order.history');
         Route::get('/order-detail/{order_id}', [UserOrderController::class, 'detail'])->name('order.detail');
-        Route::get('success-checkout',[CheckoutController :: class,'successCheckout'])->name('successCheckout');
+        Route::get('/success-checkout',[CheckoutController :: class,'successCheckout'])->name('successCheckout');
+        Route::post('/pay-Momo',[CheckoutController :: class,'payMomo'])->name('payMomo');
+
     });
 
 });

@@ -292,7 +292,7 @@ class CartController extends Controller
         } else {
             $product = Product::find($request->product_id);
             if ($product && $product->qty > 0) {
-                $product->qty -= 1;
+                $product->qty -= $request->qty;
                 $product->save();
             }
         }
@@ -323,7 +323,7 @@ class CartController extends Controller
             $discount = Discount::find($request->discount_id);
             if($discount->qty - $request->qty > 0){
                 $discount->update([
-                    'qty' => $discount->qty - 1
+                    'qty' => $discount->qty - $request->qty
                 ]);
             }
         }
@@ -347,7 +347,7 @@ class CartController extends Controller
                 if ($item['discount_id'] != 0) {
                     $discount = Discount::find($item['discount_id']);
                     $discount->update([
-                        'qty' => $discount->qty + 1
+                        'qty' => $discount->qty + $item['qty']
                     ]);
                 }
 
@@ -374,7 +374,7 @@ class CartController extends Controller
                 if ($item['discount_id'] != 0)
                     $discount = Discount::find($item['discount_id']);
                 $discount->update([
-                    'qty' => $discount->qty + 1
+                    'qty' => $discount->qty + $item['qty']
                 ]);
                 unset($cart[$index]);
             }

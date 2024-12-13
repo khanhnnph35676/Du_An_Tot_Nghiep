@@ -27,10 +27,10 @@ class CheckoutController extends Controller
         $addresses = session()->get('addresses', []);
         $address = [];
         $user_id = Auth::user()->id ?? 0;
-        if($user_id == 0){
-            $address = Address::where('user_id',null)->get();
-        }else{
-            $address = Address::where('user_id',$user_id)->get();
+        if ($user_id == 0) {
+            $address = Address::where('user_id', null)->get();
+        } else {
+            $address = Address::where('user_id', $user_id)->get();
         }
 
         $products = Product::get();
@@ -39,7 +39,7 @@ class CheckoutController extends Controller
 
         // Kiểm tra giỏ hàng rỗng
 
-        if(!$checkOrder != []) {
+        if (!$checkOrder != []) {
             if (empty($cart)) {
                 return redirect()->route('storeHome');
             }
@@ -54,6 +54,9 @@ class CheckoutController extends Controller
             if (!$checkSelect) {
                 return redirect()->route('storeHome');
             }
+        }
+        if($checkOrder){
+            return redirect()->route('successCheckout');
         }
         return view('user.cart.checkout')->with([
             'address' => $address,
@@ -133,12 +136,12 @@ class CheckoutController extends Controller
         $checkOrder = session()->get('checkOrder', []);
         $order = [
             'payment_id' => $request->payment_id,
-            'status' => 1,
+            'status' => 0,
             'sum_price' => $request->sum_price,
             'address_id' => $request->selected_address,
+            'check_payment_id' => 0,
             'order_code' => generateRandomCode(),
         ];
-
         // $user = [];
         $addOrder = Order::create($order);
         $user_id = Auth::user()->id ?? null;
@@ -171,14 +174,12 @@ class CheckoutController extends Controller
             ];
             $orderList = OrderList::create($dataOrderList);
 
-            $dataCheck=[
+            $dataCheck = [
                 'order_id' => $addOrder->id,
                 'user_id' => $user->id,
                 'payment_id' => $request->payment_id,
             ];
             $checkOrder[] = $dataCheck;
-
-
 
             // Phần gửi mail khi không có tài khoản
         } else {
@@ -188,7 +189,7 @@ class CheckoutController extends Controller
                 'check_user' => $check_user,
             ];
             $orderList = OrderList::create($dataOrderList);
-            $dataCheck=[
+            $dataCheck = [
                 'order_id' => $addOrder->id,
                 'user_id' => $user_id,
                 'payment_id' => $request->payment_id,
@@ -227,12 +228,12 @@ class CheckoutController extends Controller
             }
         }
 
-
         //    Mail cho khách đặt hàng / tính cá không đăng nhập và đăng nhập
         $emailUser = $request->email;
         $nameUser = $request->name;
         $userSearch = User::where('email', $emailUser)->where('name', $nameUser)->first();
         $orders = Order::with('address', 'payments')->find($addOrder->id);
+        $orderList = OrderList::where('order_id', $orders->id)->first();
         $productOrders = ProductOder::with('products', 'product_variants')->where('order_id', $orders->id)->get();
         $point = Point::where('user_id', $userSearch->id)->first();
         if ($point) {
@@ -246,7 +247,7 @@ class CheckoutController extends Controller
             ]);
         }
         $titleMail = "Đặt hàng thành công";
-        Mail::send('user.email.success-checkout', compact('orders', 'userSearch', 'productOrders'), function ($email) use ($titleMail, $emailUser) {
+        Mail::send('user.email.success-checkout', compact('orders', 'userSearch', 'productOrders', 'orderList'), function ($email) use ($titleMail, $emailUser) {
             $email->to($emailUser)->subject($titleMail);
             $email->from($emailUser, $titleMail);
         });
@@ -265,11 +266,12 @@ class CheckoutController extends Controller
             $partnerCode = 'MOMOBKUN20180529';
             $accessKey = 'klm05TvNBzhg7h7j';
             $secretKey = 'at67qH6mk8w5Y1nAyMoYKMWACiEi2bsa';
-            $orderInfo = "Thanh toán qua ATM MoMo";
-            $amount = $request->sum_price;
+
+            $orderInfo = "Thanh toán qua MoMo";
+            $amount =  $request->sum_price;
             $orderId = $addOrder->order_code;
-            $redirectUrl = "http://127.0.0.1:8000/order-history";
-            $ipnUrl = "http://127.0.0.1:8000/order-history";
+            $redirectUrl = "http://127.0.0.1:8000/success-checkout";
+            $ipnUrl = "http://127.0.0.1:8000/success-checkout";
             $extraData = "";
 
             $requestId = time() . "";
@@ -293,22 +295,31 @@ class CheckoutController extends Controller
                 'requestType' => $requestType,
                 'signature' => $signature
             );
-            $result = $this->execPostRequest($endpoint, json_encode($data));
+            $result =  $this->execPostRequest($endpoint, json_encode($data));
             $jsonResult = json_decode($result, true);
             return redirect()->to($jsonResult['payUrl']);
-            // return redirect()->route('order.history')->with([
-            //     'message' => 'Chúc mừng thanh toán thành công qua COD'
-            // ]);
         }
     }
-    public function successCheckout(){
+    public function successCheckout()
+    {
         $cart = session()->get('cart', []);
         $checkOrder = session()->get('checkOrder', []);
-        foreach ($checkOrder as $value){
-            $order = Order::with('address')->find($value['order_id']);
-            $productOrders = Order::where('order_id',$value['order_id'])->get();
+        $order = [];
+        $productOrders = [];
+
+        foreach ($checkOrder as $value) {
+            $order = Order::with('address', 'payments')->find($value['order_id']);
+            $productOrders = ProductOder::with('products', 'product_variants')
+                ->where('order_id', $value['order_id'])->get();
+            // check xem thanh toán thành công hay thất bại
+            if (isset($_GET['resultCode']) && $_GET['resultCode'] != 1006) {
+                $order->update([
+                    'check_payment_id' => 1,
+                ]);
+            }
         }
 
-        return view('user.cart.succes-checkout',compact('cart','checkOrder','order','productOrders'));
+        return view('user.cart.succes-checkout', compact('cart', 'checkOrder', 'order', 'productOrders'));
     }
+
 }
