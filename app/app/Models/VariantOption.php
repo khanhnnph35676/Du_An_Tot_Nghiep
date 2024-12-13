@@ -10,6 +10,7 @@ class VariantOption extends Model
     use HasFactory,SoftDeletes;
     protected $table = 'variant_options';
     public $fillable =[
+        
         'option_name',
         'option_value',
         'image_variant'
@@ -18,4 +19,9 @@ class VariantOption extends Model
     {
         return $this->hasMany(Product::class);
     }
+    public function productVariants()
+{
+    return $this->belongsTo(ProductVariant::class, 'product_variant_id', 'id');
+}
+
 }
