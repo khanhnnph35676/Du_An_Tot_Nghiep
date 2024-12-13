@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Đăng ký</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/login.css') }}">
 </head>
@@ -15,11 +15,11 @@
                     <img src="{{ asset('images/logo.png') }}" alt="Logo" class="logo">
                 </div>
                 <h2>Đăng ký</h2>
-                <form action="{{ route('user.postLogin') }}" method="POST">
+                <form action="{{ route('user.postRegister') }}" method="POST">
                     @csrf
                     <label for="name">Họ tên</label>
                     <div class="input-container">
-                        <input type="name" id="name" name="name" placeholder="Họ tên" required>
+                        <input type="text" id="name" name="name" placeholder="Họ tên" required>
                     </div>
                     <label for="email">Email</label>
                     <div class="input-container">
@@ -29,6 +29,11 @@
                     <label for="password">Mật khẩu</label>
                     <div class="input-container">
                         <input type="password" id="password" name="password" placeholder="********" required>
+                    </div>
+
+                    <label for="password_confirmation">Xác nhận mật khẩu</label>
+                    <div class="input-container">
+                        <input type="password" id="password_confirmation" name="password_confirmation" placeholder="********" required>
                     </div>
                     <button type="submit" class="submit-button">Đăng ký</button>
                 </form>

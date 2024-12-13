@@ -23,6 +23,7 @@ use App\Http\Controllers\StatisticsController;
 use App\Http\Controllers\CKEditorController;
 use App\Http\Controllers\User\PageController;
 use App\Http\Controllers\User\AuthenController;
+use App\Http\Controllers\User\AuthController;
 use App\Http\Controllers\ChatController;
 
 
@@ -235,7 +236,9 @@ Route::middleware(['checkadmin'])->group(function () {
 
 //đăng nhập đăng ký, đăng xuất , quên mật khẩu
 Route::get('/user/login', [AuthenController::class, 'loginHome'])->name('user.login');
-Route::get('/user/register', [AuthenController::class, 'registerHome'])->name('user.register');
+Route::get('/user/register', [AuthController::class, 'register'])->name('user.register');
+Route::post('/user/register', [AuthController::class, 'postRegister'])->name('user.postRegister');
+
 Route::post('/user/login', [AuthenController::class, 'postLogin'])->name('user.postLogin');
 Route::get('/user/forgot-password', [AuthenController::class, 'forgotPassword'])->name('user.forgot-password');
 Route::post('/user/logout', [AuthenController::class, 'logoutUser'])->name('logoutUser');
