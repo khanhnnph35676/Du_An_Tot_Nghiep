@@ -103,7 +103,7 @@
                             $countAddresses = 0;
                             $address_id = null;
                         @endphp
-                        @if ($address != [])
+                        @if ($address)
                             @foreach ($address as $key => $item)
                                 <div class="row address-item" id="address-row-{{ $item->id }}">
                                     <div class="form-item  align-items-center">

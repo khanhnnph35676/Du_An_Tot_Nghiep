@@ -27,7 +27,12 @@ class CheckoutController extends Controller
         $addresses = session()->get('addresses', []);
         $address = [];
         $user_id = Auth::user()->id ?? 0;
-        $address = Address::where('user_id', $user_id)->get();
+        if($user_id == 0){
+            $address = Address::where('user_id',null)->get();
+        }else{
+            $address = Address::where('user_id',$user_id)->get();
+        }
+
         $products = Product::get();
         $productVariants = ProductVariant::get();
         $payments = Payment::get();
@@ -89,20 +94,28 @@ class CheckoutController extends Controller
         $request->validate([
             'sum_price' => 'required|min:1',
             'selected_address' => 'required|exists:address,id',
-            'email' => 'required|email',
-            'phone' => 'required|min:10',
-            'name' => 'required'
+            'email' => 'required|email|max:50',
+            'phone' => 'required|min:10|max:10',
+            'name' => 'required|max:50'
         ], [
             'sum_price.required' => 'Không có giá',
             'sum_price.min' => 'Tổng giá trị phải lớn hơn 0.',
+
             'selected_address.required' => 'Vui lòng chọn địa chỉ giao hàng.',
             'address_id.exists' => 'Địa chỉ giao hàng không hợp lệ.',
+
             'email.required' => 'Vui lòng nhập email.',
             'email.email' => 'Email không hợp lệ.',
             'email.unique' => 'Email này đã được sử dụng. Vui lòng chọn một email khác.',
+            'email.max' => 'Bạn nhập tên dài quá 50 ký tự',
+
             'phone.required' => 'Vui lòng nhập số điện thoại.',
-            'phone.min' => 'Số điện thoại phải có ít nhất 10 chữ số.',
-            'name.required' => 'Vui lòng nhập tên'
+            'phone.min' => 'Số điện thoại phải có 10 chữ số.',
+            'phone.min' => 'Số điện thoại phải có 10 chữ số.',
+
+            'name.required' => 'Vui lòng nhập tên',
+            'name.max' => 'Bạn nhập tên dài quá 50 ký tự',
+
         ]);
         if (!Auth::check()) {
             $request->validate([
@@ -222,7 +235,7 @@ class CheckoutController extends Controller
         $orders = Order::with('address', 'payments')->find($addOrder->id);
         $productOrders = ProductOder::with('products', 'product_variants')->where('order_id', $orders->id)->get();
         $point = Point::where('user_id', $userSearch->id)->first();
-        if ($point != []) {
+        if ($point) {
             $point->update([
                 'point' => ceil($point->point + ($orders->sum_price - 15000) / 1000),
             ]);
