@@ -161,8 +161,8 @@
                                     <tr>
                                         <td>{{ $key + 1 }}</td>
                                         <td>
-                                            {{-- <img src="{{ 'http://127.0.0.1:8000/' . $item->products->image }}"
-                                                style="width: 60px; height: 60px; object-fit: cover;"> --}}
+                                            <img src="{{ asset($item->products->image) }}"
+                                                style="width: 60px; height: 60px; object-fit: cover;">
 
                                             <span>{{ $item->products->name }}</span>
                                         </td>
@@ -172,7 +172,7 @@
                                     <tr>
                                         <td>{{ $key + 1 }}</td>
                                         <td>
-                                            <img src="{{ 'http://127.0.0.1:8000/' . $item->product_variants->image }}"
+                                            <img src="{{ asset($item->product_variants->image)  }}"
                                                 style="width: 60px; height: 60px; object-fit: cover;">
                                             <span>{{ $item->products->name . ' - ' . $item->product_variants->sku }}</span>
                                         </td>
@@ -205,6 +205,7 @@
                                 <td class="text-start">abc123 </td>
                             </tr>
                         </table>
+                        <a href="">Cập nhật tài khoản</a>
                     @endif
                     <a href="{{ route('order.history') }}" class="btn"> Xem đơn hàng </a>
                 </div>

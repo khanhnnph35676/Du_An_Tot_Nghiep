@@ -16,8 +16,18 @@
     <!-- Single Page Header End -->
 
     <!-- Single Product Start -->
-    <div class="container-fluid py-5 mt-5">
+    <div class="container-fluid py-5 mt-3">
         <div class="container">
+            @if (session('message'))
+                <div class="message">
+                    <div class="alert alert-primary alert-dismissible alert-alt solid fade show mb-5">
+                        @if (session('message'))
+                            <strong>{{ session('message') }}</strong>
+                        @endif
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                </div>
+            @endif
             <div class="row g-4 mb-5 border">
                 <div class="col-lg-8 col-xl-9">
                     <div class="row g-4">
@@ -59,6 +69,10 @@
                                         {{ number_format($product->price) }} Vnđ
                                     @endif
                                 </p>
+                                @php
+                                    $stock = 0;
+                                @endphp
+
                                 <div class="d-flex align-items-center mb-4">
                                     <span class="me-3">Số lượng: </span>
                                     <div class="input-group quantity" style="width: 100px;">
@@ -68,8 +82,8 @@
                                                 <i class="fa fa-minus"></i>
                                             </button>
                                         </div>
-                                        <input type="text" name="qty"
-                                            class="qty form-control form-control-sm text-center border-0" value="1">
+                                        <input type="text" name="qty" value="1" min="1" max="50"
+                                            class="qty form-control form-control-sm text-center border-0">
                                         <div class="input-group-btn">
                                             <button class="btn btn-sm btn-plus rounded-circle bg-light border"
                                                 type='button'>
@@ -79,10 +93,10 @@
                                     </div>
                                 </div>
                                 @error('qty')
-                                    <span class="text-danger"><strong>Lỗi!</strong> {{ $message }}
-                                    </span>
+                                    <span class="text-danger"> {{ $message }}</span>
                                 @enderror
-                                <div class="d-flex align-items-center mb-2">
+
+                                <div class="d-flex align-items-center mb-3">
                                     <span class="me-2">Phân loại: </span>
                                     @if ($product->type == 1)
                                         Không có
@@ -92,18 +106,27 @@
                                                 type="button" data-variant-id="{{ $item->id }}"
                                                 data-variant-price="{{ $item->price }}"
                                                 data-variant-stock="{{ $item->stock }}"> <!-- Thêm thuộc tính stock -->
+                                                @php
+                                                    $stock += $item->stock;
+                                                @endphp
+
                                                 <img src="{{ asset($item->image) }}" class="me-2"
                                                     style="width: 20px; height: 20px; object-fit: cover;">
                                                 {{ $item->options->option_value }}
                                             </button>
                                         @endforeach
                                 </div>
-                                <input id="product_variant_id" type="text" name="product_variant_id" hidden>
-                                <input id="stock" type="text" name="stock" value="0" hidden>
-                                @error('product_variant_id')
-                                    <span class="alert text-danger"><strong>Lỗi!</strong> {{ $message }}
-                                    </span>
-                                @enderror
+                                    @error('product_variant_id')
+                                        <span class="text-danger"> {{ $message }}</span>
+                                    @enderror
+                                    @if ($stock > 0)
+                                        <p>Tổng số lượng: {{ $stock }}</p>
+                                    @else
+                                        <p class="text-danger">{{ $stock == 0 ? 'Hết hàng' : '' }}</p>
+                                    @endif
+                                        <input id="product_variant_id" type="text" name="product_variant_id" hidden>
+                                        <p>Số lượng sản phẩm:</p>
+                                        <input id="stock" type="text" class="form-control" style="width:60px;" name="stock" value="0">
                                 @endif
                                 <br>
 
@@ -125,8 +148,9 @@
                             <nav>
                                 <div class="nav nav-tabs mb-3">
                                     <button class="nav-link active border-white border-bottom-0" type="button"
-                                        role="tab" id="nav-about-tab" data-bs-toggle="tab" data-bs-target="#nav-about"
-                                        aria-controls="nav-about" aria-selected="true">Mô tả</button>
+                                        role="tab" id="nav-about-tab" data-bs-toggle="tab"
+                                        data-bs-target="#nav-about" aria-controls="nav-about" aria-selected="true">Mô
+                                        tả</button>
                                     <button class="nav-link border-white border-bottom-0" type="button" role="tab"
                                         id="nav-mission-tab" data-bs-toggle="tab" data-bs-target="#nav-mission"
                                         aria-controls="nav-mission" aria-selected="false">Đánh giá</button>
@@ -238,7 +262,8 @@
                             <h4 class="mb-4 text-center mt-4">Sản phẩm nổi bật</h4>
                             <div class="d-flex justify-content-center my-4">
                                 <a href="#"
-                                    class="btn border border-secondary px-4 py-3 rounded-pill text-primary w-100">Xem thêm</a>
+                                    class="btn border border-secondary px-4 py-3 rounded-pill text-primary w-100">Xem
+                                    thêm</a>
                             </div>
                         </div>
                     </div>
@@ -253,8 +278,7 @@
                                 <a href="{{ route('product.detail', $related->id) }}">
                                     <img src="{{ asset($related->image) }}"
                                         style="width: 50px; height: 250px; object-fit: cover;"
-                                        class="img-fluid w-100 rounded-top"
-                                        alt="{{ $related->name }}">
+                                        class="img-fluid w-100 rounded-top" alt="{{ $related->name }}">
                                 </a>
                             </div>
                             <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
@@ -306,7 +330,7 @@
 
                         const variantPrice = this.getAttribute('data-variant-price');
                         // Lấy số lượng từ data-variant-price và hiển thị vào trường nhập liệu #stock
-                         // Giả sử bạn có thuộc tính stock cho biến thể
+                        // Giả sử bạn có thuộc tính stock cho biến thể
                         const variantStock = this.getAttribute(
                             'data-variant-stock');
 

@@ -230,28 +230,29 @@ class CartController extends Controller
 
     public function addToCartDetai(Request $request)
     {
+        $request->validate([
+            'qty' => 'required|integer|min:1|max:50',
+            'product_variant_id' => 'required',
+        ], [
+            'qty.required' => 'Chưa nhập số lượng',
+            'qty.integer' => 'Số lượng phải là một số nguyên',
+            'qty.min' => 'Số lượng không hợp lệ',
+            'qty.max' => 'Số lượng quá 50',
+            'product_variant_id.required' => 'Chưa nhập chọn phân loại',
+        ]);
         $product = Product::find($request->product_id);
-        if ($product->type == 2) {
+
+        if ($product->type == 1) {
             $request->validate([
-                'qty' => 'required|min:1|max:50',
-                'stock' => 'gte:qty',
-                'product_variant_id' => 'required'
+                'qty' => 'lte:qty',
             ], [
-                'qty.required' => 'Chưa nhập số lượng',
-                'qty.min' => 'Số lượng không hợp lệ',
-                'qty.max' => 'Số lượng quá 50',
-                'stock.gte' => 'Số lượng trong kho không đủ so với số lượng bạn nhập',
-                'product_variant_id.required' => 'Chưa nhập chọn phân loại',
+               'product_qty.gte' => 'Số lượng trong kho không đủ so với số lượng bạn nhập'
             ]);
         } else {
             $request->validate([
-                'qty' => 'required|min:1|max:50',
-                'product_qty' => 'gte:qty'
+                'qty' => 'lte:stock',
             ], [
-                'qty.required' => 'Chưa nhập số lượng',
-                'qty.min' => 'Số lượng không hợp lệ',
-                'qty.max' => 'Số lượng quá 50',
-                'product_qty.gte' => 'Số lượng trong kho không đủ so với số lượng bạn nhập'
+               'qty.lte' => 'Số lượng trong kho không đủ so với số lượng bạn nhập'
             ]);
         }
 
@@ -283,7 +284,7 @@ class CartController extends Controller
         if ($hasVariant) {
             $product_variant = ProductVariant::find($request->product_variant_id);
             if ($product_variant && $product_variant->stock > 0) {
-                $product_variant->stock -= 1;
+                $product_variant->stock -= $request->qty;
                 $product_variant->save();
             } else {
                 return response()->json(['error' => 'Sản phẩm không đủ số lượng.'], 400);
@@ -325,7 +326,9 @@ class CartController extends Controller
             ]);
         }
         session()->put('cart', $cart);
-        return redirect()->back();
+        return redirect()->back()->with([
+            'message' => 'Đặt hàng thành công',
+        ]);
     }
 
     public function removeItemCart($product_variant_id)
