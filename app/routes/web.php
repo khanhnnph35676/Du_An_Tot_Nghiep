@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\PaymentController;
 use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\TestimonialController;
 use App\Http\Controllers\Admin\PointController;
+use App\Http\Controllers\Admin\BlogCategoryController;
 
 use App\Http\Controllers\User\UserBlogController;
 use App\Http\Controllers\User\UserProfileController;
@@ -22,6 +23,7 @@ use App\Http\Controllers\CKEditorController;
 use App\Http\Controllers\User\PageController;
 use App\Http\Controllers\User\AuthenController;
 use App\Http\Controllers\ChatController;
+
 
 
 
@@ -142,12 +144,15 @@ Route::middleware(['auth.check'])->group(function () {
         Route::delete('/admin/blog', [BlogController::class, 'destroy'])->name('blog.delete');
 
         // danh mục bài viết
+// Quản lý danh mục bài viết
+Route::get('/blog-categories', [BlogCategoryController::class, 'list_categories'])->name('blog.categories.list'); // Danh sách danh mục
+Route::get('/blog-categories/create', [BlogCategoryController::class, 'create_category'])->name('blog.categories.create'); // Form thêm danh mục
+Route::post('/blog-categories/store', [BlogCategoryController::class, 'store_category'])->name('blog.categories.store'); // Xử lý thêm danh mục
+Route::get('/blog-categories/edit/{id}', [BlogCategoryController::class, 'edit_category'])->name('blog.categories.edit'); // Form chỉnh sửa danh mục
+Route::patch('/blog-categories/update/{id}', [BlogCategoryController::class, 'update_category'])->name('blog.categories.update'); // Xử lý cập nhật danh mục
+Route::delete('/blog-categories/delete/{id}', [BlogCategoryController::class, 'destroy_category'])->name('blog.categories.destroy'); // Xóa danh mục
 
-        // Route::get('/blog-category', [BlogController::class, 'category'])->name('blog.category');
-        // Route::get('/blog-category-with-blog/{id}', [BlogController::class, 'categoryWithBlog'])->name('blog.category.list');// Lấu danh mục blog và tên blog
-        // Route::post('storeBlog', [BlogController::class, 'storeBlog'])->name('blog.store'); //Lưu danh mục blog
-        // Route::put('editBlog/{id}', [BlogController::class, 'update'])->name('blog.category.update');// Sửa tên danh mục category
-        // Route::delete('blog-categories-destroy/{id}', [BlogController::class, 'Blog_categories_destroy'])->name('blog.categories.destroy');//Xóa danh mục Blog
+        
 
         // quản lý testimonial
         Route::get('/testimonials', [TestimonialController::class, 'listTestimonial'])->name('testimonials');

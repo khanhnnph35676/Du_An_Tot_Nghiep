@@ -57,7 +57,7 @@
                      <i class="fa-solid fa-blog"></i><span class="nav-text">Quản lý bài viết</span></a>
                  <ul aria-expanded="true">
                      <li><a href="{{ route('admin.blog.list') }}">Bài viết</a></li>
-                     <li><a href="#">Danh mục</a></li>
+                     <li><a href="{{ route('admin.blog.categories.list') }}">Danh mục</a></li>
                  </ul>
              </li>
              {{-- <li><a class="has-arrow" href="javascript:void()" aria-expanded="false"><i
