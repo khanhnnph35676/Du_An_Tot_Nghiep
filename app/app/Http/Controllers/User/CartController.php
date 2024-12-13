@@ -321,9 +321,11 @@ class CartController extends Controller
 
         if ($request->discount_id != 0) {
             $discount = Discount::find($request->discount_id);
-            $discount->update([
-                'qty' => $discount->qty - 1
-            ]);
+            if($discount->qty - $request->qty > 0){
+                $discount->update([
+                    'qty' => $discount->qty - 1
+                ]);
+            }
         }
         session()->put('cart', $cart);
         return redirect()->back()->with([
@@ -345,7 +347,7 @@ class CartController extends Controller
                 if ($item['discount_id'] != 0) {
                     $discount = Discount::find($item['discount_id']);
                     $discount->update([
-                        'qty' => $discount->qty + $item['qty']
+                        'qty' => $discount->qty + 1
                     ]);
                 }
 
@@ -372,7 +374,7 @@ class CartController extends Controller
                 if ($item['discount_id'] != 0)
                     $discount = Discount::find($item['discount_id']);
                 $discount->update([
-                    'qty' => $discount->qty + $item['qty']
+                    'qty' => $discount->qty + 1
                 ]);
                 unset($cart[$index]);
             }
@@ -384,6 +386,21 @@ class CartController extends Controller
 
     public function addToCart(Request $request)
     {
+        $product = Product::find($request->product_id);
+
+        if ($product->type == 1) {
+            $request->validate([
+                'qty' => 'lte:qty',
+            ], [
+               'product_qty.gte' => 'Số lượng trong kho không đủ so với số lượng bạn nhập'
+            ]);
+        } else {
+            $request->validate([
+                'qty' => 'lte:stock',
+            ], [
+               'qty.lte' => 'Số lượng trong kho không đủ so với số lượng bạn nhập'
+            ]);
+        }
         $user_id = Auth::id() ?? 0;
 
         // Kiểm tra nếu sản phẩm có biến thể

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Order;
 use App\Models\OrderList;
+use App\Models\User;
 use App\Models\Product;
 use App\Models\ProductVariant;
 use App\Models\ProductOder;
@@ -16,6 +17,7 @@ class UserOrderController extends Controller
 {
     public function index()
     {
+        session()->forget('checkOrder');
         $user_id = Auth::user()->id;
         $orderLists = OrderList::with('orders', 'orders.address', 'users')
         ->where('user_id', $user_id)
@@ -30,6 +32,32 @@ class UserOrderController extends Controller
             'productOrders' => $productOrders
         ]);
     }
+    public function detail($order_id)
+    {
+        session()->forget('checkOrder');
+        $user_id = Auth::user()->id;
+        $orderLists = OrderList::with('orders', 'orders.address', 'users')
+        ->where('user_id', $user_id)
+        ->orderBy('id', 'desc')
+        ->get();
+        $productOrders =  ProductOder::with('products', 'product_variants')
+        ->where('order_id',$order_id)
+        ->get();
+        $user =User::find($user_id);
+        $orderList = OrderList::with('orders', 'orders.address','orders.payments')
+        ->where('user_id', $user_id)
+        ->where('order_id',$order_id)
+        ->first();
+        $cart = session()->get('cart', []);
+        return view('user.cart.detail')->with([
+            'cart' => $cart,
+            'orderLists' => $orderLists,
+            'productOrders' =>$productOrders,
+            'user' => $user,
+            'orderList' => $orderList,
+        ]);
+    }
+
     public function destroyOrder(Request $request)
     {
         $order = Order::find($request->order_id);

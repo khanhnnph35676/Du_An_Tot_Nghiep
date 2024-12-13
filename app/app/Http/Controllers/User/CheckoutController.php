@@ -23,6 +23,7 @@ class CheckoutController extends Controller
     public function storeCheckout()
     {
         $cart = session()->get('cart', []);
+        $checkOrder = session()->get('checkOrder', []);
         $addresses = session()->get('addresses', []);
         $address = [];
         $user_id = Auth::user()->id ?? 0;
@@ -32,30 +33,31 @@ class CheckoutController extends Controller
         $payments = Payment::get();
 
         // Kiểm tra giỏ hàng rỗng
-        if (empty($cart)) {
-            return redirect()->route('storeHome');
-        }
 
-        $checkSelect = false; // Biến kiểm tra có ít nhất 1 sản phẩm được chọn
-        foreach ($cart as $value) {
-            if ($value['selected_products'] == 1 && $value['user_id'] == $user_id) {
-                $checkSelect = true;
-                break;
+        if(!$checkOrder != []) {
+            if (empty($cart)) {
+                return redirect()->route('storeHome');
+            }
+            $checkSelect = false; // Biến kiểm tra có ít nhất 1 sản phẩm được chọn
+            foreach ($cart as $value) {
+                if ($value['selected_products'] == 1 && $value['user_id'] == $user_id) {
+                    $checkSelect = true;
+                    break;
+                }
+            }
+            // Nếu không có sản phẩm nào được chọn, chuyển hướng về trang chủ
+            if (!$checkSelect) {
+                return redirect()->route('storeHome');
             }
         }
-
-        // Nếu không có sản phẩm nào được chọn, chuyển hướng về trang chủ
-        if (!$checkSelect) {
-            return redirect()->route('storeHome');
-        }
-
         return view('user.cart.checkout')->with([
             'address' => $address,
             'cart' => $cart,
             'products' => $products,
             'productVariants' => $productVariants,
             'payments' => $payments,
-            'addresses' => $addresses
+            'addresses' => $addresses,
+            'checkOrder' => $checkOrder,
         ]);
     }
 
@@ -115,6 +117,7 @@ class CheckoutController extends Controller
         }
         $cart = session()->get('cart', []);
         $addresses = session()->get('addresses', []);
+        $checkOrder = session()->get('checkOrder', []);
         $order = [
             'payment_id' => $request->payment_id,
             'status' => 1,
@@ -155,6 +158,15 @@ class CheckoutController extends Controller
             ];
             $orderList = OrderList::create($dataOrderList);
 
+            $dataCheck=[
+                'order_id' => $addOrder->id,
+                'user_id' => $user->id,
+                'payment_id' => $request->payment_id,
+            ];
+            $checkOrder[] = $dataCheck;
+
+
+
             // Phần gửi mail khi không có tài khoản
         } else {
             $dataOrderList = [
@@ -163,6 +175,12 @@ class CheckoutController extends Controller
                 'check_user' => $check_user,
             ];
             $orderList = OrderList::create($dataOrderList);
+            $dataCheck=[
+                'order_id' => $addOrder->id,
+                'user_id' => $user_id,
+                'payment_id' => $request->payment_id,
+            ];
+            $checkOrder[] = $dataCheck;
         }
 
         foreach ($cart as $key => $value) {
@@ -195,6 +213,8 @@ class CheckoutController extends Controller
                 }
             }
         }
+
+
         //    Mail cho khách đặt hàng / tính cá không đăng nhập và đăng nhập
         $emailUser = $request->email;
         $nameUser = $request->name;
@@ -220,7 +240,7 @@ class CheckoutController extends Controller
         // thêm điểm
 
 
-
+        session()->put('checkOrder', $checkOrder);
         session()->put('cart', $cart);
         session()->forget('addresses');
         if ($request->payment_id == 1) {
@@ -268,5 +288,14 @@ class CheckoutController extends Controller
             // ]);
         }
     }
+    public function successCheckout(){
+        $cart = session()->get('cart', []);
+        $checkOrder = session()->get('checkOrder', []);
+        foreach ($checkOrder as $value){
+            $order = Order::with('address')->find($value['order_id']);
+            $productOrders = Order::where('order_id',$value['order_id'])->get();
+        }
 
+        return view('user.cart.succes-checkout',compact('cart','checkOrder','order','productOrders'));
+    }
 }

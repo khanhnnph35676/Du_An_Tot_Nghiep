@@ -18,6 +18,7 @@ class PageController extends Controller
 {
 
     public function storeIntro(){
+        session()->forget('checkOrder');
         $cart = session()->get('cart', []);
         return view('user.introduct')->with('cart', $cart);
     }
@@ -33,6 +34,7 @@ class PageController extends Controller
         $discount = DiscountProduct::with("discounts")->get();
         // session()->flush();
         // session()->forget('addresses');
+        session()->forget('checkOrder');
         return view('user.home', compact('products', 'categories', 'bestViewedProducts','product_variants','cart','discount'));
 
     }
@@ -65,13 +67,13 @@ class PageController extends Controller
         $products = $query->paginate(12);
         $categories = Category::all();
         $bestProducts = Product::orderBy('view', 'desc')->take(6)->get();
-
+        session()->forget('checkOrder');
         return view('user.product.list', compact('products', 'categories', 'bestProducts', 'cart'));
     }
 
-
     public function storeProductDetail($id)
     {
+        session()->forget('checkOrder');
         $galleries = Gallerie::where('product_id',$id)->get();
 
         $discount = DiscountProduct::with("discounts")->where('product_id',$id)->first();
@@ -88,28 +90,30 @@ class PageController extends Controller
                                     ->where('id', '!=', $id)
                                     ->take(6)
                                     ->get();
-
+        session()->forget('checkOrder');
         return view('user.product.detail', compact('product', 'relatedProducts','cart','productVariant','galleries','discount'));
     }
-
 
     public function storeListCart()
     {
         $cart = session()->get('cart', []);
         // dd($cart);
+
         $bestProducts = Product::orderBy('view', 'desc')->take(6)->get();
         // session()->forget('cart');
-
+        session()->forget('checkOrder');
         $products = Product::get();
         $productVariants = ProductVariant::get();
         return view('user.cart.list', compact('bestProducts','cart','products','productVariants'));
     }
     public function storeTestimonial(){
         $cart = session()->get('cart', []);
+        session()->forget('checkOrder');
         return view('user.testimonial')->with([
             'cart' => $cart]);;
     }
     public function storeContact(){
+        session()->forget('checkOrder');
         $cart = session()->get('cart', []);
         return view('user.contact')->with([
             'cart' => $cart]);;

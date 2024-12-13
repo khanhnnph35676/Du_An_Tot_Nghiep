@@ -205,9 +205,9 @@
                                 <td class="text-start">abc123 </td>
                             </tr>
                         </table>
-                        <a href="">Cập nhật tài khoản</a>
+                        <a href="" style="color: #333">Cập nhật tài khoản</a>
                     @endif
-                    <a href="{{ route('order.history') }}" class="btn"> Xem đơn hàng </a>
+                    <a href="{{ route('order.detail',['order_id' =>$orders->id]) }}" class="btn"> Xem đơn hàng </a>
                 </div>
             </div>
         </div>
