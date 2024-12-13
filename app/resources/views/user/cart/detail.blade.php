@@ -65,13 +65,13 @@
                         <tr>
                             <th>Trang thái đơn: </th>
                             <td>
-                                @if ($orderList->orders->status == 1)
+                                @if ($orderList->orders->status == 0)
                                 <strong class="border rounded p-1 text-dark fs-6 bg-white">Chờ Xác
                                     Nhận</strong>
-                                @elseif($orderList->orders->status == 2)
+                                @elseif($orderList->orders->status == 1)
                                     <strong class="border rounded p-1 text-dark fs-6 bg-secondary">Chờ Lấy
                                         Hàng</strong>
-                                @elseif($orderList->orders->status == 3)
+                                @elseif($orderList->orders->status == 3 || $orderList->orders->status == 2)
                                     <strong class="border rounded p-1 text-dark fs-6 bg-info">Đang Giao
                                         Hàng</strong>
                                 @elseif($orderList->orders->status == 4)
@@ -85,7 +85,7 @@
                         </tr>
                         <tr>
                             <th>Địa chi nhận hàng: </th>
-                            <td>{{ $orderList->orders->address->home_address . ', ' . $orderList->orders->address->address }}
+                            <td>{{ $orderList->orders->address->home_address ? $orderList->orders->address->home_address . ', ' . $orderList->orders->address->address:'N/A' }}
                             </td>
                         </tr>
                         <tr>
