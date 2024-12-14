@@ -152,10 +152,7 @@ class AuthenController extends Controller
             'email' => 'The provided credentials do not match our records.',
         ]);
     }
-    public function registerHome()
-    {
-        return view('user.register');
-    }
+    
     public function forgotPassword()
     {
         return view('user.forgot-password');
