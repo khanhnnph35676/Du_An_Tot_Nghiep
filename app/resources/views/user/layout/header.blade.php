@@ -16,9 +16,9 @@
                          class="text-white">khanhnnph35676@fpt.edu.vn</a></small>
              </div>
              <div class="pe-2">
-                 <a href="#" class="text-white"><small class="text-white mx-2">Chính sách bảo mật</small>/</a>
-                 <a href="#" class="text-white"><small class="text-white mx-2">Điều khoản</small>/</a>
-                 <a href="#" class="text-white"><small class="text-white ms-2">Bán hàng và hoàn tiền</small></a>
+                 <a href="{{ route('privacy-policy') }}" class="text-white"><small class="text-white mx-2">Chính sách bảo mật</small>/</a>
+                 <a href="{{ route('terms-and-conditions') }}" class="text-white"><small class="text-white mx-2">Điều khoản</small>/</a>
+                 <a href="{{ route('sales-and-refunds') }}" class="text-white"><small class="text-white ms-2">Bán hàng và hoàn tiền</small></a>
              </div>
          </div>
      </div>
@@ -92,6 +92,8 @@
                          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                              @if (Auth::check())
                                  <li><a class="dropdown-item" href="{{ route('user.profile') }}">Thông tin cá nhân</a>
+                                 </li>
+                                 <li><a class="dropdown-item" href="{{ route('user.change-password') }}">Đổi mật khẩu</a>
                                  </li>
                                  <li><a class="dropdown-item" href="{{ route('order.history') }}">Lịch sử đặt hàng</a>
                                  </li>
