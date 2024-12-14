@@ -52,7 +52,7 @@
     </div>
     <!-- Single Page Header End -->
     @php
-        // print_r($checkOrder);
+        print_r($checkOrder);
     @endphp
     {{-- @if ($checkOrder != null )
         @foreach ($checkOrder as $item)
@@ -97,6 +97,10 @@
                                 <div class="alert alert-danger p-2 mt-1"><strong>Lỗi!</strong> {{ $message }}
                                 </div>
                             @enderror
+                            {{-- @error('error')
+                            <div class="alert alert-danger p-2 mt-1"><strong>Lỗi!</strong> {{ $message }}
+                            </div>
+                        @enderror --}}
 
                         </div>
                         @php

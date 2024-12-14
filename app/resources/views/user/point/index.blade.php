@@ -189,7 +189,7 @@
                             <span class="me-3 title-point">Xu của tôi</span>
                         </h5>
                         <div class="d-flex border rounded justify-content-strat align-items-start group-point me-4">
-                            <div class="text-center point ms-2">{{ $point->point }}</div>
+                            <div class="text-center point ms-2">{{ $point->point ?? '0' }}</div>
                             <img src="{{ asset('img/xu.png') }}" style="width: 20px; height: 20px; object-fit: cover;"
                                 alt="">
                         </div>

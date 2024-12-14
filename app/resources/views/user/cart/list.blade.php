@@ -136,12 +136,14 @@
                                                     @if ($item['selected_products'] == 1) checked @endif>
                                             </td>
                                             <th scope="row">
-                                                <div class="d-flex align-items-center">
-                                                    <img src=" {{ asset($product->image) }}"
-                                                        class="img-fluid me-5 rounded-circle"
-                                                        style="width: 80px; height: 80px;" alt="Ảnh sản phẩm">
-                                                    {{ $product->name }}
-                                                </div>
+                                                <a href="{{route('product.detail',['id'=> $product->id])}}">
+                                                    <div class="d-flex align-items-center">
+                                                        <img src=" {{ asset($product->image) }}"
+                                                            class="img-fluid me-5 rounded-circle"
+                                                            style="width: 80px; height: 80px;" alt="Ảnh sản phẩm">
+                                                        {{ $product->name }}
+                                                    </div>
+                                                </a>
                                             </th>
                                             <td>
                                                 <div class="input-group quantity mt-4" style="width: 100px;">
@@ -206,12 +208,14 @@
                                                         @if ($item['selected_products'] == 1) checked @endif>
                                                 </td>
                                                 <th scope="row">
-                                                    <div class="d-flex align-items-center">
-                                                        <img src=" {{ asset($productVariant->image) }}"
-                                                            class="img-fluid me-5 rounded-circle"
-                                                            style="width: 80px; height: 80px;" alt="Ảnh sản phẩm">
-                                                        {{ $product->name . ' - ' . $productVariant->sku }}
-                                                    </div>
+                                                    <a href="{{route('product.detail',['id'=> $product->id])}}">
+                                                        <div class="d-flex align-items-center">
+                                                            <img src=" {{ asset($productVariant->image) }}"
+                                                                class="img-fluid me-5 rounded-circle"
+                                                                style="width: 80px; height: 80px;" alt="Ảnh sản phẩm">
+                                                            {{ $product->name . ' - ' . $productVariant->sku }}
+                                                        </div>
+                                                    </a>
                                                 </th>
                                                 <td>
                                                     <div class="input-group quantity mt-4" style="width: 100px;">
@@ -464,7 +468,7 @@
                         </form>
 
                     </div>
-                    Điểm của tôi: {{$point->point}}
+                    Điểm của tôi: {{$point->point ?? '0'}}
                     <img src="{{ asset('img/xu.png') }}"
                     style="width: 20px; height: 20px; object-fit: cover;"
                     alt="">
@@ -658,7 +662,6 @@
                         </div>
                         <div class="p-4 pb-0 rounded-bottom">
                             <h4>{{ $product->name }}</h4>
-                            <p>{{ Str::limit($product->description, 50) }}</p>
                             <div class="d-flex justify-content-between flex-lg-wrap">
                                 <p class="text-dark fs-5 fw-bold">{{ number_format($product->price) }} vnđ</p>
                                 <a href=""
@@ -767,9 +770,9 @@
                     } else {
                         errorMessageElement.textContent = data.message;
                         errorMessageElement.style.display = 'block';
-                        // setTimeout(() => {
-                        //     location.reload(); // Reload trang sau 1 giây
-                        // }, 300);
+                        setTimeout(() => {
+                            location.reload(); // Reload trang sau 1 giây
+                        }, 300);
                     }
                 });
         }
