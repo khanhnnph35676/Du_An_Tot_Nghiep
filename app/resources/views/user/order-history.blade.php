@@ -260,9 +260,6 @@
                                         <input type="text" value="{{ $value->orders->id }}" name='order_id' hidden>
                                         <button class="huy btn btn border me-2">Huỷ đơn</button>
                                     </form>
-                                @elseif($value->orders->status == 4)
-                                    {{-- <input type="text" value="{{ $value->orders->id }}" name='order_id' hidden> --}}
-                                    <button class="danhgia btn btn-primary border me-2">Đánh giá</button>
                                 @endif
                             </div>
                         @endforeach
@@ -273,25 +270,26 @@
                             @if ($value->orders->status == 0)
                                 <div class="border p-2 rounded border mb-2 d-flex justify-content-between"
                                     style="width:100%;">
-                                    <ul>
-                                        <li> Mã đơn hàng: {{ $value->orders->order_code }}
-                                            <strong class="ms-3 border rounded p-1 text-dark fs-6 bg-white">Chờ Xác
-                                                Nhận</strong>
-                                            @if ($value->orders->check_payment_id == 0)
-                                                <strong class="border rounded p-1 text-dark fs-6 bg-white">Chưa thanh
-                                                    toán</strong>
-                                            @elseif($value->orders->check_payment_id == 1)
-                                                <strong class="border rounded p-1 text-primary fs-6 bg-white">Đã thanh
-                                                    toán</strong>
-                                            @endif
-                                        </li>
-                                        <li> Địa chỉ:
-                                            {{ isset($value->orders->address) ? $value->orders->address->home_address . ', ' . $value->orders->address->address : 'Chưa có địa chỉ' }}
-                                        </li>
-                                        <li> <strong> Tổng giá: {{ number_format($value->orders->sum_price) }} vnđ</strong>
-                                        </li>
-                                    </ul>
-
+                                    <a href="{{ route('order.detail', ['order_id' => $value->order_id]) }}" class="text-dark">
+                                        <ul>
+                                            <li> Mã đơn hàng: {{ $value->orders->order_code }}
+                                                <strong class="ms-3 border rounded p-1 text-dark fs-6 bg-white">Chờ Xác
+                                                    Nhận</strong>
+                                                @if ($value->orders->check_payment_id == 0)
+                                                    <strong class="border rounded p-1 text-dark fs-6 bg-white">Chưa thanh
+                                                        toán</strong>
+                                                @elseif($value->orders->check_payment_id == 1)
+                                                    <strong class="border rounded p-1 text-primary fs-6 bg-white">Đã thanh
+                                                        toán</strong>
+                                                @endif
+                                            </li>
+                                            <li> Địa chỉ:
+                                                {{ isset($value->orders->address) ? $value->orders->address->home_address . ', ' . $value->orders->address->address : 'Chưa có địa chỉ' }}
+                                            </li>
+                                            <li> <strong> Tổng giá: {{ number_format($value->orders->sum_price) }} vnđ</strong>
+                                            </li>
+                                        </ul>
+                                    </a>
                                     <form action="{{ route('destroyOrder') }}" class="mt-3 text-end" method="POST">
                                         @csrf
                                         @method('patch')
@@ -307,25 +305,27 @@
                         @foreach ($orderLists as $value)
                             @if ($value->orders->status == 1)
                                 <div class="border p-2 rounded mb-2" style="width:100%;">
-                                    <ul>
-                                        <li> Mã đơn hàng: {{ $value->orders->order_code }}
-                                            <strong class="ms-3 border rounded p-1 text-white fs-6 bg-secondary">Chờ Lấy
-                                                Hàng</strong>
-                                            @if ($value->orders->check_payment_id == 0)
-                                                <strong class="border rounded p-1 text-dark fs-6 bg-white">Chưa thanh
-                                                    toán</strong>
-                                            @elseif($value->orders->check_payment_id == 1)
-                                                <strong class="border rounded p-1 text-primary fs-6 bg-white">Đã thanh
-                                                    toán</strong>
-                                            @endif
-                                        </li>
-                                        <li> Địa chỉ:
-                                            {{ isset($value->orders->address) ? $value->orders->address->home_address . ', ' . $value->orders->address->address : 'Chưa có địa chỉ' }}
-                                        </li>
+                                    <a href="{{ route('order.detail', ['order_id' => $value->order_id]) }}" class="text-dark">
+                                        <ul>
+                                            <li> Mã đơn hàng: {{ $value->orders->order_code }}
+                                                <strong class="ms-3 border rounded p-1 text-white fs-6 bg-secondary">Chờ Lấy
+                                                    Hàng</strong>
+                                                @if ($value->orders->check_payment_id == 0)
+                                                    <strong class="border rounded p-1 text-dark fs-6 bg-white">Chưa thanh
+                                                        toán</strong>
+                                                @elseif($value->orders->check_payment_id == 1)
+                                                    <strong class="border rounded p-1 text-primary fs-6 bg-white">Đã thanh
+                                                        toán</strong>
+                                                @endif
+                                            </li>
+                                            <li> Địa chỉ:
+                                                {{ isset($value->orders->address) ? $value->orders->address->home_address . ', ' . $value->orders->address->address : 'Chưa có địa chỉ' }}
+                                            </li>
 
-                                        <li> <strong> Tổng giá: {{ number_format($value->orders->sum_price) }} vnđ</strong>
-                                        </li>
-                                    </ul>
+                                            <li> <strong> Tổng giá: {{ number_format($value->orders->sum_price) }} vnđ</strong>
+                                            </li>
+                                        </ul>
+                                    </a>
                                 </div>
                             @endif
                         @endforeach
@@ -335,25 +335,27 @@
                         @foreach ($orderLists as $value)
                             @if ($value->orders->status == 3 || $value->orders->status == 2)
                                 <div class="border p-2 rounded mb-2" style="width:100%;">
-                                    <ul>
-                                        <li> Mã đơn hàng: {{ $value->orders->order_code }}
-                                            <strong class="ms-3 border rounded p-1 text-white fs-6 bg-info">Đang giao
-                                                hàng</strong>
-                                            @if ($value->orders->check_payment_id == 0)
-                                                <strong class="border rounded p-1 text-dark fs-6 bg-white">Chưa thanh
-                                                    toán</strong>
-                                            @elseif($value->orders->check_payment_id == 1)
-                                                <strong class="border rounded p-1 text-primary fs-6 bg-white">Đã thanh
-                                                    toán</strong>
-                                            @endif
-                                        </li>
-                                        <li> Địa chỉ:
-                                            {{ isset($value->orders->address) ? $value->orders->address->home_address . ', ' . $value->orders->address->address : 'Chưa có địa chỉ' }}
-                                        </li>
+                                    <a href="{{ route('order.detail', ['order_id' => $value->order_id]) }}" class="text-dark">
+                                        <ul>
+                                            <li> Mã đơn hàng: {{ $value->orders->order_code }}
+                                                <strong class="ms-3 border rounded p-1 text-white fs-6 bg-info">Đang giao
+                                                    hàng</strong>
+                                                @if ($value->orders->check_payment_id == 0)
+                                                    <strong class="border rounded p-1 text-dark fs-6 bg-white">Chưa thanh
+                                                        toán</strong>
+                                                @elseif($value->orders->check_payment_id == 1)
+                                                    <strong class="border rounded p-1 text-primary fs-6 bg-white">Đã thanh
+                                                        toán</strong>
+                                                @endif
+                                            </li>
+                                            <li> Địa chỉ:
+                                                {{ isset($value->orders->address) ? $value->orders->address->home_address . ', ' . $value->orders->address->address : 'Chưa có địa chỉ' }}
+                                            </li>
 
-                                        <li> <strong> Tổng giá: {{ number_format($value->orders->sum_price) }} vnđ</strong>
-                                        </li>
-                                    </ul>
+                                            <li> <strong> Tổng giá: {{ number_format($value->orders->sum_price) }} vnđ</strong>
+                                            </li>
+                                        </ul>
+                                    </a>
                                 </div>
                             @endif
                         @endforeach
@@ -363,27 +365,28 @@
                         @foreach ($orderLists as $value)
                             @if ($value->orders->status == 4)
                                 <div class="border p-2 rounded mb-2 d-flex justify-content-between" style="width:100%;">
-                                    <ul class="me-5">
-                                        <li> Mã đơn hàng: {{ $value->orders->order_code }}
-                                            <strong class="ms-3 border rounded p-1 text-white fs-6 bg-primary">Đã giao
-                                                hàng</strong>
-                                            @if ($value->orders->check_payment_id == 0)
-                                                <strong class="border rounded p-1 text-dark fs-6 bg-white">Chưa thanh
-                                                    toán</strong>
-                                            @elseif($value->orders->check_payment_id == 1)
-                                                <strong class="border rounded p-1 text-primary fs-6 bg-white">Đã thanh
-                                                    toán</strong>
-                                            @endif
-                                        </li>
-                                        <li> Địa chỉ:
-                                            {{ isset($value->orders->address) ? $value->orders->address->home_address . ', ' . $value->orders->address->address : 'Chưa có địa chỉ' }}
-                                        </li>
+                                    <a href="{{ route('order.detail', ['order_id' => $value->order_id]) }}" class="text-dark">
+                                        <ul class="me-5">
+                                            <li> Mã đơn hàng: {{ $value->orders->order_code }}
+                                                <strong class="ms-3 border rounded p-1 text-white fs-6 bg-primary">Đã giao
+                                                    hàng</strong>
+                                                @if ($value->orders->check_payment_id == 0)
+                                                    <strong class="border rounded p-1 text-dark fs-6 bg-white">Chưa thanh
+                                                        toán</strong>
+                                                @elseif($value->orders->check_payment_id == 1)
+                                                    <strong class="border rounded p-1 text-primary fs-6 bg-white">Đã thanh
+                                                        toán</strong>
+                                                @endif
+                                            </li>
+                                            <li> Địa chỉ:
+                                                {{ isset($value->orders->address) ? $value->orders->address->home_address . ', ' . $value->orders->address->address : 'Chưa có địa chỉ' }}
+                                            </li>
 
-                                        <li> <strong> Tổng giá: {{ number_format($value->orders->sum_price) }} vnđ</strong>
-                                        </li>
-                                    </ul>
+                                            <li> <strong> Tổng giá: {{ number_format($value->orders->sum_price) }} vnđ</strong>
+                                            </li>
+                                        </ul>
+                                    </a>
                                     {{-- <input type="text" value="{{ $value->orders->id }}" name='order_id' hidden> --}}
-                                    <button class="danhgia btn btn-primary border me-2">Đánh giá</button>
                                 </div>
                             @endif
                         @endforeach
@@ -393,18 +396,20 @@
                         @foreach ($orderLists as $value)
                             @if ($value->orders->status == 5)
                                 <div class="border p-2 rounded mb-2" style="width:100%;">
-                                    <ul>
-                                        <li> Mã đơn hàng: {{ $value->orders->order_code }}
-                                            <strong class="ms-3 border rounded p-1 text-white fs-6 bg-danger">Đã
-                                                huỷ</strong>
-                                        </li>
-                                        <li> Địa chỉ:
-                                            {{ isset($value->orders->address) ? $value->orders->address->home_address . ', ' . $value->orders->address->address : 'Chưa có địa chỉ' }}
-                                        </li>
+                                    <a href="{{ route('order.detail', ['order_id' => $value->order_id]) }}" class="text-dark">
+                                        <ul>
+                                            <li> Mã đơn hàng: {{ $value->orders->order_code }}
+                                                <strong class="ms-3 border rounded p-1 text-white fs-6 bg-danger">Đã
+                                                    huỷ</strong>
+                                            </li>
+                                            <li> Địa chỉ:
+                                                {{ isset($value->orders->address) ? $value->orders->address->home_address . ', ' . $value->orders->address->address : 'Chưa có địa chỉ' }}
+                                            </li>
 
-                                        <li> <strong> Tổng giá: {{ number_format($value->orders->sum_price) }} vnđ</strong>
-                                        </li>
-                                    </ul>
+                                            <li> <strong> Tổng giá: {{ number_format($value->orders->sum_price) }} vnđ</strong>
+                                            </li>
+                                        </ul>
+                                    </a>
                                 </div>
                             @endif
                         @endforeach

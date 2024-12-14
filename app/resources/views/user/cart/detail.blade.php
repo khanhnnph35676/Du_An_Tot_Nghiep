@@ -14,10 +14,11 @@
 </style>
 @section('content')
     <div class="container-fluid page-header py-5">
-        <h1 class="text-center text-white display-6">Đơn hàng</h1>
+        <h1 class="text-center text-white display-6">Chi tiết đơn hàng</h1>
         <ol class="breadcrumb justify-content-center mb-0">
             <li class="breadcrumb-item"><a href="{{ route('storeHome') }}">Trang Chủ</a></li>
-            <li class="breadcrumb-item active text-white">Đơn hàng</li>
+            <li class="breadcrumb-item"><a href="{{ route('storeHome') }}">Lịch sử đơn hàng</a></li>
+            <li class="breadcrumb-item active text-white">Chi tiết đơn hàng</li>
         </ol>
     </div>
     <!-- Order History Start -->
@@ -35,7 +36,7 @@
         <div class="row">
             <div class="col-lg-3">
                 <ul class="side-bar border rounded p-1">
-                    <h3 class="mb-4 mt-3 ms-3">Đơn Hàng</h3>
+                    <h3 class="mb-4 mt-3 ms-3">Chi tiết đơn hàng</h3>
                     <li class="p-2 mt-2"><a href="{{ route('user.profile') }}" class="text-dark"><strong>Thông tin cá
                                 nhân</strong> </a> </li>
                     <li class="p-2 mt-2"><a href="{{ route('order.history') }}" class="text-dark"><strong>Đơn hàng
@@ -63,6 +64,15 @@
                             <td>{{ $orderList->orders->payments->name }}</td>
                         </tr>
                         <tr>
+                            <th>Phương thức thanh toán: </th>
+                            <td>
+                                @if ($orderList->orders->check_payment_id == 1)
+                                <strong class="border rounded p-1 text-dark fs-6 bg-primary">Đã thanh toán</strong>
+                                @else
+                                <strong class="border rounded p-1 text-dark fs-6 bg-white">Chưa thanh toán</strong>
+                                @endif
+                        </tr>
+                        <tr>
                             <th>Trang thái đơn: </th>
                             <td>
                                 @if ($orderList->orders->status == 0)
@@ -78,7 +88,7 @@
                                     <strong class="border rounded p-1 text-dark fs-6 bg-primary">Đã Giao
                                         Hàng</strong>
                                 @elseif($orderList->orders->status == 5)
-                                    <strong class="border rounded p-1 text-dark fs-6 bg-danger">Đã
+                                    <strong class="border rounded p-1 text-white fs-6 bg-danger">Đã
                                         Huỷ</strong>
                                 @endif
                             </td>
@@ -138,7 +148,7 @@
 
                 </div>
                 <div class="text-end">
-                    @if ($orderList->orders->status == 1)
+                    @if ($orderList->orders->status == 0)
                     <form action="{{ route('destroyOrder') }}" class="mt-3 text-end" method="POST">
                         @csrf
                         @method('patch')

@@ -127,7 +127,7 @@
         <div class="row">
             <div class="col-lg-3">
                 <ul class="side-bar border rounded p-1">
-                    <h3 class="mb-4 mt-3 ms-3">Đơn Hàng</h3>
+                    <h3 class="mb-4 mt-3 ms-3">Điểm thưởng</h3>
                     <li class="p-2 mt-2"><a href="{{ route('user.profile') }}" class="text-dark"><strong>Thông tin cá
                                 nhân</strong> </a> </li>
 

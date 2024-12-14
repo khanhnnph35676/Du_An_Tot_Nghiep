@@ -68,11 +68,11 @@
                                                 <td class="text-center">{{$value->orders->payments->name?$value->orders->payments->name:'No address found'}}</td>
                                                 <td>
                                                     <span
-                                                        class="badge badge-light">{{ $value->orders->status == 1 ? 'Chờ xác nhận' : '' }}</span>
+                                                        class="badge badge-light">{{ $value->orders->status == 0 ? 'Chờ xác nhận' : '' }}</span>
                                                     <span
-                                                        class="badge badge-warning">{{ $value->orders->status == 2 ? 'Chờ lấy hàng' : '' }}</span>
+                                                        class="badge badge-warning">{{ $value->orders->status == 1 ? 'Chờ lấy hàng' : '' }}</span>
                                                     <span
-                                                        class="badge badge-info">{{ $value->orders->status == 3 ? 'Đang giao hàng' : '' }}</span>
+                                                        class="badge badge-info">{{ $value->orders->status == 3 ||  $value->orders->status == 2 ? 'Đang giao hàng' : '' }}</span>
                                                     <span
                                                         class="badge badge-success">{{ $value->orders->status == 4 ? 'Đã giao hàng' : '' }}</span>
                                                     <span
@@ -81,7 +81,7 @@
                                                 </td>
                                                 <td>
                                                     <a href="{{ route('admin.orderDetail', ['order_id' => $value->order_id]) }}"
-                                                        class="btn btn-primary">Chi tiết</button>
+                                                        class="btn btn-primary">Cập nhật</button>
                                                 </td>
                                             </tr>
                                         @endforeach
