@@ -176,9 +176,8 @@ Route::middleware(['auth.check'])->group(function () {
 Route::middleware(['checkadmin'])->group(function () {
     // trang chủ
     Route::get('/', [PageController::class, 'storeHome'])->name('storeHome');
-// comment
-Route::get('/product/{id}/testimonials', [TestimonialController::class, 'getProductTestimonials'])
-    ->name('product.testimonials');
+    // comment
+    Route::get('/product/{id}/testimonials', [TestimonialController::class, 'getProductTestimonials'])->name('product.testimonials');
 
     //Sản phẩm
     Route::get('list-product', [PageController::class, 'storeListProduct'])->name('storeListProduct');
@@ -211,8 +210,6 @@ Route::get('/product/{id}/testimonials', [TestimonialController::class, 'getProd
     Route::post('add-order', [CheckoutController::class, 'AddOrder'])->name('AddOrder');
     Route::post('momo_payment', [CheckoutController::class, 'momoPayment'])->name('momoPayment');
     Route::patch('order-update-destroy', [UserOrderController::class, 'destroyOrder'])->name('destroyOrder');
-
-
 
     // Bài viết
     Route::prefix('blogs')->group(function () {
