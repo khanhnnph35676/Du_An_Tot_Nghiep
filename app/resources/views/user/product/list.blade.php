@@ -1,6 +1,8 @@
 @extends('user.layout.default')
+
 @push('styleHome')
 @endpush
+
 @section('content')
 <!-- Single Page Header start -->
 <div class="container-fluid page-header py-5">
@@ -56,14 +58,6 @@
                                     <p class="mt-3">Lọc các sản phẩm dưới giá nhập</p>
                                 </div>
                             </div>
-                            {{-- <div class="col-lg-12">
-                                <div class="position-relative">
-                                    <img src="img/banner-fruits.jpg" class="img-fluid w-100 rounded" alt="">
-                                    <div class="position-absolute" style="top: 50%; right: 10px; transform: translateY(-50%);">
-                                        <h3 class="text-secondary fw-bold">Đồ ăn <br> Vặt <br> </h3>
-                                    </div>
-                                </div>
-                            </div> --}}
                         </div>
                     </div>
                     <div class="col-lg-9">
@@ -74,12 +68,12 @@
                                     <div class="fruite-img">
                                         <a href="{{route('product.detail',['id'=>$product->id])}}">
                                             <img src="{{ asset($product->image) }}"
-                                            style="height: 170px; object-fit: cover;"
-                                            class="img-fluid w-100 rounded-top" alt="{{ $product->name }}">
-                                            </a>
+                                                style="height: 170px; object-fit: cover; border: 1px solid #ddd;"
+                                                class="img-fluid w-100 rounded-top" alt="{{ $product->name }}">
+                                        </a>
                                     </div>
                                     <div class="p-4 border border-secondary border-top-0 rounded-bottom">
-                                        <h4>{{ $product->name }}</h4>
+                                        <h4>{{ Str::words(strip_tags($product->name), 4, '...') }}</h4> <!-- Giới hạn 6 chữ -->
                                         <div class="d-flex justify-content-between flex-lg-wrap">
                                             <p class="text-dark fw-bold mb-0">{{ number_format($product->price) }} vnđ</p>
                                             <a href="#" class="btn border border-secondary rounded-pill mt-3 text-primary">
@@ -105,6 +99,7 @@
     </div>
 </div>
 <!-- Fruits Shop End-->
+ 
 @endsection
 
 @push('scriptHome')

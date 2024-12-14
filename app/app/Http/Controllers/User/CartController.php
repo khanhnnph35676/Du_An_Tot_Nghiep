@@ -13,6 +13,7 @@ use function Psy\bin;
 
 class CartController extends Controller
 {
+
     public function updateQtyCartVariant(Request $request)
     {
         $user_id = Auth::id() ?? 0;
