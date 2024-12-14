@@ -25,6 +25,7 @@
                      <span class="nav-text">Quản lý sản phẩm</span></a>
                  <ul aria-expanded="false">
                      <li><a href="{{ route('admin.listProducts') }}">Sản phẩm</a></li>
+                     <li><a href="{{ route('admin.variant-options.index') }}">Quản lý biến thể</a></li>
                      <li><a href="{{ route('admin.listCategories') }}">Danh mục</a></li>
                  </ul>
              </li>
