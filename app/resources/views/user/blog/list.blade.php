@@ -119,14 +119,12 @@
     <div class="container mt-5">
         <!-- Danh sách bài viết -->
         <div class="row">
-            <div class="col-3 border rounded">
-                <h2 class="mb-4 mt-4">Bài viết nổi bật</h2>
-            </div>
-            <div class="ms-3 pe-5 ps-5 col-8 border rounded">
+            
+            <div class="ms-3 pe-5 ps-5 border rounded">
                 <div class="row">
                     <h2 class="mb-4 mt-4">Danh sách bài viết</h2>
                     @foreach ($blogs as $blog)
-                        <div class="col-md-4 mb-4">
+                        <div class="col-md-3 mb-3">
                             <div class="card">
                                 <img src="{{ asset('storage/images/blog/' . $blog->BlogImage) }}" class="card-img-top"
                                     alt="{{ $blog->BlogTitle }}">
