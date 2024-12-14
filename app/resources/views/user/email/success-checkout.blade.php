@@ -142,9 +142,18 @@
                             <td class="text-start"> {{ $orders->order_code }}</td>
                         </tr>
                         <tr>
+                            <th style="width:20%;">Trạng thái: </th>
+                            <td class="text-start"> {{ $orders->status == 0 ? 'Chưa xác nhận':'' }}</td>
+                        </tr>
+                        <tr>
+                            <th style="width:20%;">Tình trạng thanh toán: </th>
+                            <td class="text-start"> {{ $orders->check_payment_id == 0 ? 'Chưa thanh toán':'Đã thanh toán'}}</td>
+                        </tr>
+                        <tr>
                             <th style="width:20%;">Phương thức thanh toán: </th>
                             <td class="text-start"> {{ $orders->payments->name }}</td>
                         </tr>
+
                     </table>
                     <h4 class="mb-5 mt-5 text-center">Sản phẩm đã đặt</h4>
                     <table class="table">
@@ -161,8 +170,8 @@
                                     <tr>
                                         <td>{{ $key + 1 }}</td>
                                         <td>
-                                            {{-- <img src="{{ 'http://127.0.0.1:8000/' . $item->products->image }}"
-                                                style="width: 60px; height: 60px; object-fit: cover;"> --}}
+                                            <img src="{{ asset($item->products->image) }}"
+                                                style="width: 60px; height: 60px; object-fit: cover;">
 
                                             <span>{{ $item->products->name }}</span>
                                         </td>
@@ -172,7 +181,7 @@
                                     <tr>
                                         <td>{{ $key + 1 }}</td>
                                         <td>
-                                            <img src="{{ 'http://127.0.0.1:8000/' . $item->product_variants->image }}"
+                                            <img src="{{ asset($item->product_variants->image)  }}"
                                                 style="width: 60px; height: 60px; object-fit: cover;">
                                             <span>{{ $item->products->name . ' - ' . $item->product_variants->sku }}</span>
                                         </td>
@@ -192,7 +201,7 @@
                             </tr>
                         </tbody>
                     </table>
-                    @if ($userSearch->check_user == 0)
+                    @if ($orderList->check_user == 0)
                         <h4 class="mb-5 mt-5 text-center">Do bạn chưa có mật khẩu nên chúng tôi đã tạo cho bạn tài khoản
                         </h4>
                         <table class="table">
@@ -205,8 +214,9 @@
                                 <td class="text-start">abc123 </td>
                             </tr>
                         </table>
+                        <a href="" style="color: #333">Cập nhật tài khoản</a>
                     @endif
-                    <a href="{{ route('order.history') }}" class="btn"> Xem đơn hàng </a>
+                    <a href="{{ route('order.detail',['order_id' =>$orders->id]) }}" class="btn"> Xem đơn hàng </a>
                 </div>
             </div>
         </div>

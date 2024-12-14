@@ -115,6 +115,7 @@
                                         <div class="col-md-6 col-lg-4 col-xl-3">
                                             <form action="{{ route('addToCart') }}" method="POST">
                                                 @csrf
+                                                <input type="hidden" name="product_qty" value="{{$product->qty}}">
                                                 <div class="rounded position-relative fruite-item">
                                                     <div class="fruite-img">
                                                         <a href="{{ route('product.detail', $product->id) }}">
@@ -130,8 +131,7 @@
                                                             $countDiscount = 0;
                                                         @endphp
                                                         @foreach ($discount as $key => $item)
-                                                            @if (
-                                                                $item->product_id == $product->id &&
+                                                            @if ($item->product_id == $product->id &&
                                                                     $discount[$key]->priority <= $discount[$key++]->priority &&
                                                                     $item->discounts->start_date < $item->discounts->end_date &&
                                                                     $item->discounts->qty > 0)
@@ -154,7 +154,7 @@
                                                     <input type="hidden" name="product_id" value="{{ $product->id }}">
 
                                                     <input hidden name="qty" value="1">
-                                                    <p class="text-start text-dark fs-5 fw-bold">{{ $product->name }}</p>
+                                                    <p class="text-start text-dark fs-6 fw-bold">{{Str::words(strip_tags($product->name), 6, '...') }}</p>
                                                     <div class="variant d-flex flex-wrap">
                                                         @php
                                                             $hasVariants = false;
@@ -165,26 +165,32 @@
                                                                 @php
                                                                     $hasVariants = true;
                                                                 @endphp
-
                                                                     <button type="button"class="btn border border-secondary rounded px-2 me-2  mt-2 text-primary"
-                                                                        onclick="showOptionValue('{{ $product->id }}', '{{ $product_variant->id }}')">
+                                                                    onclick="showOptionValue('{{ $product->id }}', '{{ $product_variant->id }}', '{{ $product_variant->stock }}')">
                                                                         <span>{{ $product_variant->options->option_value }}</span>
                                                                     </button>
-
+                                                                    <span class="text-danger"> {{$product_variant->stock <= 0 ? 'Hết hàng' :''}} </span>
                                                             @endif
                                                         @endforeach
                                                         <input type="hidden" id="optionValueInput{{ $product->id }}"
                                                             name="product_variant_id" value="">
                                                     </div>
                                                     <div class="d-flex">
-                                                        <p class="text-dark fs-5 fw-bold mb-0">
-                                                            {{ number_format($product->price - $product->price * ($countDiscount / 100)) }}
-                                                            Vnđ
-                                                        </p>
-                                                        <del class="fs-6 ms-2"> {{ number_format($product->price) }}
-                                                            Vnđ</del>
+                                                        @if ($countDiscount == 0)
+                                                            <p class="text-dark fs-5 fw-bold mb-0">
+                                                                {{ number_format($product->price) }}
+                                                                Vnđ
+                                                            </p>
+                                                        @else
+                                                            <p class="text-dark fs-5 fw-bold mb-0">
+                                                                {{ number_format($product->price - $product->price * ($countDiscount / 100)) }}
+                                                                Vnđ
+                                                            </p>
+                                                            <del class="fs-6 ms-2"> {{ number_format($product->price) }}Vnđ</del>
+                                                        @endif
                                                     </div>
                                                     <br>
+                                                    <input type="text" id="stockInput{{ $product->id }}" name="stock" value="0" hidden>
 
                                                     <div class="d-flex">
                                                         <button onclick="validateSelection('{{ $product->id }}')"
@@ -361,8 +367,7 @@
 
                                     <a href="{{ route('product.detail', $product->id) }}"
                                         class="h5">{{ $product->name }}</a>
-                                    <h4 class="mb-3" id="product-price">{{ number_format($product->price, 2) }} đ
-                                    </h4>
+                                    <p class="mb-3 fs-6 text-secondary fw-bold" id="product-price">{{ number_format($product->price, 2) }} Vnđ</p>
 
                                     <div class="variant">
                                         @php
@@ -551,13 +556,14 @@
         }
     }
 
-    function showOptionValue(productId, variantId) {
+    function showOptionValue(productId, variantId,stock) {
         const input = document.getElementById(`optionValueInput${productId}`);
         const addToCartButton = document.getElementById(`addToCartButton${productId}`);
-
+        const stockInput = document.getElementById(`stockInput${productId}`);
         if (input && addToCartButton) {
             input.value = variantId; // Gán giá trị của biến thể
             addToCartButton.disabled = false; // Bật nút thêm vào giỏ
+            stockInput.value = stock;
         }
     }
 

@@ -16,6 +16,7 @@ class UserProfileController extends Controller
 {
     public function index()
     {
+        session()->forget('checkOrder');
         $user = Auth::user();
         $address = Address::where('user_id', $user->id)->get();
         $orderLists = OrderList::with('orders', 'orders.address', 'users')
@@ -47,6 +48,7 @@ class UserProfileController extends Controller
     }
     public function points()
     {
+        session()->forget('checkOrder');
         $user = Auth::user();
         $orderLists = OrderList::with('orders', 'orders.address', 'users')
             ->where('user_id', $user->id)
@@ -98,50 +100,49 @@ class UserProfileController extends Controller
         ]);
     }
     public function update(Request $request)
-{
-    $user = Auth::user();
+    {
+        $user = Auth::user();
 
-    // Validate thông tin cá nhân và địa chỉ
-    $request->validate([
-        'name' => 'required|string|max:255',
-        'email' => 'required|email|unique:users,email,' . $user->id,
-        'phone' => 'nullable|digits_between:10,15',
-        'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        'gender' => 'nullable|in:male,female,other',
-        'address' => 'required|string|max:255',
-        'home_address' => 'nullable|string|max:255',
-    ]);
-
-    // Cập nhật thông tin người dùng
-    $user->name = $request->input('name');
-    $user->email = $request->input('email');
-    $user->phone = $request->input('phone');
-    $user->gender = $request->input('gender');
-
-    // Cập nhật avatar nếu có
-    if ($request->hasFile('avatar')) {
-        $avatarPath = $request->file('avatar')->store('avatars', 'public');
-        $user->avatar = $avatarPath;
-    }
-
-    $user->save();
-
-    // Cập nhật địa chỉ
-    $address = Address::where('user_id', $user->id)->first();
-    if ($address) {
-        $address->update([
-            'address' => $request->input('address'),
-            'home_address' => $request->input('home_address'),
+        // Validate thông tin cá nhân và địa chỉ
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $user->id,
+            'phone' => 'nullable|digits_between:10,15',
+            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'gender' => 'nullable|in:male,female,other',
+            'address' => 'required|string|max:255',
+            'home_address' => 'nullable|string|max:255',
         ]);
-    } else {
-        Address::create([
-            'user_id' => $user->id,
-            'address' => $request->input('address'),
-            'home_address' => $request->input('home_address'),
-        ]);
+
+        // Cập nhật thông tin người dùng
+        $user->name = $request->input('name');
+        $user->email = $request->input('email');
+        $user->phone = $request->input('phone');
+        $user->gender = $request->input('gender');
+
+        // Cập nhật avatar nếu có
+        if ($request->hasFile('avatar')) {
+            $avatarPath = $request->file('avatar')->store('avatars', 'public');
+            $user->avatar = $avatarPath;
+        }
+
+        // $user->save();
+
+        // Cập nhật địa chỉ
+        $address = Address::where('user_id', $user->id)->first();
+        if ($address) {
+            $address->update([
+                'address' => $request->input('address'),
+                'home_address' => $request->input('home_address'),
+            ]);
+        } else {
+            Address::create([
+                'user_id' => $user->id,
+                'address' => $request->input('address'),
+                'home_address' => $request->input('home_address'),
+            ]);
+        }
+
+        return redirect()->route('user.profile')->with('success', 'Cập nhật thông tin và địa chỉ thành công!');
     }
-
-    return redirect()->route('user.profile')->with('success', 'Cập nhật thông tin và địa chỉ thành công!');
-}
-
 }

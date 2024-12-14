@@ -37,12 +37,11 @@
 
                      <a href="{{ route('storeHome') }}"
                          class="nav-item nav-link {{ request()->routeIs('storeHome') ? 'active' : '' }}">Trang chủ</a>
-                     <a href="{{ route('storeIntro') }}"
+                     <a href="{{ route('storeListProduct') }}"
+                         class="nav-item nav-link {{ request()->routeIs('storeListProduct') ? 'active' : '' }}">Cửa hàng</a>
+                    <a href="{{ route('storeIntro') }}"
                          class="nav-item nav-link {{ request()->routeIs('storeIntro') ? 'active' : '' }}">Giới
                          thiệu</a>
-                     <a href="{{ route('storeListProduct') }}"
-                         class="nav-item nav-link {{ request()->routeIs('storeListProduct') ? 'active' : '' }}">Sản
-                         Phẩm</a>
                      <div class="nav-item dropdown">
                          <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Trang</a>
                          <div class="dropdown-menu m-0 bg-secondary rounded-0">

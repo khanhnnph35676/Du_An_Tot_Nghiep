@@ -70,7 +70,7 @@
                                                 </td>
                                                 <td>{{ $value->users->email }} </td>
                                                 <td>{{ $value->users->phone }} </td>
-                                                <td>{{ $value->point }} đ</td>
+                                                <td>{{ $value->point ?? '0'}} đ</td>
                                                 <td><a href="{{ route('admin.updatePoint', ['id' => $value->id]) }}"
                                                         class="btn btn-secondary"> Cập nhật </a></td>
 

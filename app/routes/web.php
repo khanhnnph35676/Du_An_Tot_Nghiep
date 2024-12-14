@@ -45,7 +45,7 @@ Route::middleware(['auth.check'])->group(function () {
         // đăng xuất
         Route::post('logout', [AuthenController::class, 'logout'])->name('logout');
 
-        // nếu không phải admin không cho vào trang
+        // TRANG CHỈ CHO ADMIN THỰC HIỆN, CÒN CÁC TRANG NGOÀI NHÂN VIÊN THỰC HIỆN
         Route::middleware(['checkrule'])->group(function () {
             // Trang customer
             Route::get('list-customer', [CustomerController::class, 'listCustomer'])->name('listCustomer');
@@ -83,8 +83,6 @@ Route::middleware(['auth.check'])->group(function () {
 
         // chat
         Route::get('list-chat', [ChatController::class, 'index'])->name('listChat');
-
-
 
         // trang chủ
         Route::get('/', [StatisticsController::class, 'index'])->name('admin1');
@@ -154,15 +152,13 @@ Route::put('variant-options/{id}', [VariantOptionController::class, 'update'])->
 Route::delete('variant-options/{variantOption}', [VariantOptionController::class, 'destroy'])->name('variant-options.destroy');
 
         // danh mục bài viết
-// Quản lý danh mục bài viết
-Route::get('/blog-categories', [BlogCategoryController::class, 'list_categories'])->name('blog.categories.list'); // Danh sách danh mục
-Route::get('/blog-categories/create', [BlogCategoryController::class, 'create_category'])->name('blog.categories.create'); // Form thêm danh mục
-Route::post('/blog-categories/store', [BlogCategoryController::class, 'store_category'])->name('blog.categories.store'); // Xử lý thêm danh mục
-Route::get('/blog-categories/edit/{id}', [BlogCategoryController::class, 'edit_category'])->name('blog.categories.edit'); // Form chỉnh sửa danh mục
-Route::patch('/blog-categories/update/{id}', [BlogCategoryController::class, 'update_category'])->name('blog.categories.update'); // Xử lý cập nhật danh mục
-Route::delete('/blog-categories/delete/{id}', [BlogCategoryController::class, 'destroy_category'])->name('blog.categories.destroy'); // Xóa danh mục
-
-        
+        // Quản lý danh mục bài viết
+        Route::get('/blog-categories', [BlogCategoryController::class, 'list_categories'])->name('blog.categories.list'); // Danh sách danh mục
+        Route::get('/blog-categories/create', [BlogCategoryController::class, 'create_category'])->name('blog.categories.create'); // Form thêm danh mục
+        Route::post('/blog-categories/store', [BlogCategoryController::class, 'store_category'])->name('blog.categories.store'); // Xử lý thêm danh mục
+        Route::get('/blog-categories/edit/{id}', [BlogCategoryController::class, 'edit_category'])->name('blog.categories.edit'); // Form chỉnh sửa danh mục
+        Route::patch('/blog-categories/update/{id}', [BlogCategoryController::class, 'update_category'])->name('blog.categories.update'); // Xử lý cập nhật danh mục
+        Route::delete('/blog-categories/delete/{id}', [BlogCategoryController::class, 'destroy_category'])->name('blog.categories.destroy'); // Xóa danh mục
 
         // quản lý testimonial
         Route::get('/testimonials', [TestimonialController::class, 'listTestimonial'])->name('testimonials');
@@ -176,7 +172,7 @@ Route::delete('/blog-categories/delete/{id}', [BlogCategoryController::class, 'd
 
 
 
-// các trang người không đăng nhập có thể vào
+// TRANG KHÔNG CÓ TÀI KHOẢN CŨNG CÓ THỂ VÀO (TÀI KHOẢN QUẢN LÝ WEB KHÔNG CHO VÀO)
 Route::middleware(['checkadmin'])->group(function () {
     // trang chủ
     Route::get('/', [PageController::class, 'storeHome'])->name('storeHome');
@@ -216,23 +212,29 @@ Route::get('/product/{id}/testimonials', [TestimonialController::class, 'getProd
     Route::post('momo_payment', [CheckoutController::class, 'momoPayment'])->name('momoPayment');
     Route::patch('order-update-destroy', [UserOrderController::class, 'destroyOrder'])->name('destroyOrder');
 
-    // Route::get('success-checkout',[CheckoutController :: class,'successCheckout'])->name('successCheckout');
+
 
     // Bài viết
     Route::prefix('blogs')->group(function () {
         Route::get('/', [UserBlogController::class, 'index'])->name('user.blog.index');
         Route::get('/{BlogSlug}', [UserBlogController::class, 'show'])->name('user.blog.detail');
     });
-    // các trang bắt buộc phải đăng nhập mới có thể vào
+
+    // TRANG CÓ TÀI KHOẢN NGƯỜI DÙNG MỚI CHO VÀO
     Route::middleware(['checkuser'])->group(function () {
         //Trang thông tin khách hàng
         Route::get('/user/profile', [UserProfileController::class, 'index'])->name('user.profile');
         Route::get('list-points', [UserProfileController::class, 'points'])->name('points');
         Route::post('add-voucher', [UserProfileController::class, 'addVoucher'])->name('addVoucher');
         Route::get('/order-history', [UserOrderController::class, 'index'])->name('order.history');
+        Route::get('/order-detail/{order_id}', [UserOrderController::class, 'detail'])->name('order.detail');
+        Route::get('/success-checkout',[CheckoutController :: class,'successCheckout'])->name('successCheckout');
+        Route::post('/pay-Momo',[CheckoutController :: class,'payMomo'])->name('payMomo');
+
     });
+
 });
-// });
+
 
 //đăng nhập đăng ký, đăng xuất , quên mật khẩu
 Route::get('/user/login', [AuthenController::class, 'loginHome'])->name('user.login');

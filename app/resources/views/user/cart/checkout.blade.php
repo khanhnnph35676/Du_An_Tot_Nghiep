@@ -17,6 +17,29 @@
             box-shadow: 0 0 5px rgba(255, 87, 34, 0.5);
             /* Hiệu ứng đổ bóng */
         }
+
+        .wrapper {
+            height: 100vh;
+            width: 100%;
+            background: #00000044;
+            position: fixed;
+            top: 0;
+            z-index: 1;
+        }
+
+        .mess-checkout {
+            width: 400px;
+            height: 220px;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2 !important;
+            background: white;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            /* Tùy chọn để tạo bo góc */
+        }
     </style>
     <!-- Single Page Header start -->
     <div class="container-fluid page-header py-5">
@@ -28,6 +51,30 @@
         </ol>
     </div>
     <!-- Single Page Header End -->
+    @php
+        // print_r($checkOrder);
+    @endphp
+    {{-- @if ($checkOrder != null )
+        @foreach ($checkOrder as $item)
+            @if ($item['payment_id'] == 2)
+                <div class="mess-checkout border">
+                    <div class="content text-center text-dark fs-5 mt-3">
+                        Bạn đã huỷ thanh toán bằng Momo. Hệ thống sẽ tự chuyển cho bạn sang thanh toán COD
+                    </div>
+                    <div class="d-flex mt-5 justify-content-end">
+                        <a href="{{ route('successCheckout') }}" class="btn btn border me-4">Huỷ</a>
+                        <form action="{{route('payMomo')}}" method="POST">
+                            @csrf
+                            <button class="btn btn-primary me-3">Tiếp tục thanh toán </button>
+                        </form>
+                    </div>
+                </div>
+                <div class="wrapper">
+                </div>
+            @endif
+        @endforeach
+    @endif --}}
+
 
     <!-- Checkout Page Start -->
     <div class="container-fluid py-5">
@@ -58,7 +105,7 @@
                             $countAddresses = 0;
                             $address_id = null;
                         @endphp
-                        @if ($address != [])
+                        @if ($address)
                             @foreach ($address as $key => $item)
                                 <div class="row address-item" id="address-row-{{ $item->id }}">
                                     <div class="form-item  align-items-center">
@@ -197,7 +244,7 @@
                                                             </div>
                                                         </th>
                                                         <td class="align-middle">
-                                                            {{ $product->name }}
+                                                            {{Str::words(strip_tags($product->name), 6, '...') }}
                                                         </td>
                                                         <td class="align-middle">
                                                             @if ($item['discount'] != 0)
@@ -240,7 +287,7 @@
                                                                     alt="Ảnh sản phẩm">
                                                             </td>
                                                             <td class="align-middle">
-                                                                {{ $product->name . ' - ' . $productVariant->sku }}
+                                                                {{Str::words(strip_tags($product->name . ' - ' . $productVariant->sku), 6, '...') }}
                                                             </td>
                                                             <td class="align-middle" style="width:100px;">
                                                                 @if ($item['discount'] != 0)
@@ -290,7 +337,7 @@
                                                             </div>
                                                         </th>
                                                         <td class="align-middle">
-                                                            {{ $product->name }}
+                                                            {{Str::words(strip_tags($product->name), 6, '...') }}
                                                         </td>
                                                         <td class="align-middle">
                                                             @if ($item['discount'] != 0)
@@ -333,7 +380,7 @@
                                                                     alt="Ảnh sản phẩm">
                                                             </td>
                                                             <td class="align-middle">
-                                                                {{ $product->name . ' - ' . $productVariant->sku }}
+                                                                {{Str::words(strip_tags($product->name . ' - ' . $productVariant->sku), 6, '...') }}
                                                             </td>
                                                             <td class="align-middle" style="width:100px;">
                                                                 @if ($item['discount'] != 0)

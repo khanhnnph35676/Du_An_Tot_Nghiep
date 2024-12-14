@@ -111,13 +111,12 @@
                                                 </form>
                                             </td>
                                         </tr>
+
                                     @endif
                                     @foreach ($productVariants as $productVariant)
-                                        @if (
-                                            $product->id == $item['product_id'] &&
+                                        @if ($product->id == $item['product_id'] &&
                                                 $item['product_variant_id'] == $productVariant->id &&
-                                                Auth::id() == $item['user_id']
-                                        )
+                                                Auth::id() == $item['user_id'])
                                             <tr>
                                                 <td style="width:100px;" class="text-center align-middle">
                                                     <input type="checkbox" class="form-check-input select-item"
@@ -156,10 +155,7 @@
                                                             </button>
                                                         </div>
                                                     </div>
-                                                    <span id="error-message" class="mt-1"
-                                                        style="color: red; display: none;"></span>
-                                                    <span
-                                                        id="error-message-{{ $item['product_id'] }}-{{ $item['product_variant_id'] ?? 'null' }}"
+                                                    <span id="error-message-{{ $item['product_id'] }}-{{ $item['product_variant_id'] ?? 'null' }}"
                                                         class="mt-1 text-danger" style="display: none;"></span>
                                                 </td>
                                                 <td>
@@ -188,6 +184,14 @@
                                     @endforeach
                                 @endforeach
                             @endforeach
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td> <span id="error-message" class="mt-1"
+                                    style="color: red; display: none;"></span></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
                         @else
                             @foreach ($products as $product)
                                 @foreach ($cart as $item)
@@ -293,8 +297,6 @@
                                                             </button>
                                                         </div>
                                                     </div>
-                                                    <span id="error-message" class="mt-1"
-                                                        style="color: red; display: none;"></span>
                                                     <span
                                                         id="error-message-{{ $item['product_id'] }}-{{ $item['product_variant_id'] ?? 'null' }}"
                                                         class="mt-1 text-danger" style="display: none;"></span>
@@ -325,6 +327,14 @@
                                     @endforeach
                                 @endforeach
                             @endforeach
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td> <span id="error-message" class="mt-1"
+                                    style="color: red; display: none;"></span></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
                         @endif
                     </tbody>
                 </table>
@@ -618,9 +628,9 @@
                     } else {
                         errorMessageElement.textContent = data.message;
                         errorMessageElement.style.display = 'block';
-                        setTimeout(() => {
-                            location.reload(); // Reload trang sau 1 giây
-                        }, 300);
+                        // setTimeout(() => {
+                        //     location.reload(); // Reload trang sau 1 giây
+                        // }, 300);
                     }
                 });
         }
