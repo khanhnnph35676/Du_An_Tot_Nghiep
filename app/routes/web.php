@@ -180,6 +180,9 @@ Route::delete('/blog-categories/delete/{id}', [BlogCategoryController::class, 'd
 Route::middleware(['checkadmin'])->group(function () {
     // trang chủ
     Route::get('/', [PageController::class, 'storeHome'])->name('storeHome');
+// comment 
+Route::get('/product/{id}/testimonials', [TestimonialController::class, 'getProductTestimonials'])
+    ->name('product.testimonials');
 
     //Sản phẩm
     Route::get('list-product', [PageController::class, 'storeListProduct'])->name('storeListProduct');

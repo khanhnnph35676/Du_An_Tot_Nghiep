@@ -13,6 +13,17 @@ use Illuminate\Support\Facades\Storage;
 
 class TestimonialController extends Controller
 {
+    public function getProductTestimonials($id)
+{
+    // Lấy tất cả đánh giá cho sản phẩm cụ thể kèm thông tin người dùng
+    $testimonials = Testimonial::with('user')
+        ->where('product_id', $id)
+        ->orderBy('created_at', 'desc') // Sắp xếp theo ngày tạo mới nhất
+        ->get();
+
+    return view('user.product.testimonials', compact('testimonials'));
+}
+
     public function listTestimonial()
     {
         // Lấy tất cả testimonials kèm theo thông tin người dùng
