@@ -267,38 +267,6 @@
 <!-- Featurs End -->
 
 
-<!-- Vesitable Shop Start-->
-<div class="container-fluid vesitable">
-    <div class="container py-3">
-        <h2 class="mb-3">Danh mục sản phẩm</h2>
-        <div class="row">
-            @foreach ($categories as $category)
-                <div class="col-md-3 mb-2">
-                    <div class="border border-primary rounded position-relative vesitable-item">
-                        <div class="vesitable-img">
-                            <img src="{{ asset('storage/' . $category->image) }}"
-                                style="width: 50px; height: 250px; object-fit: cover;"
-                                class="img-fluid w-100 rounded-top" alt="{{ $category->name }}">
-                        </div>
-                        <div class="p-4 rounded-bottom">
-                            <h4>{{ $category->name }}</h4>
-                            <p>{{ $category->description }}</p>
-                            <div class="d-flex justify-content-between flex-lg-wrap">
-                                <a href="#" class="btn border border-secondary rounded px-3 text-primary">
-                                    Xem chi tiết
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            @endforeach
-        </div>
-    </div>
-
-</div>
-<!-- Vesitable Shop End -->
-
-
 <!-- Banner Section Start-->
 <div class="container-fluid banner bg-secondary my-5">
     <div class="container py-5">
@@ -369,7 +337,7 @@
                                         class="h5">{{ $product->name }}</a>
                                     <p class="mb-3 fs-6 text-secondary fw-bold" id="product-price">{{ number_format($product->price, 2) }} Vnđ</p>
 
-                                    <div class="variant">
+                                    <div class="variant d-flex flex-wrap">
                                         @php
                                             $hasVariants = false;
                                         @endphp
@@ -379,22 +347,18 @@
                                                 @php
                                                     $hasVariants = true;
                                                 @endphp
+                                                @if ($product_variant->stock <=0)
+                                                    <span class='text-danger'> Hết hàng</span>
+                                                @endif
+
                                                 <button type="button"
-                                                    class="btn border border-secondary rounded px-3 text-primary"
+                                                    class="btn border border-secondary rounded px-3 me-2 text-primary"
                                                     onclick="selectVariant('{{ $product_variant->id }}', '{{ $product->id }}')">
                                                     <span>{{ $product_variant->options->option_value }}</span>
                                                 </button>
                                             @endif
                                         @endforeach
                                     </div>
-
-                                    <button type="button" id="addToCartButton{{ $product->id }}"
-                                        class="btn border border-secondary rounded px-3 text-primary"
-                                        onclick="openModalIfValid('{{ $product->id }}', {{ $hasVariants ? 'true' : 'false' }})">
-                                        <i class="fa fa-shopping-bag me-2 text-primary"></i>
-                                        Thêm vào giỏ
-                                    </button>
-
                                 </form>
                             </div>
                         </div>
@@ -451,8 +415,8 @@
 <div class="container-fluid testimonial py-5">
     <div class="container py-5">
         <div class="testimonial-header text-center">
-            <h4 class="text-primary">Our Testimonial</h4>
-            <h1 class="display-5 mb-5 text-dark">Our Client Saying!</h1>
+            <h4 class="text-primary">Khách Hàng Của Chúng Tôi</h4>
+            <h1 class="display-5 mb-5 text-dark">Cảm Nhận Từ Khách Hàng!</h1>
         </div>
         <div class="owl-carousel testimonial-carousel">
             <div class="testimonial-item img-border-radius bg-light rounded p-4">
@@ -460,9 +424,7 @@
                     <i class="fa fa-quote-right fa-2x text-secondary position-absolute"
                         style="bottom: 30px; right: 0;"></i>
                     <div class="mb-4 pb-4 border-bottom border-secondary">
-                        <p class="mb-0">Lorem Ipsum is simply dummy text of the printing Ipsum has been the
-                            industry's standard dummy text ever since the 1500s,
-                        </p>
+                        <p class="mb-0">Lorem Ipsum chỉ là đoạn văn bản mẫu của ngành in ấn và dàn trang. Đoạn văn này đã trở thành chuẩn mực từ những năm 1500.</p>
                     </div>
                     <div class="d-flex align-items-center flex-nowrap">
                         <div class="bg-secondary rounded">
@@ -470,8 +432,8 @@
                                 style="width: 100px; height: 100px;" alt="">
                         </div>
                         <div class="ms-4 d-block">
-                            <h4 class="text-dark">Client Name</h4>
-                            <p class="m-0 pb-3">Profession</p>
+                            <h4 class="text-dark">Tên Khách Hàng</h4>
+                            <p class="m-0 pb-3">Nghề Nghiệp</p>
                             <div class="d-flex pe-5">
                                 <i class="fas fa-star text-primary"></i>
                                 <i class="fas fa-star text-primary"></i>
@@ -488,9 +450,7 @@
                     <i class="fa fa-quote-right fa-2x text-secondary position-absolute"
                         style="bottom: 30px; right: 0;"></i>
                     <div class="mb-4 pb-4 border-bottom border-secondary">
-                        <p class="mb-0">Lorem Ipsum is simply dummy text of the printing Ipsum has been the
-                            industry's standard dummy text ever since the 1500s,
-                        </p>
+                        <p class="mb-0">Lorem Ipsum chỉ là đoạn văn bản mẫu của ngành in ấn và dàn trang. Đoạn văn này đã trở thành chuẩn mực từ những năm 1500.</p>
                     </div>
                     <div class="d-flex align-items-center flex-nowrap">
                         <div class="bg-secondary rounded">
@@ -498,8 +458,8 @@
                                 style="width: 100px; height: 100px;" alt="">
                         </div>
                         <div class="ms-4 d-block">
-                            <h4 class="text-dark">Client Name</h4>
-                            <p class="m-0 pb-3">Profession</p>
+                            <h4 class="text-dark">Tên Khách Hàng</h4>
+                            <p class="m-0 pb-3">Nghề Nghiệp</p>
                             <div class="d-flex pe-5">
                                 <i class="fas fa-star text-primary"></i>
                                 <i class="fas fa-star text-primary"></i>
@@ -516,9 +476,7 @@
                     <i class="fa fa-quote-right fa-2x text-secondary position-absolute"
                         style="bottom: 30px; right: 0;"></i>
                     <div class="mb-4 pb-4 border-bottom border-secondary">
-                        <p class="mb-0">Lorem Ipsum is simply dummy text of the printing Ipsum has been the
-                            industry's standard dummy text ever since the 1500s,
-                        </p>
+                        <p class="mb-0">Lorem Ipsum chỉ là đoạn văn bản mẫu của ngành in ấn và dàn trang. Đoạn văn này đã trở thành chuẩn mực từ những năm 1500.</p>
                     </div>
                     <div class="d-flex align-items-center flex-nowrap">
                         <div class="bg-secondary rounded">
@@ -526,8 +484,8 @@
                                 style="width: 100px; height: 100px;" alt="">
                         </div>
                         <div class="ms-4 d-block">
-                            <h4 class="text-dark">Client Name</h4>
-                            <p class="m-0 pb-3">Profession</p>
+                            <h4 class="text-dark">Tên Khách Hàng</h4>
+                            <p class="m-0 pb-3">Nghề Nghiệp</p>
                             <div class="d-flex pe-5">
                                 <i class="fas fa-star text-primary"></i>
                                 <i class="fas fa-star text-primary"></i>
@@ -542,6 +500,7 @@
         </div>
     </div>
 </div>
+
 <!-- Tastimonial End -->
 <script>
     function selectVariant(variantId, productId) {

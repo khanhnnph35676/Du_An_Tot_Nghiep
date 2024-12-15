@@ -17,7 +17,7 @@
     </div>
 
      </div>
-    
+
     <!-- Nội dung chính -->
     <div class="row">
         <div class="col-lg-8 offset-lg-2">
@@ -84,15 +84,15 @@
                     <ul class="list-unstyled">
                         <li>
                             <i class="bi bi-envelope-fill text-primary me-2"></i>
-                            Email: <a href="mailto:support@doanvat.com" class="text-decoration-none">support@doanvat.com</a>
+                            Email: <a href="mailto:support@doanvat.com" class="text-decoration-none">khanhnnph35676@fpt.edu.vn</a>
                         </li>
                         <li>
                             <i class="bi bi-telephone-fill text-success me-2"></i>
-                            Hotline: <a href="tel:0123456789" class="text-decoration-none">0123-456-789</a>
+                            Hotline: <a href="tel:0123456789" class="text-decoration-none">0961746082</a>
                         </li>
                         <li>
                             <i class="bi bi-chat-fill text-warning me-2"></i>
-                            Chat trực tiếp: Truy cập <a href="/live-chat" class="text-decoration-none">Hỗ trợ trực tuyến</a>.
+                            Chat trực tiếp: Truy cập <a href="#" class="text-decoration-none">Hỗ trợ trực tuyến</a>.
                         </li>
                     </ul>
                 </div>

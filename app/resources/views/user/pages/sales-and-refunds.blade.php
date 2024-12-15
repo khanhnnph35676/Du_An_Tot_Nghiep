@@ -16,7 +16,7 @@
         <p class="text-muted">Chúng tôi cam kết mang lại sản phẩm chất lượng và chính sách hỗ trợ minh bạch cho khách hàng.</p>
     </div>
      </div>
-    
+
 
     <!-- Nội dung chính -->
     <div class="row">
@@ -48,7 +48,7 @@
                 <div class="card-body">
                     <h4 class="card-title text-danger">Lưu Ý Quan Trọng</h4>
                     <p class="card-text">
-                        Khách hàng cần cung cấp <strong>hóa đơn mua hàng</strong> hoặc thông tin đặt hàng để chúng tôi có thể xử lý yêu cầu hoàn tiền. 
+                        Khách hàng cần cung cấp <strong>hóa đơn mua hàng</strong> hoặc thông tin đặt hàng để chúng tôi có thể xử lý yêu cầu hoàn tiền.
                         Vui lòng kiểm tra kỹ sản phẩm khi nhận hàng để đảm bảo quyền lợi của bạn.
                     </p>
                 </div>
@@ -87,11 +87,11 @@
                     <ul class="list-unstyled">
                         <li>
                             <i class="bi bi-envelope-fill text-success me-2"></i>
-                            Email: <a href="mailto:support@doanvat.com" class="text-decoration-none">support@doanvat.com</a>
+                            Email: <a href="mailto:support@doanvat.com" class="text-decoration-none">khanhnnph35676@fpt.edu.vn</a>
                         </li>
                         <li>
                             <i class="bi bi-telephone-fill text-danger me-2"></i>
-                            Hotline: <a href="tel:0123456789" class="text-decoration-none">0123-456-789</a>
+                            Hotline: <a href="tel:0123456789" class="text-decoration-none">0961746082</a>
                         </li>
                         <li>
                             <i class="bi bi-chat-fill text-info me-2"></i>

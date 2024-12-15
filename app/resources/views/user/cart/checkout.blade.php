@@ -52,7 +52,7 @@
     </div>
     <!-- Single Page Header End -->
     @php
-        print_r($checkOrder);
+        // print_r($checkOrder);
     @endphp
     {{-- @if ($checkOrder != null )
         @foreach ($checkOrder as $item)

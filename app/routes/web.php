@@ -197,7 +197,7 @@ Route::get('/faq-and-support', [PageController::class, 'faqAndSupport'])->name('
     Route::delete('remove-item-cart-detail/{product_id}', [CartController::class, 'removeItemCartDetail'])->name('removeItemCartDetail');
     Route::delete('remove-item-cart/{product_variant_id}', [CartController::class, 'removeItemCart'])->name('removeItemCart');
     Route::post('add-to-cart', [CartController::class, 'addToCart'])->name('addToCart');
-    Route::post('add-to-cart-detail', [CartController::class, 'addToCartDetai'])->name('addToCartDetai');
+    Route::post('add-to-cart-detail/{checkAdd}', [CartController::class, 'addToCartDetai'])->name('addToCartDetai');
 
     //Trang thanh toán
     Route::get('store-checkout', [CheckoutController::class, 'storeCheckout'])->name('storeCheckout');
@@ -221,7 +221,7 @@ Route::get('/faq-and-support', [PageController::class, 'faqAndSupport'])->name('
     Route::prefix('blogs')->group(function () {
         Route::get('/', [UserBlogController::class, 'index'])->name('user.blog.index');
         Route::get('/{BlogSlug}', [UserBlogController::class, 'show'])->name('user.blog.detail');
-        
+
     });
 
     // TRANG CÓ TÀI KHOẢN NGƯỜI DÙNG MỚI CHO VÀO
@@ -236,7 +236,7 @@ Route::get('/faq-and-support', [PageController::class, 'faqAndSupport'])->name('
         Route::post('/pay-Momo',[CheckoutController :: class,'payMomo'])->name('payMomo');
         Route::get('user/change-password', [AuthController::class, 'changePassword'])->name('user.change-password');
         Route::post('user/update-password', [AuthController::class, 'updatePassword'])->name('user.update-password');
-        
+
     });
 
 });

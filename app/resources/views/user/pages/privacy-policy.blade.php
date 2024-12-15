@@ -15,8 +15,8 @@
         <p class="text-muted">Chúng tôi cam kết bảo vệ thông tin cá nhân của bạn khi sử dụng dịch vụ tại Đồ Ăn Vặt.</p>
     </div>
     </div>
-    
-    
+
+
     <!-- Nội dung chính -->
     <div class="row">
         <div class="col-lg-8 offset-lg-2">
@@ -27,7 +27,7 @@
                     <p class="card-text">Dưới đây là những thông tin cụ thể về chính sách bảo mật của chúng tôi:</p>
                 </div>
             </div>
-            
+
             <!-- Các cam kết chi tiết -->
             <div class="card shadow-sm border-0 mb-4">
                 <div class="card-body">
@@ -55,11 +55,11 @@
                     <p class="card-text">Hãy liên hệ với chúng tôi nếu bạn có bất kỳ thắc mắc nào.</p>
                     <p>
                         <i class="bi bi-envelope-fill text-primary me-2"></i>
-                        Email: <a href="mailto:support@doanvat.com" class="text-decoration-none">support@doanvat.com</a>
+                        Email: <a href="mailto:support@doanvat.com" class="text-decoration-none">khanhnnph35676@fpt.edu.vn</a>
                     </p>
                     <p>
                         <i class="bi bi-telephone-fill text-success me-2"></i>
-                        Hotline: <a href="tel:0123456789" class="text-decoration-none">0123-456-789</a>
+                        Số liện hệ: <a href="tel:0123456789" class="text-decoration-none">0961746082</a>
                     </p>
                 </div>
             </div>
