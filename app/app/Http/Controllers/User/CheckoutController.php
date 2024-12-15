@@ -188,6 +188,11 @@ class CheckoutController extends Controller
 
             // Phần gửi mail khi không có tài khoản
         } else {
+            $user = User::find($user_id);
+            $user->update([
+                'name' => $request->name,
+                'phone' => $request->phone,
+            ]);
             $dataOrderList = [
                 'order_id' => $addOrder->id,
                 'user_id' => $user_id,
@@ -200,11 +205,57 @@ class CheckoutController extends Controller
                 'payment_id' => $request->payment_id,
             ];
             $checkOrder[] = $dataCheck;
+            foreach ($cart as $key => $value) {
+                if ($value['selected_products'] == 1 && $user_id == $value['user_id']) {
+                    //  đăng nhập được sản phẩm
+                    $value['product_variant_id'] = 0 ? $product_variant_id =  null : $product_variant_id = $value['product_variant_id'];
+                    $dataProducts = [
+                        'order_id' => $addOrder->id,  // ID đơn hàng
+                        'product_id' => $value['product_id'],
+                        'product_variant_id' =>  $product_variant_id,
+                        'quantity' => $value['qty'],
+                        'price' => $request->price
+                    ];
+                    ProductOder::create($dataProducts);
+
+                    // Nếu sản phẩm có biến thể, kiểm tra và trừ kho
+                    if ($value['product_variant_id'] != 0) {
+                        $product_variant = ProductVariant::find($product_variant_id);
+                        if ($product_variant && $product_variant->stock > 0 && $product_variant->stock - $value['qty'] > 0) {
+                            $product_variant->stock -= $value['qty'];
+                            $product_variant->save();
+                        } else {
+                            return redirect()->back()->with([
+                                'error' => 'Sản phẩm không đủ số lượng.'
+                            ]);
+                        }
+                    } else {
+                        $product = Product::find($value['product_id']);
+                        if ($product && $product->qty > 0 || $product->qty - $value['qty'] > 0) {
+                            $product->qty -= $value['qty'];
+                            $product->save();
+                        } else {
+                            return redirect()->back()->with([
+                                'error' => 'Sản phẩm không đủ số lượng.'
+                            ]);
+                        }
+                    }
+                    // làm giảm số giảm giá khi khách đặt hàng
+                    if ($value['discount_id'] != 0) {
+                        $discount = Discount::find($value['discount_id']);
+                        $discount->update([
+                            'qty' => $discount->qty + $value['qty']
+                        ]);
+                    }
+                    unset($cart[$key]);
+                }
+            }
         }
 
         $emailUser = $request->email;
         $nameUser = $request->name;
         $userSearch = User::where('email', $emailUser)->first();
+        // đối với khách đã có tài khoản
         foreach ($cart as $key => $value) {
             if ($value['selected_products'] == 1 && $userSearch->id == $value['user_id']) {
                 if ($user_id == $value['user_id']) {
@@ -324,12 +375,12 @@ class CheckoutController extends Controller
             return redirect()->to($jsonResult['payUrl']);
         } else {
             // date_default_timezone_set('Asia/Ho_Chi_Minh');
-            $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
+            $vnp_Url = env("VNPAY_URL");
             $vnp_Returnurl = "http://127.0.0.1:8000/success-checkout";
-            $vnp_TmnCode = "RXJT5TCH"; // Mã website tại VNPAY
-            $vnp_HashSecret = "F9F4V2ZO75SI9ZUKJ6LJHFD4C0JGJDRD"; // Chuỗi bí mật
+            $vnp_TmnCode = env('VNPAY_TMN_CODE'); // Mã website tại VNPAY
+            $vnp_HashSecret = env('VNPAY_HASH_SECRET'); // Chuỗi bí mật
             $vnp_TxnRef = $addOrder->order_code;
-            $vnp_OrderInfo = 'Thanh toán đơn hàng';
+            $vnp_OrderInfo = 'Thanh toan don hang';
             $vnp_OrderType = 'billpayment';
             $vnp_Amount = $request->sum_price * 100;
             $vnp_Locale = 'vn';
@@ -383,12 +434,9 @@ class CheckoutController extends Controller
                 $vnpSecureHash = hash_hmac('sha512', $hashdata, $vnp_HashSecret);
                 $vnp_Url .= 'vnp_SecureHash=' . $vnpSecureHash;
             }
-
+            // dd($vnp_Url);
             // Chuyển hướng người dùng đến cổng thanh toán nếu bấm nút redirect
-            if (isset($_POST['redirect'])) {
-                header('Location: ' . $vnp_Url);
-                die();
-            }
+            return redirect($vnp_Url);
         }
     }
     public function successCheckout()

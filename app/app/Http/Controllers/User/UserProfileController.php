@@ -57,7 +57,7 @@ class UserProfileController extends Controller
             ->orderBy('id', 'desc')
             ->get();
         $cart = session()->get('cart', []);
-        $listVouchers = Voucher::get();
+        $listVouchers = Voucher::whereColumn('start_date', '<', 'end_date')->get();
         $user_voucher = UserVoucher::where('user_id', $user->id)->get();
         $point = Point::where('user_id', $user->id)->first();
         return view('user.point.index', compact('cart', 'orderLists', 'listVouchers', 'point', 'user_voucher'));
@@ -65,7 +65,9 @@ class UserProfileController extends Controller
     public function addVoucher(Request $request)
     {
         $user = Auth::user();
-        $voucher = Voucher::find($request->voucher_id);
+        $voucher = Voucher::where('id', $request->voucher_id)
+                    ->whereColumn('start_date', '<', 'end_date')
+                  ->first();
         $point = Point::where('user_id', $user->id)->first();
 
         // Check lỗi hết số lượng và lỗi không đủ điểm

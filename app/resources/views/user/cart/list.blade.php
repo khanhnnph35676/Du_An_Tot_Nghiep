@@ -437,32 +437,37 @@
                             <div class="d-flex flex-wrap justify-content-start gap-3 m-2">
                                 <!-- Vòng lặp hiển thị các voucher -->
                                 @foreach ($listVouchers as $voucher)
-                                    <div class="card shadow-sm rounded-3" style="width: 31%; min-height:200px;">
-                                        <span class="qty-point border bg-secondary text-white p-1 d-flex">
-                                            @if ($user_voucher == [])
-                                                x0
-                                            @else
-                                                @foreach ($user_voucher as $value)
-                                                    @if ($value->voucher_id == $voucher->id)
-                                                        x{{ $value->qty }}
-                                                    @endif
-                                                @endforeach
-                                            @endif
-                                        </span>
-                                        <div class="card-body text-center">
-                                            <h6 class="card-title text-success mb-3 text-start">Mã:
-                                                {{ $voucher->code_vocher }}
-                                            </h6>
-                                            <p class="text-start name-voucher">{{ $voucher->name }}</p>
-                                            <!-- Nút để chọn voucher -->
-                                            <button type="button" class="btn btn-primary redeem m-2"
-                                                onclick="setVoucherAndSubmit('{{ $voucher->id }}')">
-                                                <div class="d-flex justify-content-start align-items-start group-point">
-                                                    <div class="text-center">Dùng</div>
-                                                </div>
-                                            </button>
+                                    @if (\Carbon\Carbon::parse(now())->format('d/m/Y') < \Carbon\Carbon::parse($voucher->end_date)->format('d/m/Y'))
+                                        <div class="card shadow-sm rounded-3" style="width: 31%; min-height:200px;">
+
+                                            <span class="qty-point border bg-secondary text-white p-1 d-flex">
+                                                @if ($user_voucher == [])
+                                                    x0
+                                                @else
+                                                    @foreach ($user_voucher as $value)
+                                                        @if ($value->voucher_id == $voucher->id)
+                                                            x{{ $value->qty }}
+                                                        @endif
+                                                    @endforeach
+                                                @endif
+                                            </span>
+                                            <div class="card-body text-center">
+                                                <h6 class="card-title text-success mb-3 text-start">Mã:
+                                                    {{ $voucher->code_vocher }}
+                                                </h6>
+
+                                                <p class="text-start name-voucher">{{ $voucher->name }}</p>
+                                                <p style="font-size: 10px;">HSD: {{' đến '.\Carbon\Carbon::parse($voucher->end_date)->format('d/m/Y')   }}</p>
+                                                <!-- Nút để chọn voucher -->
+                                                <button type="button" class="btn btn-primary redeem m-2"
+                                                    onclick="setVoucherAndSubmit('{{ $voucher->id }}')">
+                                                    <div class="d-flex justify-content-start align-items-start group-point">
+                                                        <div class="text-center">Dùng</div>
+                                                    </div>
+                                                </button>
+                                            </div>
                                         </div>
-                                    </div>
+                                    @endif
                                 @endforeach
                             </div>
                         </form>

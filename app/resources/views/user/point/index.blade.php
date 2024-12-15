@@ -169,6 +169,7 @@
                                                 {{ $voucher->code_vocher }}
                                             </h6>
                                             <p class="text-start name-voucher">{{ $voucher->name }}</p>
+                                            <p style="font-size: 10px;">HSD: {{' đến '.\Carbon\Carbon::parse($voucher->end_date)->format('d/m/Y')   }}</p>
                                             <!-- Nút để chọn voucher -->
                                             <button type="button" class="btn btn-primary redeem m-2"
                                                 onclick="setVoucherAndSubmit('{{ $voucher->id }}')">
