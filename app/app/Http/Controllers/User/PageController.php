@@ -29,7 +29,7 @@ class PageController extends Controller
     {
         $cart = session()->get('cart', []);
         // dd($cart);
-        $products = Product::latest()->take(8)->get();
+        $products = Product::where('type',2)->take(8)->get();
         $bestViewedProducts = Product::orderBy('view', 'desc')->take(9)->get();
         $categories = Category::all();
         $product_variants = ProductVariant::with("options")->get();

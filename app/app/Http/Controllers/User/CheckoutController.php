@@ -93,39 +93,39 @@ class CheckoutController extends Controller
 
     public function AddOrder(Request $request)
     {
-        // $request->validate([
-        //     'sum_price' => 'required|min:1',
-        //     'selected_address' => 'required|exists:address,id',
-        //     'email' => 'required|email|max:50',
-        //     'phone' => 'required|min:10|max:10',
-        //     'name' => 'required|max:50'
-        // ], [
-        //     'sum_price.required' => 'Không có giá',
-        //     'sum_price.min' => 'Tổng giá trị phải lớn hơn 0.',
+        $request->validate([
+            'sum_price' => 'required|min:1',
+            'selected_address' => 'required|exists:address,id',
+            'email' => 'required|email|max:50',
+            'phone' => 'required|min:10|max:10',
+            'name' => 'required|max:50'
+        ], [
+            'sum_price.required' => 'Không có giá',
+            'sum_price.min' => 'Tổng giá trị phải lớn hơn 0.',
 
-        //     'selected_address.required' => 'Vui lòng chọn địa chỉ giao hàng.',
-        //     'address_id.exists' => 'Địa chỉ giao hàng không hợp lệ.',
+            'selected_address.required' => 'Vui lòng chọn địa chỉ giao hàng.',
+            'address_id.exists' => 'Địa chỉ giao hàng không hợp lệ.',
 
-        //     'email.required' => 'Vui lòng nhập email.',
-        //     'email.email' => 'Email không hợp lệ.',
-        //     'email.unique' => 'Email này đã được sử dụng. Vui lòng chọn một email khác.',
-        //     'email.max' => 'Bạn nhập tên dài quá 50 ký tự',
+            'email.required' => 'Vui lòng nhập email.',
+            'email.email' => 'Email không hợp lệ.',
+            'email.unique' => 'Email này đã được sử dụng. Vui lòng chọn một email khác.',
+            'email.max' => 'Bạn nhập tên dài quá 50 ký tự',
 
-        //     'phone.required' => 'Vui lòng nhập số điện thoại.',
-        //     'phone.min' => 'Số điện thoại phải có 10 chữ số.',
-        //     'phone.min' => 'Số điện thoại phải có 10 chữ số.',
+            'phone.required' => 'Vui lòng nhập số điện thoại.',
+            'phone.min' => 'Số điện thoại phải có 10 chữ số.',
+            'phone.min' => 'Số điện thoại phải có 10 chữ số.',
 
-        //     'name.required' => 'Vui lòng nhập tên',
-        //     'name.max' => 'Bạn nhập tên dài quá 50 ký tự',
+            'name.required' => 'Vui lòng nhập tên',
+            'name.max' => 'Bạn nhập tên dài quá 50 ký tự',
 
-        // ]);
-        // if (!Auth::check()) {
-        //     $request->validate([
-        //         'email' => 'unique:users,email',
-        //     ], [
-        //         'email.unique' => 'Email này đã được sử dụng. Vui lòng chọn một email khác.',
-        //     ]);
-        // }
+        ]);
+        if (!Auth::check()) {
+            $request->validate([
+                'email' => 'unique:users,email',
+            ], [
+                'email.unique' => 'Email này đã được sử dụng. Vui lòng chọn một email khác.',
+            ]);
+        }
         function generateRandomCode($length = 8)
         {
             return strtoupper(substr(md5(uniqid(rand(), true)), 0, $length));
@@ -214,24 +214,26 @@ class CheckoutController extends Controller
                     ProductOder::create($dataProducts);
 
                     // Nếu sản phẩm có biến thể, kiểm tra và trừ kho
-                    $product_variant = ProductVariant::find($product_variant_id);
-                    if ($product_variant && $product_variant->stock > 0 && $product_variant->stock - $value['qty'] > 0) {
-                        $product_variant->stock -= $value['qty'];
-                        $product_variant->save();
-                    } else {
-                        return redirect()->back()->with([
-                            'error'=>'Sản phẩm không đủ số lượng.'
-                        ]);
-                    }
-                } else {
-                    $product = Product::find($value['product_id']);
-                    if ($product && $product->qty > 0 || $product->qty - $value['qty'] > 0) {
-                        $product->qty -= $value['qty'];
-                        $product->save();
-                    }else {
-                        return redirect()->back()->with([
-                            'error'=>'Sản phẩm không đủ số lượng.'
-                        ]);
+                    if($value['product_variant_id'] != 0){
+                        $product_variant = ProductVariant::find($product_variant_id);
+                        if ($product_variant && $product_variant->stock > 0 && $product_variant->stock - $value['qty'] > 0) {
+                            $product_variant->stock -= $value['qty'];
+                            $product_variant->save();
+                        } else {
+                            return redirect()->back()->with([
+                                'error'=>'Sản phẩm không đủ số lượng.'
+                            ]);
+                        }
+                    }else{
+                        $product = Product::find($value['product_id']);
+                        if ($product && $product->qty > 0 || $product->qty - $value['qty'] > 0) {
+                            $product->qty -= $value['qty'];
+                            $product->save();
+                        }else {
+                            return redirect()->back()->with([
+                                'error'=>'Sản phẩm không đủ số lượng.'
+                            ]);
+                        }
                     }
 
                 }
@@ -316,7 +318,7 @@ class CheckoutController extends Controller
             $jsonResult = json_decode($result, true);
             return redirect()->to($jsonResult['payUrl']);
         }else{
-            date_default_timezone_set('Asia/Ho_Chi_Minh');
+            // date_default_timezone_set('Asia/Ho_Chi_Minh');
             $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
             $vnp_Returnurl = "http://127.0.0.1:8000/success-checkout";
             $vnp_TmnCode = "RXJT5TCH";//Mã website tại VNPAY
@@ -330,7 +332,7 @@ class CheckoutController extends Controller
             $vnp_Locale = 'vn';
             $vnp_BankCode = 'NCB';
             $vnp_IpAddr = $_SERVER['REMOTE_ADDR']; // 127.0.0.1
-            $vnp_ExpireDate = date('YmdHis', strtotime('+15 minutes'));
+            // $vnp_ExpireDate = date('YmdHis', strtotime('+15 minutes'));
             //Add Params of 2.0.1 Version
             // $vnp_ExpireDate = $_POST['txtexpire'];
             //Billing
@@ -367,7 +369,7 @@ class CheckoutController extends Controller
                 "vnp_OrderType" => $vnp_OrderType,
                 "vnp_ReturnUrl" => $vnp_Returnurl,
                 "vnp_TxnRef" => $vnp_TxnRef,
-                "vnp_ExpireDate"=>$vnp_ExpireDate,
+                // "vnp_ExpireDate"=>$vnp_ExpireDate,
                 // "vnp_Bill_Mobile"=>$vnp_Bill_Mobile,
                 // "vnp_Bill_Email"=>$vnp_Bill_Email,
                 // "vnp_Bill_FirstName"=>$vnp_Bill_FirstName,
@@ -412,14 +414,8 @@ class CheckoutController extends Controller
                 $vnp_Url .= 'vnp_SecureHash=' . $vnpSecureHash;
             }
             $returnData = array('code' => '00', 'message' => 'success', 'data' => $vnp_Url);
-
-                // if (isset($_POST['redirect'])) {
-                header('Location: ' . $vnp_Url);
-                exit();
-                // } else {
-                //     echo json_encode($returnData);
-                // }
-                // vui lòng tham khảo thêm tại code demo
+            // header('Location: ' . $vnp_Url);
+            return redirect()->to($vnp_Url);
         }
 
     }
