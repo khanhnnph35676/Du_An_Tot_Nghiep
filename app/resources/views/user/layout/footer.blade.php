@@ -10,10 +10,10 @@
                     </a>
                 </div>
                 <div class="col-lg-6">
-                    <div class="position-relative mx-auto">
+                    {{-- <div class="position-relative mx-auto">
                         <input class="form-control border-0 w-100 py-3 px-4 rounded-pill" type="number" placeholder="Your Email">
                         <button type="submit" class="btn btn-primary border-0 border-secondary py-3 px-4 position-absolute rounded-pill text-white" style="top: 0; right: 0;">Đăng ký ngay</button>
-                    </div>
+                    </div> --}}
                 </div>
                 <div class="col-lg-3">
                     <div class="d-flex justify-content-end pt-3">
@@ -60,9 +60,9 @@
                     <h4 class="text-light mb-3">Liên Hệ</h4>
                     <p>Địa Chỉ: 1 Trịnh Văn Bô, Nam Từ Liêm, Hà Nội</p>
                     <p>Email: khanhnnph35676@fpt.edu.vn</p>
-                    <p>Số Điện Thoại:0193817369</p>
+                    <p>Số Điện Thoại: 0193817369</p>
                     <p>Chấp Nhận Thanh Toán</p>
-                    <img src="img/payment.png" class="img-fluid" alt="Phương thức thanh toán">
+                    {{-- <img src="img/payment.png" class="img-fluid" alt="Phương thức thanh toán"> --}}
                 </div>
             </div>
         </div>
@@ -76,12 +76,6 @@
         <div class="row">
             <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
                 <span class="text-light"><a href="#"><i class="fas fa-copyright text-light me-2"></i>Bán đồ ăn vặt J-Snack</a>, Mọi quyền được bảo lưu.</span>
-            </div>
-            <div class="col-md-6 my-auto text-center text-md-end text-white">
-                <!--/*** Mẫu này miễn phí nếu bạn giữ liên kết bản quyền/ghi nhận bên dưới. ***/-->
-                <!--/*** Nếu bạn muốn sử dụng mẫu mà không ghi nhận liên kết, ***/-->
-                <!--/*** bạn có thể mua giấy phép xóa liên kết tại "https://htmlcodex.com/credit-removal". ***/-->
-                Thiết Kế Bởi <a class="border-bottom" href="https://htmlcodex.com">HTML Codex</a> Phân Phối Bởi <a class="border-bottom" href="https://themewagon.com">ThemeWagon</a>
             </div>
         </div>
     </div>

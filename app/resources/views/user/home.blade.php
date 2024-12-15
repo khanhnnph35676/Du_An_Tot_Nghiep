@@ -17,13 +17,13 @@
                 <div class="col-md-12 col-lg-7">
                     <h4 class="mb-3 text-secondary">100% Snack chất lượng</h4>
                     <h1 class="mb-5 display-3 text-primary">Snack sạch, vị ngon tự nhiên</h1>
-                    <div class="position-relative mx-auto">
+                    {{-- <div class="position-relative mx-auto">
                         <input class="form-control border-2 border-secondary w-75 py-3 px-4 rounded" type="number"
                             placeholder="Tìm kiếm">
                         <button type="submit"
                             class="btn btn-primary border-2 border-secondary py-3 px-4 position-absolute rounded text-white h-100"
                             style="top: 0; right: 25%;">Gửi ngay</button>
-                    </div>
+                    </div> --}}
                 </div>
                 <div class="col-md-12 col-lg-5">
                 </div>
@@ -31,8 +31,39 @@
         </div>
     </div>
     <!-- Hero End -->
-
-
+{{-- 
+<div class="container-fluid banner bg-secondary my-5">
+    <div class="container py-5">
+        <div class="row g-4 align-items-center">
+            <div class="col-lg-6">
+                <div class="py-4">
+                    <h2 class="display-6 text-white">Đồ ăn vặt độc đáo </h2>
+                    <h3 class="display-6 text-dark mb-4">mới lạ trong từng món</h3>
+                    <p class="mb-4 text-dark">Khám phá thế giới đồ ăn vặt phong phú và độc đáo tại cửa hàng của chúng
+                        tôi.
+                        Từ bánh tráng cuốn, trái cây sấy giòn rụm, đến kẹo ngọt nhập khẩu – tất cả đều mang đến hương vị
+                        khó quên!</p>
+                    <a href="#" class="banner-btn btn border-2 border-white rounded text-dark py-3 px-5">MUA</a>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="position-relative">
+                    <img src="https://mir-s3-cdn-cf.behance.net/project_modules/fs/9fd15a185094509.655dc7178246f.jpg"
+                        style="width: 300px; height: 300px; object-fit: cover;" class="img-fluid w-100 rounded"
+                        alt="">
+                    <div class="d-flex align-items-center justify-content-center bg-white rounded-circle position-absolute"
+                        style="width: 140px; height: 140px; top: 0; left: 0;">
+                        <h1 style="font-size: 100px;">1</h1>
+                        <div class="d-flex flex-column">
+                            <span class="h2 mb-0">50$</span>
+                            <span class="h4 text-muted mb-0">kg</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> --}}
     <!-- Featurs Section Start -->
     <div class="container-fluid featurs">
         <div class="container">
@@ -219,7 +250,7 @@
 </div>
 <!-- Fruits Shop End-->
 <!-- Featurs Start -->
-<div class="container-fluid service">
+{{-- <div class="container-fluid service">
     <div class="container py-5">
         <div class="row g-4 justify-content-center">
             <div class="col-md-6 col-lg-4">
@@ -263,48 +294,16 @@
             </div>
         </div>
     </div>
-</div>
+</div> --}}
 <!-- Featurs End -->
 
-
 <!-- Banner Section Start-->
-<div class="container-fluid banner bg-secondary my-5">
-    <div class="container py-5">
-        <div class="row g-4 align-items-center">
-            <div class="col-lg-6">
-                <div class="py-4">
-                    <h2 class="display-6 text-white">Đồ ăn vặt độc đáo </h2>
-                    <h3 class="display-6 text-dark mb-4">mới lạ trong từng món</h3>
-                    <p class="mb-4 text-dark">Khám phá thế giới đồ ăn vặt phong phú và độc đáo tại cửa hàng của chúng
-                        tôi.
-                        Từ bánh tráng cuốn, trái cây sấy giòn rụm, đến kẹo ngọt nhập khẩu – tất cả đều mang đến hương vị
-                        khó quên!</p>
-                    <a href="#" class="banner-btn btn border-2 border-white rounded text-dark py-3 px-5">MUA</a>
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="position-relative">
-                    <img src="https://mir-s3-cdn-cf.behance.net/project_modules/fs/9fd15a185094509.655dc7178246f.jpg"
-                        style="width: 300px; height: 300px; object-fit: cover;" class="img-fluid w-100 rounded"
-                        alt="">
-                    <div class="d-flex align-items-center justify-content-center bg-white rounded-circle position-absolute"
-                        style="width: 140px; height: 140px; top: 0; left: 0;">
-                        <h1 style="font-size: 100px;">1</h1>
-                        <div class="d-flex flex-column">
-                            <span class="h2 mb-0">50$</span>
-                            <span class="h4 text-muted mb-0">kg</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+
 <!-- Banner Section End -->
 
 
 <!-- list product Start -->
-<div class="container-fluid py-5">
+{{-- <div class="container-fluid py-5">
     <div class="container py-5">
         <div class="text-center mx-auto mb-5" style="max-width: 700px;">
             <h1 class="display-4">Sản phẩm bán chạy nhất</h1>
@@ -367,12 +366,12 @@
             @endforeach
         </div>
     </div>
-</div>
+</div> --}}
 <!-- Bestsaler Product End -->
 
 
 <!-- Fact Start -->
-<div class="container-fluid py-5">
+{{-- <div class="container-fluid py-5">
     <div class="container">
         <div class="bg-light p-5 rounded">
             <div class="row g-4 justify-content-center">
@@ -407,101 +406,11 @@
             </div>
         </div>
     </div>
-</div>
+</div> --}}
 <!-- Fact Start -->
 
 
-<!-- Tastimonial Start -->
-<div class="container-fluid testimonial py-5">
-    <div class="container py-5">
-        <div class="testimonial-header text-center">
-            <h4 class="text-primary">Khách Hàng Của Chúng Tôi</h4>
-            <h1 class="display-5 mb-5 text-dark">Cảm Nhận Từ Khách Hàng!</h1>
-        </div>
-        <div class="owl-carousel testimonial-carousel">
-            <div class="testimonial-item img-border-radius bg-light rounded p-4">
-                <div class="position-relative">
-                    <i class="fa fa-quote-right fa-2x text-secondary position-absolute"
-                        style="bottom: 30px; right: 0;"></i>
-                    <div class="mb-4 pb-4 border-bottom border-secondary">
-                        <p class="mb-0">Lorem Ipsum chỉ là đoạn văn bản mẫu của ngành in ấn và dàn trang. Đoạn văn này đã trở thành chuẩn mực từ những năm 1500.</p>
-                    </div>
-                    <div class="d-flex align-items-center flex-nowrap">
-                        <div class="bg-secondary rounded">
-                            <img src="img/testimonial-1.jpg" class="img-fluid rounded"
-                                style="width: 100px; height: 100px;" alt="">
-                        </div>
-                        <div class="ms-4 d-block">
-                            <h4 class="text-dark">Tên Khách Hàng</h4>
-                            <p class="m-0 pb-3">Nghề Nghiệp</p>
-                            <div class="d-flex pe-5">
-                                <i class="fas fa-star text-primary"></i>
-                                <i class="fas fa-star text-primary"></i>
-                                <i class="fas fa-star text-primary"></i>
-                                <i class="fas fa-star text-primary"></i>
-                                <i class="fas fa-star"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="testimonial-item img-border-radius bg-light rounded p-4">
-                <div class="position-relative">
-                    <i class="fa fa-quote-right fa-2x text-secondary position-absolute"
-                        style="bottom: 30px; right: 0;"></i>
-                    <div class="mb-4 pb-4 border-bottom border-secondary">
-                        <p class="mb-0">Lorem Ipsum chỉ là đoạn văn bản mẫu của ngành in ấn và dàn trang. Đoạn văn này đã trở thành chuẩn mực từ những năm 1500.</p>
-                    </div>
-                    <div class="d-flex align-items-center flex-nowrap">
-                        <div class="bg-secondary rounded">
-                            <img src="img/testimonial-1.jpg" class="img-fluid rounded"
-                                style="width: 100px; height: 100px;" alt="">
-                        </div>
-                        <div class="ms-4 d-block">
-                            <h4 class="text-dark">Tên Khách Hàng</h4>
-                            <p class="m-0 pb-3">Nghề Nghiệp</p>
-                            <div class="d-flex pe-5">
-                                <i class="fas fa-star text-primary"></i>
-                                <i class="fas fa-star text-primary"></i>
-                                <i class="fas fa-star text-primary"></i>
-                                <i class="fas fa-star text-primary"></i>
-                                <i class="fas fa-star text-primary"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="testimonial-item img-border-radius bg-light rounded p-4">
-                <div class="position-relative">
-                    <i class="fa fa-quote-right fa-2x text-secondary position-absolute"
-                        style="bottom: 30px; right: 0;"></i>
-                    <div class="mb-4 pb-4 border-bottom border-secondary">
-                        <p class="mb-0">Lorem Ipsum chỉ là đoạn văn bản mẫu của ngành in ấn và dàn trang. Đoạn văn này đã trở thành chuẩn mực từ những năm 1500.</p>
-                    </div>
-                    <div class="d-flex align-items-center flex-nowrap">
-                        <div class="bg-secondary rounded">
-                            <img src="img/testimonial-1.jpg" class="img-fluid rounded"
-                                style="width: 100px; height: 100px;" alt="">
-                        </div>
-                        <div class="ms-4 d-block">
-                            <h4 class="text-dark">Tên Khách Hàng</h4>
-                            <p class="m-0 pb-3">Nghề Nghiệp</p>
-                            <div class="d-flex pe-5">
-                                <i class="fas fa-star text-primary"></i>
-                                <i class="fas fa-star text-primary"></i>
-                                <i class="fas fa-star text-primary"></i>
-                                <i class="fas fa-star text-primary"></i>
-                                <i class="fas fa-star text-primary"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
-<!-- Tastimonial End -->
 <script>
     function selectVariant(variantId, productId) {
         // Lấy giá từ biến thể tương ứng

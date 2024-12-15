@@ -243,7 +243,7 @@
                         const row = `
                             <tr>
                                 <td class="text-dark">${index + 1}</td>
-                                <td><img src=" {{ asset($product->image) }}" alt="" style="width: 50px; height: 50px; object-fit: cover;"></td>
+                                <td><img src=" ${ item.product.image }" alt="" style="width: 50px; height: 50px; object-fit: cover;"></td>
                                 <td class="text-dark">${item.product.name}</td>
                                 <td class="text-dark">${item.total_sold}</td>
                             </tr>

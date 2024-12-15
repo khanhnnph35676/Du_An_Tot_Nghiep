@@ -11,9 +11,7 @@
     <div class="frame">
         <div class="login-container">
             <div class="form-section">
-                <div class="logo-container">
-                    <img src="{{ asset('images/logo.png') }}" alt="Logo" class="logo">
-                </div>
+
                 <h2>Đăng ký</h2>
                 <form action="{{ route('user.postRegister') }}" method="POST">
                     @csrf
@@ -37,10 +35,15 @@
                     </div>
                     <button type="submit" class="submit-button">Đăng ký</button>
                 </form>
-                <p class="signup-link">Bạn đã có tài khoản? <a href="{{ route('user.login') }}">Log in</a></p>
+                <p class="signup-link">Bạn đã có tài khoản? <a href="{{ route('user.login') }}">Đăng nhập</a></p>
             </div>
-            <div class="background-section">
-                <h3><br> Đăng ký <br> tài khoản</h3>
+            <div class="background-section" style="display: flex; align-items: center; justify-content: center;">
+                <div style="text-align: center;">
+                    <div class="logo-container">
+                        <img src="{{ asset('images/logo.png') }}" alt="Logo" class="logo">
+                    </div>
+                    <h3>Đăng ký <br> tài khoản</h3>
+                </div>
             </div>
         </div>
     </div>
