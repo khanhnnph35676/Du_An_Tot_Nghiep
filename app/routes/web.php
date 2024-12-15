@@ -179,12 +179,12 @@ Route::middleware(['checkadmin'])->group(function () {
     Route::get('/', [PageController::class, 'storeHome'])->name('storeHome');
     // comment
     Route::get('/product/{id}/testimonials', [TestimonialController::class, 'getProductTestimonials'])->name('product.testimonials');
-//trang tren header footer
-Route::get('/privacy-policy', [PageController::class, 'privacyPolicy'])->name('privacy-policy');
-Route::get('/terms-and-conditions', [PageController::class, 'termsAndConditions'])->name('terms-and-conditions');
-Route::get('/sales-and-refunds', [PageController::class, 'salesAndRefunds'])->name('sales-and-refunds');
-Route::get('/return-policy', [PageController::class, 'returnPolicy'])->name('return-policy');
-Route::get('/faq-and-support', [PageController::class, 'faqAndSupport'])->name('faq-and-support');
+    //trang tren header footer
+    Route::get('/privacy-policy', [PageController::class, 'privacyPolicy'])->name('privacy-policy');
+    Route::get('/terms-and-conditions', [PageController::class, 'termsAndConditions'])->name('terms-and-conditions');
+    Route::get('/sales-and-refunds', [PageController::class, 'salesAndRefunds'])->name('sales-and-refunds');
+    Route::get('/return-policy', [PageController::class, 'returnPolicy'])->name('return-policy');
+    Route::get('/faq-and-support', [PageController::class, 'faqAndSupport'])->name('faq-and-support');
     //Sản phẩm
     Route::get('list-product', [PageController::class, 'storeListProduct'])->name('storeListProduct');
     Route::get('/product/{id}', action: [PageController::class, 'storeProductDetail'])->name('product.detail');

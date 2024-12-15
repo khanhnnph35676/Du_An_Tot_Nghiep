@@ -170,8 +170,8 @@
                                     <tr>
                                         <td>{{ $key + 1 }}</td>
                                         <td>
-                                            <img src="{{ asset($item->products->image) }}"
-                                                style="width: 60px; height: 60px; object-fit: cover;">
+                                            {{-- <img src="{{ asset($item->products->image) }}"
+                                                style="width: 60px; height: 60px; object-fit: cover;"> --}}
 
                                             <span>{{ $item->products->name }}</span>
                                         </td>
@@ -181,8 +181,8 @@
                                     <tr>
                                         <td>{{ $key + 1 }}</td>
                                         <td>
-                                            <img src="{{ asset($item->product_variants->image)  }}"
-                                                style="width: 60px; height: 60px; object-fit: cover;">
+                                            {{-- <img src="{{ asset($item->product_variants->image)  }}"
+                                                style="width: 60px; height: 60px; object-fit: cover;"> --}}
                                             <span>{{ $item->products->name . ' - ' . $item->product_variants->sku }}</span>
                                         </td>
                                         <td>{{ number_format($item->price) }} Vnđ</td>
