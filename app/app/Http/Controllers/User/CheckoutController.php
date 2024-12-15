@@ -14,7 +14,7 @@ use App\Models\Product;
 use App\Models\Address;
 use App\Models\Discount;
 use App\Models\Point;
-
+use App\Models\MessOrder;
 use App\Models\ProductVariant;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Hash;
@@ -26,6 +26,7 @@ class CheckoutController extends Controller
 {
     public function storeCheckout()
     {
+
         $cart = session()->get('cart', []);
         $checkOrder = session()->get('checkOrder', []);
         $addresses = session()->get('addresses', []);
@@ -139,6 +140,7 @@ class CheckoutController extends Controller
         $cart = session()->get('cart', []);
         $addresses = session()->get('addresses', []);
         $checkOrder = session()->get('checkOrder', []);
+
         $order = [
             'payment_id' => $request->payment_id,
             'status' => 0,
@@ -231,6 +233,10 @@ class CheckoutController extends Controller
                 'payment_id' => $request->payment_id,
             ];
             $checkOrder[] = $dataCheck;
+            MessOrder::create([
+                'order_id' => $addOrder->id,
+                'user_id' => $user->id,
+            ]);
             Auth::login($user);
             // Phần gửi mail khi không có tài khoản
         } else {
@@ -250,7 +256,11 @@ class CheckoutController extends Controller
                 'user_id' => $user_id,
                 'payment_id' => $request->payment_id,
             ];
-            $checkOrder[] = $dataCheck;
+            $checkOrder [] = $dataCheck;
+            MessOrder::create([
+                'order_id' => $addOrder->id,
+                'user_id' => $user_id,
+            ]);
         }
 
         // đối với khách chưa có tài khoản

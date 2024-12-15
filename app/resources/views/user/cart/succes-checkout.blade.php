@@ -78,9 +78,6 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @php
-                                // print_r($productOrders);
-                            @endphp
                             @foreach ($productOrders as $key => $item)
                                 @if ($item->product_variant_id == null)
                                     <tr>

@@ -6,8 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\BlogRequest;
 use App\Models\Blog;
 use App\Models\BlogCategory;
+use App\Models\MessOrder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+
 use PhpParser\Node\Stmt\Block;
 
 class BlogController extends Controller
@@ -16,7 +18,8 @@ class BlogController extends Controller
     {
         $blog_categories = BlogCategory::get();
         $list_blog = Blog::with('blog_categories')->get();
-        return view('admin.blog.list', compact('list_blog','blog_categories'));
+        $messages = MessOrder::with('user','order')->get();
+        return view('admin.blog.list', compact('list_blog','blog_categories','messages'));
     }
 
     public function submit_add_blog(BlogRequest $request)
@@ -46,8 +49,9 @@ class BlogController extends Controller
     {
         $Blog = Blog::with('blog_categories')->where('BlogSlug', $BlogSlug)->first();
         $blog_categories = BlogCategory::get();
+        $messages = MessOrder::with('user','order')->get();
         if ($Blog->Status != 0) {
-            return view("admin.blog.blog-details")->with(compact('Blog','blog_categories'));
+            return view("admin.blog.blog-details")->with(compact('Blog','blog_categories','messages'));
         }
     }
     public function edit_blog($idBlog)

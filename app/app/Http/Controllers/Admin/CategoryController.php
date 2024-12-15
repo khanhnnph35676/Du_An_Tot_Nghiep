@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Category;
 use App\Http\Controllers\Controller;
+use App\Models\MessOrder;
+
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -16,11 +18,13 @@ class CategoryController extends Controller
     {
         // Lấy tất cả các category chưa bị xóa
         $categories = Category::whereNull('deleted_at')->get();
-        return view('admin.category.list', compact('categories'));
+        $messages = MessOrder::with('user','order')->get();
+        return view('admin.category.list', compact('categories','messages'));
     }
     public function editCategory($id){
         $category = Category::find($id);
-        return view('admin.category.edit', compact('category'));
+        $messages = MessOrder::with('user','order')->get();
+        return view('admin.category.edit', compact('category','messages'));
     }
     public function pathchEditCategory(Request $request, $id){
         $categorie = Category::find($id);
@@ -57,13 +61,13 @@ class CategoryController extends Controller
             'image' => $imagePath,
         ]);
 
-        return redirect()->route('admin.categories.index')->with('success', 'Category created successfully.');
+        return redirect()->route('admin.categories.index')->with('success', 'Thêm thánh công');
     }
 
     public function destroy(Category $category)
     {
         $category->delete();  // Xóa mềm
-        return redirect()->route('admin.categories.index')->with('success', 'Category deleted successfully.');
+        return redirect()->route('admin.categories.index')->with('success', 'Xoá thành công');
     }
 
     public function restore($id)
@@ -73,10 +77,10 @@ class CategoryController extends Controller
         if ($category) {
             $category->restore();
             return redirect()->route('admin.categories.deleted')
-                             ->with('success', 'Category restored successfully!');
+                             ->with('success', 'Khôi phục thành công!');
         }
 
-        return redirect()->route('admin.categories.deleted')->with('error', 'Category not found.');
+        return redirect()->route('admin.categories.deleted')->with('error', 'Lỗi khôi phục');
     }
 
     public function forceDestroy($id)
@@ -85,7 +89,7 @@ class CategoryController extends Controller
         $category = Category::onlyTrashed()->find($id);
         if ($category) {
             $category->forceDelete();
-            return redirect()->route('admin.categories.deleted')->with('success', 'Category permanently deleted.');
+            return redirect()->route('admin.categories.deleted')->with('success', 'Xoá thành công.');
         }
 
         return redirect()->route('admin.categories.deleted')->with('error', 'Category not found.');

@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Models\ProductOder;
 use App\Models\User;
 use Carbon\Carbon;
+use App\Models\MessOrder;
 use Illuminate\Http\Request;
 
 class StatisticsController extends Controller
@@ -144,13 +145,16 @@ class StatisticsController extends Controller
             ->take(10) // Lấy 10 tài khoản
             ->get();
 
+        // thông báo
+        $messages = MessOrder::with('user','order')->get();
         return view('admin.home', compact(
                 'totalRevenue',
                 'totalProductsSold',
                 'topProducts',
                 'topRevenueProducts',
                 'products',
-                'topUsers'
+                'topUsers',
+                'messages',
                 // 'products_lower'
             ));
     }
@@ -201,8 +205,8 @@ class StatisticsController extends Controller
                 'total_sold' => $totalSold,
             ];
         });
-
-        return view('admin.statistics.chart', compact('data', 'startDate', 'endDate', 'filter'));
+        $messages = MessOrder::with('user','order')->get();
+        return view('admin.statistics.chart', compact('data', 'startDate', 'endDate', 'filter','messages'));
     }
 
     private function getDateRangeByFilter($filter)

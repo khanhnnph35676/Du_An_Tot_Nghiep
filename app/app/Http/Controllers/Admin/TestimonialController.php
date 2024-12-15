@@ -8,30 +8,32 @@ use App\Models\Testimonial;
 use App\Models\User;
 use App\Models\Gallerie;
 use App\Models\ProductVariant;
+use App\Models\MessOrder;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class TestimonialController extends Controller
 {
     public function getProductTestimonials($id)
-{
-    // Lấy tất cả đánh giá cho sản phẩm cụ thể kèm thông tin người dùng
-    $testimonials = Testimonial::with('user')
-        ->where('product_id', $id)
-        ->orderBy('created_at', 'desc') // Sắp xếp theo ngày tạo mới nhất
-        ->get();
+    {
+        $messages = MessOrder::with('user', 'order')->get();
+        $testimonials = Testimonial::with('user')
+            ->where('product_id', $id)
+            ->orderBy('created_at', 'desc') // Sắp xếp theo ngày tạo mới nhất
+            ->get();
 
-    return view('user.product.testimonials', compact('testimonials'));
-}
+        return view('user.product.testimonials', compact('testimonials','messages'));
+    }
 
     public function listTestimonial()
     {
         // Lấy tất cả testimonials kèm theo thông tin người dùng
+        $messages = MessOrder::with('user', 'order')->get();
         $testimonials = Testimonial::with('user', 'product')->get();
         // dd($testimonials);
-        return view('admin.testimonials.index', compact('testimonials'));
+        return view('admin.testimonials.index', compact('testimonials','messages'));
     }
-
 
     // Hiển thị form thêm testimonial
     public function createTestimonial()
@@ -41,8 +43,9 @@ class TestimonialController extends Controller
         $products = Product::with([
             'categories:id,name,image,describe'
         ])->get();
+        $messages = MessOrder::with('user', 'order')->get();
         $users = User::where('rule_id', 2)->get();
-        return view('admin.testimonials.create', compact('users', 'variants', 'galleries', 'products'));
+        return view('admin.testimonials.create', compact('users', 'variants', 'galleries', 'products','messages'));
     }
 
     // Lưu thông tin testimonial mới
@@ -87,7 +90,8 @@ class TestimonialController extends Controller
     {
         $testimonial = Testimonial::with('user', 'product')->find($id);
         $users = User::where('rule_id', 2)->get();
-        return view('admin.testimonials.edit', compact('testimonial', 'users'));
+        $messages = MessOrder::with('user', 'order')->get();
+        return view('admin.testimonials.edit', compact('testimonial', 'users','messages'));
     }
 
     // Cập nhật testimonial

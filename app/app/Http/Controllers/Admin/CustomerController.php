@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Rule;
-use App\Models\User; // Model người dùng
+use App\Models\User;
+use App\Models\MessOrder;// Model người dùng
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -16,20 +18,23 @@ class CustomerController extends Controller
     {
         $rules = Rule::all();
         $users = User::whereIn('rule_id', [3, 1])->get();
-        return view('admin.customer.list-employees', compact('users', 'rules'));
+        $messages = MessOrder::with('user','order')->get();
+        return view('admin.customer.list-employees', compact('users', 'rules','messages'));
     }
     public function listCustomer()
     {
         $rules = Rule::all();
         $users = User::where('rule_id',2)->get();
-        return view('admin.customer.list', compact('users', 'rules'));
+        $messages = MessOrder::with('user','order')->get();
+        return view('admin.customer.list', compact('users', 'rules','messages'));
     }
 
     // Hiển thị form thêm khách hàng
     public function customerCreate()
     {
         $rules = Rule::all(); // Lấy tất cả các rule từ cơ sở dữ liệu
-        return view('admin.customer.create', compact('rules')); // Truyền dữ liệu $rules vào view
+        $messages = MessOrder::with('user','order')->get();
+        return view('admin.customer.create', compact('rules','messages')); // Truyền dữ liệu $rules vào view
     }
 
     // Lưu thông tin khách hàng mới
@@ -76,15 +81,13 @@ class CustomerController extends Controller
 
     }
 
-
-
-
     // Hiển thị form chỉnh sửa thông tin khách hàng
     public function customerEdit($id)
     {
         $user = User::findOrFail($id);
         $rules = Rule::all(); // Lấy tất cả các rule để hiển thị trong form
-        return view('admin.customer.edit', compact('user', 'rules'));
+        $messages = MessOrder::with('user','order')->get();
+        return view('admin.customer.edit', compact('user', 'rules','messages'));
     }
 
     // Cập nhật thông tin khách hàng

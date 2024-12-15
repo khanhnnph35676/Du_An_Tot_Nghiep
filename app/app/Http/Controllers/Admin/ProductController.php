@@ -9,6 +9,7 @@ use App\Models\Gallerie;
 use App\Models\Category;
 use App\Models\ProductVariant;
 use App\Models\VariantOption;
+use App\Models\MessOrder;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\ProductAdminRequest;
 use Illuminate\Support\Facades\File;
@@ -24,10 +25,12 @@ class ProductController extends Controller
         $listProducts = Product::with([
             'categories:id,name,image,describe'
         ])->get();
+        $messages = MessOrder::with('user','order')->get();
         return view('admin.product.list')->with([
             'listProducts' => $listProducts,
             'galleries' => $galleries,
             'variants' => $variants,
+            'messages' => $messages,
         ]);
     }
     // chi tiết sản phẩm có biến thể
@@ -36,18 +39,22 @@ class ProductController extends Controller
         $variants = VariantOption::select('option_name')->distinct()->get();
         $categories = Category::all();
         $variant_values = VariantOption::get();
+        $messages = MessOrder::with('user','order')->get();
         return view('admin.product.detail')->with([
             'categories' => $categories,
             'variants' => $variants,
-            'variant_values' => $variant_values
+            'variant_values' => $variant_values,
+            'messages' => $messages,
         ]);
     }
     // chi tiết sản phẩm đơn thể
     public function productSimple()
     {
         $listCategories = Category::get();
+        $messages = MessOrder::with('user','order')->get();
         return view('admin.product.simple')->with([
-            'listCategories' => $listCategories
+            'listCategories' => $listCategories,
+            'messages' => $messages
         ]);
     }
     // thêm sản phẩm
@@ -96,9 +103,11 @@ class ProductController extends Controller
     {
         $product = Product::find($idProduct);
         $listCategories = Category::get();
+        $messages = MessOrder::with('user','order')->get();
         return view('admin.product.update-simple')->with([
             'listCategories' => $listCategories,
-            'product' => $product
+            'product' => $product,
+            'messages' => $messages,
         ]);
     }
     // update sản phẩm
@@ -375,10 +384,12 @@ class ProductController extends Controller
         $listProducts = Product::with([
             'categories:id,name,image,describe'
         ])->onlyTrashed()->get();
+        $messages = MessOrder::with('user','order')->get();
         return view('admin.product.restore')->with([
             'listProducts' => $listProducts,
             'galleries' => $galleries,
-            'variants' => $variants
+            'variants' => $variants,
+            'messages' => $messages
         ]);
     }
     public function restoreAction(Request $request)
@@ -386,9 +397,10 @@ class ProductController extends Controller
         $product = Product::withTrashed()->find($request->id);
         if ($product) {
             $product->restore();
-            return redirect()->back()->with('success', 'Product restored successfully.');
+            return redirect()->back()->with('success', 'Khôi phục sản phẩm thành công');
         }
-        return redirect()->back()->with('error', 'Product not found.');
+
+        return redirect()->back()->with('error', 'Khôi phục không thành công');
     }
     public function forceDeleteProduct(Request $request)
     {
@@ -423,8 +435,8 @@ class ProductController extends Controller
         $variant = ProductVariant::withTrashed()->find($request->id);
         if ($variant) {
             $variant->restore();
-            return redirect()->back()->with('success', 'Product variant restored successfully.');
+            return redirect()->back()->with('success', 'Xoá thành công.');
         }
-        return redirect()->back()->with('error', 'Product not found.');
+        return redirect()->back()->with('error', 'Xoá không thành công.');
     }
 }
