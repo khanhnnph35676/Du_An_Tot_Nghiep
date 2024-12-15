@@ -31,7 +31,7 @@
         </div>
     </div>
     <!-- Hero End -->
-{{-- 
+{{--
 <div class="container-fluid banner bg-secondary my-5">
     <div class="container py-5">
         <div class="row g-4 align-items-center">
@@ -303,10 +303,10 @@
 
 
 <!-- list product Start -->
-{{-- <div class="container-fluid py-5">
+<div class="container-fluid py-5">
     <div class="container py-5">
         <div class="text-center mx-auto mb-5" style="max-width: 700px;">
-            <h1 class="display-4">Sản phẩm bán chạy nhất</h1>
+            <h1 class="display-4">Sản phẩm nổi bật</h1>
             <p>Khám phá các món ăn vặt được yêu thích nhất tại cửa hàng chúng tôi,
                 được chọn lọc kỹ càng để mang đến hương vị tuyệt vời và chất lượng tốt nhất!</p>
         </div>
@@ -366,12 +366,12 @@
             @endforeach
         </div>
     </div>
-</div> --}}
+</div>
 <!-- Bestsaler Product End -->
 
 
 <!-- Fact Start -->
-{{-- <div class="container-fluid py-5">
+<div class="container-fluid py-5">
     <div class="container">
         <div class="bg-light p-5 rounded">
             <div class="row g-4 justify-content-center">
@@ -406,7 +406,7 @@
             </div>
         </div>
     </div>
-</div> --}}
+</div>
 <!-- Fact Start -->
 
 

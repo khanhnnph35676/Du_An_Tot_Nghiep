@@ -116,6 +116,9 @@
                                 <th>Tên sản phẩm</th>
                                 <th>Số lượng</th>
                                 <th>Giá:</th>
+                                @if ($orderList->orders->status == 4)
+                                <td></td>
+                                @endif
                             </tr>
                         </thead>
                         <tbody>
@@ -127,9 +130,13 @@
                                             <img src="{{ asset($item->products->image) }}"
                                             style="width: 70px; height: 70px; object-fit: cover;" alt="">
                                         </td>
-                                        <td>{{ $item->products->name }}</td>
+                                        <td>{{Str::words(strip_tags( $item->products->name), 6, '...') }} </td>
                                         <td>{{ $item->quantity }}</td>
                                         <td>{{ number_format($item->price) }} Vnđ</td>
+
+                                        @if ($orderList->orders->status == 4)
+                                        <td><button type="button" class="btn btn-primary">Đánh giá</button></td>
+                                        @endif
                                     </tr>
                                 @elseif($item->product_variant_id != null)
                                     <tr>
@@ -137,9 +144,12 @@
                                         <td><img src="{{ asset($item->product_variants->image) }}"
                                                 style="width: 70px; height: 70px; object-fit: cover;" alt="">
                                             </td>
-                                        <td>{{ $item->products->name . ' - ' . $item->product_variants->sku }}</td>
+                                        <td>{{Str::words(strip_tags( $item->products->name . ' - ' . $item->product_variants->sku ), 6, '...') }} </td>
                                         <td>{{ $item->quantity }}</td>
                                         <td>{{ number_format($item->price) }} Vnđ</td>
+                                        @if ($orderList->orders->status == 4)
+                                        <td><button type="button" class="btn btn-primary">Đánh giá</button></td>
+                                        @endif
                                     </tr>
                                 @endif
                             @endforeach
