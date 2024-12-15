@@ -9,6 +9,8 @@ use App\Models\Address;
 use App\Models\Voucher;
 use App\Models\Point;
 use App\Models\UserVoucher;
+use App\Models\User;
+use Illuminate\Support\Facades\Storage;
 
 use Illuminate\Support\Facades\Auth;
 
@@ -99,50 +101,38 @@ class UserProfileController extends Controller
             'message' => "Đổi thành công mã: $voucher->code_vocher",
         ]);
     }
-    public function update(Request $request)
+    public function updateProfile(Request $request)
     {
-        $user = Auth::user();
+        $user = User::find(Auth::user()->id);
+        $img = $user->avatar;
+        if ($request->hasFile('avatar')) {
+            if ($user->avatar) {
+                Storage::disk('public')->delete($user->avatar);
+            }
+            $request->file('avatar')->store('avatars', 'public');
+            $img = 'avatars/'. $request->file('avatar');
+        }
 
         // Validate thông tin cá nhân và địa chỉ
         $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $user->id,
-            'phone' => 'nullable|digits_between:10,15',
+            'name' => 'required|string|max:50',
+            'phone' => 'nullable|digits:10',
             'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'gender' => 'nullable|in:male,female,other',
-            'address' => 'required|string|max:255',
-            'home_address' => 'nullable|string|max:255',
+        ],[
+            'phone.digits' => 'Số điện thoại phải có đúng 10 chữ số.',
+            'name.required' => 'Tên là bắt buộc.',
+            'name.max' => 'Tên không được vượt quá 50 ký tự.',
+            'avatar.image' => 'Ảnh đại diện phải là một hình ảnh.',
+            'avatar.mimes' => 'Ảnh đại diện phải có định dạng jpeg, png, jpg hoặc gif.',
+            'avatar.max' => 'Ảnh đại diện không được vượt quá 2MB.',
         ]);
-
-        // Cập nhật thông tin người dùng
-        $user->name = $request->input('name');
-        $user->email = $request->input('email');
-        $user->phone = $request->input('phone');
-        $user->gender = $request->input('gender');
-
-        // Cập nhật avatar nếu có
-        if ($request->hasFile('avatar')) {
-            $avatarPath = $request->file('avatar')->store('avatars', 'public');
-            $user->avatar = $avatarPath;
-        }
-
-        // $user->save();
-
-        // Cập nhật địa chỉ
-        $address = Address::where('user_id', $user->id)->first();
-        if ($address) {
-            $address->update([
-                'address' => $request->input('address'),
-                'home_address' => $request->input('home_address'),
-            ]);
-        } else {
-            Address::create([
-                'user_id' => $user->id,
-                'address' => $request->input('address'),
-                'home_address' => $request->input('home_address'),
-            ]);
-        }
-
+        $data= [
+            'name' => $request->name,
+            'phone' => $request->phone,
+            'gender' => $request->gender,
+            'avatar' => $img,
+        ];
+        $user->update($data);
         return redirect()->route('user.profile')->with('success', 'Cập nhật thông tin và địa chỉ thành công!');
     }
 }
