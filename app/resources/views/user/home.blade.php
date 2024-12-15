@@ -17,13 +17,13 @@
                 <div class="col-md-12 col-lg-7">
                     <h4 class="mb-3 text-secondary">100% Snack chất lượng</h4>
                     <h1 class="mb-5 display-3 text-primary">Snack sạch, vị ngon tự nhiên</h1>
-                    <div class="position-relative mx-auto">
+                    {{-- <div class="position-relative mx-auto">
                         <input class="form-control border-2 border-secondary w-75 py-3 px-4 rounded" type="number"
                             placeholder="Tìm kiếm">
                         <button type="submit"
                             class="btn btn-primary border-2 border-secondary py-3 px-4 position-absolute rounded text-white h-100"
                             style="top: 0; right: 25%;">Gửi ngay</button>
-                    </div>
+                    </div> --}}
                 </div>
                 <div class="col-md-12 col-lg-5">
                 </div>
@@ -31,8 +31,39 @@
         </div>
     </div>
     <!-- Hero End -->
-
-
+{{-- 
+<div class="container-fluid banner bg-secondary my-5">
+    <div class="container py-5">
+        <div class="row g-4 align-items-center">
+            <div class="col-lg-6">
+                <div class="py-4">
+                    <h2 class="display-6 text-white">Đồ ăn vặt độc đáo </h2>
+                    <h3 class="display-6 text-dark mb-4">mới lạ trong từng món</h3>
+                    <p class="mb-4 text-dark">Khám phá thế giới đồ ăn vặt phong phú và độc đáo tại cửa hàng của chúng
+                        tôi.
+                        Từ bánh tráng cuốn, trái cây sấy giòn rụm, đến kẹo ngọt nhập khẩu – tất cả đều mang đến hương vị
+                        khó quên!</p>
+                    <a href="#" class="banner-btn btn border-2 border-white rounded text-dark py-3 px-5">MUA</a>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="position-relative">
+                    <img src="https://mir-s3-cdn-cf.behance.net/project_modules/fs/9fd15a185094509.655dc7178246f.jpg"
+                        style="width: 300px; height: 300px; object-fit: cover;" class="img-fluid w-100 rounded"
+                        alt="">
+                    <div class="d-flex align-items-center justify-content-center bg-white rounded-circle position-absolute"
+                        style="width: 140px; height: 140px; top: 0; left: 0;">
+                        <h1 style="font-size: 100px;">1</h1>
+                        <div class="d-flex flex-column">
+                            <span class="h2 mb-0">50$</span>
+                            <span class="h4 text-muted mb-0">kg</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> --}}
     <!-- Featurs Section Start -->
     <div class="container-fluid featurs">
         <div class="container">
@@ -219,7 +250,7 @@
 </div>
 <!-- Fruits Shop End-->
 <!-- Featurs Start -->
-<div class="container-fluid service">
+{{-- <div class="container-fluid service">
     <div class="container py-5">
         <div class="row g-4 justify-content-center">
             <div class="col-md-6 col-lg-4">
@@ -263,12 +294,12 @@
             </div>
         </div>
     </div>
-</div>
+</div> --}}
 <!-- Featurs End -->
 
 
 <!-- Vesitable Shop Start-->
-<div class="container-fluid vesitable">
+{{-- <div class="container-fluid vesitable">
     <div class="container py-3">
         <h2 class="mb-3">Danh mục sản phẩm</h2>
         <div class="row">
@@ -295,48 +326,17 @@
         </div>
     </div>
 
-</div>
+</div> --}}
 <!-- Vesitable Shop End -->
 
 
 <!-- Banner Section Start-->
-<div class="container-fluid banner bg-secondary my-5">
-    <div class="container py-5">
-        <div class="row g-4 align-items-center">
-            <div class="col-lg-6">
-                <div class="py-4">
-                    <h2 class="display-6 text-white">Đồ ăn vặt độc đáo </h2>
-                    <h3 class="display-6 text-dark mb-4">mới lạ trong từng món</h3>
-                    <p class="mb-4 text-dark">Khám phá thế giới đồ ăn vặt phong phú và độc đáo tại cửa hàng của chúng
-                        tôi.
-                        Từ bánh tráng cuốn, trái cây sấy giòn rụm, đến kẹo ngọt nhập khẩu – tất cả đều mang đến hương vị
-                        khó quên!</p>
-                    <a href="#" class="banner-btn btn border-2 border-white rounded text-dark py-3 px-5">MUA</a>
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="position-relative">
-                    <img src="https://mir-s3-cdn-cf.behance.net/project_modules/fs/9fd15a185094509.655dc7178246f.jpg"
-                        style="width: 300px; height: 300px; object-fit: cover;" class="img-fluid w-100 rounded"
-                        alt="">
-                    <div class="d-flex align-items-center justify-content-center bg-white rounded-circle position-absolute"
-                        style="width: 140px; height: 140px; top: 0; left: 0;">
-                        <h1 style="font-size: 100px;">1</h1>
-                        <div class="d-flex flex-column">
-                            <span class="h2 mb-0">50$</span>
-                            <span class="h4 text-muted mb-0">kg</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+
 <!-- Banner Section End -->
 
 
 <!-- list product Start -->
-<div class="container-fluid py-5">
+{{-- <div class="container-fluid py-5">
     <div class="container py-5">
         <div class="text-center mx-auto mb-5" style="max-width: 700px;">
             <h1 class="display-4">Sản phẩm bán chạy nhất</h1>
@@ -403,12 +403,12 @@
             @endforeach
         </div>
     </div>
-</div>
+</div> --}}
 <!-- Bestsaler Product End -->
 
 
 <!-- Fact Start -->
-<div class="container-fluid py-5">
+{{-- <div class="container-fluid py-5">
     <div class="container">
         <div class="bg-light p-5 rounded">
             <div class="row g-4 justify-content-center">
@@ -443,12 +443,12 @@
             </div>
         </div>
     </div>
-</div>
+</div> --}}
 <!-- Fact Start -->
 
 
 <!-- Tastimonial Start -->
-<div class="container-fluid testimonial py-5">
+{{-- <div class="container-fluid testimonial py-5">
     <div class="container py-5">
         <div class="testimonial-header text-center">
             <h4 class="text-primary">Our Testimonial</h4>
@@ -541,7 +541,7 @@
             </div>
         </div>
     </div>
-</div>
+</div> --}}
 <!-- Tastimonial End -->
 <script>
     function selectVariant(variantId, productId) {

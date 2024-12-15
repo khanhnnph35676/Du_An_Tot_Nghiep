@@ -22,23 +22,14 @@
                     <div class="col-12">
                         <div class="text-center mx-auto" style="max-width: 700px;">
                             <h1 class="text-primary">Liên Hệ</h1>
-                            <p class="mb-4">Mẫu liên hệ hiện tại chưa hoạt động. Bạn có thể tạo một mẫu liên hệ đầy đủ chức năng chỉ trong vài phút với Ajax & PHP. Chỉ cần sao chép và dán tệp, thêm một ít mã và hoàn tất. <a href="https://htmlcodex.com/contact-form">Tải Ngay</a>.</p>
+                            <p class="mb-4">Bạn đang tìm kiếm các món ăn vặt hấp dẫn? Đừng ngần ngại liên hệ với chúng tôi để được tư vấn và hỗ trợ nhanh chóng, chuyên nghiệp. Với đội ngũ nhân viên giàu kinh nghiệm, chúng tôi cam kết mang đến cho bạn những giải pháp tốt nhất. Hãy liên hệ ngay cho chúng tôi để được hỗ trợ 24/7. Chúng tôi luôn sẵn sàng lắng nghe và giải đáp mọi thắc mắc của bạn.</a>.</p>
                         </div>
                     </div>
-                    <div class="col-lg-12">
-                        <div class="h-100 rounded">
-                            <iframe class="rounded w-100"
-                                style="height: 400px;" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d387191.33750346623!2d-73.97968099999999!3d40.6974881!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sNew%20York%2C%20NY%2C%20USA!5e0!3m2!1svi!2sbd!4v1694259649153!5m2!1svi!2sbd"
-                                loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                        </div>
-                    </div>
+                    <hr>
                     <div class="col-lg-7">
-                        <form action="" class="">
-                            <input type="text" class="w-100 form-control border-0 py-3 mb-4" placeholder="Họ và Tên của bạn">
-                            <input type="email" class="w-100 form-control border-0 py-3 mb-4" placeholder="Nhập Email của bạn">
-                            <textarea class="w-100 form-control border-0 mb-4" rows="5" cols="10" placeholder="Tin nhắn của bạn"></textarea>
-                            <button class="w-100 btn form-control border-secondary py-3 bg-white text-primary" type="submit">Gửi</button>
-                        </form>
+                        <div class="h-100 rounded">
+                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d119198.40352271408!2d105.80177537026792!3d20.994636881946267!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135a9758f5ae7f3%3A0x82722d06b18178f9!2zUGjhu5UgdGjDtG5nIENhbyDEkeG6s25nIEZQVCBQb2x5dGVjaG5pYw!5e0!3m2!1sen!2s!4v1734261279514!5m2!1sen!2s" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                        </div>
                     </div>
                     <div class="col-lg-5">
                         <div class="d-flex p-4 rounded mb-4 bg-white">
@@ -63,6 +54,15 @@
                             </div>
                         </div>
                     </div>
+                    {{-- <div class="col-lg-7">  
+                        <form action="" class="">
+                            <input type="text" class="w-100 form-control border-0 py-3 mb-4" placeholder="Họ và Tên của bạn">
+                            <input type="email" class="w-100 form-control border-0 py-3 mb-4" placeholder="Nhập Email của bạn">
+                            <textarea class="w-100 form-control border-0 mb-4" rows="5" cols="10" placeholder="Tin nhắn của bạn"></textarea>
+                            <button class="w-100 btn form-control border-secondary py-3 bg-white text-primary" type="submit">Gửi</button>
+                        </form>
+                    </div> --}}
+                    
                 </div>
             </div>
         </div>
