@@ -19,9 +19,6 @@
                 <div class="card">
                     <div class="card-header">
                         <h2 class="card-title">Danh sách biến thể</h2>
-                        <a href="{{ route('admin.variant-options.index') }}" class="btn btn-dark">
-                            <i class="fa fa-trash mr-1"></i>Thùng rác
-                        </a>
                     </div>
                     <div class="card-body row">
                         <div class="col-4 ml-3 border">
@@ -29,11 +26,12 @@
                                 <ul class="list-group">
                                     @foreach($variantOptions as $option)
                                     <li class="list-group-item d-flex justify-content-between align-items-center mt-2">
-                                        @if($option->image_variant)
+                                        {{-- @if($option->image_variant)
                                         <img src="{{ Storage::url($option->image_variant) }}" alt="{{ $option->option_name }}" style="max-width: 50px; height :50px;">
                                         @else
                                         <img src="#" alt="" width="50px" height="50px">
-                                        @endif
+                                        @endif --}}
+                                        {{$option->id}}
                                         <h5>{{ $option->option_name }}</h5>
                                         <div class="d-flex">
                                             <a href="{{ route('admin.variant-options.edit', $option->id) }}" class="btn btn-secondary mr-2">Sửa</a>

@@ -492,6 +492,10 @@
                             style="display:none;">
                             Thanh toán qua ATM Momo
                         </button>
+                        <button class="btn border-secondary py-3 px-4 text-uppercase w-100 text-primary" id='VNPayment'
+                        style="display:none;">
+                        Thanh toán qua VNPAY
+                    </button>
                         @error('payment_id')
                             <div class="alert alert-danger"><strong>Lỗi!</strong> {{ $message }}
                             </div>
@@ -712,13 +716,17 @@
             radio.addEventListener('change', function() {
                 const paymentButtonCOD = document.querySelector('#payment-button');
                 const paymentButtonMoMo = document.querySelector('#momoPayment');
-
+                const vnPayment = document.querySelector('#VNPayment');
                 if (this.value == 1) { // Hiển thị COD
                     paymentButtonCOD.style.display = 'block';
                     paymentButtonMoMo.style.display = 'none';
                 } else if (this.value == 2) { // Hiển thị MoMo
                     paymentButtonCOD.style.display = 'none';
                     paymentButtonMoMo.style.display = 'block';
+                }else if(this.value == 3)  { // Hiển thị VNPAY
+                    paymentButtonMoMo.style.display = 'none';
+                    paymentButtonCOD.style.display = 'none';
+                    vnPayment.style.display = 'block';
                 }
             });
         });

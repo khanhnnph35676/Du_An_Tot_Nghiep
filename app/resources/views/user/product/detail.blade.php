@@ -129,10 +129,11 @@
                                     @else
                                         <p class="text-danger">{{ $stock == 0 ? 'Hết hàng' : '' }}</p>
                                     @endif
-
-                                    <p>Số lượng sản phẩm:</p>
-                                    <input id="stock" type="text" class="form-control" style="width:60px;"
-                                        name="stock" value="0">
+                                    <div class="d-flex align-items-center">
+                                        <span class="me-2">Số lượng sản phẩm của biến thể :</span>
+                                        <input id="stock" type="text" class="form-control" style="width:60px;"
+                                            name="stock" value="0">
+                                    </div>
                                     @endif
                                 </div>
                                 {{-- <input type="text" name="product_id" value="{{$product_id}}">
