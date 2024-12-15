@@ -92,10 +92,9 @@
                          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                              @if (Auth::check())
                                  <li><a class="dropdown-item" href="{{ route('user.profile') }}">Thông tin cá nhân</a>
+                                 </li>  <li><a class="dropdown-item" href="{{ route('order.history') }}">Lịch sử đặt hàng</a>
                                  </li>
                                  <li><a class="dropdown-item" href="{{ route('user.change-password') }}">Đổi mật khẩu</a>
-                                 </li>
-                                 <li><a class="dropdown-item" href="{{ route('order.history') }}">Lịch sử đặt hàng</a>
                                  </li>
                                  <li><a class="dropdown-item" href="{{ route('points') }}">Điểm thưởng</a>
                                  </li>

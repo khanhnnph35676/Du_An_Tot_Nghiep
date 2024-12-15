@@ -17,7 +17,7 @@
         <p class="text-muted">Bằng việc sử dụng dịch vụ tại <strong>Đồ Ăn Vặt</strong>, bạn đồng ý tuân thủ các điều khoản dưới đây.</p>
     </div>
     </div>
-    
+
 
     <!-- Nội dung điều khoản -->
     <div class="row">
@@ -49,7 +49,7 @@
                     <h4 class="card-title text-danger">Quyền Của Chúng Tôi</h4>
                     <p>
                         <i class="bi bi-exclamation-circle-fill text-danger me-2"></i>
-                        Chúng tôi có quyền thay đổi, chỉnh sửa, hoặc cập nhật các điều khoản bất kỳ lúc nào mà không cần báo trước. 
+                        Chúng tôi có quyền thay đổi, chỉnh sửa, hoặc cập nhật các điều khoản bất kỳ lúc nào mà không cần báo trước.
                         Các thay đổi sẽ có hiệu lực ngay khi được cập nhật trên hệ thống.
                     </p>
                 </div>
@@ -60,7 +60,7 @@
                 <div class="card-body">
                     <h4 class="card-title text-success">Lưu Ý Quan Trọng</h4>
                     <p>
-                        Việc tiếp tục sử dụng dịch vụ sau khi có thay đổi đồng nghĩa với việc bạn chấp nhận các điều khoản mới. 
+                        Việc tiếp tục sử dụng dịch vụ sau khi có thay đổi đồng nghĩa với việc bạn chấp nhận các điều khoản mới.
                         Nếu bạn có bất kỳ thắc mắc nào về điều khoản, vui lòng liên hệ với chúng tôi để được giải đáp.
                     </p>
                 </div>
@@ -74,15 +74,15 @@
                     <ul class="list-unstyled">
                         <li>
                             <i class="bi bi-envelope-fill text-success me-2"></i>
-                            Email: <a href="mailto:support@doanvat.com" class="text-decoration-none">support@doanvat.com</a>
+                            Email: <a href="mailto:support@doanvat.com" class="text-decoration-none">khanhnnph35676@fpt.edu.vn</a>
                         </li>
                         <li>
                             <i class="bi bi-telephone-fill text-danger me-2"></i>
-                            Hotline: <a href="tel:0123456789" class="text-decoration-none">0123-456-789</a>
+                            Hotline: <a href="tel:0123456789" class="text-decoration-none">0961746082</a>
                         </li>
                         <li>
                             <i class="bi bi-chat-fill text-info me-2"></i>
-                            Chat trực tiếp: Truy cập <a href="/live-chat" class="text-decoration-none">Hỗ trợ trực tuyến</a>.
+                            Chat trực tiếp: Truy cập <a href="#" class="text-decoration-none">Hỗ trợ trực tuyến</a>.
                         </li>
                     </ul>
                 </div>
