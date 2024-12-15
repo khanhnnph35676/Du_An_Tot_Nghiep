@@ -119,4 +119,45 @@ class PageController extends Controller
             'cart' => $cart]);;
     }
 
+    public function privacyPolicy()
+    {
+        $cart = session()->get('cart', []);
+        return view('user.pages.privacy-policy',compact('cart'));
+    }
+
+    /**
+     * Hiển thị trang Điều khoản.
+     */
+    public function termsAndConditions()
+    {
+        $cart = session()->get('cart', []);
+        return view('user.pages.terms-and-conditions',compact('cart'));
+    }
+
+    /**
+     * Hiển thị trang Bán hàng và hoàn tiền.
+     */
+    public function salesAndRefunds()
+    {
+        $cart = session()->get('cart', []);
+        return view('user.pages.sales-and-refunds',compact('cart'));
+    }
+
+    /**
+     * Hiển thị trang Chính sách đổi trả.
+     */
+    public function returnPolicy()
+    {
+        $cart = session()->get('cart', []);
+        return view('user.pages.return-policy',compact('cart'));
+    }
+
+    /**
+     * Hiển thị trang Câu hỏi thường gặp và Hỗ trợ.
+     */
+    public function faqAndSupport()
+    {
+        $cart = session()->get('cart', []);
+        return view('user.pages.faq-and-support',compact('cart'));
+    }
 }

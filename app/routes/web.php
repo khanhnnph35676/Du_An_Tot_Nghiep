@@ -179,7 +179,12 @@ Route::middleware(['checkadmin'])->group(function () {
     Route::get('/', [PageController::class, 'storeHome'])->name('storeHome');
     // comment
     Route::get('/product/{id}/testimonials', [TestimonialController::class, 'getProductTestimonials'])->name('product.testimonials');
-
+//trang tren header footer
+Route::get('/privacy-policy', [PageController::class, 'privacyPolicy'])->name('privacy-policy');
+Route::get('/terms-and-conditions', [PageController::class, 'termsAndConditions'])->name('terms-and-conditions');
+Route::get('/sales-and-refunds', [PageController::class, 'salesAndRefunds'])->name('sales-and-refunds');
+Route::get('/return-policy', [PageController::class, 'returnPolicy'])->name('return-policy');
+Route::get('/faq-and-support', [PageController::class, 'faqAndSupport'])->name('faq-and-support');
     //Sản phẩm
     Route::get('list-product', [PageController::class, 'storeListProduct'])->name('storeListProduct');
     Route::get('/product/{id}', action: [PageController::class, 'storeProductDetail'])->name('product.detail');
@@ -216,6 +221,7 @@ Route::middleware(['checkadmin'])->group(function () {
     Route::prefix('blogs')->group(function () {
         Route::get('/', [UserBlogController::class, 'index'])->name('user.blog.index');
         Route::get('/{BlogSlug}', [UserBlogController::class, 'show'])->name('user.blog.detail');
+        
     });
 
     // TRANG CÓ TÀI KHOẢN NGƯỜI DÙNG MỚI CHO VÀO
@@ -228,7 +234,9 @@ Route::middleware(['checkadmin'])->group(function () {
         Route::get('/order-detail/{order_id}', [UserOrderController::class, 'detail'])->name('order.detail');
         Route::get('/success-checkout',[CheckoutController :: class,'successCheckout'])->name('successCheckout');
         Route::post('/pay-Momo',[CheckoutController :: class,'payMomo'])->name('payMomo');
-
+        Route::get('user/change-password', [AuthController::class, 'changePassword'])->name('user.change-password');
+        Route::post('user/update-password', [AuthController::class, 'updatePassword'])->name('user.update-password');
+        
     });
 
 });
