@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\TestimonialController;
 use App\Http\Controllers\Admin\PointController;
 use App\Http\Controllers\Admin\BlogCategoryController;
 use App\Http\Controllers\Admin\VariantOptionController;
+use App\Http\Controllers\Admin\VoucherController;
 
 use App\Http\Controllers\User\UserBlogController;
 use App\Http\Controllers\User\UserProfileController;
@@ -55,6 +56,11 @@ Route::middleware(['auth.check'])->group(function () {
             Route::get('customer-edit/{id}', [CustomerController::class, 'customerEdit'])->name('customerEdit');
             Route::put('customer-update/{id}', [CustomerController::class, 'customerUpdate'])->name('customerUpdate');
             Route::delete('customer-destroy/{id}', [CustomerController::class, 'customerDestroy'])->name('customerDestroy');
+
+//quản lý voucher
+
+// Trang danh mục
+
 
 
             // quản lý nhân viên
@@ -114,7 +120,7 @@ Route::middleware(['auth.check'])->group(function () {
         Route::delete('force-delete-product', [ProductController::class, 'forceDeleteProduct'])->name('forceDeleteProduct');
         Route::delete('force-delete-variant', [ProductController::class, 'forceDeleteVariant'])->name('forceDeleteVariant');
 
-        // Trang danh mục
+       
         Route::resource('categories', CategoryController::class);
         Route::get('list-categories', [CategoryController::class, 'listCategories'])->name('listCategories');
         Route::get('list-categories-deleted', [CategoryController::class, 'listDeletedCategories'])->name('categories.deleted');
@@ -152,8 +158,8 @@ Route::middleware(['auth.check'])->group(function () {
 
         Route::delete('variant-options/{variantOption}', [VariantOptionController::class, 'destroy'])->name('variant-options.destroy');
 
-        // danh mục bài viết
-        // Quản lý danh mục bài viết
+        // 
+        Route::resource('vouchers', VoucherController::class);
         Route::get('/blog-categories', [BlogCategoryController::class, 'list_categories'])->name('blog.categories.list'); // Danh sách danh mục
         Route::get('/blog-categories/create', [BlogCategoryController::class, 'create_category'])->name('blog.categories.create'); // Form thêm danh mục
         Route::post('/blog-categories/store', [BlogCategoryController::class, 'store_category'])->name('blog.categories.store'); // Xử lý thêm danh mục

@@ -27,6 +27,7 @@
                      <li><a href="{{ route('admin.listProducts') }}">Sản phẩm</a></li>
                      <li><a href="{{ route('admin.variant-options.index') }}">Quản lý biến thể</a></li>
                      <li><a href="{{ route('admin.listCategories') }}">Danh mục</a></li>
+                     <li><a href="{{ route('admin.vouchers.index') }}">Mã giảm giá</a></li>
                  </ul>
              </li>
              {{-- Danh mục quản lý người dùng --}}
