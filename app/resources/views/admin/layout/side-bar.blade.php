@@ -81,10 +81,10 @@
              <li><a href="{{route('admin.listChat')}}"> <i class="fa-solid fa-comments"></i>
                      <span class="nav-text">Tin nhắn</span>
                  </a></li>
-             <li><a href="{{ route('admin.calender') }}"><i class="fa-solid fa-calendar-days"></i>
+             {{-- <li><a href="{{ route('admin.calender') }}"><i class="fa-solid fa-calendar-days"></i>
                      <span class="nav-text">
                          Lịch
-                     </span></a></li>
+                     </span></a></li> --}}
          </ul>
      </div>
  </div>

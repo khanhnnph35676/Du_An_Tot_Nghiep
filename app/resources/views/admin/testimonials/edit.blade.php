@@ -42,7 +42,7 @@
                                 <h4 class="card-title">Cập nhật đánh giá</h4>
                                 <div class="d-flex">
                                     <a href="{{ route('admin.testimonials') }}" class="btn btn-dark mr-3">Quay lại</a>
-                                    <button class="btn btn-primary">Cập nhật</button>
+                                    {{-- <button class="btn btn-primary">Cập nhật</button> --}}
                                 </div>
                             </div>
                             <div class="card-body">
