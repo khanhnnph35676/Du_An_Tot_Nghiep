@@ -8,6 +8,8 @@ use App\Models\Product;
 use App\Models\Gallerie;
 use App\Models\DiscountProduct;
 use App\Models\ProductVariant;
+use App\Models\MessOrder;
+
 use Illuminate\Http\Request;
 use App\Http\Requests\DiscountRequest;
 class DiscountController extends Controller
@@ -15,8 +17,9 @@ class DiscountController extends Controller
     public function listDiscounts(){
         $discounts = Discount::get();
         $products =Product::get();
+        $messages = MessOrder::with('user','order')->get();
         // dd($discounts);
-        return view('admin.discount.list', compact('discounts','products'));
+        return view('admin.discount.list', compact('discounts','products','messages'));
     }
     public function createDiscount(){
         $galleries = Gallerie::get();
@@ -24,10 +27,12 @@ class DiscountController extends Controller
         $products = Product::with([
             'categories:id,name,image,describe'
         ])->get();
+        $messages = MessOrder::with('user','order')->get();
         return view('admin.discount.create')->with([
             'products' => $products,
             'galleries' => $galleries,
-            'variants' => $variants
+            'variants' => $variants,
+            'messages' => $messages
         ]);
     }
     public function storeDiscount(DiscountRequest $request)
@@ -67,7 +72,8 @@ class DiscountController extends Controller
         ])->get();
         $discount = Discount::where('id', $request->id)->first();
         $discountProduct = DiscountProduct::where('name_discount',$discount->name)->get();
-        return view('admin.discount.update', compact('discount','galleries','variants','products','discountProduct'));
+        $messages = MessOrder::with('user','order')->get();
+        return view('admin.discount.update', compact('discount','galleries','variants','products','discountProduct','messages'));
     }
     public function update(DiscountRequest $request)
     {

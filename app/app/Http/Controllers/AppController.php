@@ -3,24 +3,29 @@
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-
+use App\Models\MessOrder;
 class AppController extends Controller
 {
     // Giao diện các mục trong app
     public function calender(){
-        return view('admin.app.calender');
+        $messages = MessOrder::with('user','order')->get();
+        return view('admin.app.calender',compact('messages'));
     }
     public function profile(){
-        return view('admin.app.profile');
+        $messages = MessOrder::with('user','order')->get();
+        return view('admin.app.profile',compact('messages'));
     }
     public function inbox(){
-        return view('admin.app.inbox');
+        $messages = MessOrder::with('user','order')->get();
+        return view('admin.app.inbox',compact('messages'));
     }
     public function compose(){
-        return view('admin.app.compose');
+        $messages = MessOrder::with('user','order')->get();
+        return view('admin.app.compose',compact('messages'));
     }
     public function readEmail(){
-        return view('admin.app.read-email');
+        $messages = MessOrder::with('user','order')->get();
+        return view('admin.app.read-email',compact('messages'));
     }
 
 }

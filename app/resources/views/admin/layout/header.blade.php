@@ -1,6 +1,33 @@
  <!--**********************************
             Nav header start
         ***********************************-->
+ <style>
+     .list-unstyled {
+         overflow: auto;
+         max-height: 280px;
+     }
+
+     .list-unstyled::-webkit-scrollbar {
+         width: 2px;
+         /* Độ rộng của scrollbar */
+     }
+
+     .list-unstyled::-webkit-scrollbar-thumb {
+         background: #888;
+         /* Màu của thanh cuộn */
+         border-radius: 4px;
+         /* Bo tròn góc */
+     }
+
+     .list-unstyled::-webkit-scrollbar-thumb:hover {
+         background: #555;
+         /* Màu khi hover */
+     }
+
+     .media-body{
+        max-width: 400px;
+     }
+ </style>
  <div class="nav-header">
      <div class="nav-control">
          <div class="hamburger">
@@ -39,56 +66,59 @@
                          </a>
                          <div class="dropdown-menu dropdown-menu-right">
                              <ul class="list-unstyled">
-                                 <li class="media dropdown-item">
-                                     <span class="success"><i class="ti-user"></i></span>
-                                     <div class="media-body">
-                                         <a href="#">
-                                             <p><strong>Martin</strong> has added a <strong>customer</strong>
-                                                 Successfully
-                                             </p>
-                                         </a>
-                                     </div>
-                                     <span class="notify-time">3:20 am</span>
-                                 </li>
-                                 <li class="media dropdown-item">
-                                     <span class="primary"><i class="ti-shopping-cart"></i></span>
-                                     <div class="media-body">
-                                         <a href="#">
-                                             <p><strong>Jennifer</strong> purchased Light Dashboard 2.0.</p>
-                                         </a>
-                                     </div>
-                                     <span class="notify-time">3:20 am</span>
-                                 </li>
-                                 <li class="media dropdown-item">
-                                     <span class="danger"><i class="ti-bookmark"></i></span>
-                                     <div class="media-body">
-                                         <a href="#">
-                                             <p><strong>Robin</strong> marked a <strong>ticket</strong> as unsolved.
-                                             </p>
-                                         </a>
-                                     </div>
-                                     <span class="notify-time">3:20 am</span>
-                                 </li>
-                                 <li class="media dropdown-item">
-                                     <span class="primary"><i class="ti-heart"></i></span>
-                                     <div class="media-body">
-                                         <a href="#">
-                                             <p><strong>David</strong> purchased Light Dashboard 1.0.</p>
-                                         </a>
-                                     </div>
-                                     <span class="notify-time">3:20 am</span>
-                                 </li>
-                                 <li class="media dropdown-item">
-                                     <span class="success"><i class="ti-image"></i></span>
-                                     <div class="media-body">
-                                         <a href="#">
-                                             <p><strong> James.</strong> has added a<strong>customer</strong>
-                                                 Successfully
-                                             </p>
-                                         </a>
-                                     </div>
-                                     <span class="notify-time">3:20 am</span>
-                                 </li>
+                                 @foreach ($messages as $item)
+                                     <li class="media dropdown-item">
+                                        <a href="{{route('admin.orderDetail',['order_id'=> $item->order->id])}}" class="d-flex align-items-center mr-3">
+                                            <span class="primary mr-3"><i class="ti-shopping-cart"></i></span>
+                                            <div class="media-body" style="max:width:300px;">
+                                                    <span><strong>{{ $item->user->email }}</strong> đã đặt hàng thành công</span> <br>
+                                                    <strong>Mã đơn:  {{ $item->order->order_code }}</strong>
+                                            </div>
+                                        </a>
+                                        <div>
+                                            <span class="text-end">Ngày {{$item->order->created_at->format('d-m').' lúc '. $item->order->created_at->format('H:i')}}</span>
+                                        </div>
+                                     </li>
+                                     <li class="media dropdown-item">
+                                         <span class="primary"><i class="ti-shopping-cart"></i></span>
+                                         <div class="media-body">
+                                             <a href="#">
+                                                 <p><strong>Jennifer</strong> purchased Light Dashboard 2.0.</p>
+                                             </a>
+                                         </div>
+                                         <span class="notify-time">3:20 am</span>
+                                     </li>
+                                     <li class="media dropdown-item">
+                                         <span class="danger"><i class="ti-bookmark"></i></span>
+                                         <div class="media-body">
+                                             <a href="#">
+                                                 <p><strong>Robin</strong> marked a <strong>ticket</strong> as unsolved.
+                                                 </p>
+                                             </a>
+                                         </div>
+                                         <span class="notify-time">3:20 am</span>
+                                     </li>
+                                     <li class="media dropdown-item">
+                                         <span class="primary"><i class="ti-heart"></i></span>
+                                         <div class="media-body">
+                                             <a href="#">
+                                                 <p><strong>David</strong> purchased Light Dashboard 1.0.</p>
+                                             </a>
+                                         </div>
+                                         <span class="notify-time">3:20 am</span>
+                                     </li>
+                                     <li class="media dropdown-item">
+                                         <span class="success"><i class="ti-image"></i></span>
+                                         <div class="media-body">
+                                             <a href="#">
+                                                 <p><strong> James.</strong> has added a<strong>customer</strong>
+                                                     Successfully
+                                                 </p>
+                                             </a>
+                                         </div>
+                                         <span class="notify-time">3:20 am</span>
+                                     </li>
+                                 @endforeach
                              </ul>
                              <a class="all-notification" href="#">See all notifications <i
                                      class="ti-arrow-right"></i></a>

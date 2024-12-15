@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Order;
 use App\Models\OrderList;
 use App\Models\ProductOder;
+use App\Models\MessOrder;
+
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -16,8 +18,10 @@ class OrderController extends Controller
         $orderLists = OrderList::with('orders','orders.address' ,'users')
         ->orderBy('id', 'desc')
         ->get();
+        $messages = MessOrder::with('user','order')->get();
         return view('admin.order.list')->with([
-            'orderLists' => $orderLists
+            'orderLists' => $orderLists,
+            'messages' => $messages
         ]);
     }
     public function orderDetail($order_id){
@@ -27,9 +31,11 @@ class OrderController extends Controller
             ->get();
             $data = ProductOder::with('products','product_variants')->where('order_id',$order_id)->get();
         }
+        $messages = MessOrder::with('user','order')->get();
         return view('admin.order.detail')->with([
             'orderList' => $orderList,
-            'data' => $data
+            'data' => $data,
+            'messages' => $messages
         ]);
     }
     public function updateOrder($order_id,Request $request){

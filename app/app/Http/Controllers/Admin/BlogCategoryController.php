@@ -5,14 +5,15 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\BlogCategory;
 use Illuminate\Http\Request;
-
+use App\Models\MessOrder;
 class BlogCategoryController extends Controller
 {
     // Hiển thị danh sách danh mục blog
     public function list_categories()
     {
         $categories = BlogCategory::paginate(10); // Phân trang danh sách
-        return view('admin.blog.categories.list', compact('categories'));
+        $messages = MessOrder::with('user','order')->get();
+        return view('admin.blog.categories.list', compact('categories','messages'));
     }
 
     public function create_category()
@@ -25,19 +26,20 @@ class BlogCategoryController extends Controller
         $request->validate([
             'name' => 'required|string|max:255|unique:blog_categories,blog_categories_name',
         ]);
-    
+
         BlogCategory::create([
             'blog_categories_name' => $request->name, // Đúng với key trong form và database
         ]);
-    
+
         return redirect()->route('admin.blog.categories.list')->with('message', 'Thêm danh mục thành công.');
     }
-    
+
 
     public function edit_category($id)
     {
         $category = BlogCategory::findOrFail($id);
-        return view('admin.blog.categories.edit', compact('category'));
+        $messages = MessOrder::with('user','order')->get();
+        return view('admin.blog.categories.edit', compact('category','messages'));
     }
 
     public function update_category(Request $request, $id)
