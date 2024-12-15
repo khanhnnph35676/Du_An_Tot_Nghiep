@@ -8,6 +8,9 @@ use App\Models\Product;
 use App\Models\Address;
 use App\Models\ProductVariant;
 use App\Models\Payment;
+use App\Models\Point;
+use App\Models\UserVoucher;
+use App\Models\Voucher;
 use App\Models\Gallerie;
 
 use App\Models\DiscountProduct;
@@ -98,13 +101,16 @@ class PageController extends Controller
     {
         $cart = session()->get('cart', []);
         // dd($cart);
-
+        $user_id = Auth::user()->id ?? null;
         $bestProducts = Product::orderBy('view', 'desc')->take(6)->get();
         // session()->forget('cart');
         session()->forget('checkOrder');
         $products = Product::get();
         $productVariants = ProductVariant::get();
-        return view('user.cart.list', compact('bestProducts','cart','products','productVariants'));
+        $listVouchers = Voucher::get();
+        $point = Point::where('user_id',$user_id)->first();
+        $user_voucher = UserVoucher::where('user_id', $user_id)->get();
+        return view('user.cart.list', compact('bestProducts','cart','products','productVariants','point','listVouchers','user_voucher'));
     }
     public function storeTestimonial(){
         $cart = session()->get('cart', []);
@@ -119,4 +125,45 @@ class PageController extends Controller
             'cart' => $cart]);;
     }
 
+    public function privacyPolicy()
+    {
+        $cart = session()->get('cart', []);
+        return view('user.pages.privacy-policy',compact('cart'));
+    }
+
+    /**
+     * Hiển thị trang Điều khoản.
+     */
+    public function termsAndConditions()
+    {
+        $cart = session()->get('cart', []);
+        return view('user.pages.terms-and-conditions',compact('cart'));
+    }
+
+    /**
+     * Hiển thị trang Bán hàng và hoàn tiền.
+     */
+    public function salesAndRefunds()
+    {
+        $cart = session()->get('cart', []);
+        return view('user.pages.sales-and-refunds',compact('cart'));
+    }
+
+    /**
+     * Hiển thị trang Chính sách đổi trả.
+     */
+    public function returnPolicy()
+    {
+        $cart = session()->get('cart', []);
+        return view('user.pages.return-policy',compact('cart'));
+    }
+
+    /**
+     * Hiển thị trang Câu hỏi thường gặp và Hỗ trợ.
+     */
+    public function faqAndSupport()
+    {
+        $cart = session()->get('cart', []);
+        return view('user.pages.faq-and-support',compact('cart'));
+    }
 }

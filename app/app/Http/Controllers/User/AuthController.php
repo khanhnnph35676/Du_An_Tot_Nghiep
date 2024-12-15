@@ -1,12 +1,17 @@
 <?php
 
 namespace App\Http\Controllers\User;
-
-use App\Http\Controllers\Controller;
+use App\Models\Rule;
+use App\Models\User; // Model người dùng
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use App\Models\User;
+use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\Controller;
+
+use Illuminate\Support\Facades\Auth;
+
+
+
 use Illuminate\Auth\Events\Registered;
 
 class AuthController extends Controller
@@ -44,4 +49,43 @@ class AuthController extends Controller
             return back()->withErrors(['error' => 'Có lỗi xảy ra, vui lòng thử lại. Chi tiết lỗi: ' . $e->getMessage()]);
         }
     }
+
+    // Hiển thị form đổi mật khẩu
+    public function changePassword()
+    {
+        $cart = session()->get('cart', []);
+        return view('user.change-password',compact('cart'));
+    }
+
+    // Xử lý yêu cầu đổi mật khẩu
+//     public function updatePassword(Request $request)
+// {
+//     // Validate input
+//     $request->validate([
+//         'current_password' => 'required|string',
+//         'new_password' => 'required|string|min:8|confirmed',
+//     ]);
+
+//     $user = Auth::user();
+
+
+//     if (!Hash::check($request->current_password, $user->password)) {
+//         return back()->withErrors(['current_password' => 'Mật khẩu hiện tại không chính xác.']);
+//     }
+
+//     try {
+      
+//         $user->password = Hash::make($request->new_password);
+
+      
+//         if ($user->save()) {
+//             return redirect()->route('')->with('status', 'Đổi mật khẩu thành công.');
+//         } else {
+//             return back()->withErrors(['error' => 'Không thể lưu mật khẩu mới.']);
+//         }
+//     } catch (\Exception $e) {
+//         return back()->withErrors(['error' => 'Đã xảy ra lỗi: ' . $e->getMessage()]);
+//     }
+// }
+
 }

@@ -38,10 +38,10 @@
                     <h4 class="text-light mb-3">Thông Tin Cửa Hàng</h4>
                     <a class="btn-link" href="">Về Chúng Tôi</a>
                     <a class="btn-link" href="">Liên Hệ</a>
-                    <a class="btn-link" href="">Chính Sách Bảo Mật</a>
-                    <a class="btn-link" href="">Điều Khoản & Điều Kiện</a>
-                    <a class="btn-link" href="">Chính Sách Đổi Trả</a>
-                    <a class="btn-link" href="">Câu Hỏi Thường Gặp & Hỗ Trợ</a>
+                    <a class="btn-link" href="{{ route('privacy-policy') }}">Chính Sách Bảo Mật</a>
+                    <a class="btn-link" href="{{ route('terms-and-conditions') }}">Điều Khoản & Điều Kiện</a>
+                    <a class="btn-link" href="{{ route('return-policy') }}">Chính Sách Đổi Trả</a>
+                    <a class="btn-link" href="{{ route('faq-and-support') }}">Câu Hỏi Thường Gặp & Hỗ Trợ</a>
                 </div>
             </div>
             <div class="col-lg-3 col-md-6">

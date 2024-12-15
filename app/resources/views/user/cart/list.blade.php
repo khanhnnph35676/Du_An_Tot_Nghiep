@@ -2,6 +2,85 @@
 @push('styleStore')
 @endpush
 @section('content')
+    <style>
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-header img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin-right: 20px;
+        }
+
+        .info-card {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .btn-edit {
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        .side-bar {
+            min-height: 300px;
+        }
+
+        .side-bar li {
+            display: block;
+            border-bottom: 1px solid black;
+        }
+
+        .side-bar li:hover {
+            background: #b9b7b793;
+        }
+
+        .qty-point {
+            position: absolute;
+            right: 0;
+            width: auto;
+            height: auto;
+            text-align: center;
+            z-index: 1;
+            opacity: 0.7;
+        }
+
+        .point {
+            font-size: 29px;
+            color: #333;
+        }
+
+        .title-point {
+            font-size: 20px;
+            color: #333;
+        }
+
+        .redeem {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+        }
+
+        .name-voucher {
+            font-size: 13px;
+        }
+    </style>
     <!-- Single Page Header start -->
     <div class="container-fluid page-header py-5">
         <h1 class="text-center text-white display-6">Giỏ hàng</h1>
@@ -57,12 +136,14 @@
                                                     @if ($item['selected_products'] == 1) checked @endif>
                                             </td>
                                             <th scope="row">
-                                                <div class="d-flex align-items-center">
-                                                    <img src=" {{ asset($product->image) }}"
-                                                        class="img-fluid me-5 rounded-circle"
-                                                        style="width: 80px; height: 80px;" alt="Ảnh sản phẩm">
-                                                    {{ $product->name }}
-                                                </div>
+                                                <a href="{{route('product.detail',['id'=> $product->id])}}">
+                                                    <div class="d-flex align-items-center">
+                                                        <img src=" {{ asset($product->image) }}"
+                                                            class="img-fluid me-5 rounded-circle"
+                                                            style="width: 80px; height: 80px;" alt="Ảnh sản phẩm">
+                                                        {{ $product->name }}
+                                                    </div>
+                                                </a>
                                             </th>
                                             <td>
                                                 <div class="input-group quantity mt-4" style="width: 100px;">
@@ -111,12 +192,13 @@
                                                 </form>
                                             </td>
                                         </tr>
-
                                     @endif
                                     @foreach ($productVariants as $productVariant)
-                                        @if ($product->id == $item['product_id'] &&
+                                        @if (
+                                            $product->id == $item['product_id'] &&
                                                 $item['product_variant_id'] == $productVariant->id &&
-                                                Auth::id() == $item['user_id'])
+                                                Auth::id() == $item['user_id']
+                                        )
                                             <tr>
                                                 <td style="width:100px;" class="text-center align-middle">
                                                     <input type="checkbox" class="form-check-input select-item"
@@ -126,12 +208,14 @@
                                                         @if ($item['selected_products'] == 1) checked @endif>
                                                 </td>
                                                 <th scope="row">
-                                                    <div class="d-flex align-items-center">
-                                                        <img src=" {{ asset($productVariant->image) }}"
-                                                            class="img-fluid me-5 rounded-circle"
-                                                            style="width: 80px; height: 80px;" alt="Ảnh sản phẩm">
-                                                        {{ $product->name . ' - ' . $productVariant->sku }}
-                                                    </div>
+                                                    <a href="{{route('product.detail',['id'=> $product->id])}}">
+                                                        <div class="d-flex align-items-center">
+                                                            <img src=" {{ asset($productVariant->image) }}"
+                                                                class="img-fluid me-5 rounded-circle"
+                                                                style="width: 80px; height: 80px;" alt="Ảnh sản phẩm">
+                                                            {{ $product->name . ' - ' . $productVariant->sku }}
+                                                        </div>
+                                                    </a>
                                                 </th>
                                                 <td>
                                                     <div class="input-group quantity mt-4" style="width: 100px;">
@@ -155,7 +239,8 @@
                                                             </button>
                                                         </div>
                                                     </div>
-                                                    <span id="error-message-{{ $item['product_id'] }}-{{ $item['product_variant_id'] ?? 'null' }}"
+                                                    <span
+                                                        id="error-message-{{ $item['product_id'] }}-{{ $item['product_variant_id'] ?? 'null' }}"
                                                         class="mt-1 text-danger" style="display: none;"></span>
                                                 </td>
                                                 <td>
@@ -187,8 +272,8 @@
                             <tr>
                                 <td></td>
                                 <td></td>
-                                <td> <span id="error-message" class="mt-1"
-                                    style="color: red; display: none;"></span></td>
+                                <td> <span id="error-message" class="mt-1" style="color: red; display: none;"></span>
+                                </td>
                                 <td></td>
                                 <td></td>
                             </tr>
@@ -330,8 +415,8 @@
                             <tr>
                                 <td></td>
                                 <td></td>
-                                <td> <span id="error-message" class="mt-1"
-                                    style="color: red; display: none;"></span></td>
+                                <td> <span id="error-message" class="mt-1" style="color: red; display: none;"></span>
+                                </td>
                                 <td></td>
                                 <td></td>
                             </tr>
@@ -339,14 +424,59 @@
                     </tbody>
                 </table>
             </div>
-            <div class="mt-5">
-                <input type="text" class="border-0 border-bottom rounded me-5 py-3 mb-4" placeholder="Mã giảm giá">
-                <button class="btn border-secondary rounded-pill px-4 py-3 text-primary" type="button">Áp
-                    dụng</button>
-            </div>
+
             <div class="row g-4 justify-content-end">
-                <div class="col-8"></div>
-                <div class="col-sm-8 col-md-7 col-lg-6 col-xl-4">
+                <div class="col-lg-6">
+                    <div class="border rounded p-2 mb-3">
+                        <h3 class="m-3"> Phiếu giảm giá của tôi </h3>
+                        <form id="voucherForm" action="{{ route('addVoucher') }}" method="POST">
+                            @csrf
+                            <!-- Input ẩn giữ giá trị voucher_id được chọn -->
+                            <input type="hidden" id="voucher_id" name="voucher_id" value="">
+
+                            <div class="d-flex flex-wrap justify-content-start gap-3 m-2">
+                                <!-- Vòng lặp hiển thị các voucher -->
+                                @foreach ($listVouchers as $voucher)
+                                    <div class="card shadow-sm rounded-3" style="width: 31%; min-height:200px;">
+                                        <span class="qty-point border bg-secondary text-white p-1 d-flex">
+                                            @if ($user_voucher == [])
+                                                x0
+                                            @else
+                                                @foreach ($user_voucher as $value)
+                                                    @if ($value->voucher_id == $voucher->id)
+                                                        x{{ $value->qty }}
+                                                    @endif
+                                                @endforeach
+                                            @endif
+                                        </span>
+                                        <div class="card-body text-center">
+                                            <h6 class="card-title text-success mb-3 text-start">Mã:
+                                                {{ $voucher->code_vocher }}
+                                            </h6>
+                                            <p class="text-start name-voucher">{{ $voucher->name }}</p>
+                                            <!-- Nút để chọn voucher -->
+                                            <button type="button" class="btn btn-primary redeem m-2"
+                                                onclick="setVoucherAndSubmit('{{ $voucher->id }}')">
+                                                <div class="d-flex justify-content-start align-items-start group-point">
+                                                    <div class="text-center">Dùng</div>
+                                                </div>
+                                            </button>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </form>
+
+                    </div>
+                    Điểm của tôi: {{$point->point ?? '0'}}
+                    <img src="{{ asset('img/xu.png') }}"
+                    style="width: 20px; height: 20px; object-fit: cover;"
+                    alt="">
+                </div>
+                <div class="col-lg-2">
+
+                </div>
+                <div class="col-lg-4">
                     <div class="bg-light rounded">
                         <div class="p-4">
                             <h2 class="display-6 mb-4">Tổng <span class="fw-normal">Giỏ hàng</span></h2>
@@ -368,11 +498,14 @@
                                                     $item['selected_products'] == 1)
                                                 @if ($item['discount'] != 0)
                                                     @php
-                                                        $price +=($product->price -($product->price * $item['discount']) / 100) *$item['qty'];
+                                                        $price +=
+                                                            ($product->price -
+                                                                ($product->price * $item['discount']) / 100) *
+                                                            $item['qty'];
                                                     @endphp
                                                 @else
                                                     @php
-                                                       $price += $product->price * $item['qty'];
+                                                        $price += $product->price * $item['qty'];
                                                     @endphp
                                                 @endif
                                             @endif
@@ -385,7 +518,10 @@
                                                     $item['selected_products'] == 1)
                                                 @if ($item['discount'] != 0)
                                                     @php
-                                                        $price +=($productVariant->price -($productVariant->price * $item['discount']) / 100) *$item['qty'];
+                                                        $price +=
+                                                            ($productVariant->price -
+                                                                ($productVariant->price * $item['discount']) / 100) *
+                                                            $item['qty'];
                                                     @endphp
                                                 @else
                                                     @php
@@ -398,13 +534,17 @@
                                 @else
                                     @foreach ($cart as $item)
                                         @foreach ($products as $product)
-                                            @if ($product->type == 1 &&
+                                            @if (
+                                                $product->type == 1 &&
                                                     $product->id == $item['product_id'] &&
                                                     $item['user_id'] == 0 &&
                                                     $item['selected_products'] == 1)
                                                 @if ($item['discount'] != 0)
                                                     @php
-                                                        $price +=($product->price -($product->price * $item['discount']) / 100) *$item['qty'];
+                                                        $price +=
+                                                            ($product->price -
+                                                                ($product->price * $item['discount']) / 100) *
+                                                            $item['qty'];
                                                     @endphp
                                                 @else
                                                     @php
@@ -421,7 +561,10 @@
                                                     $item['selected_products'] == 1)
                                                 @if ($item['discount'] != 0)
                                                     @php
-                                                        $price +=($productVariant->price -($productVariant->price * $item['discount']) / 100) *$item['qty'];
+                                                        $price +=
+                                                            ($productVariant->price -
+                                                                ($productVariant->price * $item['discount']) / 100) *
+                                                            $item['qty'];
                                                     @endphp
                                                 @else
                                                     @php
@@ -519,7 +662,6 @@
                         </div>
                         <div class="p-4 pb-0 rounded-bottom">
                             <h4>{{ $product->name }}</h4>
-                            <p>{{ Str::limit($product->description, 50) }}</p>
                             <div class="d-flex justify-content-between flex-lg-wrap">
                                 <p class="text-dark fs-5 fw-bold">{{ number_format($product->price) }} vnđ</p>
                                 <a href=""
@@ -628,9 +770,9 @@
                     } else {
                         errorMessageElement.textContent = data.message;
                         errorMessageElement.style.display = 'block';
-                        // setTimeout(() => {
-                        //     location.reload(); // Reload trang sau 1 giây
-                        // }, 300);
+                        setTimeout(() => {
+                            location.reload(); // Reload trang sau 1 giây
+                        }, 300);
                     }
                 });
         }

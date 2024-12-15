@@ -97,6 +97,10 @@
                                 <div class="alert alert-danger p-2 mt-1"><strong>Lỗi!</strong> {{ $message }}
                                 </div>
                             @enderror
+                            {{-- @error('error')
+                            <div class="alert alert-danger p-2 mt-1"><strong>Lỗi!</strong> {{ $message }}
+                            </div>
+                        @enderror --}}
 
                         </div>
                         @php

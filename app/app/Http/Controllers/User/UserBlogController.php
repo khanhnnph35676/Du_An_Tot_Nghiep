@@ -23,4 +23,5 @@ class UserBlogController extends Controller
         $blog = Blog::where('Status', 1)->where('BlogSlug', $BlogSlug)->firstOrFail(); // Chỉ hiển thị blog có trạng thái được phê duyệt
         return view('user.blog.detail', compact('blog','cart'));
     }
+   
 }

@@ -12,7 +12,9 @@ use App\Models\OrderList;
 use App\Models\ProductOder;
 use App\Models\Product;
 use App\Models\Address;
+use App\Models\Discount;
 use App\Models\Point;
+
 use App\Models\ProductVariant;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Hash;
@@ -69,19 +71,15 @@ class CheckoutController extends Controller
         ]);
     }
 
-    public function execPostRequest($url, $data)
+    function execPostRequest($url, $data)
     {
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt(
-            $ch,
-            CURLOPT_HTTPHEADER,
-            array(
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
                 'Content-Type: application/json',
-                'Content-Length: ' . strlen($data)
-            )
+                'Content-Length: ' . strlen($data))
         );
         curl_setopt($ch, CURLOPT_TIMEOUT, 5);
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
@@ -91,6 +89,7 @@ class CheckoutController extends Controller
         curl_close($ch);
         return $result;
     }
+
 
     public function AddOrder(Request $request)
     {
@@ -172,7 +171,7 @@ class CheckoutController extends Controller
                 'user_id' => $user->id,
                 'check_user' => $check_user,
             ];
-            $orderList = OrderList::create($dataOrderList);
+            OrderList::create($dataOrderList);
 
             $dataCheck = [
                 'order_id' => $addOrder->id,
@@ -188,7 +187,7 @@ class CheckoutController extends Controller
                 'user_id' => $user_id,
                 'check_user' => $check_user,
             ];
-            $orderList = OrderList::create($dataOrderList);
+            OrderList::create($dataOrderList);
             $dataCheck = [
                 'order_id' => $addOrder->id,
                 'user_id' => $user_id,
@@ -197,41 +196,58 @@ class CheckoutController extends Controller
             $checkOrder[] = $dataCheck;
         }
 
+        $emailUser = $request->email;
+        $nameUser = $request->name;
+        $userSearch = User::where('email', $emailUser)->first();
         foreach ($cart as $key => $value) {
-            if ($value['selected_products'] == 1) {
+            if ($value['selected_products'] == 1 && $userSearch->id == $value['user_id']) {
                 if ($user_id == $value['user_id']) {
                     //  đăng nhập được sản phẩm
                     $value['product_variant_id'] = 0 ? $product_variant_id =  null : $product_variant_id = $value['product_variant_id'];
+                    $dataProducts = [
+                        'order_id' => $addOrder->id,  // ID đơn hàng
+                        'product_id' => $value['product_id'],
+                        'product_variant_id' =>  $product_variant_id,
+                        'quantity' => $value['qty'],
+                        'price' => $request->price
+                    ];
+                    ProductOder::create($dataProducts);
 
-                    $dataProducts = [
-                        'order_id' => $addOrder->id,  // ID đơn hàng
-                        'product_id' => $value['product_id'],
-                        'product_variant_id' =>  $product_variant_id,
-                        'quantity' => $value['qty'],
-                        'price' => $request->price
-                    ];
-                    ProductOder::create($dataProducts);
-                    unset($cart[$key]);
+                    // Nếu sản phẩm có biến thể, kiểm tra và trừ kho
+                    $product_variant = ProductVariant::find($product_variant_id);
+                    if ($product_variant && $product_variant->stock > 0 || $product_variant->stock - $value['qty'] > 0) {
+                        $product_variant->stock -= $value['qty'];
+                        $product_variant->save();
+                    } else {
+                        return redirect()->back()->with([
+                            'error'=>'Sản phẩm không đủ số lượng.'
+                        ]);
+                    }
                 } else {
-                    // nếu không đăng nhập vẫn lưu được sản phẩm
-                    $value['product_variant_id'] = 0 ? $product_variant_id =  null : $product_variant_id = $value['product_variant_id'];
-                    $dataProducts = [
-                        'order_id' => $addOrder->id,  // ID đơn hàng
-                        'product_id' => $value['product_id'],
-                        'product_variant_id' =>  $product_variant_id,
-                        'quantity' => $value['qty'],
-                        'price' => $request->price
-                    ];
-                    ProductOder::create($dataProducts);
-                    unset($cart[$key]);
+                    $product = Product::find($value['product_id']);
+                    if ($product && $product->qty > 0 || $product->qty - $value['qty'] > 0) {
+                        $product->qty -= $value['qty'];
+                        $product->save();
+                    }else {
+                        return redirect()->back()->with([
+                            'error'=>'Sản phẩm không đủ số lượng.'
+                        ]);
+                    }
+
                 }
+                // làm giảm số giảm giá khi khách đặt hàng
+                if ($value['discount_id'] != 0){
+                    $discount = Discount::find($value['discount_id']);
+                    $discount->update([
+                        'qty' => $discount->qty + $value['qty']
+                    ]);
+                }
+                unset($cart[$key]);
             }
         }
 
         //    Mail cho khách đặt hàng / tính cá không đăng nhập và đăng nhập
-        $emailUser = $request->email;
-        $nameUser = $request->name;
-        $userSearch = User::where('email', $emailUser)->where('name', $nameUser)->first();
+
         $orders = Order::with('address', 'payments')->find($addOrder->id);
         $orderList = OrderList::where('order_id', $orders->id)->first();
         $productOrders = ProductOder::with('products', 'product_variants')->where('order_id', $orders->id)->get();
@@ -251,14 +267,14 @@ class CheckoutController extends Controller
             $email->to($emailUser)->subject($titleMail);
             $email->from($emailUser, $titleMail);
         });
-        // thêm điểm
 
+        // thêm điểm
 
         session()->put('checkOrder', $checkOrder);
         session()->put('cart', $cart);
         session()->forget('addresses');
         if ($request->payment_id == 1) {
-            return redirect()->route('order.history')->with([
+            return redirect()->route('successCheckout')->with([
                 'message' => 'Chúc mừng thanh toán thành công qua COD'
             ]);
         } else {
@@ -269,7 +285,7 @@ class CheckoutController extends Controller
 
             $orderInfo = "Thanh toán qua MoMo";
             $amount =  $request->sum_price;
-            $orderId = $addOrder->order_code;
+            $orderId = $addOrder->order_code ;
             $redirectUrl = "http://127.0.0.1:8000/success-checkout";
             $ipnUrl = "http://127.0.0.1:8000/success-checkout";
             $extraData = "";
