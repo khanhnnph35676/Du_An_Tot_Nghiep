@@ -12,11 +12,6 @@
                     <span class="ml-1">Quản lý danh mục blog</span>
                 </div>
             </div>
-            <div class="col-sm-6 p-md-0 d-flex justify-content-end align-items-center">
-                <a href="{{ route('admin.categories.deleted') }}" class="btn btn-dark">
-                    <i class="fa fa-trash mr-1"></i>Thùng rác
-                </a>
-            </div>
         </div>
 
         <!-- Danh sách danh mục -->
@@ -34,15 +29,15 @@
                             <table class="table table-striped">
                                 <thead>
                                     <tr>
-                                        <th>Tên danh mục</th>
-                                        <th>Hành động</th>
+                                        <th class="text-dark">Tên danh mục</th>
+                                        <th class="text-dark">Hành động</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach ($categories as $category)
                                     <tr>
-                                        <td>{{ $category->blog_categories_name }}</td>
-                                        <td>
+                                        <td class="text-dark">{{ $category->blog_categories_name }}</td>
+                                        <td class="text-dark">
                                             <div class="d-flex">
                                                 <a href="{{ route('admin.blog.categories.edit', $category->id) }}" class="btn btn-warning btn-sm mr-2">
                                                     <i class="fa fa-edit"></i> Sửa
