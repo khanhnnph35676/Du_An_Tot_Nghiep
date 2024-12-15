@@ -60,10 +60,10 @@
                                                             <li>Số điện thoại: {{ $order->users->phone }}</li>
                                                             <li>Địa chỉ giao hàng:
                                                                 @if (isset($order->orders->address))
-                                                                    {{ $order->orders->address->home_address .' , '. $order->orders->address->address }}
+                                                                    {{ $order->orders->address->home_address . ' , ' . $order->orders->address->address }}
                                                                 @endif
                                                             </li>
-                                                            <li>Mã đơn hàng: {{$order->orders->order_code}} </li>
+                                                            <li>Mã đơn hàng: {{ $order->orders->order_code }} </li>
                                                         </ul>
                                                     </div>
                                                 </div>
@@ -153,7 +153,8 @@
                                                 <label>Trạng thái:</label>
                                                 <select id="single-select" name="status">
                                                     <option value="0"
-                                                    {{ $order->orders->status == 0 ? 'selected' : '' }}> Chưa xác nhận</option>
+                                                        {{ $order->orders->status == 0 ? 'selected' : '' }}> Chưa xác nhận
+                                                    </option>
                                                     <option value="1"
                                                         {{ $order->orders->status == 1 ? 'selected' : '' }}>
                                                         Xác nhận
@@ -172,7 +173,7 @@
                                                     </option>
                                                     <option value="5"
                                                         {{ $order->orders->status == 5 ? 'selected' : '' }}>
-                                                        Đã huỷ</option>
+                                                        Huỷ đơn</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -185,31 +186,57 @@
         </div>
     </div>
     <!--**********************************
-                                                            Content body end
-                                                        ***********************************-->
+                                                                    Content body end
+                                                                ***********************************-->
     <script src="{{ asset('backend/js/product.js') }}"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const select = document.getElementById("single-select");
-            const currentStatus = parseInt(select.value); // Trạng thái hiện tại
+            let currentStatus = parseInt(select.value); // Trạng thái hiện tại
 
-            // Loại bỏ các lựa chọn không hợp lệ
-            Array.from(select.options).forEach(option => {
-                const value = parseInt(option.value);
+            // Loại bỏ các lựa chọn không hợp lệ và ẩn tùy chọn Huỷ đơn khi chọn Xác nhận đã giao
+            function updateOptions() {
+                Array.from(select.options).forEach(option => {
+                    const value = parseInt(option.value);
 
-                // Chỉ cho phép chọn trạng thái liền kề (trước hoặc sau)
-                if (value !== currentStatus && value !== currentStatus + 1) {
-                    option.disabled = true; // Disable các trạng thái không hợp lệ
-                }
-            });
+                    // Thêm điều kiện đặc biệt khi trạng thái là "Giao hàng"
+                    if (currentStatus === 3) {
+                        // Khi ở trạng thái Giao hàng, có thể chọn Xác nhận đã giao hoặc Huỷ đơn
+                        if (value !== currentStatus && value !== currentStatus + 1 && value !== 4 &&
+                            value !== 5) {
+                            option.disabled = true;
+                        } else {
+                            option.disabled = false;
+                        }
+                    } else if (currentStatus === 4) {
+                        // Khi đã chọn "Xác nhận đã giao", ẩn "Huỷ đơn"
+                        if (value === 5) {
+                            option.disabled = true; // Ẩn Huỷ đơn
+                        } else {
+                            option.disabled = false;
+                        }
+                    } else {
+                        // Xử lý trạng thái bình thường (không phải Giao hàng hay Xác nhận đã giao)
+                        if (value !== currentStatus && value !== currentStatus + 1) {
+                            option.disabled = true; // Disable các trạng thái không hợp lệ
+                        } else {
+                            option.disabled = false;
+                        }
+                    }
+                });
+            }
+
+            // Cập nhật các tùy chọn ban đầu
+            updateOptions();
 
             // Kiểm tra khi người dùng thay đổi giá trị
             select.addEventListener("change", function() {
-                const selectedValue = parseInt(this.value);
+                currentStatus = parseInt(this.value);
+                // Cập nhật lại các tùy chọn khi người dùng thay đổi trạng thái
+                updateOptions();
 
-                // Chỉ cho phép chọn trạng thái liền kề
-                if (selectedValue !== currentStatus && selectedValue !== currentStatus + 1) {
-                    alert("Bạn chỉ có thể chọn trạng thái tiếp theo!");
+                // Kiểm tra khi người dùng chọn trạng thái không hợp lệ
+                if (currentStatus !== 3 && currentStatus !== 4 && currentStatus !== currentStatus + 1) {
                     this.value = currentStatus; // Khôi phục trạng thái cũ
                 }
             });
