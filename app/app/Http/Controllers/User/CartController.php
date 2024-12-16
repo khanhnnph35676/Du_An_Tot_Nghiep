@@ -224,18 +224,43 @@ class CartController extends Controller
             $cart = session()->get('cart', []);
             $productExists = false;
             foreach ($cart as $index => $item) {
-                if ($item['user_id'] === $data['user_id'] && $item['product_id'] === $data['product_id']
+                if (
+                    $item['user_id'] === $data['user_id'] && $item['product_id'] === $data['product_id']
                     && $item['product_variant_id'] === $data['product_variant_id']
                 ) {
                     if ($item['product_variant_id']  == 0) {
                         $product = Product::find($item['product_id']);
-                        if ($request->qty + $item['qty'] <= $product->qty && $request->qty + $item['qty'] <=50) {
+                        if ($request->qty + $item['qty'] <= $product->qty && $request->qty + $item['qty'] <= 50) {
                             $cart[$index]['qty'] += $data['qty'];
                             $cart[$index]['selected_products'] = $data['selected_products'];
                             $productExists = true;
                             break;
-                        }else{
-                            return redirect()->back()->with('error','Vượt quá số đơn trong giỏ hàng');
+                        } else {
+                            return redirect()->back()->with('error', 'Vượt quá số đơn trong giỏ hàng');
+                        }
+                    } else {
+                        foreach ($cart as $index => $item) {
+                            if (
+                                $item['user_id'] === $data['user_id'] &&
+                                $item['product_id'] === $data['product_id'] &&
+                                $item['product_variant_id'] === $data['product_variant_id']
+                            ) {
+                                $productVariant = ProductVariant::find($item['product_variant_id']);
+                                $newQty = $request->qty + $item['qty']; // Tính tổng trước
+
+                                if ($newQty > 50) {
+                                    return redirect()->back()->with('error', 'Tổng số lượng sản phẩm vượt quá 50!');
+                                }
+
+                                if ($newQty <= $productVariant->stock) {
+                                    $cart[$index]['qty'] = $newQty; // Cộng chính xác
+                                    $cart[$index]['selected_products'] = $data['selected_products'];
+                                    $productExists = true;
+                                    break;
+                                } else {
+                                    return redirect()->back()->with('error', 'Vượt quá số lượng tồn kho!');
+                                }
+                            }
                         }
                     }
                 }
@@ -263,19 +288,45 @@ class CartController extends Controller
             $cart = session()->get('cart', []);
             $productExists = false;
             foreach ($cart as $index => $item) {
-                if ($item['user_id'] === $data['user_id'] && $item['product_id'] === $data['product_id']
+                if (
+                    $item['user_id'] === $data['user_id'] && $item['product_id'] === $data['product_id']
                     && $item['product_variant_id'] === $data['product_variant_id']
                 ) {
-                    $productVariant = ProductVariant::find($item['product_variant_id']);
-                    if ($request->qty + $item['qty'] <= $productVariant->stock && $request->qty + $item['qty'] <= 50) {
-                        $cart[$index]['qty'] += $data['qty'];
-                        $cart[$index]['selected_products'] = $data['selected_products'];
-                        $productExists = true;
-                        break;
-                    }else{
-                        return redirect()->back()->with('error','Vượt quá số đơn trong giỏ hàng');
-                    }
+                    if ($item['product_variant_id']  == 0) {
+                        $product = Product::find($item['product_id']);
+                        if ($request->qty + $item['qty'] <= $product->qty && $request->qty + $item['qty'] <= 50) {
+                            $cart[$index]['qty'] += $data['qty'];
+                            $cart[$index]['selected_products'] = $data['selected_products'];
+                            $productExists = true;
+                            break;
+                        } else {
+                            return redirect()->back()->with('error', 'Vượt quá số đơn trong giỏ hàng');
+                        }
+                    } else {
+                        foreach ($cart as $index => $item) {
+                            if (
+                                $item['user_id'] === $data['user_id'] &&
+                                $item['product_id'] === $data['product_id'] &&
+                                $item['product_variant_id'] === $data['product_variant_id']
+                            ) {
+                                $productVariant = ProductVariant::find($item['product_variant_id']);
+                                $newQty = $request->qty + $item['qty']; // Tính tổng trước
 
+                                if ($newQty > 50) {
+                                    return redirect()->back()->with('error', 'Tổng số lượng sản phẩm vượt quá 50!');
+                                }
+
+                                if ($newQty <= $productVariant->stock) {
+                                    $cart[$index]['qty'] = $newQty; // Cộng chính xác
+                                    $cart[$index]['selected_products'] = $data['selected_products'];
+                                    $productExists = true;
+                                    break;
+                                } else {
+                                    return redirect()->back()->with('error', 'Vượt quá số lượng tồn kho!');
+                                }
+                            }
+                        }
+                    }
                 }
             }
 
@@ -371,25 +422,42 @@ class CartController extends Controller
 
         foreach ($cart as $index => $item) {
             if (
-                $item['user_id'] === $data['user_id'] &&
-                $item['product_id'] === $data['product_id'] &&
-                $item['product_variant_id'] === $data['product_variant_id']
+                $item['user_id'] === $data['user_id'] && $item['product_id'] === $data['product_id']
+                && $item['product_variant_id'] === $data['product_variant_id']
             ) {
-                if ($item['product_variant_id'] == 0) {
+                if ($item['product_variant_id']  == 0) {
                     $product = Product::find($item['product_id']);
                     if ($request->qty + $item['qty'] <= $product->qty && $request->qty + $item['qty'] <= 50) {
                         $cart[$index]['qty'] += $data['qty'];
                         $cart[$index]['selected_products'] = $data['selected_products'];
                         $productExists = true;
                         break;
+                    } else {
+                        return redirect()->back()->with('error', 'Vượt quá số đơn trong giỏ hàng');
                     }
                 } else {
-                    // $productVariant = ProductVariant::find($item['product_variant_id']);
-                    if ($request->qty + $item['qty'] <= $request->stock && $request->qty + $item['qty'] <= 50) {
-                        $cart[$index]['qty'] += $data['qty'];
-                        $cart[$index]['selected_products'] = $data['selected_products'];
-                        $productExists = true;
-                        break;
+                    foreach ($cart as $index => $item) {
+                        if (
+                            $item['user_id'] === $data['user_id'] &&
+                            $item['product_id'] === $data['product_id'] &&
+                            $item['product_variant_id'] === $data['product_variant_id']
+                        ) {
+                            $productVariant = ProductVariant::find($item['product_variant_id']);
+                            $newQty = $request->qty + $item['qty']; // Tính tổng trước
+
+                            if ($newQty > 50) {
+                                return redirect()->back()->with('error', 'Tổng số lượng sản phẩm vượt quá 50!');
+                            }
+
+                            if ($newQty <= $productVariant->stock) {
+                                $cart[$index]['qty'] = $newQty; // Cộng chính xác
+                                $cart[$index]['selected_products'] = $data['selected_products'];
+                                $productExists = true;
+                                break;
+                            } else {
+                                return redirect()->back()->with('error', 'Vượt quá số lượng tồn kho!');
+                            }
+                        }
                     }
                 }
             }

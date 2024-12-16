@@ -111,8 +111,10 @@ class UserProfileController extends Controller
             if ($user->avatar) {
                 Storage::disk('public')->delete($user->avatar);
             }
-            $request->file('avatar')->store('avatars', 'public');
-            $img = 'avatars/'. $request->file('avatar');
+            $path = $request->file('avatar')->store('avatars', 'public');
+
+            // Lưu đường dẫn file đã lưu
+            $img = $path;
         }
 
         // Validate thông tin cá nhân và địa chỉ
