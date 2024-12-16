@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\PointController;
 use App\Http\Controllers\Admin\BlogCategoryController;
 use App\Http\Controllers\Admin\VariantOptionController;
 use App\Http\Controllers\Admin\MessagesController;
+use App\Http\Controllers\Admin\VoucherController;
 
 use App\Http\Controllers\User\UserBlogController;
 use App\Http\Controllers\User\UserProfileController;
@@ -155,7 +156,8 @@ Route::middleware(['auth.check'])->group(function () {
 
         Route::delete('variant-options/{variantOption}', [VariantOptionController::class, 'destroy'])->name('variant-options.destroy');
 
-        // danh mục bài viết
+        // voucher
+        Route::resource('vouchers', VoucherController::class);
         // Quản lý danh mục bài viết
         Route::get('/blog-categories', [BlogCategoryController::class, 'list_categories'])->name('blog.categories.list'); // Danh sách danh mục
         Route::get('/blog-categories/create', [BlogCategoryController::class, 'create_category'])->name('blog.categories.create'); // Form thêm danh mục
