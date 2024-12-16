@@ -55,7 +55,8 @@
                             @php
                                 $checkAdd = 1;
                             @endphp
-                            <form id="product-form" action="{{ route('addToCartDetai', ['checkAdd' => $checkAdd]) }}" method="POST">
+                            <form id="product-form" action="{{ route('addToCartDetai', ['checkAdd' => $checkAdd]) }}"
+                                method="POST">
                                 @csrf
                                 <input type="text" name='product_id' value="{{ $product->id }}" hidden>
                                 <input type="text" name="discount_id"
@@ -149,6 +150,18 @@
                                         Mua ngay
                                     </button>
                                 </div>
+                                @if (session('error'))
+                                    <div class="error">
+                                        <div class="alert alert-danger alert-dismissible alert-alt solid fade show">
+                                            <button type="button" class="close h-100" data-dismiss="alert"
+                                                aria-label="Close">
+                                            </button>
+                                            @if (session('error'))
+                                                <strong>{{ session('error') }}</strong>
+                                            @endif
+                                        </div>
+                                    </div>
+                                @endif
                             </form>
                             {{-- yeu thich
                             <input type="text" name='product_id' value="{{ $product->id }}" > --}}
@@ -157,8 +170,8 @@
                     <div class="col-lg-12 m-4">
                         <nav>
                             <div class="nav nav-tabs mb-3">
-                                <button class="nav-link active border-white border-bottom-0" type="button" role="tab"
-                                    id="nav-about-tab" data-bs-toggle="tab" data-bs-target="#nav-about"
+                                <button class="nav-link active border-white border-bottom-0" type="button"
+                                    role="tab" id="nav-about-tab" data-bs-toggle="tab" data-bs-target="#nav-about"
                                     aria-controls="nav-about" aria-selected="true">Mô
                                     tả</button>
                                 <button class="nav-link border-white border-bottom-0" type="button" role="tab"

@@ -210,7 +210,7 @@ class CartController extends Controller
             ]);
         }
         $user_id = Auth::id() ?? 0;
-        if($checkAdd == 1){
+        if ($checkAdd == 1) {
             $data = [
                 'user_id' => $user_id,
                 'product_variant_id' => $request->product_variant_id ?? 0,
@@ -224,15 +224,20 @@ class CartController extends Controller
             $cart = session()->get('cart', []);
             $productExists = false;
             foreach ($cart as $index => $item) {
-                if (
-                    $item['user_id'] === $data['user_id'] &&
-                    $item['product_id'] === $data['product_id'] &&
-                    $item['product_variant_id'] === $data['product_variant_id']
+                if ($item['user_id'] === $data['user_id'] && $item['product_id'] === $data['product_id']
+                    && $item['product_variant_id'] === $data['product_variant_id']
                 ) {
-                    $cart[$index]['qty'] += $data['qty'];
-                    $cart[$index]['selected_products'] = $data['selected_products'];
-                    $productExists = true;
-                    break;
+                    if ($item['product_variant_id']  == 0) {
+                        $product = Product::find($item['product_id']);
+                        if ($request->qty + $item['qty'] <= $product->qty && $request->qty + $item['qty'] <=50) {
+                            $cart[$index]['qty'] += $data['qty'];
+                            $cart[$index]['selected_products'] = $data['selected_products'];
+                            $productExists = true;
+                            break;
+                        }else{
+                            return redirect()->back()->with('error','Vượt quá số đơn trong giỏ hàng');
+                        }
+                    }
                 }
             }
 
@@ -244,7 +249,7 @@ class CartController extends Controller
             return redirect()->back()->with([
                 'message' => 'Đặt hàng thành công',
             ]);
-        }else{
+        } else {
             $data = [
                 'user_id' => $user_id,
                 'product_variant_id' => $request->product_variant_id ?? 0,
@@ -258,15 +263,19 @@ class CartController extends Controller
             $cart = session()->get('cart', []);
             $productExists = false;
             foreach ($cart as $index => $item) {
-                if (
-                    $item['user_id'] === $data['user_id'] &&
-                    $item['product_id'] === $data['product_id'] &&
-                    $item['product_variant_id'] === $data['product_variant_id']
+                if ($item['user_id'] === $data['user_id'] && $item['product_id'] === $data['product_id']
+                    && $item['product_variant_id'] === $data['product_variant_id']
                 ) {
-                    $cart[$index]['qty'] += $data['qty'];
-                    $cart[$index]['selected_products'] = $data['selected_products'];
-                    $productExists = true;
-                    break;
+                    $productVariant = ProductVariant::find($item['product_variant_id']);
+                    if ($request->qty + $item['qty'] <= $productVariant->stock && $request->qty + $item['qty'] <= 50) {
+                        $cart[$index]['qty'] += $data['qty'];
+                        $cart[$index]['selected_products'] = $data['selected_products'];
+                        $productExists = true;
+                        break;
+                    }else{
+                        return redirect()->back()->with('error','Vượt quá số đơn trong giỏ hàng');
+                    }
+
                 }
             }
 
@@ -279,7 +288,6 @@ class CartController extends Controller
                 'message' => 'Đặt hàng thành công',
             ]);
         }
-
     }
 
     public function removeItemCart($product_variant_id)
@@ -356,7 +364,7 @@ class CartController extends Controller
             // 'voucher_sale' => $request->voucher_sale,
             // 'qty_voucher' => $request->qty_voucher,
         ];
-
+        // dd($data);
         // Xử lý giỏ hàng
         $cart = session()->get('cart', []);
         $productExists = false;
@@ -367,10 +375,23 @@ class CartController extends Controller
                 $item['product_id'] === $data['product_id'] &&
                 $item['product_variant_id'] === $data['product_variant_id']
             ) {
-                $cart[$index]['qty'] += $data['qty'];
-                $cart[$index]['selected_products'] = $data['selected_products'];
-                $productExists = true;
-                break;
+                if ($item['product_variant_id'] == 0) {
+                    $product = Product::find($item['product_id']);
+                    if ($request->qty + $item['qty'] <= $product->qty && $request->qty + $item['qty'] <= 50) {
+                        $cart[$index]['qty'] += $data['qty'];
+                        $cart[$index]['selected_products'] = $data['selected_products'];
+                        $productExists = true;
+                        break;
+                    }
+                } else {
+                    // $productVariant = ProductVariant::find($item['product_variant_id']);
+                    if ($request->qty + $item['qty'] <= $request->stock && $request->qty + $item['qty'] <= 50) {
+                        $cart[$index]['qty'] += $data['qty'];
+                        $cart[$index]['selected_products'] = $data['selected_products'];
+                        $productExists = true;
+                        break;
+                    }
+                }
             }
         }
 

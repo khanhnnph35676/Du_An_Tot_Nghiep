@@ -13,6 +13,7 @@ use App\Models\ProductOder;
 use App\Models\Product;
 use App\Models\Address;
 use App\Models\Discount;
+use App\Models\DiscountProduct;
 use App\Models\MessOrder;
 use App\Models\Point;
 use App\Models\UserVoucher;
@@ -188,19 +189,24 @@ class CheckoutController extends Controller
             foreach ($cart as $key => $value) {
                 if ($value['selected_products'] == 1 && $value['user_id'] == $user_id) {
                     $value['product_variant_id'] = 0 ? $product_variant_id =  null : $product_variant_id = $value['product_variant_id'];
-
+                    $discount = DiscountProduct::with('discounts')
+                    ->where('product_id', $value['product_id'])->first();
                     // Nếu sản phẩm có biến thể, kiểm tra và trừ kho
                     if ($value['product_variant_id'] != 0) {
                         $product_variant = ProductVariant::find($product_variant_id);
-                        if ($product_variant && $product_variant->stock > 0 && $product_variant->stock - $value['qty'] > 0) {
+                        if ($product_variant && $product_variant->stock >= 0 && $product_variant->stock - $value['qty'] >= 0) {
                             $product_variant->stock -= $value['qty'];
                             $product_variant->save();
+                            $price =$product_variant->price;
+                            if($discount !=null){
+                                $price =  $product_variant->price - ($product_variant->price* $discount->discounts->discount)/100;
+                            }
                             $dataProducts = [
                                 'order_id' => $addOrder->id,  // ID đơn hàng
                                 'product_id' => $value['product_id'],
                                 'product_variant_id' =>  $value['product_variant_id'],
                                 'quantity' => $value['qty'],
-                                'price' => $product_variant->price
+                                'price' => $price
                             ];
                             ProductOder::create($dataProducts);
                         } else {
@@ -210,15 +216,19 @@ class CheckoutController extends Controller
                         }
                     } else {
                         $product = Product::find($value['product_id']);
-                        if ($product && $product->qty > 0 || $product->qty - $value['qty'] > 0) {
+                        if ($product && $product->qty >= 0 || $product->qty - $value['qty'] >= 0) {
                             $product->qty -= $value['qty'];
                             $product->save();
+                            $price =$product->price;
+                            if($discount !=null){
+                                $price =  $product->price - ($product->price* $discount->discounts->discount)/100;
+                            }
                             $dataProducts = [
                                 'order_id' => $addOrder->id,  // ID đơn hàng
                                 'product_id' => $value['product_id'],
                                 'product_variant_id' =>  $product_variant_id,
                                 'quantity' => $value['qty'],
-                                'price' => $product->price
+                                'price' => $price
                             ];
                             ProductOder::create($dataProducts);
                         } else {
@@ -294,19 +304,24 @@ class CheckoutController extends Controller
             foreach ($cart as $key => $value) {
                 if ($value['selected_products'] == 1 && $value['user_id'] == $user_id) {
                     $value['product_variant_id'] = 0 ? $product_variant_id =  null : $product_variant_id = $value['product_variant_id'];
-
+                    $discount = DiscountProduct::with('discounts')
+                    ->where('product_id', $value['product_id'])->first();
                     // Nếu sản phẩm có biến thể, kiểm tra và trừ kho
                     if ($value['product_variant_id'] != 0) {
                         $product_variant = ProductVariant::find($product_variant_id);
-                        if ($product_variant && $product_variant->stock > 0 && $product_variant->stock - $value['qty'] > 0) {
+                        if ($product_variant && $product_variant->stock >= 0 && $product_variant->stock - $value['qty'] >= 0) {
                             $product_variant->stock -= $value['qty'];
                             $product_variant->save();
+                            $price =$product_variant->price;
+                            if($discount !=null){
+                                $price =  $product_variant->price - ($product_variant->price* $discount->discounts->discount)/100;
+                            }
                             $dataProducts = [
                                 'order_id' => $addOrder->id,  // ID đơn hàng
                                 'product_id' => $value['product_id'],
                                 'product_variant_id' =>  $value['product_variant_id'],
                                 'quantity' => $value['qty'],
-                                'price' => $product_variant->price
+                                'price' => $price
                             ];
                             ProductOder::create($dataProducts);
                         } else {
@@ -316,15 +331,19 @@ class CheckoutController extends Controller
                         }
                     } else {
                         $product = Product::find($value['product_id']);
-                        if ($product && $product->qty > 0 || $product->qty - $value['qty'] > 0) {
+                        if ($product && $product->qty >= 0 || $product->qty - $value['qty'] >= 0) {
                             $product->qty -= $value['qty'];
                             $product->save();
+                            $price =$product->price;
+                            if($discount !=null){
+                                $price =  $product->price - ($product->price* $discount->discounts->discount)/100;
+                            }
                             $dataProducts = [
                                 'order_id' => $addOrder->id,  // ID đơn hàng
                                 'product_id' => $value['product_id'],
                                 'product_variant_id' =>  $product_variant_id,
                                 'quantity' => $value['qty'],
-                                'price' => $product->price
+                                'price' => $price
                             ];
                             ProductOder::create($dataProducts);
                         } else {

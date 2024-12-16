@@ -256,6 +256,7 @@
                                 <div class="alert alert-danger p-2 mt-1"><strong>Lỗi!</strong> {{ $message }}
                                 </div>
                             @enderror
+
                         </div>
                         <div class="form-item">
                             <label class="form-label my-3">Phương thức thanh toán<sup>*</sup></label>
@@ -514,7 +515,11 @@
                                             <div class="form-check text-start">
                                             </div>
                                             <div class="form-check text-start">
-                                                <span id="total-price">{{ number_format($sumPrice + 15000) }} Vnđ</span>
+                                                @php
+                                                    $sumPrice+=15000
+                                                @endphp
+                                                <span id="total-price">{{ number_format($sumPrice) }} Vnđ</span>
+                                                <input type="text" name='sum_price' value="{{ $sumPrice}}" hidden>
                                             </div>
                                             <div class="form-check text-start">
                                             </div>
@@ -544,12 +549,23 @@
                             </table>
                         </div>
 
+                        @if (session('error'))
+                        <div class="error">
+                            <div class="alert alert-danger alert-dismissible alert-alt solid fade show">
+                                <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close">
+                                </button>
+                                @if (session('error'))
+                                    <strong>{{ session('error') }}</strong>
+                                @endif
+                            </div>
+                        </div>
+                        @endif
                         @php
                             // print_r($cart);
                         @endphp
                         <div id="payment-button">
                             <!-- Mặc định hiển thị cho COD -->
-                            <input type="text" name='sum_price' value="{{ $sumPrice + 15000 }}" hidden>
+
                             <button class="btn border-secondary py-3 px-4 text-uppercase w-100 text-primary">
                                 Thanh toán COD
                             </button>
@@ -620,7 +636,7 @@
                                     style="width: 20px; height: 20px; object-fit: cover;" alt="">
                             </div>
                         @endif
-
+                    </div>
             </form>
         </div>
     </div>
