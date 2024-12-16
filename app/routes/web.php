@@ -176,8 +176,6 @@ Route::middleware(['auth.check'])->group(function () {
     });
 });
 
-
-
 // TRANG KHÔNG CÓ TÀI KHOẢN CŨNG CÓ THỂ VÀO (TÀI KHOẢN QUẢN LÝ WEB KHÔNG CHO VÀO)
 Route::middleware(['checkadmin'])->group(function () {
     // trang chủ
