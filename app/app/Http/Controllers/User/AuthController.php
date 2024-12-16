@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
+use App\Models\OrderList;
 
 use Illuminate\Support\Facades\Auth;
 
@@ -54,7 +55,10 @@ class AuthController extends Controller
     public function changePassword()
     {
         $cart = session()->get('cart', []);
-        return view('user.change-password',compact('cart'));
+        session()->forget('checkOrder');
+        $user_id = Auth::user()->id;
+        $orderLists = OrderList::with('orders', 'orders.address', 'users');
+        return view('user.change-password',compact('cart','orderLists'));
     }
 
     // Xử lý yêu cầu đổi mật khẩu
@@ -74,10 +78,10 @@ class AuthController extends Controller
 //     }
 
 //     try {
-      
+
 //         $user->password = Hash::make($request->new_password);
 
-      
+
 //         if ($user->save()) {
 //             return redirect()->route('')->with('status', 'Đổi mật khẩu thành công.');
 //         } else {

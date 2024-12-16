@@ -19,6 +19,8 @@ use App\Models\ProductVariant;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Config;
+use Carbon\Carbon;
 
 class CheckoutController extends Controller
 {
@@ -57,7 +59,7 @@ class CheckoutController extends Controller
                 return redirect()->route('storeHome');
             }
         }
-        if($checkOrder){
+        if ($checkOrder) {
             return redirect()->route('successCheckout');
         }
         return view('user.cart.checkout')->with([
@@ -77,9 +79,13 @@ class CheckoutController extends Controller
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+        curl_setopt(
+            $ch,
+            CURLOPT_HTTPHEADER,
+            array(
                 'Content-Type: application/json',
-                'Content-Length: ' . strlen($data))
+                'Content-Length: ' . strlen($data)
+            )
         );
         curl_setopt($ch, CURLOPT_TIMEOUT, 5);
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
@@ -156,6 +162,7 @@ class CheckoutController extends Controller
             $user = User::create($data_user);
             Auth::login($user);
 
+
             // sửa địa chỉ có user_id null thành id
             $address = Address::where('user_id', NULL)->get();
             foreach ($address as $value) {
@@ -182,6 +189,11 @@ class CheckoutController extends Controller
 
             // Phần gửi mail khi không có tài khoản
         } else {
+            $user = User::find($user_id);
+            $user->update([
+                'name' => $request->name,
+                'phone' => $request->phone,
+            ]);
             $dataOrderList = [
                 'order_id' => $addOrder->id,
                 'user_id' => $user_id,
@@ -196,49 +208,45 @@ class CheckoutController extends Controller
             $checkOrder[] = $dataCheck;
         }
 
-        $emailUser = $request->email;
-        $nameUser = $request->name;
-        $userSearch = User::where('email', $emailUser)->first();
+        // đối với khách chưa có tài khoản
         foreach ($cart as $key => $value) {
-            if ($value['selected_products'] == 1 && $userSearch->id == $value['user_id']) {
-                if ($user_id == $value['user_id']) {
-                    //  đăng nhập được sản phẩm
-                    $value['product_variant_id'] = 0 ? $product_variant_id =  null : $product_variant_id = $value['product_variant_id'];
-                    $dataProducts = [
-                        'order_id' => $addOrder->id,  // ID đơn hàng
-                        'product_id' => $value['product_id'],
-                        'product_variant_id' =>  $product_variant_id,
-                        'quantity' => $value['qty'],
-                        'price' => $request->price
-                    ];
-                    ProductOder::create($dataProducts);
+            $user_id = null ? 0 : $user_id;
+            if ($value['selected_products'] == 1 &&  $user_id == $value['user_id']) {
+                //  đăng nhập được sản phẩm
+                $value['product_variant_id'] = 0 ? $product_variant_id =  null : $product_variant_id = $value['product_variant_id'];
+                $dataProducts = [
+                    'order_id' => $addOrder->id,  // ID đơn hàng
+                    'product_id' => $value['product_id'],
+                    'product_variant_id' =>  $product_variant_id,
+                    'quantity' => $value['qty'],
+                    'price' => $request->price
+                ];
+                ProductOder::create($dataProducts);
 
-                    // Nếu sản phẩm có biến thể, kiểm tra và trừ kho
-                    if($value['product_variant_id'] != 0){
-                        $product_variant = ProductVariant::find($product_variant_id);
-                        if ($product_variant && $product_variant->stock > 0 && $product_variant->stock - $value['qty'] > 0) {
-                            $product_variant->stock -= $value['qty'];
-                            $product_variant->save();
-                        } else {
-                            return redirect()->back()->with([
-                                'error'=>'Sản phẩm không đủ số lượng.'
-                            ]);
-                        }
-                    }else{
-                        $product = Product::find($value['product_id']);
-                        if ($product && $product->qty > 0 || $product->qty - $value['qty'] > 0) {
-                            $product->qty -= $value['qty'];
-                            $product->save();
-                        }else {
-                            return redirect()->back()->with([
-                                'error'=>'Sản phẩm không đủ số lượng.'
-                            ]);
-                        }
+                // Nếu sản phẩm có biến thể, kiểm tra và trừ kho
+                if ($value['product_variant_id'] != 0) {
+                    $product_variant = ProductVariant::find($product_variant_id);
+                    if ($product_variant && $product_variant->stock > 0 && $product_variant->stock - $value['qty'] > 0) {
+                        $product_variant->stock -= $value['qty'];
+                        $product_variant->save();
+                    } else {
+                        return redirect()->back()->with([
+                            'error' => 'Sản phẩm không đủ số lượng.'
+                        ]);
                     }
-
+                } else {
+                    $product = Product::find($value['product_id']);
+                    if ($product && $product->qty > 0 || $product->qty - $value['qty'] > 0) {
+                        $product->qty -= $value['qty'];
+                        $product->save();
+                    } else {
+                        return redirect()->back()->with([
+                            'error' => 'Sản phẩm không đủ số lượng.'
+                        ]);
+                    }
                 }
                 // làm giảm số giảm giá khi khách đặt hàng
-                if ($value['discount_id'] != 0){
+                if ($value['discount_id'] != 0) {
                     $discount = Discount::find($value['discount_id']);
                     $discount->update([
                         'qty' => $discount->qty + $value['qty']
@@ -247,6 +255,9 @@ class CheckoutController extends Controller
                 unset($cart[$key]);
             }
         }
+        $emailUser = $request->email;
+        $nameUser = $request->name;
+        $userSearch = User::where('email', $emailUser)->first();
 
         //    Mail cho khách đặt hàng / tính cá không đăng nhập và đăng nhập
 
@@ -279,7 +290,7 @@ class CheckoutController extends Controller
             return redirect()->route('successCheckout')->with([
                 'message' => 'Chúc mừng thanh toán thành công qua COD'
             ]);
-        } elseif($request->payment_id == 2) {
+        } elseif ($request->payment_id == 2) {
             $endpoint = "https://test-payment.momo.vn/v2/gateway/api/create";
             $partnerCode = 'MOMOBKUN20180529';
             $accessKey = 'klm05TvNBzhg7h7j';
@@ -287,8 +298,8 @@ class CheckoutController extends Controller
 
             $orderInfo = "Thanh toán qua MoMo";
             $amount =  $request->sum_price;
-            $orderId = generateRandomCode();
-            // $addOrder->order_code
+            $orderId = $addOrder->order_code;
+
             $redirectUrl = "http://127.0.0.1:8000/success-checkout";
             $ipnUrl = "http://127.0.0.1:8000/success-checkout";
             $extraData = "";
@@ -317,45 +328,23 @@ class CheckoutController extends Controller
             $result =  $this->execPostRequest($endpoint, json_encode($data));
             $jsonResult = json_decode($result, true);
             return redirect()->to($jsonResult['payUrl']);
-        }else{
+        } else {
             // date_default_timezone_set('Asia/Ho_Chi_Minh');
-            $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
+            $vnp_Url = env("VNPAY_URL");
             $vnp_Returnurl = "http://127.0.0.1:8000/success-checkout";
-            $vnp_TmnCode = "RXJT5TCH";//Mã website tại VNPAY
-            $vnp_HashSecret = "4TSVTLPJLVR4VUAOAL1F70807XY93Q52"; //Chuỗi bí mật
-
-            $vnp_TxnRef = generateRandomCode(); //Mã đơn hàng. Trong thực tế Merchant cần insert đơn hàng vào DB và gửi mã này
-            // $addOrder->order_code
-            $vnp_OrderInfo = 'Noi dung thanh toán';
+            $vnp_TmnCode = env('VNPAY_TMN_CODE'); // Mã website tại VNPAY
+            $vnp_HashSecret = env('VNPAY_HASH_SECRET'); // Chuỗi bí mật
+            $vnp_TxnRef = $addOrder->order_code;
+            $vnp_OrderInfo = 'Thanh toan don hang';
             $vnp_OrderType = 'billpayment';
             $vnp_Amount = $request->sum_price * 100;
             $vnp_Locale = 'vn';
-            $vnp_BankCode = 'NCB';
+            // $vnp_BankCode = 'NCB';
             $vnp_IpAddr = $_SERVER['REMOTE_ADDR']; // 127.0.0.1
-            // $vnp_ExpireDate = date('YmdHis', strtotime('+15 minutes'));
-            //Add Params of 2.0.1 Version
-            // $vnp_ExpireDate = $_POST['txtexpire'];
-            //Billing
-            // $vnp_Bill_Mobile = $_POST['txt_billing_mobile'];
-            // $vnp_Bill_Email = $_POST['txt_billing_email'];
-            // $fullName = trim($_POST['txt_billing_fullname']);
-            // if (isset($fullName) && trim($fullName) != '') {
-            //     $name = explode(' ', $fullName);
-            //     $vnp_Bill_FirstName = array_shift($name);
-            //     $vnp_Bill_LastName = array_pop($name);
-            // }
-            // $vnp_Bill_Address=$_POST['txt_inv_addr1'];
-            // $vnp_Bill_City=$_POST['txt_bill_city'];
-            // $vnp_Bill_Country=$_POST['txt_bill_country'];
-            // $vnp_Bill_State=$_POST['txt_bill_state'];
-            // // Invoice
-            // $vnp_Inv_Phone=$_POST['txt_inv_mobile'];
-            // $vnp_Inv_Email=$_POST['txt_inv_email'];
-            // $vnp_Inv_Customer=$_POST['txt_inv_customer'];
-            // $vnp_Inv_Address=$_POST['txt_inv_addr1'];
-            // $vnp_Inv_Company=$_POST['txt_inv_company'];
-            // $vnp_Inv_Taxcode=$_POST['txt_inv_taxcode'];
-            // $vnp_Inv_Type=$_POST['cbo_inv_type'];
+
+            // Thêm thời gian hết hạn cho giao dịch (15 phút từ thời điểm hiện tại)
+            // $vnp_ExpireDate = date('YmdHis', strtotime('+60 minutes'));
+
             $inputData = array(
                 "vnp_Version" => "2.1.0",
                 "vnp_TmnCode" => $vnp_TmnCode,
@@ -369,35 +358,19 @@ class CheckoutController extends Controller
                 "vnp_OrderType" => $vnp_OrderType,
                 "vnp_ReturnUrl" => $vnp_Returnurl,
                 "vnp_TxnRef" => $vnp_TxnRef,
-                // "vnp_ExpireDate"=>$vnp_ExpireDate,
-                // "vnp_Bill_Mobile"=>$vnp_Bill_Mobile,
-                // "vnp_Bill_Email"=>$vnp_Bill_Email,
-                // "vnp_Bill_FirstName"=>$vnp_Bill_FirstName,
-                // "vnp_Bill_LastName"=>$vnp_Bill_LastName,
-                // "vnp_Bill_Address"=>$vnp_Bill_Address,
-                // "vnp_Bill_City"=>$vnp_Bill_City,
-                // "vnp_Bill_Country"=>$vnp_Bill_Country,
-                // "vnp_Inv_Phone"=>$vnp_Inv_Phone,
-                // "vnp_Inv_Email"=>$vnp_Inv_Email,
-                // "vnp_Inv_Customer"=>$vnp_Inv_Customer,
-                // "vnp_Inv_Address"=>$vnp_Inv_Address,
-                // "vnp_Inv_Company"=>$vnp_Inv_Company,
-                // "vnp_Inv_Taxcode"=>$vnp_Inv_Taxcode,
-                // "vnp_Inv_Type"=>$vnp_Inv_Type
+                // "vnp_ExpireDate" => $vnp_ExpireDate, // Đặt thời gian hết hạn
             );
 
             if (isset($vnp_BankCode) && $vnp_BankCode != "") {
                 $inputData['vnp_BankCode'] = $vnp_BankCode;
             }
-            // if (isset($vnp_Bill_State) && $vnp_Bill_State != "") {
-            //     $inputData['vnp_Bill_State'] = $vnp_Bill_State;
-            // }
 
-            //var_dump($inputData);
+            // Sắp xếp dữ liệu theo thứ tự chữ cái
             ksort($inputData);
             $query = "";
             $i = 0;
             $hashdata = "";
+
             foreach ($inputData as $key => $value) {
                 if ($i == 1) {
                     $hashdata .= '&' . urlencode($key) . "=" . urlencode($value);
@@ -408,16 +381,18 @@ class CheckoutController extends Controller
                 $query .= urlencode($key) . "=" . urlencode($value) . '&';
             }
 
+            // Tạo URL để chuyển hướng người dùng đến cổng thanh toán
             $vnp_Url = $vnp_Url . "?" . $query;
+
             if (isset($vnp_HashSecret)) {
-                $vnpSecureHash =   hash_hmac('sha512', $hashdata, $vnp_HashSecret);//
+                // Tạo mã hash bảo mật
+                $vnpSecureHash = hash_hmac('sha512', $hashdata, $vnp_HashSecret);
                 $vnp_Url .= 'vnp_SecureHash=' . $vnpSecureHash;
             }
-            $returnData = array('code' => '00', 'message' => 'success', 'data' => $vnp_Url);
-            // header('Location: ' . $vnp_Url);
-            return redirect()->to($vnp_Url);
+            // dd($vnp_Url);
+            // Chuyển hướng người dùng đến cổng thanh toán nếu bấm nút redirect
+            return redirect($vnp_Url);
         }
-
     }
     public function successCheckout()
     {
@@ -440,5 +415,4 @@ class CheckoutController extends Controller
 
         return view('user.cart.succes-checkout', compact('cart', 'checkOrder', 'order', 'productOrders'));
     }
-
 }

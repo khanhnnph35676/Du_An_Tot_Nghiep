@@ -136,6 +136,8 @@
                         </a> </li>
                     <li class="p-2 mt-2"><a href="{{ route('points') }}" class="text-dark"><strong>Điểm thưởng</strong>
                         </a> </li>
+                    <li class="p-2 mt-2"><a href="{{ route('user.change-password') }}" class="text-dark"><strong>Đổi mật khẩu</strong>
+                        </a> </li>
                 </ul>
             </div>
             <div class="col-lg-8 m-0 p-0 ms-4">
@@ -167,6 +169,7 @@
                                                 {{ $voucher->code_vocher }}
                                             </h6>
                                             <p class="text-start name-voucher">{{ $voucher->name }}</p>
+                                            <p style="font-size: 10px;">HSD: {{' đến '.\Carbon\Carbon::parse($voucher->end_date)->format('d/m/Y')   }}</p>
                                             <!-- Nút để chọn voucher -->
                                             <button type="button" class="btn btn-primary redeem m-2"
                                                 onclick="setVoucherAndSubmit('{{ $voucher->id }}')">

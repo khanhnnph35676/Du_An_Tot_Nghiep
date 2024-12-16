@@ -201,6 +201,8 @@
                         </a> </li>
                     <li class="p-2 mt-2"><a href="{{ route('points') }}" class="text-dark"><strong>Điểm thưởng</strong>
                         </a> </li>
+                    <li class="p-2 mt-2"><a href="{{ route('user.change-password') }}" class="text-dark"><strong>Đổi mật khẩu</strong>
+                        </a> </li>
                 </ul>
             </div>
             <div class="col-lg-9  border rounded">

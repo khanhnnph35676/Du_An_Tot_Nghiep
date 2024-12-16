@@ -30,5 +30,13 @@ return [
         'secret' => env('AWS_SECRET_ACCESS_KEY'),
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
+    'vnpay' => [
+        'vnp_TmnCode' => env('VNPAY_TMN_CODE', 'RXJT5TCH'),  // Terminal ID / Mã website
+        'vnp_HashSecret' => env('VNPAY_HASH_SECRET', '4TSVTLPJLVR4VUAOAL1F70807XY93Q52'),  // Secret key
+        'vnp_Url' => env('VNPAY_URL', 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html'),  // URL thanh toán môi trường TEST
+        // 'vnp_ReturnUrl' => env('VNPAY_RETURN_URL', 'http://127.0.0.1:8000/success-checkout'),  // URL người dùng quay lại sau khi thanh toán,
+        // 'timer' => env('VNPAY_TIMER', 30000),
+    ],
+
 
 ];
