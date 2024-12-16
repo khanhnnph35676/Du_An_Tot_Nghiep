@@ -116,7 +116,17 @@
                             <h2>{{ $user->name }}</h2>
                             <p class="text-muted">Email: {{ $user->email }}</p>
                             <p class="text-muted">Phone: {{ $user->phone }}</p>
-                            <p class="text-muted">Giới tính: {{ $user->gender }}</p>
+                            <p class="text-muted">Giới tính:
+                                @if ($user->gender == 'male')
+                                    Nam
+                                @elseif($user->gender == 'female')
+                                    Nữ
+                                @elseif('other')
+                                    Giới tính khác
+                                @else
+                                    Chưa nhập
+                                @endif
+                            </p>
                         </div>
                     </div>
 
@@ -197,7 +207,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 {{-- {{ route('user.profile.update') }} --}}
-                <form action="{{route('updateProfile')}}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('updateProfile') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('patch')
                     <div class="modal-body">
@@ -209,7 +219,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="email" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="email"  disabled
+                            <input type="email" class="form-control" id="email" disabled
                                 value="{{ $user->email }}" placeholder="Nhập email">
                         </div>
                         <div class="mb-3">
@@ -343,7 +353,7 @@
 
                 const addressId = this.getAttribute('data-id'); // Lấy ID của địa chỉ
                 const addressRow = document.getElementById(
-                `address-row-${addressId}`); // Tìm hàng tương ứng
+                    `address-row-${addressId}`); // Tìm hàng tương ứng
 
                 // Xóa hàng khỏi DOM
                 if (addressRow) {

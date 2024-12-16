@@ -70,7 +70,7 @@
                  </ul>
              </li> --}}
              {{-- Danh mục giao tiếp với khách --}}
-             <li><a class="has-arrow" href="javascript:void()" aria-expanded="false"><i
+             {{-- <li><a class="has-arrow" href="javascript:void()" aria-expanded="false"><i
                          class="fa-solid fa-envelope"></i>
                      <span class="nav-text">Email </span>
                  </a>
@@ -78,7 +78,7 @@
                      <li><a href="{{ route('admin.inbox') }}">Hộp thư đến</a></li>
                      <li><a href="{{ route('admin.compose') }}">Soạn thư</a></li>
                  </ul>
-             </li>
+             </li> --}}
              <li><a href="{{route('admin.listChat')}}"> <i class="fa-solid fa-comments"></i>
                      <span class="nav-text">Tin nhắn</span>
                  </a></li>
