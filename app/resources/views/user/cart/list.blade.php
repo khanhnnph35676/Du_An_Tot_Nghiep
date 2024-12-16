@@ -51,71 +51,7 @@
             background: #b9b7b793;
         }
 
-        .qty-point {
-            position: absolute;
-            right: 0;
-            width: auto;
-            height: auto;
-            text-align: center;
-            z-index: 1;
-            opacity: 0.7;
-        }
 
-        .point {
-            font-size: 29px;
-            color: #333;
-        }
-
-        .title-point {
-            font-size: 20px;
-            color: #333;
-        }
-
-        .redeem {
-            position: absolute;
-            bottom: 0;
-            right: 0;
-        }
-
-        .name-voucher {
-            font-size: 13px;
-        }
-
-        .card.selected {
-            border: 2px solid #1eff00;
-            /* Đổi màu viền voucher được chọn */
-            background-color: #eaf4ff;
-            /* Làm nền sáng để phân biệt */
-        }
-
-        .redeem {
-            background-color: #1eff00;
-            /* Màu xanh mặc định */
-            color: white;
-            border: none;
-            transition: background-color 0.3s ease;
-            /* Hiệu ứng mượt */
-        }
-
-        .redeem.used {
-            background-color: #6c757d;
-            /* Màu xám khi đã dùng */
-            color: #fff;
-        }
-
-
-        #price {
-            border: none;
-            /* Ẩn viền */
-            background: none;
-            /* Loại bỏ nền */
-            color: inherit;
-            /* Giữ màu chữ theo bối cảnh */
-            outline: none;
-            /* Ẩn viền khi focus */
-            pointer-events: none;
-            /* Không cho phép click hoặc chỉnh sửa */
-        }
     </style>
     <!-- Single Page Header start -->
     <div class="container-fluid page-header py-5">
@@ -465,6 +401,8 @@
             </div>
 
             <div class="row g-4 justify-content-end">
+                <div class="col-lg-6">
+                </div>
                 <div class="col-lg-4">
                     <div class="bg-light rounded">
                         <div class="p-4">
@@ -578,11 +516,16 @@
                         </div>
                         <div class="py-4 mb-4 border-top border-bottom d-flex justify-content-between">
                             <h5 class="mb-0 ps-4 me-4">Tổng giá</h5>
-                            @php $price = $price + 15000 @endphp
-                            {{-- <input id="price" name="price" value="{{ $price }}">  <!-- Giá mặc định --> --}}
-                            <p class="fw-bold pe-4"> {{ number_format($price) }} Vnđ</p>
+                            <input type="hidden" id="price" name="price" value="{{ $price }}">
+                            <!-- Giá hiện tại -->
+                            <input type="hidden" id="shipping_fee" name="shipping_fee" value="15000">
+                            <!-- Phí ship mặc định -->
+                            <p class="fw-bold pe-4"> {{ number_format($price + 15000) }} Vnđ</p>
 
+                            {{-- <input class="fw-bold pe-4" name="price" value="{{ $price + 15000 }}"> --}}
+                            <!-- Hiển thị tổng giá -->
                         </div>
+
                         @if (Auth::check())
                             @php
                                 $hasSelectedProduct = false;
@@ -633,65 +576,6 @@
 
                     </div>
                 </div>
-                <div class="col-lg-2"> </div>
-                <div class="col-lg-6">
-                    <div class="border rounded p-2 mb-3">
-                        <h3 class="m-3"> Phiếu giảm giá của tôi</h3>
-                        <div class="d-flex flex-wrap justify-content-start gap-3 m-2">
-                            <!-- Vòng lặp hiển thị các voucher -->
-                            <!-- Các input ẩn -->
-                            <input id="voucher_id" name="voucher_id" value="" hidden>
-                            <input id="voucher_sale" name="voucher_sale" value="" hidden>
-
-                            <input type="hidden" id="shipping_fee" name="shipping_fee" value="15000">
-                            <!-- Phí ship mặc định -->
-
-                            @foreach ($listVouchers as $voucher)
-                                @if (
-                                    \Carbon\Carbon::parse(now())->format('d/m/Y') < \Carbon\Carbon::parse($voucher->end_date)->format('d/m/Y') &&
-                                        $price >= $voucher->money)
-                                    <div class="card shadow-sm rounded-3" id="voucher-{{ $voucher->id }}"
-                                        data-sale="{{ $voucher->sale }}" data-id="{{ $voucher->id }}"
-                                        style="width: 31%; min-height: 200px;">
-                                        <span class="qty-point border bg-secondary text-white p-1 d-flex">
-                                            @if ($user_voucher == [])
-                                                x0
-                                            @else
-                                                @foreach ($user_voucher as $value)
-                                                    @if ($value->voucher_id == $voucher->id)
-                                                        x{{ $value->qty }}
-                                                    @endif
-                                                @endforeach
-                                            @endif
-                                        </span>
-                                        <div class="card-body text-center">
-                                            <h6 class="card-title text-success mb-3 text-start">Mã:
-                                                {{ $voucher->code_vocher }}</h6>
-                                            <p class="text-start name-voucher">{{ $voucher->name }}</p>
-                                            <p style="font-size: 10px;">HSD: đến
-                                                {{ \Carbon\Carbon::parse($voucher->end_date)->format('d/m/Y') }}</p>
-                                            <button type="button" class="btn btn-primary redeem m-2"
-                                                onclick="setVoucherAndSubmit('{{ $voucher->id }}')">
-                                                <div class="d-flex justify-content-start align-items-start group-point">
-                                                    <div class="text-center">Dùng</div>
-                                                </div>
-                                            </button>
-
-                                        </div>
-                                    </div>
-                                @endif
-                            @endforeach
-                        </div>
-
-                        @php
-                            //   $price += $price - $price*$voucher_sale
-                        @endphp
-                    </div>
-                    Điểm của tôi: {{ $point->point ?? '0' }}
-                    <img src="{{ asset('img/xu.png') }}" style="width: 20px; height: 20px; object-fit: cover;"
-                        alt="">
-                </div>
-
             </div>
         </div>
 
@@ -718,45 +602,6 @@
 
     </div>
     <script>
-        function setVoucherAndSubmit(voucherId) {
-            const voucherElement = document.getElementById(`voucher-${voucherId}`);
-            const voucherButton = voucherElement.querySelector('.redeem');
-
-            // Kiểm tra trạng thái "đã dùng" của nút
-            if (voucherButton.classList.contains('used')) {
-                // Nếu đang ở trạng thái "đã dùng", hủy chọn và reset các input
-                voucherButton.classList.remove('used');
-                document.getElementById('voucher_id').value = '';
-                document.getElementById('voucher_sale').value = '';
-            } else {
-                // Nếu chưa ở trạng thái "đã dùng", đặt trạng thái cho nút hiện tại
-                const allButtons = document.querySelectorAll('.redeem');
-                allButtons.forEach(button => button.classList.remove('used')); // Xóa trạng thái khỏi nút khác
-                voucherButton.classList.add('used'); // Đánh dấu nút hiện tại là "đã dùng"
-
-                // Cập nhật giá trị vào các input ẩn
-                const voucherSale = voucherElement.getAttribute('data-sale');
-                document.getElementById('voucher_id').value = voucherId;
-                document.getElementById('voucher_sale').value = voucherSale;
-            }
-
-            // Debug để kiểm tra giá trị
-            console.log('Voucher ID:', document.getElementById('voucher_id').value);
-            console.log('Voucher Sale:', document.getElementById('voucher_sale').value);
-        }
-
-
-
-
-
-
-
-
-
-
-
-
-
         // nhập số nó cũng tự update
         function updateQtyByInput(productId, variantId, newQty) {
             const parsedQty = parseInt(newQty, 10);

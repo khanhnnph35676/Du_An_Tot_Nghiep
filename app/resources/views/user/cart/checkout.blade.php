@@ -40,6 +40,72 @@
             border-radius: 8px;
             /* Tùy chọn để tạo bo góc */
         }
+
+        .qty-point {
+            position: absolute;
+            right: 0;
+            width: auto;
+            height: auto;
+            text-align: center;
+            z-index: 1;
+            opacity: 0.7;
+        }
+
+        .point {
+            font-size: 29px;
+            color: #333;
+        }
+
+        .title-point {
+            font-size: 20px;
+            color: #333;
+        }
+
+        .redeem {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+        }
+
+        .name-voucher {
+            font-size: 13px;
+        }
+
+        .card.selected {
+            border: 2px solid #1eff00;
+            /* Đổi màu viền voucher được chọn */
+            background-color: #eaf4ff;
+            /* Làm nền sáng để phân biệt */
+        }
+
+        .redeem {
+            background-color: #2cdb1599;
+            /* Màu xanh mặc định */
+            color: white;
+            border: none;
+            transition: background-color 0.3s ease;
+            /* Hiệu ứng mượt */
+        }
+
+        .redeem.used {
+            background-color: #6c757d;
+            /* Màu xám khi đã dùng */
+            color: #fff;
+        }
+
+
+        #price {
+            border: none;
+            /* Ẩn viền */
+            background: none;
+            /* Loại bỏ nền */
+            color: inherit;
+            /* Giữ màu chữ theo bối cảnh */
+            outline: none;
+            /* Ẩn viền khi focus */
+            pointer-events: none;
+            /* Không cho phép click hoặc chỉnh sửa */
+        }
     </style>
     <!-- Single Page Header start -->
     <div class="container-fluid page-header py-5">
@@ -54,9 +120,8 @@
     @php
         // print_r($checkOrder);
         //  print_r($mesOrder);
-
     @endphp
-    {{-- @if ($checkOrder != null )
+    {{-- @if ($checkOrder != null)
         @foreach ($checkOrder as $item)
             @if ($item['payment_id'] == 2)
                 <div class="mess-checkout border">
@@ -108,6 +173,7 @@
                         @php
                             // print_r($addresses);
                             // print_r($address);
+                            // print_r($cart);
                             $countAddresses = 0;
                             $address_id = null;
                         @endphp
@@ -190,6 +256,7 @@
                                 <div class="alert alert-danger p-2 mt-1"><strong>Lỗi!</strong> {{ $message }}
                                 </div>
                             @enderror
+
                         </div>
                         <div class="form-item">
                             <label class="form-label my-3">Phương thức thanh toán<sup>*</sup></label>
@@ -202,7 +269,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="col-md-12 col-lg-6 col-xl-5">
                         <div class="table-responsive">
                             <table class="table">
@@ -218,7 +284,6 @@
 
                                     @php
                                         $sumPrice = 0;
-                                        // print_r($cart);
                                     @endphp
                                     @if (Auth::check())
                                         @foreach ($products as $product)
@@ -250,7 +315,7 @@
                                                             </div>
                                                         </th>
                                                         <td class="align-middle">
-                                                            {{Str::words(strip_tags($product->name), 6, '...') }}
+                                                            {{ Str::words(strip_tags($product->name), 6, '...') }}
                                                         </td>
                                                         <td class="align-middle">
                                                             @if ($item['discount'] != 0)
@@ -293,7 +358,7 @@
                                                                     alt="Ảnh sản phẩm">
                                                             </td>
                                                             <td class="align-middle">
-                                                                {{Str::words(strip_tags($product->name . ' - ' . $productVariant->sku), 6, '...') }}
+                                                                {{ Str::words(strip_tags($product->name . ' - ' . $productVariant->sku), 6, '...') }}
                                                             </td>
                                                             <td class="align-middle" style="width:100px;">
                                                                 @if ($item['discount'] != 0)
@@ -343,7 +408,7 @@
                                                             </div>
                                                         </th>
                                                         <td class="align-middle">
-                                                            {{Str::words(strip_tags($product->name), 6, '...') }}
+                                                            {{ Str::words(strip_tags($product->name), 6, '...') }}
                                                         </td>
                                                         <td class="align-middle">
                                                             @if ($item['discount'] != 0)
@@ -386,7 +451,7 @@
                                                                     alt="Ảnh sản phẩm">
                                                             </td>
                                                             <td class="align-middle">
-                                                                {{Str::words(strip_tags($product->name . ' - ' . $productVariant->sku), 6, '...') }}
+                                                                {{ Str::words(strip_tags($product->name . ' - ' . $productVariant->sku), 6, '...') }}
                                                             </td>
                                                             <td class="align-middle" style="width:100px;">
                                                                 @if ($item['discount'] != 0)
@@ -450,8 +515,11 @@
                                             <div class="form-check text-start">
                                             </div>
                                             <div class="form-check text-start">
-                                                <label class="form-check-label"
-                                                    for="Shipping-2">{{ number_format($sumPrice + 15000) }} Vnđ</label>
+                                                @php
+                                                    $sumPrice+=15000
+                                                @endphp
+                                                <span id="total-price">{{ number_format($sumPrice) }} Vnđ</span>
+                                                <input type="text" name='sum_price' value="{{ $sumPrice}}" hidden>
                                             </div>
                                             <div class="form-check text-start">
                                             </div>
@@ -480,12 +548,24 @@
                                 </tbody>
                             </table>
                         </div>
+
+                        @if (session('error'))
+                        <div class="error">
+                            <div class="alert alert-danger alert-dismissible alert-alt solid fade show">
+                                <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close">
+                                </button>
+                                @if (session('error'))
+                                    <strong>{{ session('error') }}</strong>
+                                @endif
+                            </div>
+                        </div>
+                        @endif
                         @php
                             // print_r($cart);
                         @endphp
                         <div id="payment-button">
                             <!-- Mặc định hiển thị cho COD -->
-                            <input type="text" name='sum_price' value="{{ $sumPrice + 15000 }}" hidden>
+
                             <button class="btn border-secondary py-3 px-4 text-uppercase w-100 text-primary">
                                 Thanh toán COD
                             </button>
@@ -494,14 +574,69 @@
                             style="display:none;">
                             Thanh toán qua ATM Momo
                         </button>
-                        <button class="btn border-secondary py-3 px-4 text-uppercase w-100 text-primary" name='redirect' id='VNPayment'
-                        style="display:none;">
-                        Thanh toán qua VNPAY
-                    </button>
+                        <button class="btn border-secondary py-3 px-4 text-uppercase w-100 text-primary" name='redirect'
+                            id='VNPayment' style="display:none;">
+                            Thanh toán qua VNPAY
+                        </button>
                         @error('payment_id')
                             <div class="alert alert-danger"><strong>Lỗi!</strong> {{ $message }}
                             </div>
                         @enderror
+                    </div>
+                    <div class="row mt-3 ms-1">
+                        <input id="voucher_id" name="voucher_id" value="" hidden> <!-- Giá hiện tại -->
+                        <input id="voucher_sale" name="voucher_sale" value="" hidden>
+                        @if (Auth::check())
+                            <div class="col-lg-12">
+                                <div class="border rounded p-2 mb-3">
+                                    <h3 class="m-3"> Phiếu giảm giá của tôi</h3>
+                                    <div class="d-flex flex-wrap justify-content-start gap-3 m-2">
+                                        @foreach ($listVouchers as $voucher)
+                                            @if (
+                                                \Carbon\Carbon::parse(now())->format('d/m/Y') < \Carbon\Carbon::parse($voucher->end_date)->format('d/m/Y') &&
+                                                    $sumPrice >= $voucher->money)
+                                                <div class="card shadow-sm rounded-3" id="voucher-{{ $voucher->id }}"
+                                                    data-sale="{{ $voucher->sale }}" data-id="{{ $voucher->id }}"
+                                                    style="width: 190px; min-height: 200px;">
+                                                    <span class="qty-point border bg-secondary text-white p-1 d-flex">
+                                                        @if ($user_voucher == [])
+                                                            x0
+                                                        @else
+                                                            @foreach ($user_voucher as $value)
+                                                                @if ($value->voucher_id == $voucher->id)
+                                                                    x{{ $value->qty }}
+                                                                @endif
+                                                            @endforeach
+                                                        @endif
+                                                    </span>
+                                                    <div class="card-body text-center">
+                                                        <h6 class="card-title text-success mb-3 text-start">Mã:
+                                                            {{ $voucher->code_vocher }}</h6>
+                                                        <p class="text-start name-voucher">{{ $voucher->name }}</p>
+                                                        <p style="font-size: 10px;">HSD: đến
+                                                            {{ \Carbon\Carbon::parse($voucher->end_date)->format('d/m/Y') }}
+                                                        </p>
+                                                        <button type="button" class="btn btn-primary redeem m-2"
+                                                            onclick="setVoucherAndSubmit('{{ $voucher->id }}')">
+                                                            <div
+                                                                class="d-flex justify-content-start align-items-start group-point">
+                                                                <div class="text-center">Dùng</div>
+                                                            </div>
+                                                        </button>
+
+                                                    </div>
+                                                </div>
+                                            @endif
+                                        @endforeach
+                                    </div>
+
+                                </div>
+                                Điểm của tôi: {{ $point->point ?? '0' }}
+                                <img src="{{ asset('img/xu.png') }}"
+                                    style="width: 20px; height: 20px; object-fit: cover;" alt="">
+                            </div>
+                        @endif
+                    </div>
             </form>
         </div>
     </div>
@@ -551,6 +686,64 @@
             </form>
         </div>
     </div>
+    <script>
+        function setVoucherAndSubmit(voucherId) {
+            // Lấy thông tin từ phần tử voucher
+            const voucherElement = document.getElementById(`voucher-${voucherId}`);
+            const voucherSale = voucherElement.getAttribute('data-sale'); // Lấy giá trị sale
+            const voucherButton = voucherElement.querySelector('.redeem'); // Nút "Dùng"
+
+            // Cập nhật giá trị vào các input ẩn
+            const voucherIdInput = document.getElementById('voucher_id');
+            const voucherSaleInput = document.getElementById('voucher_sale');
+            const totalPriceElement = document.getElementById('total-price'); // Element chứa giá trị tổng
+
+            // Định nghĩa giá ban đầu
+            let sumPrice = {{ $sumPrice }}; // Assuming $sumPrice is the initial total price
+
+            // Định dạng số
+            const formatNumber = (number) => {
+                return new Intl.NumberFormat('vi-VN').format(number); // Format to Vietnamese currency style
+            };
+
+            // Kiểm tra nếu nút đang ở trạng thái "đã dùng"
+            if (voucherButton.classList.contains('used')) {
+                // Hủy chọn voucher
+                voucherButton.classList.remove('used'); // Xóa trạng thái "đã dùng"
+                voucherIdInput.value = ''; // Xóa giá trị voucher_id
+                voucherSaleInput.value = ''; // Xóa giá trị voucher_sale
+                totalPriceElement.textContent = `${formatNumber(sumPrice)} Vnđ`; // Hiển thị lại giá ban đầu
+            } else {
+                // Đánh dấu nút hiện tại là "đã dùng" và bỏ chọn các nút khác
+                const allButtons = document.querySelectorAll('.redeem');
+                allButtons.forEach(button => button.classList.remove('used')); // Xóa trạng thái khỏi nút khác
+                voucherButton.classList.add('used'); // Đánh dấu nút hiện tại là "đã dùng"
+
+                // Gán giá trị vào các input
+                voucherIdInput.value = voucherId;
+                voucherSaleInput.value = voucherSale;
+
+                // Tính toán giá sau khi áp dụng voucher
+                let finalPrice = sumPrice;
+
+                // Nếu voucher có sale là 0, giảm 15000
+                if (voucherSale == 0) {
+                    finalPrice = sumPrice - 15000;
+                } else {
+                    // Nếu có sale, tính theo phần trăm giảm giá
+                    finalPrice = sumPrice - (sumPrice * (voucherSale / 100));
+                }
+
+                // Cập nhật lại giá trị vào element tổng tiền
+                totalPriceElement.textContent = `${formatNumber(finalPrice.toFixed(0))} Vnđ`;
+            }
+
+            // Hiển thị giá trị trong console (Debug)
+            console.log('Voucher ID:', voucherIdInput.value);
+            console.log('Voucher Sale:', voucherSaleInput.value);
+            console.log('Final Price:', totalPriceElement.textContent);
+        }
+    </script>
     <script>
         // Khai báo đối tượng lưu tên các tỉnh, quận, xã
         let provinceList = {};
@@ -727,13 +920,14 @@
                     paymentButtonCOD.style.display = 'none';
                     paymentButtonMoMo.style.display = 'block';
                     vnPayment.style.display = 'none';
-                }else if(this.value == 3)  { // Hiển thị VNPAY
+                } else if (this.value == 3) { // Hiển thị VNPAY
                     paymentButtonMoMo.style.display = 'none';
                     paymentButtonCOD.style.display = 'none';
                     vnPayment.style.display = 'block';
                 }
             });
         });
+        // Khởi tạo giá gốc ban đầu bên ngoài hàm để dùng lại
     </script>
 
 @endsection

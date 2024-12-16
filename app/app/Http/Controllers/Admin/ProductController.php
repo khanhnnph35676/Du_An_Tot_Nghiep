@@ -266,13 +266,15 @@ class ProductController extends Controller
         $categories = Category::get();
         $variant_values = VariantOption::get();
         $product = Product::find($idProduct);
+        $messages = MessOrder::with('user','order')->get();
         $productVariants = ProductVariant::where('product_id', $product->id)->get();
         return view('admin.product.update-detail')->with([
             'categories' => $categories,
             'product' => $product,
             'variants' => $variants,
             'variant_values' => $variant_values,
-            'productVariants' => $productVariants
+            'productVariants' => $productVariants,
+            'messages' => $messages
         ]);
     }
     public function updateProductConfigurable($idProduct, ProductAdminRequest $request)

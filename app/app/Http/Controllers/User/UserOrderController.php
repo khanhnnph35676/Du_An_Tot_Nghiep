@@ -10,6 +10,8 @@ use App\Models\User;
 use App\Models\Product;
 use App\Models\ProductVariant;
 use App\Models\ProductOder;
+use App\Models\Voucher;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redis;
 
@@ -49,12 +51,15 @@ class UserOrderController extends Controller
         ->where('order_id',$order_id)
         ->first();
         $cart = session()->get('cart', []);
+        $order = Order::find($order_id);
+        $voucher = Voucher::find($order->voucher_id);
         return view('user.cart.detail')->with([
             'cart' => $cart,
             'orderLists' => $orderLists,
             'productOrders' =>$productOrders,
             'user' => $user,
             'orderList' => $orderList,
+            'voucher' => $voucher,
         ]);
     }
 
