@@ -16,6 +16,8 @@ class Voucher extends Model
         'end_date',
         'qty',
         'code_vocher',
-        'point'
+        'point',
+        'money'
+
     ];
 }
