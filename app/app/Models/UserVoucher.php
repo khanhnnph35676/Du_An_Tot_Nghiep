@@ -16,10 +16,10 @@ class UserVoucher extends Model
     ];
     public function user()
     {
-        return $this->hasMany(Product::class);
+        return $this->belongsTo(User::class);
     }
     public function voucher()
     {
-        return $this->hasMany(Product::class);
+        return $this->belongsTo(Voucher::class);
     }
 }

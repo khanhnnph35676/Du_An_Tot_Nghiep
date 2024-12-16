@@ -516,10 +516,11 @@
                                             </div>
                                             <div class="form-check text-start">
                                                 @php
-                                                    $sumPrice+=15000
+                                                    $sumPrice += 15000;
                                                 @endphp
                                                 <span id="total-price">{{ number_format($sumPrice) }} Vnđ</span>
-                                                <input type="text" name='sum_price' value="{{ $sumPrice}}" hidden>
+                                                <input type="text" name='sum_price' value="{{ $sumPrice }}"
+                                                    hidden>
                                             </div>
                                             <div class="form-check text-start">
                                             </div>
@@ -550,15 +551,15 @@
                         </div>
 
                         @if (session('error'))
-                        <div class="error">
-                            <div class="alert alert-danger alert-dismissible alert-alt solid fade show">
-                                <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close">
-                                </button>
-                                @if (session('error'))
-                                    <strong>{{ session('error') }}</strong>
-                                @endif
+                            <div class="error">
+                                <div class="alert alert-danger alert-dismissible alert-alt solid fade show">
+                                    <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close">
+                                    </button>
+                                    @if (session('error'))
+                                        <strong>{{ session('error') }}</strong>
+                                    @endif
+                                </div>
                             </div>
-                        </div>
                         @endif
                         @php
                             // print_r($cart);
@@ -587,37 +588,43 @@
                         <input id="voucher_id" name="voucher_id" value="" hidden> <!-- Giá hiện tại -->
                         <input id="voucher_sale" name="voucher_sale" value="" hidden>
                         @if (Auth::check())
+                            @php
+                                // print_r($user_voucher);
+                            @endphp
                             <div class="col-lg-12">
                                 <div class="border rounded p-2 mb-3">
                                     <h3 class="m-3"> Phiếu giảm giá của tôi</h3>
                                     <div class="d-flex flex-wrap justify-content-start gap-3 m-2">
-                                        @foreach ($listVouchers as $voucher)
+                                        @foreach ($user_voucher as $voucher)
+                                            {{-- @php
+                                                   print_r($voucher->voucher);
+                                            @endphp --}}
                                             @if (
-                                                \Carbon\Carbon::parse(now())->format('d/m/Y') < \Carbon\Carbon::parse($voucher->end_date)->format('d/m/Y') &&
-                                                    $sumPrice >= $voucher->money)
-                                                <div class="card shadow-sm rounded-3" id="voucher-{{ $voucher->id }}"
-                                                    data-sale="{{ $voucher->sale }}" data-id="{{ $voucher->id }}"
+                                                \Carbon\Carbon::parse(now())->format('d/m/Y') <
+                                                    \Carbon\Carbon::parse($voucher->voucher->end_date)->format('d/m/Y') && $sumPrice >= $voucher->voucher->id)
+                                                <div class="card shadow-sm rounded-3"
+                                                    id="voucher-{{ $voucher->voucher->id }}"
+                                                    data-sale="{{ $voucher->voucher->sale }}"
+                                                    data-id="{{ $voucher->voucher->id }}"
                                                     style="width: 190px; min-height: 200px;">
                                                     <span class="qty-point border bg-secondary text-white p-1 d-flex">
                                                         @if ($user_voucher == [])
                                                             x0
                                                         @else
-                                                            @foreach ($user_voucher as $value)
-                                                                @if ($value->voucher_id == $voucher->id)
-                                                                    x{{ $value->qty }}
-                                                                @endif
-                                                            @endforeach
+                                                            @if ($voucher->voucher_id == $voucher->voucher->id)
+                                                                x{{ $voucher->qty }}
+                                                            @endif
                                                         @endif
                                                     </span>
                                                     <div class="card-body text-center">
                                                         <h6 class="card-title text-success mb-3 text-start">Mã:
                                                             {{ $voucher->code_vocher }}</h6>
-                                                        <p class="text-start name-voucher">{{ $voucher->name }}</p>
+                                                        <p class="text-start name-voucher">{{ $voucher->voucher->name }}</p>
                                                         <p style="font-size: 10px;">HSD: đến
-                                                            {{ \Carbon\Carbon::parse($voucher->end_date)->format('d/m/Y') }}
+                                                            {{ \Carbon\Carbon::parse($voucher->voucher->end_date)->format('d/m/Y') }}
                                                         </p>
                                                         <button type="button" class="btn btn-primary redeem m-2"
-                                                            onclick="setVoucherAndSubmit('{{ $voucher->id }}')">
+                                                            onclick="setVoucherAndSubmit('{{ $voucher->voucher->id }}')">
                                                             <div
                                                                 class="d-flex justify-content-start align-items-start group-point">
                                                                 <div class="text-center">Dùng</div>
@@ -626,6 +633,8 @@
 
                                                     </div>
                                                 </div>
+                                            @else
+                                                Không có mã giảm giá
                                             @endif
                                         @endforeach
                                     </div>

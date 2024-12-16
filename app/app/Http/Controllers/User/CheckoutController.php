@@ -68,7 +68,7 @@ class CheckoutController extends Controller
         }
         $listVouchers = Voucher::get();
         $point = Point::where('user_id', $user_id)->first();
-        $user_voucher = UserVoucher::where('user_id', $user_id)->where('qty', '>', '0')->get();
+        $user_voucher = UserVoucher::with('voucher')->where('user_id', $user_id)->where('qty', '>', '0')->get();
 
         return view('user.cart.checkout')->with([
             'address' => $address,
