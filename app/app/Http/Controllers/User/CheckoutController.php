@@ -63,6 +63,7 @@ class CheckoutController extends Controller
         if ($checkOrder) {
             return redirect()->route('successCheckout');
         }
+
         return view('user.cart.checkout')->with([
             'address' => $address,
             'cart' => $cart,

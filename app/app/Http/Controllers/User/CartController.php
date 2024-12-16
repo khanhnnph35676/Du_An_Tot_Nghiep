@@ -352,6 +352,8 @@ class CartController extends Controller
             'selected_products' => $request->selected ?? false,
             'discount' => $request->discount ?? 0,
             'discount_id' => $request->discount_id ?? 0,
+            'voucher_id' => $request->voucher_id,
+            'voucher_sale' => $request->voucher_sale
         ];
 
         // Xử lý giỏ hàng
