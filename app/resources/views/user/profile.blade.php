@@ -106,11 +106,13 @@
             <div class="col-lg-9 m-0 p-0">
                 <div class="content m-0">
                     <div class="profile-header">
-                        @if ($user->avatar == null)
-                            <img src="{{ asset('storage/avatars/OIP.jpg') }}">
-                        @else
-                            <img src="{{ asset('storage/' . $user->avatar) }}" alt="" style="object-fit: cover;">
-                        @endif
+                    @if ($user->avatar == null)
+    <img src="{{ asset('storage/avatars/default.jpg') }}" alt="Default Avatar" style="object-fit: cover;">
+@else
+    <img src="{{ asset('storage/' . $user->avatar) }}" alt="User Avatar" style="object-fit: cover;">
+@endif
+
+
 
                         <div>
                             <h2>{{ $user->name }}</h2>
