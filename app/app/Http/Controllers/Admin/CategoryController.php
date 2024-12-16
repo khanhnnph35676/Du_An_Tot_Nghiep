@@ -41,7 +41,8 @@ class CategoryController extends Controller
     {
         // Lấy tất cả các category đã bị xóa (xóa mềm)
         $deletedCategories = Category::onlyTrashed()->get();
-        return view('admin.category.deleted', compact('deletedCategories'));
+        $messages = MessOrder::with('user','order')->get();
+        return view('admin.category.deleted', compact('deletedCategories','messages'));
     }
 
     public function store(Request $request)

@@ -59,10 +59,10 @@
                                     <label for="option_value">Giá trị biến thể:</label>
                                     <input class="form-control" type="text" name="option_value" placeholder="Nhập giá trị biến thể">
                                 </div>
-                                <div class="form-group">
+                                {{-- <div class="form-group">
                                     <label for="image_variant">Ảnh:</label>
                                     <input type="file" class="form-control-file" name="image_variant" accept="image/*">
-                                </div>
+                                </div> --}}
                                 <button type="submit" class="btn btn-secondary mb-3">Thêm mới</button>
                             </form>
                         </div>

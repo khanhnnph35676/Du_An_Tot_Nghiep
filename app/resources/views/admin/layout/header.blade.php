@@ -24,8 +24,8 @@
          /* Màu khi hover */
      }
 
-     .media-body{
-        max-width: 400px;
+     .media-body {
+         max-width: 400px;
      }
  </style>
  <div class="nav-header">
@@ -67,61 +67,74 @@
                          <div class="dropdown-menu dropdown-menu-right">
                              <ul class="list-unstyled">
                                  @foreach ($messages as $item)
-                                     <li class="media dropdown-item">
-                                        <a href="{{route('admin.orderDetail',['order_id'=> $item->order->id])}}" class="d-flex align-items-center mr-3">
-                                            <span class="primary mr-3"><i class="ti-shopping-cart"></i></span>
-                                            <div class="media-body" style="max:width:300px;">
-                                                    <span><strong>{{ $item->user->email }}</strong> đã đặt hàng thành công</span> <br>
-                                                    <strong>Mã đơn:  {{ $item->order->order_code }}</strong>
-                                            </div>
-                                        </a>
-                                        <div>
-                                            <span class="text-end">Ngày {{$item->order->created_at->format('d-m').' lúc '. $item->order->created_at->format('H:i')}}</span>
-                                        </div>
-                                     </li>
-                                     <li class="media dropdown-item">
-                                         <span class="primary"><i class="ti-shopping-cart"></i></span>
-                                         <div class="media-body">
-                                             <a href="#">
-                                                 <p><strong>Jennifer</strong> purchased Light Dashboard 2.0.</p>
-                                             </a>
+                                     <li class="media dropdown-item" id="message-{{ $item->id }}">
+                                         <a href="{{ route('admin.orderDetail', ['order_id' => $item->order->id]) }}"
+                                             class="d-flex align-items-center mr-3">
+                                             <span class="primary mr-3"><i class="ti-shopping-cart"></i></span>
+                                             <div class="media-body" style="max:width:300px;">
+                                                 <span><strong>{{ $item->user->email }}</strong> mới đặt hàng</span>
+                                                 <br>
+                                                 <strong>Mã đơn: {{ $item->order->order_code }}</strong>
+                                             </div>
+                                         </a>
+                                         <div>
+                                             <span class="text-end">Ngày
+                                                 {{ $item->order->created_at->format('d-m') . ' lúc ' . $item->order->created_at->format('H:i') }}</span>
                                          </div>
-                                         <span class="notify-time">3:20 am</span>
-                                     </li>
-                                     <li class="media dropdown-item">
-                                         <span class="danger"><i class="ti-bookmark"></i></span>
-                                         <div class="media-body">
-                                             <a href="#">
-                                                 <p><strong>Robin</strong> marked a <strong>ticket</strong> as unsolved.
-                                                 </p>
-                                             </a>
-                                         </div>
-                                         <span class="notify-time">3:20 am</span>
-                                     </li>
-                                     <li class="media dropdown-item">
-                                         <span class="primary"><i class="ti-heart"></i></span>
-                                         <div class="media-body">
-                                             <a href="#">
-                                                 <p><strong>David</strong> purchased Light Dashboard 1.0.</p>
-                                             </a>
-                                         </div>
-                                         <span class="notify-time">3:20 am</span>
-                                     </li>
-                                     <li class="media dropdown-item">
-                                         <span class="success"><i class="ti-image"></i></span>
-                                         <div class="media-body">
-                                             <a href="#">
-                                                 <p><strong> James.</strong> has added a<strong>customer</strong>
-                                                     Successfully
-                                                 </p>
-                                             </a>
-                                         </div>
-                                         <span class="notify-time">3:20 am</span>
+                                         {{--  --}}
+                                         <form action="{{ route('admin.deleteMessage', $item->id) }}" method="POST"
+                                             class="ml-3" id="delete-form-{{ $item->id }}">
+                                             @csrf
+                                             @method('DELETE')
+                                             <button
+                                                 class="badge-circle text-white bg-primary d-flex align-items-center delete-mes"
+                                                 data-id="{{ $item->id }}"
+                                                 onclick="deleteMessage({{ $item->id }})">x</button>
+                                         </form>
                                      </li>
                                  @endforeach
+
+                                 {{-- <li class="media dropdown-item">
+                                    <span class="primary"><i class="ti-shopping-cart"></i></span>
+                                    <div class="media-body">
+                                        <a href="#">
+                                            <p><strong>Jennifer</strong> purchased Light Dashboard 2.0.</p>
+                                        </a>
+                                    </div>
+                                    <span class="notify-time">3:20 am</span>
+                                </li>
+                                <li class="media dropdown-item">
+                                    <span class="danger"><i class="ti-bookmark"></i></span>
+                                    <div class="media-body">
+                                        <a href="#">
+                                            <p><strong>Robin</strong> marked a <strong>ticket</strong> as unsolved.
+                                            </p>
+                                        </a>
+                                    </div>
+                                    <span class="notify-time">3:20 am</span>
+                                </li>
+                                <li class="media dropdown-item">
+                                    <span class="primary"><i class="ti-heart"></i></span>
+                                    <div class="media-body">
+                                        <a href="#">
+                                            <p><strong>David</strong> purchased Light Dashboard 1.0.</p>
+                                        </a>
+                                    </div>
+                                    <span class="notify-time">3:20 am</span>
+                                </li>
+                                <li class="media dropdown-item">
+                                    <span class="success"><i class="ti-image"></i></span>
+                                    <div class="media-body">
+                                        <a href="#">
+                                            <p><strong> James.</strong> has added a<strong>customer</strong>
+                                                Successfully
+                                            </p>
+                                        </a>
+                                    </div>
+                                    <span class="notify-time">3:20 am</span>
+                                </li> --}}
                              </ul>
-                             <a class="all-notification" href="#">See all notifications <i
-                                     class="ti-arrow-right"></i></a>
+                             <a class="all-notification" href="#">Xem thêm <i class="ti-arrow-right"></i></a>
                          </div>
                      </li>
                      <li class="nav-item dropdown header-profile">
@@ -155,6 +168,20 @@
          </nav>
      </div>
  </div>
+ <script>
+    //  document.querySelectorAll('.delete-mes').forEach(function(button) {
+    //      button.addEventListener('click', function(e) {
+    //          e.preventDefault(); // Prevent the page from reloading
+
+    //          const messageId = this.getAttribute('data-id'); // Get the message ID
+    //          const messageRow = document.getElementById(
+    //              `message-${messageId}`); // Find the corresponding row
+    //          if (messageRow) {
+    //              messageRow.remove();
+    //          }
+    //      });
+    //  });
+ </script>
  <!--**********************************
             Header end ti-comment-alt
         ***********************************-->

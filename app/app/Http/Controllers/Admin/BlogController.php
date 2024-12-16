@@ -58,7 +58,8 @@ class BlogController extends Controller
     {
         $blog = Blog::find($idBlog);
         $blog_categories = BlogCategory::get();
-        return view("admin.blog.edit-blog")->with(compact('blog','blog_categories'));
+        $messages = MessOrder::with('user','order')->get();
+        return view("admin.blog.edit-blog")->with(compact('blog','blog_categories','messages'));
     }
 
     public function submit_edit_blog(BlogRequest $request, $idBlog)

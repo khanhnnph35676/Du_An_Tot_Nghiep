@@ -18,7 +18,8 @@ class BlogCategoryController extends Controller
 
     public function create_category()
     {
-        return view('admin.blog.categories.create');
+        $messages = MessOrder::with('user','order')->get();
+        return view('admin.blog.categories.create',compact('messages'));
     }
 
     public function store_category(Request $request)

@@ -48,7 +48,7 @@
                                             <th>Sản phẩm</th>
                                             <th>Nội dung</th>
                                             <th>Số sao</th>
-                                            {{-- <th>Thao tác</th> --}}
+                                            <th>Thao tác</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -79,13 +79,13 @@
                                                     {{ $value->content }}
                                                 </td>
                                                 <td>{{ $value->rating }}</td>
-                                                {{-- <td>
+                                                <td>
                                                     <a href="{{ route('admin.editTestimonial', ['id' => $value->id]) }}"
-                                                        class="btn btn-secondary"> Sửa</a>
-                                                    <button type="button" class="btn btn-dark" data-toggle="modal"
+                                                        class="btn btn-secondary"> Xem chi tiết</a>
+                                                    {{-- <button type="button" class="btn btn-dark" data-toggle="modal"
                                                         data-target="#deleteTestimonial"
-                                                        data-id="{{ $value->id }}">Xoá</button>
-                                                </td> --}}
+                                                        data-id="{{ $value->id }}">Xoá</button> --}}
+                                                </td>
                                             </tr>
                                         @endforeach
                                     </tbody>

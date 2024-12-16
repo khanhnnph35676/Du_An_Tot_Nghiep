@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\TestimonialController;
 use App\Http\Controllers\Admin\PointController;
 use App\Http\Controllers\Admin\BlogCategoryController;
 use App\Http\Controllers\Admin\VariantOptionController;
+use App\Http\Controllers\Admin\MessagesController;
 
 use App\Http\Controllers\User\UserBlogController;
 use App\Http\Controllers\User\UserProfileController;
@@ -135,7 +136,9 @@ Route::middleware(['auth.check'])->group(function () {
         Route::get('order-detail/{order_id}', [OrderController::class, 'orderDetail'])->name('orderDetail');
         Route::post('order-update/{order_id}', [OrderController::class, 'updateOrder'])->name('updateOrder');
 
+        // MessagesController
 
+        Route::delete('/admin/messages/{id}', [MessagesController::class, 'deleteMessage'])->name('deleteMessage');
         // quản lý blog
         Route::get('/blog', [BlogController::class, 'index'])->name('blog.list');
         Route::post('/submit-add-blog', [BlogController::class, 'submit_add_blog'])->name('submit_add_blog'); // Thêm blog
