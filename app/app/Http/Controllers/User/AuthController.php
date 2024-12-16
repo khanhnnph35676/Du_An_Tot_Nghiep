@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use App\Models\OrderList;
-
+use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -61,35 +61,35 @@ class AuthController extends Controller
         return view('user.change-password',compact('cart','orderLists'));
     }
 
-    // Xử lý yêu cầu đổi mật khẩu
-//     public function updatePassword(Request $request)
-// {
-//     // Validate input
-//     $request->validate([
-//         'current_password' => 'required|string',
-//         'new_password' => 'required|string|min:8|confirmed',
-//     ]);
 
-//     $user = Auth::user();
+    public function updatePassword(Request $request)
+{
+    // Validate input
+    $request->validate([
+        'current_password' => 'required|string',
+        'new_password' => 'required|string|min:8|confirmed',
+    ]);
 
-
-//     if (!Hash::check($request->current_password, $user->password)) {
-//         return back()->withErrors(['current_password' => 'Mật khẩu hiện tại không chính xác.']);
-//     }
-
-//     try {
-
-//         $user->password = Hash::make($request->new_password);
+    $user = Auth::user();
 
 
-//         if ($user->save()) {
-//             return redirect()->route('')->with('status', 'Đổi mật khẩu thành công.');
-//         } else {
-//             return back()->withErrors(['error' => 'Không thể lưu mật khẩu mới.']);
-//         }
-//     } catch (\Exception $e) {
-//         return back()->withErrors(['error' => 'Đã xảy ra lỗi: ' . $e->getMessage()]);
-//     }
-// }
+    if (!Hash::check($request->current_password, $user->password)) {
+        return back()->withErrors(['current_password' => 'Mật khẩu hiện tại không chính xác.']);
+    }
+
+    try {
+
+        $user->password = Hash::make($request->new_password);
+
+
+        if ($user->save()) {
+            return redirect()->route('')->with('status', 'Đổi mật khẩu thành công.');
+        } else {
+            return back()->withErrors(['error' => 'Không thể lưu mật khẩu mới.']);
+        }
+    } catch (\Exception $e) {
+        return back()->withErrors(['error' => 'Đã xảy ra lỗi: ' . $e->getMessage()]);
+    }
+}
 
 }
