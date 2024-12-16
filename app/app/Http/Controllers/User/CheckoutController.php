@@ -160,9 +160,52 @@ class CheckoutController extends Controller
                 'password' => Hash::make($request->pass)
             ];
             $user = User::create($data_user);
-            Auth::login($user);
 
+            foreach ($cart as $key => $value) {
+                if ($value['selected_products'] == 1 && $value['user_id'] == 0) {
+                    //  đăng nhập được sản phẩm
+                    $value['product_variant_id'] = 0 ? $product_variant_id =  null : $product_variant_id = $value['product_variant_id'];
+                    $dataProducts = [
+                        'order_id' => $addOrder->id,  // ID đơn hàng
+                        'product_id' => $value['product_id'],
+                        'product_variant_id' =>  $product_variant_id,
+                        'quantity' => $value['qty'],
+                        'price' => $request->price
+                    ];
+                    ProductOder::create($dataProducts);
 
+                    // Nếu sản phẩm có biến thể, kiểm tra và trừ kho
+                    if ($value['product_variant_id'] != 0) {
+                        $product_variant = ProductVariant::find($product_variant_id);
+                        if ($product_variant && $product_variant->stock > 0 && $product_variant->stock - $value['qty'] > 0) {
+                            $product_variant->stock -= $value['qty'];
+                            $product_variant->save();
+                        } else {
+                            return redirect()->back()->with([
+                                'error' => 'Sản phẩm không đủ số lượng.'
+                            ]);
+                        }
+                    } else {
+                        $product = Product::find($value['product_id']);
+                        if ($product && $product->qty > 0 || $product->qty - $value['qty'] > 0) {
+                            $product->qty -= $value['qty'];
+                            $product->save();
+                        } else {
+                            return redirect()->back()->with([
+                                'error' => 'Sản phẩm không đủ số lượng.'
+                            ]);
+                        }
+                    }
+                    // làm giảm số giảm giá khi khách đặt hàng
+                    if ($value['discount_id'] != 0) {
+                        $discount = Discount::find($value['discount_id']);
+                        $discount->update([
+                            'qty' => $discount->qty + $value['qty']
+                        ]);
+                    }
+                    unset($cart[$key]);
+                }
+            }
             // sửa địa chỉ có user_id null thành id
             $address = Address::where('user_id', NULL)->get();
             foreach ($address as $value) {
@@ -171,7 +214,9 @@ class CheckoutController extends Controller
                 ]);
             }
             foreach ($cart as $key => $value) {
-                $cart[$key]['user_id'] = $user->id;
+                if($user_id == 0){
+                    $cart[$key]['user_id'] = $user->id;
+                }
             }
             $dataOrderList = [
                 'order_id' => $addOrder->id,
@@ -186,7 +231,7 @@ class CheckoutController extends Controller
                 'payment_id' => $request->payment_id,
             ];
             $checkOrder[] = $dataCheck;
-
+            Auth::login($user);
             // Phần gửi mail khi không có tài khoản
         } else {
             $user = User::find($user_id);
@@ -210,9 +255,7 @@ class CheckoutController extends Controller
 
         // đối với khách chưa có tài khoản
         foreach ($cart as $key => $value) {
-            $user_id = null ? 0 : $user_id;
-            if ($value['selected_products'] == 1 &&  $user_id == $value['user_id']) {
-                //  đăng nhập được sản phẩm
+            if($value['selected_products'] == 1 &&  $value['user_id'] == $user_id){
                 $value['product_variant_id'] = 0 ? $product_variant_id =  null : $product_variant_id = $value['product_variant_id'];
                 $dataProducts = [
                     'order_id' => $addOrder->id,  // ID đơn hàng
