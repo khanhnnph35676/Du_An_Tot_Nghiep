@@ -114,7 +114,7 @@ class CheckoutController extends Controller
             'sum_price' => 'required|min:1',
             'selected_address' => 'required|exists:address,id',
             'email' => 'required|email|max:50',
-            'phone' => 'required|min:10|max:10',
+            'phone' => 'required|digits:10',
             'name' => 'required|max:50'
         ], [
             'sum_price.required' => 'Không có giá',
@@ -129,8 +129,7 @@ class CheckoutController extends Controller
             'email.max' => 'Bạn nhập tên dài quá 50 ký tự',
 
             'phone.required' => 'Vui lòng nhập số điện thoại.',
-            'phone.min' => 'Số điện thoại phải có 10 chữ số.',
-            'phone.min' => 'Số điện thoại phải có 10 chữ số.',
+            'phone.digits' => 'Số điện thoại phải có 10 chữ số.',
 
             'name.required' => 'Vui lòng nhập tên',
             'name.max' => 'Bạn nhập tên dài quá 50 ký tự',
@@ -270,6 +269,7 @@ class CheckoutController extends Controller
                 'order_id' => $addOrder->id,
                 'user_id' => $user->id,
                 'payment_id' => $request->payment_id,
+                'voucher_id' => $request->voucher_id,
             ];
             $checkOrder[] = $dataCheck;
             MessOrder::create([
@@ -516,7 +516,11 @@ class CheckoutController extends Controller
         $productOrders = [];
 
         foreach ($checkOrder as $value) {
-            $user_voucher = UserVoucher::where('voucher_id', $value['voucher_id'])->where('user_id', $value['user_id'])->first();
+            $user_voucher =[];
+            if($value['voucher_id'] != null){
+                $user_voucher = UserVoucher::where('voucher_id', $value['voucher_id'])->where('user_id', $value['user_id'])->first();
+            }
+
             $order = Order::with('address', 'payments')->find($value['order_id']);
             $productOrders = ProductOder::with('products', 'product_variants')
                 ->where('order_id', $value['order_id'])->get();

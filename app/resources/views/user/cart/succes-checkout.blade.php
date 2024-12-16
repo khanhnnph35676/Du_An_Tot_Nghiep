@@ -53,7 +53,7 @@
                                 <th>Phí vận chuyển: </th>
 
                                 <td>
-                                    @if ($user_voucher)
+                                    @if ($user_voucher != [])
                                         {{ $user_voucher->sale == 0 ? 0 : 15.0 }} Vnđ
                                     @else
                                         15.000 Vnđ
