@@ -13,8 +13,10 @@ use App\Models\ProductOder;
 use App\Models\Product;
 use App\Models\Address;
 use App\Models\Discount;
-use App\Models\Point;
 use App\Models\MessOrder;
+use App\Models\Point;
+use App\Models\UserVoucher;
+use App\Models\Voucher;
 use App\Models\ProductVariant;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Hash;
@@ -63,6 +65,9 @@ class CheckoutController extends Controller
         if ($checkOrder) {
             return redirect()->route('successCheckout');
         }
+        $listVouchers = Voucher::get();
+        $point = Point::where('user_id', $user_id)->first();
+        $user_voucher = UserVoucher::where('user_id', $user_id)->where('qty', '>', '0')->get();
 
         return view('user.cart.checkout')->with([
             'address' => $address,
@@ -72,6 +77,9 @@ class CheckoutController extends Controller
             'payments' => $payments,
             'addresses' => $addresses,
             'checkOrder' => $checkOrder,
+            'listVouchers' => $listVouchers,
+            'point' => $point,
+            'user_voucher' => $user_voucher,
         ]);
     }
 
@@ -142,14 +150,27 @@ class CheckoutController extends Controller
         $addresses = session()->get('addresses', []);
         $checkOrder = session()->get('checkOrder', []);
 
+        //   tính giá kho có voucher
+        $voucher = Voucher::find($request->voucher_id);
+        $sum_price = $request->sum_price;
+        if ($voucher != null) {
+            if ($voucher->sale == 0) {
+                $sum_price = $request->sum_price - 15000;
+            } else {
+                $sum_price = $request->sum_price - $request->sum_price * $voucher->sale / 100;
+            }
+        }
+
         $order = [
             'payment_id' => $request->payment_id,
             'status' => 0,
-            'sum_price' => $request->sum_price,
+            'sum_price' => $sum_price,
             'address_id' => $request->selected_address,
             'check_payment_id' => 0,
             'order_code' => generateRandomCode(),
+            'voucher_id' => $request->voucher_id,
         ];
+
         // $user = [];
         $addOrder = Order::create($order);
         $user_id = Auth::user()->id ?? null;
@@ -165,17 +186,8 @@ class CheckoutController extends Controller
             $user = User::create($data_user);
 
             foreach ($cart as $key => $value) {
-                if ($value['selected_products'] == 1 && $value['user_id'] == 0) {
-                    //  đăng nhập được sản phẩm
+                if ($value['selected_products'] == 1 && $value['user_id'] == $user_id) {
                     $value['product_variant_id'] = 0 ? $product_variant_id =  null : $product_variant_id = $value['product_variant_id'];
-                    $dataProducts = [
-                        'order_id' => $addOrder->id,  // ID đơn hàng
-                        'product_id' => $value['product_id'],
-                        'product_variant_id' =>  $product_variant_id,
-                        'quantity' => $value['qty'],
-                        'price' => $request->price
-                    ];
-                    ProductOder::create($dataProducts);
 
                     // Nếu sản phẩm có biến thể, kiểm tra và trừ kho
                     if ($value['product_variant_id'] != 0) {
@@ -183,6 +195,14 @@ class CheckoutController extends Controller
                         if ($product_variant && $product_variant->stock > 0 && $product_variant->stock - $value['qty'] > 0) {
                             $product_variant->stock -= $value['qty'];
                             $product_variant->save();
+                            $dataProducts = [
+                                'order_id' => $addOrder->id,  // ID đơn hàng
+                                'product_id' => $value['product_id'],
+                                'product_variant_id' =>  $value['product_variant_id'],
+                                'quantity' => $value['qty'],
+                                'price' => $product_variant->price
+                            ];
+                            ProductOder::create($dataProducts);
                         } else {
                             return redirect()->back()->with([
                                 'error' => 'Sản phẩm không đủ số lượng.'
@@ -193,6 +213,14 @@ class CheckoutController extends Controller
                         if ($product && $product->qty > 0 || $product->qty - $value['qty'] > 0) {
                             $product->qty -= $value['qty'];
                             $product->save();
+                            $dataProducts = [
+                                'order_id' => $addOrder->id,  // ID đơn hàng
+                                'product_id' => $value['product_id'],
+                                'product_variant_id' =>  $product_variant_id,
+                                'quantity' => $value['qty'],
+                                'price' => $product->price
+                            ];
+                            ProductOder::create($dataProducts);
                         } else {
                             return redirect()->back()->with([
                                 'error' => 'Sản phẩm không đủ số lượng.'
@@ -217,7 +245,7 @@ class CheckoutController extends Controller
                 ]);
             }
             foreach ($cart as $key => $value) {
-                if($user_id == 0){
+                if ($user_id == 0) {
                     $cart[$key]['user_id'] = $user->id;
                 }
             }
@@ -256,59 +284,75 @@ class CheckoutController extends Controller
                 'order_id' => $addOrder->id,
                 'user_id' => $user_id,
                 'payment_id' => $request->payment_id,
+                'voucher_id' => $request->voucher_id,
             ];
-            $checkOrder [] = $dataCheck;
+            $checkOrder[] = $dataCheck;
             MessOrder::create([
                 'order_id' => $addOrder->id,
                 'user_id' => $user_id,
             ]);
+            foreach ($cart as $key => $value) {
+                if ($value['selected_products'] == 1 && $value['user_id'] == $user_id) {
+                    $value['product_variant_id'] = 0 ? $product_variant_id =  null : $product_variant_id = $value['product_variant_id'];
+
+                    // Nếu sản phẩm có biến thể, kiểm tra và trừ kho
+                    if ($value['product_variant_id'] != 0) {
+                        $product_variant = ProductVariant::find($product_variant_id);
+                        if ($product_variant && $product_variant->stock > 0 && $product_variant->stock - $value['qty'] > 0) {
+                            $product_variant->stock -= $value['qty'];
+                            $product_variant->save();
+                            $dataProducts = [
+                                'order_id' => $addOrder->id,  // ID đơn hàng
+                                'product_id' => $value['product_id'],
+                                'product_variant_id' =>  $value['product_variant_id'],
+                                'quantity' => $value['qty'],
+                                'price' => $product_variant->price
+                            ];
+                            ProductOder::create($dataProducts);
+                        } else {
+                            return redirect()->back()->with([
+                                'error' => 'Sản phẩm không đủ số lượng.'
+                            ]);
+                        }
+                    } else {
+                        $product = Product::find($value['product_id']);
+                        if ($product && $product->qty > 0 || $product->qty - $value['qty'] > 0) {
+                            $product->qty -= $value['qty'];
+                            $product->save();
+                            $dataProducts = [
+                                'order_id' => $addOrder->id,  // ID đơn hàng
+                                'product_id' => $value['product_id'],
+                                'product_variant_id' =>  $product_variant_id,
+                                'quantity' => $value['qty'],
+                                'price' => $product->price
+                            ];
+                            ProductOder::create($dataProducts);
+                        } else {
+                            return redirect()->back()->with([
+                                'error' => 'Sản phẩm không đủ số lượng.'
+                            ]);
+                        }
+                    }
+                    // làm giảm số giảm giá khi khách đặt hàng
+                    if ($value['discount_id'] != 0) {
+                        $discount = Discount::find($value['discount_id']);
+                        $discount->update([
+                            'qty' => $discount->qty + $value['qty']
+                        ]);
+                    }
+                    unset($cart[$key]);
+                }
+            }
+            if ($request->voucher_id != null) {
+                $user_voucher = UserVoucher::where('voucher_id', $request->voucher_id)->where('user_id', $user_id)->first();
+                $user_voucher->update([
+                    'qty' => $user_voucher->qty - 1
+                ]);
+            }
         }
 
         // đối với khách chưa có tài khoản
-        foreach ($cart as $key => $value) {
-            if($value['selected_products'] == 1 &&  $value['user_id'] == $user_id){
-                $value['product_variant_id'] = 0 ? $product_variant_id =  null : $product_variant_id = $value['product_variant_id'];
-                $dataProducts = [
-                    'order_id' => $addOrder->id,  // ID đơn hàng
-                    'product_id' => $value['product_id'],
-                    'product_variant_id' =>  $product_variant_id,
-                    'quantity' => $value['qty'],
-                    'price' => $request->price
-                ];
-                ProductOder::create($dataProducts);
 
-                // Nếu sản phẩm có biến thể, kiểm tra và trừ kho
-                if ($value['product_variant_id'] != 0) {
-                    $product_variant = ProductVariant::find($product_variant_id);
-                    if ($product_variant && $product_variant->stock > 0 && $product_variant->stock - $value['qty'] > 0) {
-                        $product_variant->stock -= $value['qty'];
-                        $product_variant->save();
-                    } else {
-                        return redirect()->back()->with([
-                            'error' => 'Sản phẩm không đủ số lượng.'
-                        ]);
-                    }
-                } else {
-                    $product = Product::find($value['product_id']);
-                    if ($product && $product->qty > 0 || $product->qty - $value['qty'] > 0) {
-                        $product->qty -= $value['qty'];
-                        $product->save();
-                    } else {
-                        return redirect()->back()->with([
-                            'error' => 'Sản phẩm không đủ số lượng.'
-                        ]);
-                    }
-                }
-                // làm giảm số giảm giá khi khách đặt hàng
-                if ($value['discount_id'] != 0) {
-                    $discount = Discount::find($value['discount_id']);
-                    $discount->update([
-                        'qty' => $discount->qty + $value['qty']
-                    ]);
-                }
-                unset($cart[$key]);
-            }
-        }
         $emailUser = $request->email;
         $nameUser = $request->name;
         $userSearch = User::where('email', $emailUser)->first();
@@ -351,7 +395,7 @@ class CheckoutController extends Controller
             $secretKey = 'at67qH6mk8w5Y1nAyMoYKMWACiEi2bsa';
 
             $orderInfo = "Thanh toán qua MoMo";
-            $amount =  $request->sum_price;
+            $amount =  $sum_price;
             $orderId = $addOrder->order_code;
 
             $redirectUrl = "http://127.0.0.1:8000/success-checkout";
@@ -391,7 +435,7 @@ class CheckoutController extends Controller
             $vnp_TxnRef = $addOrder->order_code;
             $vnp_OrderInfo = 'Thanh toan don hang';
             $vnp_OrderType = 'billpayment';
-            $vnp_Amount = $request->sum_price * 100;
+            $vnp_Amount = $sum_price * 100;
             $vnp_Locale = 'vn';
             // $vnp_BankCode = 'NCB';
             $vnp_IpAddr = $_SERVER['REMOTE_ADDR']; // 127.0.0.1
@@ -456,6 +500,7 @@ class CheckoutController extends Controller
         $productOrders = [];
 
         foreach ($checkOrder as $value) {
+            $user_voucher = UserVoucher::where('voucher_id', $value['voucher_id'])->where('user_id', $value['user_id'])->first();
             $order = Order::with('address', 'payments')->find($value['order_id']);
             $productOrders = ProductOder::with('products', 'product_variants')
                 ->where('order_id', $value['order_id'])->get();
@@ -467,6 +512,6 @@ class CheckoutController extends Controller
             }
         }
 
-        return view('user.cart.succes-checkout', compact('cart', 'checkOrder', 'order', 'productOrders'));
+        return view('user.cart.succes-checkout', compact('cart', 'checkOrder', 'order', 'productOrders', 'user_voucher'));
     }
 }

@@ -8,9 +8,7 @@ use App\Models\Product;
 use App\Models\Address;
 use App\Models\ProductVariant;
 use App\Models\Payment;
-use App\Models\Point;
-use App\Models\UserVoucher;
-use App\Models\Voucher;
+
 use App\Models\Gallerie;
 
 use App\Models\DiscountProduct;
@@ -70,8 +68,10 @@ class PageController extends Controller
         $products = $query->paginate(12);
         $categories = Category::all();
         $bestProducts = Product::orderBy('view', 'desc')->take(6)->get();
+        $product_variants = ProductVariant::with("options")->get();
+
         session()->forget('checkOrder');
-        return view('user.product.list', compact('products', 'categories', 'bestProducts', 'cart'));
+        return view('user.product.list', compact('products', 'categories', 'bestProducts', 'cart','product_variants'));
     }
 
     public function storeProductDetail($id)
@@ -107,10 +107,8 @@ class PageController extends Controller
         session()->forget('checkOrder');
         $products = Product::get();
         $productVariants = ProductVariant::get();
-        $listVouchers = Voucher::get();
-        $point = Point::where('user_id',$user_id)->first();
-        $user_voucher = UserVoucher::where('user_id', $user_id)->get();
-        return view('user.cart.list', compact('bestProducts','cart','products','productVariants','point','listVouchers','user_voucher'));
+
+        return view('user.cart.list', compact('bestProducts','cart','products','productVariants'));
     }
     public function storeTestimonial(){
         $cart = session()->get('cart', []);

@@ -16,6 +16,7 @@ class Order extends Model
         'address_id',
         'order_code',
         'check_payment_id',
+        'voucher_id',
     ];
     public function address()
     {

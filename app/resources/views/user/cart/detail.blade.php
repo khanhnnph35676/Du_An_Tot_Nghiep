@@ -98,10 +98,18 @@
                             <td>{{ $orderList->orders->address->home_address ? $orderList->orders->address->home_address . ', ' . $orderList->orders->address->address:'N/A' }}
                             </td>
                         </tr>
+
                         <tr>
                             <th>Phí vận chuyển: </th>
-                            <td>15.000 Vnđ</td>
+                            <td>
+                                @if ($voucher != null)
+                                {{ $voucher->sale == 0  ? 0 : 15.000 }} Vnđ
+                                @else
+                                    15.000 Vnđ
+                                @endif
+                            </td>
                         </tr>
+
                         <tr>
                             <th>Phí vận chuyển: </th>
                             <td>{{ number_format($orderList->orders->sum_price) }} Vnđ</td>
