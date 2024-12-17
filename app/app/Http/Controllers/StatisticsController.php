@@ -133,8 +133,9 @@ class StatisticsController extends Controller
                 $subQuery->where('status', 4); // Chỉ tính đơn hàng có status = 4
             });
         }])
-        ->orderBy('total_sold', 'asc') // Sắp xếp tổng số lượng tăng dần
-            ->get();
+        ->orderBy('total_sold', 'asc')
+        ->take(5) // Sắp xếp tổng số lượng tăng dần
+        ->get();
 
         $topUsers = User::withCount(['orderLists as successful_orders' => function ($query) {
             $query->whereHas('order', function ($subQuery) {
@@ -142,7 +143,7 @@ class StatisticsController extends Controller
             });
         }])
             ->orderBy('successful_orders', 'desc') // Sắp xếp giảm dần
-            ->take(10) // Lấy 10 tài khoản
+            ->take(5) // Lấy 10 tài khoản
             ->get();
 
         // thông báo
