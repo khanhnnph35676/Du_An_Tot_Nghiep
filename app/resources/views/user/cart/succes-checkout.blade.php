@@ -51,12 +51,14 @@
                             </tr>
                             <tr>
                                 <th>Phí vận chuyển: </th>
-                                @if ($user_voucher != null)
 
-                                    <td> {{$user_voucher->sale == 0 ? 0 : 15.000}}  Vnđ</td>
-                                @else
-                                    15.000 Vnđ
-                                @endif
+                                <td>
+                                    @if ($user_voucher)
+                                        {{ $user_voucher->sale == 0 ? 0 : 15.0 }} Vnđ
+                                    @else
+                                        15.000 Vnđ
+                                    @endif
+                                </td>
                             </tr>
                             <tr>
                                 <th>Tổng tiền: </th>
@@ -112,7 +114,7 @@
                 </div>
 
                 <div class="text-end">
-                    <a href="{{route('order.history')}}" class="btn btn-secondary">Xem Lịch sử đơn hàng</a>
+                    <a href="{{ route('order.history') }}" class="btn btn-secondary">Xem Lịch sử đơn hàng</a>
                     @if ($order->status == 0)
                         <form action="{{ route('destroyOrder') }}" class="mt-3 text-end" method="POST">
                             @csrf

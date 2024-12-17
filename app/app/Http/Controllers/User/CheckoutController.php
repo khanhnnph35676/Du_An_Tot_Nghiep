@@ -446,7 +446,6 @@ class CheckoutController extends Controller
             $jsonResult = json_decode($result, true);
             return redirect()->to($jsonResult['payUrl']);
         } else {
-            // date_default_timezone_set('Asia/Ho_Chi_Minh');
             $vnp_Url = env("VNPAY_URL");
             $vnp_Returnurl = "http://127.0.0.1:8000/success-checkout";
             $vnp_TmnCode = env('VNPAY_TMN_CODE'); // Mã website tại VNPAY
@@ -456,11 +455,9 @@ class CheckoutController extends Controller
             $vnp_OrderType = 'billpayment';
             $vnp_Amount = $sum_price * 100;
             $vnp_Locale = 'vn';
-            // $vnp_BankCode = 'NCB';
+            $vnp_BankCode = 'NCB';
             $vnp_IpAddr = $_SERVER['REMOTE_ADDR']; // 127.0.0.1
 
-            // Thêm thời gian hết hạn cho giao dịch (15 phút từ thời điểm hiện tại)
-            // $vnp_ExpireDate = date('YmdHis', strtotime('+60 minutes'));
 
             $inputData = array(
                 "vnp_Version" => "2.1.0",
@@ -524,7 +521,12 @@ class CheckoutController extends Controller
             $productOrders = ProductOder::with('products', 'product_variants')
                 ->where('order_id', $value['order_id'])->get();
             // check xem thanh toán thành công hay thất bại
-            if (isset($_GET['resultCode']) && $_GET['resultCode'] != 1006) {
+            if (isset($_GET['resultCode']) && $_GET['resultCode'] != 1006 && $order->payment_id == 2) {
+                $order->update([
+                    'check_payment_id' => 1,
+                ]);
+            }
+            if(isset($_GET['vnp_ResponseCode']) && $_GET['vnp_ResponseCode'] === '00' && $order->payment_id == 3){
                 $order->update([
                     'check_payment_id' => 1,
                 ]);
