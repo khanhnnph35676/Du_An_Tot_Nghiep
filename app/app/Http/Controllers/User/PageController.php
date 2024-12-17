@@ -94,7 +94,8 @@ class PageController extends Controller
                                     ->take(6)
                                     ->get();
         session()->forget('checkOrder');
-        return view('user.product.detail', compact('product', 'relatedProducts','cart','productVariant','galleries','discount'));
+        $product_variants = ProductVariant::with("options")->get();
+        return view('user.product.detail', compact('product', 'relatedProducts','cart','productVariant','galleries','discount','product_variants'));
     }
 
     public function storeListCart()
@@ -107,8 +108,8 @@ class PageController extends Controller
         session()->forget('checkOrder');
         $products = Product::get();
         $productVariants = ProductVariant::get();
-
-        return view('user.cart.list', compact('bestProducts','cart','products','productVariants'));
+        $product_variants = ProductVariant::with("options")->get();
+        return view('user.cart.list', compact('bestProducts','cart','products','productVariants','product_variants'));
     }
     public function storeTestimonial(){
         $cart = session()->get('cart', []);

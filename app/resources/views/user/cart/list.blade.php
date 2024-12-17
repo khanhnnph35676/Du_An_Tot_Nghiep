@@ -50,8 +50,6 @@
         .side-bar li:hover {
             background: #b9b7b793;
         }
-
-
     </style>
     <!-- Single Page Header start -->
     <div class="container-fluid page-header py-5">
@@ -580,14 +578,16 @@
         </div>
 
         <!-- Sản phẩm nổi bật -->
-        <div class="container mt-5">
+        <div class="container mt-5 vesitable" >
             <h2 class="text-center mb-4">Sản phẩm nổi bật</h2>
             <div class="owl-carousel vegetable-carousel justify-content-center">
                 @foreach ($bestProducts as $product)
-                    <div class="border border-primary rounded position-relative vesitable-item">
+                    <div class="border border-primary rounded position-relative vesitable-item" style="height:450px;">
                         <div class="vesitable-img">
-                            <img src="{{ asset($product->image) }}" style="height: 270px; object-fit: cover;"
-                                class="img-fluid w-100 rounded-top" alt="{{ $product->name }}">
+                            <a href="{{ route('product.detail', $product->id) }}">
+                                <img src="{{ asset($product->image) }}" style="height: 270px; object-fit: cover;"
+                                    class="img-fluid w-100 rounded-top" alt="{{ $product->name }}">
+                            </a>
                         </div>
                         <div class="p-4 pb-0 rounded-bottom">
                             <p>{{ Str::words(strip_tags($product->name), 6, '...') }}</p>
@@ -595,7 +595,31 @@
                                 <p class="text-dark fs-6 fw-bold">{{ number_format($product->price) }} vnđ</p>
                             </div>
                         </div>
+                        <div class="ms-3 variant d-flex flex-wrap">
+                            @php
+                                $hasVariants = false;
+                            @endphp
+
+                            @foreach ($product_variants as $product_variant)
+                                @if ($product_variant->product_id == $product->id)
+                                    @php
+                                        $hasVariants = true;
+                                    @endphp
+                                    <button
+                                        type="button"class="btn border border-secondary rounded px-2 me-2  mt-2 text-primary"
+                                        onclick="showOptionValue('{{ $product->id }}', '{{ $product_variant->id }}', '{{ $product_variant->stock }}')">
+                                        <span>{{ $product_variant->options->option_value }}</span>
+                                    </button>
+                                    <span class="text-danger">
+                                        {{ $product_variant->stock <= 0 ? 'Hết hàng' : '' }}
+                                    </span>
+                                @endif
+                            @endforeach
+                            <input type="hidden" id="optionValueInput{{ $product->id }}" name="product_variant_id"
+                                value="">
+                        </div>
                     </div>
+
                 @endforeach
             </div>
         </div>

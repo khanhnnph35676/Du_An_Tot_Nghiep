@@ -103,7 +103,7 @@
                             <th>Phí vận chuyển: </th>
                             <td>
                                 @if ($voucher != null)
-                                {{ $voucher->sale == 0  ? 0 : 15.000 }} Vnđ
+                                {{ $voucher->sale !=0 ? '15000': '0' }} Vnđ
                                 @else
                                     15.000 Vnđ
                                 @endif
@@ -111,7 +111,17 @@
                         </tr>
 
                         <tr>
-                            <th>Phí vận chuyển: </th>
+                            <th>Áp dụng mã giảm giá: </th>
+                            <td>
+                                @if ($voucher != null)
+                                {{ $voucher->name}}
+                                @else
+                                   Không áp dụng mã giảm giá
+                                @endif
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Tổng tiền: </th>
                             <td>{{ number_format($orderList->orders->sum_price) }} Vnđ</td>
                         </tr>
                     </table>
