@@ -19,9 +19,18 @@
                     <div class="input-container">
                         <input type="text" id="name" name="name" placeholder="Họ tên" required>
                     </div>
-                    <label for="email">Email</label>
+                    
                     <div class="input-container">
-                        <input type="email" id="email" name="email" placeholder="Email" required>
+          
+
+<!-- Hiển thị lỗi cụ thể cho từng trường -->
+<div class="form-group">
+    <label for="email">Email:</label>
+    <input type="email" name="email" class="form-control" value="{{ old('email') }}">
+    @error('email')
+        <span class="text-danger">{{ $message }}</span>
+    @enderror
+</div>
                     </div>
 
                     <label for="password">Mật khẩu</label>
@@ -33,6 +42,15 @@
                     <div class="input-container">
                         <input type="password" id="password_confirmation" name="password_confirmation" placeholder="********" required>
                     </div>
+                    @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
                     <button type="submit" class="submit-button">Đăng ký</button>
                 </form>
                 <p class="signup-link">Bạn đã có tài khoản? <a href="{{ route('user.login') }}">Đăng nhập</a></p>
