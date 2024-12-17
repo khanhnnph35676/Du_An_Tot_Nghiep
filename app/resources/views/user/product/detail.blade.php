@@ -223,7 +223,6 @@
             </div>
             {{-- Đánh giá --}}
 
-
             <div class="vesitable mt-3">
                 <h2 class="fw-bold mb-3">Sản phẩm liên quan</h2>
                 <div class="owl-carousel vegetable-carousel justify-content-center">
@@ -245,30 +244,29 @@
 
                             </div>
                             <div class="variant d-flex flex-wrap ms-3">
-                            @php
-                                $hasVariants = false;
-                            @endphp
+                                @php
+                                    $hasVariants = false;
+                                @endphp
 
-                            @foreach ($product_variants as $product_variant)
-                                @if ($product_variant->product_id == $product->id)
-                                    @php
-                                        $hasVariants = true;
-                                    @endphp
-                                    <button
-                                        type="button"class="btn border border-secondary rounded px-2 me-2  mt-2 text-primary"
-                                        onclick="showOptionValue('{{ $product->id }}', '{{ $product_variant->id }}', '{{ $product_variant->stock }}')">
-                                        <span>{{ $product_variant->options->option_value }}</span>
-                                    </button>
-                                    <span class="text-danger">
-                                        {{ $product_variant->stock <= 0 ? 'Hết hàng' : '' }}
-                                    </span>
-                                @endif
-                            @endforeach
-                            <input type="hidden" id="optionValueInput{{ $product->id }}" name="product_variant_id"
-                                value="">
+                                @foreach ($product_variants as $product_variant)
+                                    @if ($product_variant->product_id == $product->id)
+                                        @php
+                                            $hasVariants = true;
+                                        @endphp
+                                        <button
+                                            type="button"class="btn border border-secondary rounded px-2 me-2  mt-2 text-primary"
+                                            onclick="showOptionValue('{{ $product->id }}', '{{ $product_variant->id }}', '{{ $product_variant->stock }}')">
+                                            <span>{{ $product_variant->options->option_value }}</span>
+                                        </button>
+                                        <span class="text-danger">
+                                            {{ $product_variant->stock <= 0 ? 'Hết hàng' : '' }}
+                                        </span>
+                                    @endif
+                                @endforeach
+                                <input type="hidden" id="optionValueInput{{ $product->id }}" name="product_variant_id"
+                                    value="">
+                            </div>
                         </div>
-                        </div>
-                        
                     @endforeach
                 </div>
             </div>

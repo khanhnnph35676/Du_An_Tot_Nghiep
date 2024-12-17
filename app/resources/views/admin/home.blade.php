@@ -7,8 +7,8 @@
     </script>
 
     <!--**********************************
-                Content body start
-            ***********************************-->
+                    Content body start
+                ***********************************-->
     <div class="content-body">
         <!-- row -->
         <div class="container-fluid">
@@ -56,6 +56,7 @@
                 </div>
 
             </div>
+
             <div class="row">
                 <div class="col-xl-4 col-lg-4 col-md-4">
                     <div class="card">
@@ -110,7 +111,7 @@
                     <div class="card">
                         <div class="card-body text-center">
                             <div class="m-t-10">
-                                <h4 class="card-title">Top sản phẩm có số lượng bán thấp nhất</h4>
+                                <h4 class="card-title">Top 5 sản phẩm có số lượng bán thấp nhất</h4>
                             </div>
                             <div class="widget-card-circle">
                                 <table class="table table-bordered table-striped mt-3">
@@ -127,7 +128,9 @@
                                             <tr>
                                                 <td class="text-dark">{{ $index + 1 }}</td>
                                                 <td>
-                                                    <img src="{{ asset($product->image)  }}" alt="Ảnh sản phẩm" class="img-thumbnail" style="width: 50px; height: 50px; object-fit: cover;">
+                                                    <img src="{{ asset($product->image) }}" alt="Ảnh sản phẩm"
+                                                        class="img-thumbnail"
+                                                        style="width: 50px; height: 50px; object-fit: cover;">
                                                 </td>
                                                 <td class="text-dark">{{ $product->name }}</td>
                                                 <td class="text-dark">{{ $product->total_sold ?? 0 }}</td>
@@ -143,7 +146,7 @@
                     <div class="card">
                         <div class="card-body text-center">
                             <div class="m-t-10">
-                                <h4 class="card-title">Top tài khoản có lượt mua nhiều nhất</h4>
+                                <h4 class="card-title">Top 5 tài khoản có lượt mua nhiều nhất</h4>
                             </div>
                             <div class="widget-card-circle">
                                 <div class="row">
@@ -219,8 +222,8 @@
         </div>
     </div>
     <!--**********************************
-                Content body end
-            ***********************************-->
+                    Content body end
+                ***********************************-->
     <script>
         document.getElementById('timeFilter').addEventListener('change', function() {
             const timePeriod = this.value; // Lấy giá trị từ dropdown

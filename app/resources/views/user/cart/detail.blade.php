@@ -17,7 +17,7 @@
         <h1 class="text-center text-white display-6">Chi tiết đơn hàng</h1>
         <ol class="breadcrumb justify-content-center mb-0">
             <li class="breadcrumb-item"><a href="{{ route('storeHome') }}">Trang Chủ</a></li>
-            <li class="breadcrumb-item"><a href="{{ route('storeHome') }}">Lịch sử đơn hàng</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('order.history') }}">Lịch sử đơn hàng</a></li>
             <li class="breadcrumb-item active text-white">Chi tiết đơn hàng</li>
         </ol>
     </div>
@@ -64,7 +64,7 @@
                             <td>{{ $orderList->orders->payments->name }}</td>
                         </tr>
                         <tr>
-                            <th>Phương thức thanh toán: </th>
+                            <th> Tình trạng thanh toán: </th>
                             <td>
                                 @if ($orderList->orders->check_payment_id == 1)
                                 <strong class="border rounded p-1 text-dark fs-6 bg-primary">Đã thanh toán</strong>
