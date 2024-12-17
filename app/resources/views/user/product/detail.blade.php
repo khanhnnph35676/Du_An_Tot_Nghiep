@@ -224,7 +224,7 @@
             {{-- Đánh giá --}}
 
 
-            <div class="vesitable mt-3" style="height: 200px;">
+            <div class="vesitable mt-3">
                 <h2 class="fw-bold mb-3">Sản phẩm liên quan</h2>
                 <div class="owl-carousel vegetable-carousel justify-content-center">
                     @foreach ($relatedProducts as $related)
@@ -242,9 +242,9 @@
                                 <div class="d-flex justify-content-between flex-lg-wrap">
                                     <p class="text-dark fs-5 fw-bold">{{ number_format($related->price) }} Vnđ</p>
                                 </div>
+
                             </div>
-                        </div>
-                        <div class="variant d-flex flex-wrap">
+                            <div class="variant d-flex flex-wrap ms-3">
                             @php
                                 $hasVariants = false;
                             @endphp
@@ -267,6 +267,8 @@
                             <input type="hidden" id="optionValueInput{{ $product->id }}" name="product_variant_id"
                                 value="">
                         </div>
+                        </div>
+                        
                     @endforeach
                 </div>
             </div>
