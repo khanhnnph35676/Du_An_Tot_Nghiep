@@ -223,11 +223,12 @@
             </div>
             {{-- Đánh giá --}}
 
-            <h1 class="fw-bold mb-0">Sản phẩm liên quan</h1>
-            <div class="vesitable">
+
+            <div class="vesitable mt-3" style="height: 200px;">
+                <h2 class="fw-bold mb-3">Sản phẩm liên quan</h2>
                 <div class="owl-carousel vegetable-carousel justify-content-center">
                     @foreach ($relatedProducts as $related)
-                        <div class="border border-primary rounded position-relative vesitable-item">
+                        <div class="border border-primary rounded position-relative vesitable-item" style="height:450px;">
                             <div class="vesitable-img">
                                 <a href="{{ route('product.detail', $related->id) }}">
                                     <img src="{{ asset($related->image) }}"
@@ -235,20 +236,36 @@
                                         class="img-fluid w-100 rounded-top" alt="{{ $related->name }}">
                                 </a>
                             </div>
-                            <div class="text-white bg-primary px-3 py-1 rounded position-absolute"
-                                style="top: 10px; right: 10px;">
-                                {{ $related->category->name ?? 'Uncategorized' }}
-                            </div>
                             <div class="p-4 pb-0 rounded-bottom">
-                                <h4>{{ $related->name }}</h4>
+                                <p class="text-dark fw-bold fs-6">{{ Str::words(strip_tags($related->name), 4, '...') }}
+                                </p>
                                 <div class="d-flex justify-content-between flex-lg-wrap">
-                                    <p class="text-dark fs-5 fw-bold">{{ number_format($related->price) }} vnđ</p>
-                                    <a href=""
-                                        class="btn border border-secondary rounded-pill px-3 py-1 mb-4 text-primary">
-                                        <i class="fa fa-shopping-bag me-2 text-primary"></i> Thêm vào giỏ
-                                    </a>
+                                    <p class="text-dark fs-5 fw-bold">{{ number_format($related->price) }} Vnđ</p>
                                 </div>
                             </div>
+                        </div>
+                        <div class="variant d-flex flex-wrap">
+                            @php
+                                $hasVariants = false;
+                            @endphp
+
+                            @foreach ($product_variants as $product_variant)
+                                @if ($product_variant->product_id == $product->id)
+                                    @php
+                                        $hasVariants = true;
+                                    @endphp
+                                    <button
+                                        type="button"class="btn border border-secondary rounded px-2 me-2  mt-2 text-primary"
+                                        onclick="showOptionValue('{{ $product->id }}', '{{ $product_variant->id }}', '{{ $product_variant->stock }}')">
+                                        <span>{{ $product_variant->options->option_value }}</span>
+                                    </button>
+                                    <span class="text-danger">
+                                        {{ $product_variant->stock <= 0 ? 'Hết hàng' : '' }}
+                                    </span>
+                                @endif
+                            @endforeach
+                            <input type="hidden" id="optionValueInput{{ $product->id }}" name="product_variant_id"
+                                value="">
                         </div>
                     @endforeach
                 </div>

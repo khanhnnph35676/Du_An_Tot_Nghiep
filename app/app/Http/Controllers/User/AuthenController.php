@@ -43,7 +43,7 @@ class AuthenController extends Controller
             }
         }
         return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
+            'email' => 'Thông tin đăng nhập được cung cấp không khớp với hồ sơ của chúng tôi',
         ]);
     }
 
@@ -152,7 +152,7 @@ class AuthenController extends Controller
             'email' => 'The provided credentials do not match our records.',
         ]);
     }
-    
+
     public function forgotPassword()
     {
         return view('user.forgot-password');
@@ -183,7 +183,7 @@ class AuthenController extends Controller
         $addresses = session()->get('addresses', []);
         $user_id =  Auth::user()->id ?? null;
         $addAddress =  Address::create([
-            'address' => $request->province . ', ' . $request->district . ', ' . $request->ward,
+            'address' =>  $request->ward . ', ' . $request->district . ', ' .$request->province,
             'home_address' => $request->home_address,
             'user_id' => $user_id
         ]);
